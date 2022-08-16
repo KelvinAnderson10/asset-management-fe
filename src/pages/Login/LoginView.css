@@ -16,10 +16,20 @@
     flex-direction: column;
     justify-content: center;
     background-color: white;
-    padding: 1%;
     flex-wrap: wrap;
     padding: 3%;
 }
+
+.formContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background-color: white;
+    flex-wrap: wrap;
+    padding: 3%;
+}
+
+
 
 .columnContainerLogin > p{
     font-family: 'Mulish';
@@ -32,6 +42,7 @@
     color: #A4A6B3;
     opacity: 0.7;
     margin: 3%;
+    white-space: nowrap;
 }
 
 .columnContainerLogin > h4{
@@ -43,6 +54,7 @@
     text-align: center;
     letter-spacing: 0.3px;
     margin: 3%;
+    white-space: nowrap;
 }
 
 .columnContainerLogin > h6 {
@@ -55,4 +67,28 @@
     letter-spacing: 0.3px;
     color: #9FA2B4;
     margin: 3%;
+    white-space: nowrap;
+}
+
+.formContainer > button {
+    background: #AC1A19;
+    /* button / accent default */
+    
+    box-shadow: 0px 4px 12px rgba(55, 81, 255, 0.24);
+    border-radius: 8px;
+
+    font-family: 'Mulish';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 20px;
+    /* identical to box height, or 143% */
+    
+    text-align: center;
+    letter-spacing: 0.2px;
+    
+    color: #FFFFFF;
+
+    align-self: center;
+    
 }
