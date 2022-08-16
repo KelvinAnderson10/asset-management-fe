@@ -90,5 +90,18 @@
     color: #FFFFFF;
 
     align-self: center;
-    
+}
+
+.formContainer > label {
+    font-family: 'Mulish';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 15px;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+
+    /* grayscale / gray */
+
+    color: #9FA2B4;
 }
