@@ -1,0 +1,58 @@
+.rowContainerLogin {
+    background-image: url('../../assets/images/login_bg.svg');
+    background-repeat: no-repeat;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    background-size:cover;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.columnContainerLogin {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: white;
+    padding: 1%;
+    flex-wrap: wrap;
+    padding: 3%;
+}
+
+.columnContainerLogin > p{
+    font-family: 'Mulish';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 19px;
+    line-height: 24px;
+    text-align: center;
+    letter-spacing: 0.4px;
+    color: #A4A6B3;
+    opacity: 0.7;
+    margin: 3%;
+}
+
+.columnContainerLogin > h4{
+    font-family: 'Mulish';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 30px;
+    text-align: center;
+    letter-spacing: 0.3px;
+    margin: 3%;
+}
+
+.columnContainerLogin > h6 {
+    font-family: 'Mulish';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    text-align: center;
+    letter-spacing: 0.3px;
+    color: #9FA2B4;
+    margin: 3%;
+}
