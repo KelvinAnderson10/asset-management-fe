@@ -105,3 +105,52 @@
 
     color: #9FA2B4;
 }
+
+.otpContainer {
+    padding: 16px;
+}
+
+.otpInputContainer {
+    width: 45px;
+    height: 45px;
+    padding: 0;
+    font-size: 24px;
+    text-align: center;
+    margin-right: 12px;
+    text-transform: uppercase;
+    color: #494949;
+    font-family: SF Pro Text, SF Pro Icons, Helvetica Neue, Helvetica, Arial,
+        sans-serif;
+    border: 1px solid #d6d6d6;
+    border-radius: 4px;
+    background: #fff;
+    background-clip: padding-box;
+}
+
+.otpInputContainer:focus {
+    appearance: none;
+    outline: 0;
+    box-shadow: 0 0 0 3px rgb(131 192 253 / 50%);
+}
+
+.otpForm {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    /* padding: 5%; */
+    /* border-radius: 50px; */
+    background-color: rgba(10, 10, 10, 0.750);
+    /* background-color: white; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 100;
+}
+
+.card {
+    background-color: white;
+    padding: 2%;
+}
