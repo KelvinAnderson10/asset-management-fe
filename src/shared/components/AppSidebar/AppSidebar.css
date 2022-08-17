@@ -1,0 +1,19 @@
+.nav-pills > .active > a {
+  background-color: #0e1669;
+  color: #B70621 !important; 
+  font-weight: bold;
+}
+.nav-pills > .nav-item > a:hover {
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.nav-pills > .nav-item > a {
+    color: black;
+}
+
+.nav-container{
+  background-color: #D0D1DB;
+  width: 15rem;
+  height:100vh;
+}

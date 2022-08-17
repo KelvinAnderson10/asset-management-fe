@@ -24,28 +24,41 @@ export const LoginView = () => {
             setShowOTPForm(true)
         }
     }
+    
+
+
 
     return (
         <div className='rowContainerLogin'>
-            <div>Test</div>
+            
             <div className='columnContainerLogin'>
                 <img src={logo} alt='logo'></img>
-                <p>ASSET MANAGEMENT</p>
-                <h4>Log In to Dashboard</h4>
+                <h4>ASSET MANAGEMENT</h4>
+                <h5>Log In to Dashboard</h5>
                 <h6>Enter your email below</h6>
                 <form className='formContainer'>
                     <label>EMAIL</label>
                     <input onChange={(e) => setEmail(e.target.value)} value={email} type='email' placeholder='admin@gmail.com' ></input>
-                    <button onClick={(e) => {validateEmail(e)}} type='submit'>Log In</button>
+                    <button onClick={(e) => {validateEmail(e)}} type='submit' className="btn btn-danger">Log In</button>
                 </form>
             </div>
             {showOTPForm &&  <div className='otpForm'>
+            
                 <Card className="card">
+                <div className="x">
+                    <button className="btn">
+                        <strong>&#x2715;</strong>
+                    </button>
+                </div>
                     <h3>Please Input Your OTP Number</h3>
                     <Card.Body>
+                        
                         <AuthCode containerClassName='otpContainer' inputClassName='otpInputContainer'></AuthCode>
                         <br></br>
                         <button className='btn btn-primary btn-sm'>Submit</button>
+                        <a href="/">
+                        <strong>Resend OTP</strong>
+                </a>
                     </Card.Body>
                 </Card>
             </div>}
