@@ -1,0 +1,10 @@
+.AppLayout {
+    width: 100vw;
+    height: 100vh;
+}
+
+.Content {
+    background-color: whitesmoke;
+    width: 100%;
+    
+}

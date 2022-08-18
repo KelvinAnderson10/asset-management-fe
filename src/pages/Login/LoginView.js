@@ -51,11 +51,11 @@ export const LoginView =  () => {
 
     return (
         <div className='rowContainerLogin'>
-            <div>Test</div>
+            
             <div className='columnContainerLogin'>
                 <img src={logo} alt='logo'></img>
-                <p>ASSET MANAGEMENT</p>
-                <h4>Log In to Dashboard</h4>
+                <h4>ASSET MANAGEMENT</h4>
+                <h5>Log In to Dashboard</h5>
                 <h6>Enter your email below</h6>
                 <form className='formContainer'>
                     <label>EMAIL</label>
@@ -64,7 +64,13 @@ export const LoginView =  () => {
                 </form>
             </div>
             {showOTPForm &&  <div className='otpForm'>
+            
                 <Card className="card">
+                <div className="x">
+                    <button className="btn">
+                        <strong>&#x2715;</strong>
+                    </button>
+                </div>
                     <h3>Please Input Your OTP Number</h3>
                     <Card.Body>
                         <AuthCode onChange={(e) => {setOTPInput(e)}} containerClassName='otpContainer' inputClassName='otpInputContainer'></AuthCode>
