@@ -12,7 +12,6 @@ export const AppRouter = () => {
             <Route path='/home' element={<HomeView/>}/>  
             <Route path='/main' element={<Overview/>}/>
             <Route path='/data-management'element={<AssetItem/>}/>
-
         </Routes>
     )
 }
