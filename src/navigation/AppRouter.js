@@ -4,6 +4,7 @@ import { AssetItem } from '../pages/AssetItem/AssetItem'
 import { HomeView } from '../pages/HomePage/HomeView'
 import { LoginView } from '../pages/Login/LoginView'
 import { Overview } from '../pages/Overview/Overview'
+import { PageNotFound } from '../pages/PageNotFound/PageNotFound'
 
 export const AppRouter = () => {
     return (
@@ -13,6 +14,8 @@ export const AppRouter = () => {
             <Route path='/main' element={<Overview/>}/>
             <Route path='/data-management'element={<AssetItem/>}/>
 
+            
+            <Route path="*" element={<PageNotFound/>}/>
         </Routes>
     )
 }
