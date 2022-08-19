@@ -1,0 +1,103 @@
+.home-container {
+    display: flex;
+    justify-content: center;
+    background-color: #383838;
+    width: 100vw;
+    height: 100vh;
+}
+
+.home-header {
+    position: absolute;
+    width: 100%;
+    height: 54px;
+    padding: 15px 10px;
+    background: rgba(255, 251, 251, 0.2);
+    display: flex;
+    flex-direction: row;
+}
+
+.home-header .home-header-right {
+    display: flex;
+    margin-top: 10px;
+    margin-left: 2500px;
+}
+
+.home-header > .home-header-right > p {
+    font-family: Arial, Helvetica, sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 24px;
+    letter-spacing: 0.4px;
+    padding-right: 30px;
+    color: #F5F0F2;
+}
+
+.home-box {
+    display: flex;
+    flex-direction: row;
+    position: absolute;
+    width: 1328px;
+    height: 909px;
+    left: 275px;
+    top: 70px;
+    align-items: center;
+    padding: 0;
+}
+
+.home-box .outlier {
+    box-sizing: border-box;
+    position: absolute;
+    width: 1600px;
+    height: 1150px;
+    left: 275px;
+    top: 70px;
+    border: 1px solid #FFFFFF;
+    border-radius: 60px;    
+}
+
+.home-box .image-box {
+    position: absolute;
+    width: 1540px;
+    height: 1080px;
+    left: 305px;
+    top: 106px;
+    border-radius: 60px;
+    background-image: url('../../assets/images/laptop-lamp-work-night-top-view.jpg');
+    background-size:cover;
+}
+
+.home-box .image-box > p {
+    position: absolute;
+    left: 80px;
+    font-style: normal;
+    font-weight: 800;
+    font-size: 150px;
+    line-height: 154px;
+    letter-spacing: 0.4px;
+
+    color: #FFFFFF; 
+    text-shadow: 3px 4px #565555;
+}
+
+.home-button {
+    position: absolute;
+    width: 414px;
+    height: 118px;
+    left: 1133px;
+    top: 1200px;
+    background: #FFFFFF;
+    box-shadow: 10px 10px 10px rgba(254, 254, 254, 0.25);
+    border-radius: 50px;
+    border: #F5F0F2;
+}
+
+.home-button > p {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 32px;
+    line-height: 38px;
+    letter-spacing: 0.4px;
+
+    color: #ABA6A6;
+}

@@ -2,7 +2,7 @@ import { createContext, useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLocalStorage } from '../hook/UseLocalStorage';
 
-const AuthContext = createContext({});
+export const AuthContext = createContext({});
 
 export const AuthProvider = ({ children }) => {
     const navigate = useNavigate();
@@ -11,7 +11,7 @@ export const AuthProvider = ({ children }) => {
 
     const onLogin = (useCred) => {
         setUser(useCred)
-        navigate('dashboard', { replace: true });
+        navigate('home', { replace: true });
     };
     const onLogout = () => {
         setUser(null)
