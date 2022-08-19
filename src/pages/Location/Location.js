@@ -1,10 +1,9 @@
-import axios, { Axios } from 'axios';
+import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-
-
-
-const Location = () => {
-    const url = 'http://localhost:3002/location'
+import Sidebar from '../../shared/components/Sidebar/Sidebar';
+import { LocationList } from './LocationList';
+export const Location = () => {
+  
   const[location, setLocation] = useState('');
     
   const handleLocation = (e)=>{
@@ -16,36 +15,23 @@ const Location = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     alert('Success')
-    // axios.post(url,{
-    //     location:location
-    // })
-    // .then(res=>{
-    //     console.log(res.location);
-    // })
+    axios.post('https://62ff0fb5a85c52ee48401579.mockapi.io/location',{
+      location
+    })
 
   }
 
-  
-
-
   return (
+    <>
+    
+    <Sidebar/>
     <div>
       <div className="d-flex flex-row">
-        <button type="button" className="me-3 btn btn-primary ml-auto d-block mb-2" data-bs-toggle="modal" data-bs-target="#addModalForm">
+        <button type="button" className="me-3 mt-4 btn btn-primary ml-auto d-block mb-2" data-bs-toggle="modal" data-bs-target="#addModalForm">
           Add Location +
         </button>
       </div>
-      <table className="table table-bordered border-primary table-responsive">
-        <thead>
-          <tr>
-            <th scope="col">Location</th>
-            <th scope="col">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          
-        </tbody>
-      </table>
+      <LocationList/>
 
       {/*Add Modal */}
       <div className="modal fade" id="addModalForm" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -77,7 +63,7 @@ const Location = () => {
         </div>
       </div>
     </div>
+    </>
   )
 }
 
-export default Location

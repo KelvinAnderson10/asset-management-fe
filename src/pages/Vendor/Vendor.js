@@ -1,62 +1,42 @@
-import React, { useState } from 'react'
-
+import axios, { Axios } from 'axios';
+import React, { useEffect, useState } from 'react'
+import Sidebar from '../../shared/components/Sidebar/Sidebar';
 export const Vendor = () => {
-    const[vendorName, setVendorName] = useState('');
-    const[address, setAddress] = useState('');
-    const[phone, setPhone] = useState('');
-    const[accountNumber, setAccountNumber] = useState('');
-    const [isShown, setIsShown] = useState(false);
-    const [message, setMessage] = useState("");
-  const handleVendor = (e)=>{
-    const name = e.target.value;
-    setVendorName(name);
-    console.log(name);
+  const url = 'http://localhost:3002/location'
+  const[data, setData] = useState({
+    name:"",
+    address:"",
+    phone:"",
+    accountNumber:""
+  });
+  const handleChange = (e) => {
+    const newData = {...data}
+    newData[e.target.name] = e.target.value
+    setData(newData)
+    console.log(newData);
   }
-
-  const handleaddress = (e)=>{
-    const address = e.target.value;
-    setAddress(address);
-    console.log(address);
+ 
+  //Add Data To Table
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    alert('Success')
   }
-
-  const handlephone = (e)=>{
-    const phone = e.target.value;
-    setPhone(phone);
-    console.log(phone);
-  }
-
-  const handleaccount = (e)=>{
-    const account_number = e.target.value;
-    setAccountNumber(account_number);
-    console.log(account_number);
-  }
-
   return (
-    <div> 
-        <div>
+    <>
+    <Sidebar/>
+    <div>
       <div className="d-flex flex-row">
-        <button type="button" className="me-3 btn btn-primary ml-auto d-block mb-2" data-bs-toggle="modal" data-bs-target="#addModalForm">
+        <button type="button" className="me-3 mt-4 btn btn-primary ml-auto d-block mb-2" data-bs-toggle="modal" data-bs-target="#addModalForm">
           Add Vendor +
         </button>
       </div>
-      <table className="table table-bordered border-primary table-responsive">
-        <thead>
-          <tr>
-            <th scope="col">Vendor Name </th>
-            <th scope="col">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          
-        </tbody>
-      </table>
 
       {/*Add Modal */}
       <div className="modal fade" id="addModalForm" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title" id="exampleModalLabel">Add New Location</h5>
+              <h5 className="modal-title" id="exampleModalLabel">Add New Vendor</h5>
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div className="modal-body">
@@ -67,29 +47,47 @@ export const Vendor = () => {
                   <input
                     type="text"
                     className="form-control"
-                    placeholder="Location Name"
+                    placeholder="Vendor Name"
                     required
-                    onChange={handleVendor}
+                    name='name'
+                    value={data.name}
+                    onChange={handleChange}
                   />
                 </div>
                 <div className="mb-3">
-                  <label className="form-label">Vendor Name</label>
+                  <label className="form-label">Address</label>
                   <input
                     type="text"
                     className="form-control"
-                    placeholder="Location Name"
+                    placeholder="Address"
                     required
-                    onChange={handleVendor}
+                    name='address'
+                    value={data.address}
+                    onChange={handleChange}
                   />
                 </div>
                 <div className="mb-3">
-                  <label className="form-label">Vendor Name</label>
+                  <label className="form-label">Phone</label>
                   <input
                     type="text"
                     className="form-control"
-                    placeholder="Location Name"
+                    placeholder="Phone"
                     required
-                    onChange={handleVendor}
+                    name='phone'
+                    value={data.phone}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="mb-3">
+                  <label className="form-label">Account Number</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Account Number"
+                    required
+                    name='accountNumber'
+                    value={data.accountNumber}
+                    onChange={handleChange}
                   />
                 </div>
                 <div className="modal-footer d-block">
@@ -101,9 +99,7 @@ export const Vendor = () => {
         </div>
       </div>
     </div>
-     
-   </div>
-      
-   
+    </>
   )
 }
+

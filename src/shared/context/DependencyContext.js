@@ -1,11 +1,16 @@
-import {createContext} from "react";
+import {createContext, useContext} from "react";
 
-export const DependencyContext = createContext({});
+const DepsContext = createContext({});
 
-export function DependencyProvider({children, services}) {
+export function useDeps() {
+    return useContext(DepsContext);
+}
+
+export function DepsProvider({children, services}) {
+    
     return (
-        <DependencyContext.Provider value={services}>
+        <DepsContext.Provider value={services}>
             {children}
-        </DependencyContext.Provider>
+        </DepsContext.Provider>
     )
 }
