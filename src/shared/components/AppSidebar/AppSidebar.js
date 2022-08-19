@@ -21,19 +21,48 @@ export const AppSidebar = () => {
           Overview
         </a>
       </li>
-      <li onClick={() => handleClick('/home/data-management')} className={activeMenu === '/home/data-management' ? "nav-item active" : "nav-item"}>
-        <a className="nav-link ">
-          <svg className="bi pe-none me-2" width="16" height="16"></svg>
-          Data Management
-        </a>
-      </li>
-      <li onClick={() => handleClick('/home/asset-item')} className={activeMenu === '/home/asset-item' ? "nav-item active" : "nav-item"}>
+      <li onClick={() => handleClick('/home/assetitem')} className={activeMenu === '/home/data-management' ? "nav-item active" : "nav-item"}>
         <a className="nav-link ">
           <svg className="bi pe-none me-2" width="16" height="16"></svg>
           Asset Item
         </a>
       </li>
-      
+      <li onClick={() => handleClick('/home/assetcategory')} className={activeMenu === '/home/asset-item' ? "nav-item active" : "nav-item"}>
+        <a className="nav-link ">
+          <svg className="bi pe-none me-2" width="16" height="16"></svg>
+          Asset Category
+        </a>
+      </li>
+      <li onClick={() => handleClick('/home/assetcategory')} className={activeMenu === '/home/asset-item' ? "nav-item active" : "nav-item"}>
+        <a className="nav-link ">
+          <svg className="bi pe-none me-2" width="16" height="16"></svg>
+          Category
+        </a>
+      </li>
+      <li onClick={() => handleClick('/home/assetcategory')} className={activeMenu === '/home/asset-item' ? "nav-item active" : "nav-item"}>
+        <a className="nav-link ">
+          <svg className="bi pe-none me-2" width="16" height="16"></svg>
+          SubCategory
+        </a>
+      </li>
+      <li onClick={() => handleClick('/home/vendor')} className={activeMenu === '/home/asset-item' ? "nav-item active" : "nav-item"}>
+        <a className="nav-link ">
+          <svg className="bi pe-none me-2" width="16" height="16"></svg>
+          Vendor
+        </a>
+      </li>
+      <li onClick={() => handleClick('/home/location')} className={activeMenu === '/home/asset-item' ? "nav-item active" : "nav-item"}>
+        <a className="nav-link ">
+          <svg className="bi pe-none me-2" width="16" height="16"></svg>
+         Location
+        </a>
+      </li>
+      <li onClick={() => handleClick('/home/importdata')} className={activeMenu === '/home/asset-item' ? "nav-item active" : "nav-item"}>
+        <a className="nav-link ">
+          <svg className="bi pe-none me-2" width="16" height="16"></svg>
+          Import Data
+        </a>
+      </li>
     </ul>
   </div>
   )
