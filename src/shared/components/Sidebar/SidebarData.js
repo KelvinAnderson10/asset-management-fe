@@ -4,6 +4,7 @@ import * as AiIcons from 'react-icons/ai';
 import * as IoIcons from 'react-icons/io';
 import * as RiIcons from 'react-icons/ri';
 import * as GoIcons from 'react-icons/go';
+import * as BiIcons from 'react-icons/bi';
 
 export const SidebarData = [
   {
@@ -28,9 +29,9 @@ export const SidebarData = [
         cName: 'sub-nav'
       },
       {
-        title: 'Product',
-        path: '/data-management/product',
-        icon: <FaIcons.FaProductHunt/>,
+        title: 'Asset Category',
+        path: '/data-management/asset-category',
+        icon: <BiIcons.BiCategoryAlt/>,
         cName: 'sub-nav'
       },
       {

@@ -5,12 +5,27 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 import "@fontsource/mulish";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.min.js";
+import { apiClientFactory } from './shared/ApiClientFactory';
+import { clientInstance } from './shared/AxiosClient';
+import { ServiceFactory } from './services/ServiceFactory';
+import { DepsProvider } from './shared/context/DependencyContext';
+
+
+const apiClient = apiClientFactory(clientInstance)
+const services = ServiceFactory(apiClient)
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
+    <DepsProvider services={services}>
+
+    
       <App />
+      </DepsProvider>
     </BrowserRouter>
   </React.StrictMode>
 );
