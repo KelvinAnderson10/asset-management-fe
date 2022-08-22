@@ -144,7 +144,7 @@ export const AssetItem = () => {
                   </div>
                   <div className='asset-form-input'>
                     <label className='label-tabel'>Purchase Date</label>
-                    <input type='text' className='form-control' required name='purchaseDate' value={data.purchaseDate} onChange={handleChange}/>
+                    <input type='date' className='form-control' required name='purchaseDate' value={data.purchaseDate} onChange={handleChange}/>
                   </div>
                 </div>
                 <div className='asset-box-right'>
@@ -184,7 +184,7 @@ export const AssetItem = () => {
                   </div>
                   <div className='asset-form-input'>
                     <label className='label-tabel'>year</label>
-                    <input type='text' className='form-control' required name='year' value={data.year} onChange={handleChange}/>
+                    <input type='year' className='form-control' required name='year' value={data.year} onChange={handleChange}/>
                   </div>
                   <div className='asset-form-input'>
                     <label className='label-tabel'>Item Order Code</label>

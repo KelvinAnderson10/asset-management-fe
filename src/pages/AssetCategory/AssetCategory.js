@@ -8,13 +8,8 @@ export const AssetCategory = () => {
         <>
             <Sidebar/>
             <div>
-                <div className="d-flex flex-row">
-                    <button type="button" className="me-3 mt-4 btn btn-primary ml-auto d-block mb-2" data-bs-toggle="modal" data-bs-target="#addModalForm">
-                    Add Asset Category +
-                    </button>
-                </div>
+                <AssetCategoryForm/>
                 <AssetCategoryList/>
-                <AssetCategoryForm id='addModalForm' label= 'Add New Asset Category' button='Submit' action='added'/>
             </div>
         </>
 

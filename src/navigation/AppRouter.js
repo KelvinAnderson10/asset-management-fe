@@ -18,7 +18,6 @@ export const AppRouter = () => {
             <Route path='/data-management'element={<AssetItem/>}/> 
             <Route path='/data-management/asset-item'element={<AssetItem/>}/>
             <Route path='/data-management/asset-category'element={<AssetCategory/>}/>
-            {/* <Route path='/data-management/asset-category' element={<AssetCategoryView/>}/> */}
             <Route path='/data-management/vendor'element={<Vendor/>}/>
             <Route path='/data-management/location'element={<Location/>}/>
             

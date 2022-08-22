@@ -1,30 +1,36 @@
 import React, { useState } from 'react'
 import { Success } from '../../shared/components/alert/Success'
+import { useDeps } from '../../shared/context/DependencyContext';
 
-export const AssetCategoryForm = ({id, label, button, action}) => {
-    const[data, setData] = useState({
-        assetCategory:'',
-        usefulLife:'',
-        productCode: '',
-        productName: '',
-        subproductName:''
-    })
+export const AssetCategoryForm = () => {
+    const[assetCategory, setAssetCategory] = useState({})
+    const {assetCategoryService} = useDeps();
+    const [isLoading, setLoading] = useState(false);
 
     const handleChange = (e) => {
-        const newData = {...data}
+        const newData = {...assetCategory}
         newData[e.target.name] = e.target.value
-        setData(newData)
+        setAssetCategory(newData)
         console.log(newData);
     }
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        Success(action);
-        clearForm();
+    const handleSubmit = async (e) => {
+        setLoading(true);
+        try { 
+            e.preventDefault();
+            clearForm();
+            const response = await assetCategoryService.createAssetCategory(assetCategory);
+            setAssetCategory(response.data)
+            console.log(response);
+        } catch (e) {
+            console.log(e);
+        } finally {
+            setLoading(false)
+        }
     }
 
     const clearForm = () => {
-        setData({
+        setAssetCategory({
         assetCategory:'',
         usefulLife:0,
         productCode: '',
@@ -35,11 +41,16 @@ export const AssetCategoryForm = ({id, label, button, action}) => {
 
     return (
         <div>
-            <div className='modal fade' id={id} tabIndex='-1' aria-hidden='true'>
+            <div className="d-flex flex-row">
+                    <button type="button" className="me-3 mt-4 btn btn-primary ml-auto d-block mb-2" data-bs-toggle="modal" data-bs-target="#addModalForm">
+                    Add Asset Category +
+                    </button>
+            </div>
+            <div className='modal fade' id='addModalForm' tabIndex='-1' aria-hidden='true'>
                     <div className='modal-dialog'>
                         <div className='modal-content'>
                             <div className='modal-header'>
-                                <h5 className='modal-title' id='exampleModallabel'>{label}</h5>
+                                <h5 className='modal-title' id='exampleModallabel'>Add New Asset Category</h5>
                                 <button type='button' className='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
                             </div>
                             <div className='modal-body'>
@@ -53,7 +64,7 @@ export const AssetCategoryForm = ({id, label, button, action}) => {
                                             placeholder='Asset Category'
                                             required
                                             name='assetCategory'
-                                            value={data.assetCategory}
+                                            value={assetCategory.assetCategory}
                                             onChange={handleChange}
                                         />
                                     </div>
@@ -65,7 +76,7 @@ export const AssetCategoryForm = ({id, label, button, action}) => {
                                             placeholder='Useful Life'
                                             required
                                             name='usefulLife'
-                                            value={data.usefulLife}
+                                            value={assetCategory.usefulLife}
                                             onChange={handleChange}
                                         />
                                     </div>
@@ -77,7 +88,7 @@ export const AssetCategoryForm = ({id, label, button, action}) => {
                                             placeholder='Product Code'
                                             required
                                             name='productCode'
-                                            value={data.productCode}
+                                            value={assetCategory.productCode}
                                             onChange={handleChange}
                                         />
                                     </div>
@@ -89,7 +100,7 @@ export const AssetCategoryForm = ({id, label, button, action}) => {
                                             placeholder='Product Name'
                                             required
                                             name='productName'
-                                            value={data.productName}
+                                            value={assetCategory.productName}
                                             onChange={handleChange}
                                         />
                                     </div>
@@ -101,12 +112,12 @@ export const AssetCategoryForm = ({id, label, button, action}) => {
                                             placeholder='Subproduct Name'
                                             required
                                             name='subproductName'
-                                            value={data.subproductName}
+                                            value={assetCategory.subproductName}
                                             onChange={handleChange}
                                         />
                                     </div>
                                     <div className='modal-footer d-block'>
-                                        <button type='submit' dat-bs-dismiss='modal' className='btn btn-warning float-end'>{button}</button>
+                                        <button type='submit' dat-bs-dismiss='modal' className='btn btn-warning float-end'>Submit</button>
                                     </div>
                                 </form>
                             </div>
