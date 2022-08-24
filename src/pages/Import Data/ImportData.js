@@ -1,10 +1,26 @@
 import React, { useEffect, useState } from 'react'
 import Sidebar from '../../shared/components/Sidebar/Sidebar'
 import * as XLSX from 'xlsx';
+import { useDeps } from '../../shared/context/DependencyContext';
 
 export const ImportData = () => {
   const [excelData, setExcelData] = useState([])
   const [doneUploadExcel, setDoneUploadExcel] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [uploadBackendData, setUploadBackendData] = useState([])
+
+  const {assetItemService} = useDeps();
+
+  const handleSubmit = async () => {
+    try {
+      const response = await assetItemService.batchInsert(uploadBackendData)
+      console.log(response);
+      alert("UPLOAD DATA SUCCESS !")
+    } catch (error) {
+      alert(error)
+      console.log(error);
+    }
+  }
 
   const convertExcelDate = (excelDate) => {
     let date = new Date(Math.round((excelDate - (25567 + 2)) * 86400 * 1000));
@@ -13,6 +29,7 @@ export const ImportData = () => {
   }
 
   const readUploadFile = (e) => {
+    setIsLoading(true)
     e.preventDefault();
     if (e.target.files) {
         const reader = new FileReader();
@@ -25,6 +42,8 @@ export const ImportData = () => {
 
             // Notes : yang dikirim ke backend tetap const json, const excelData hanya untuk tampilan
             setExcelData(json)
+
+            setUploadBackendData(json)
         };
         reader.readAsArrayBuffer(e.target.files[0]);
     }
@@ -33,6 +52,7 @@ export const ImportData = () => {
   useEffect(() => {
     console.log(excelData);
     setDoneUploadExcel(true)
+    setIsLoading(false)
   }, [excelData])
 
   return (
@@ -49,14 +69,15 @@ export const ImportData = () => {
       </form>
         <div className="body">
           <div className="container">
+            <br></br>
+                  <h2>
+                      Upload <b>Assets</b>
+                  </h2>
             <div className="table-responsive">
               <div className="table-wrapper">
                 <div className="table-title">
                   <div className="row">
-                    <div className="col-xs-6">
-                      <h2>
-                        Manage <b>Locations</b>
-                      </h2>
+                    <div className="col-xs-8">
                     </div>
                   </div>
                 </div>
@@ -68,7 +89,7 @@ export const ImportData = () => {
                       <th>Tahun</th>
                       <th>No. PO / Dokumenen Pendukung</th>
                       <th>Vendor</th>
-                      <th>Nama Barang</th>
+                      <th style={{minWidth: "300px"}}>Nama Barang</th>
                       <th>Harga Perolehan</th>
                       <th>PPN</th>
                       <th>Biaya Lain-Lain</th>
@@ -104,7 +125,7 @@ export const ImportData = () => {
                           <td>{item['Tahun']}</td>
                           <td>{item['No. PO / Dokumenen Pendukung']}</td>
                           <td>{item['Vendor']}</td>
-                          <td>{item['Nama Barang']}</td>
+                          <td style={{minWidth: "300px"}}>{item['Nama Barang']}</td>
                           <td>{item['Harga Perolehan']}</td>
                           <td>{item['PPN']}</td>
                           <td>{item['Biaya Lain-Lain']}</td>
@@ -140,7 +161,7 @@ export const ImportData = () => {
               <br></br>
               <br></br>
               <br></br>
-              <button>Save</button>
+              <button onClick={handleSubmit}>Save</button>
               <button>Clear</button>
               <br></br>
               <br></br>
@@ -149,6 +170,9 @@ export const ImportData = () => {
               <br></br>
           </div>
         </div>
+
+        {/* tinggal didesign */}
+        {isLoading && <div>Lagi loading</div>}
 
     
     

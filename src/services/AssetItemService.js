@@ -47,8 +47,17 @@ export const assetItemService = ({doGet,doPost,doPut,doDelete}) => {
             throw e;
         }
     }
+
+    const batchInsert = async (batchData) => {
+        try {
+            return await doPost({
+                url: `/asset/batch`, data: batchData})
+        } catch (e) {
+            throw e;            
+        }
+    }
     
 
 
-  return {getAllAsset,createAsset,updateAsset,deleteAsset,getAssetByName}
+  return {getAllAsset,createAsset,updateAsset,deleteAsset,getAssetByName, batchInsert}
 }

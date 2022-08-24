@@ -28,24 +28,25 @@
 
 .AppFooter {
   position: fixed;
-  width: 100%;
-  height: 50px;
+  width: 100vw;
   bottom: 0px;
   background: #383838;
+  display: flex;
+  /* align-items: center;
+  justify-content: flex-start; */
+  flex-direction: column;
 }
 
 .AppFooter > p {
-  position: absolute;
-  width: 374.51px;
-  height: 41px;
-  left: 42.2%;
+  width: 100vw;
+  height: 100%;
   font-family: 'Mulish';
   font-style: normal;
   font-weight: 600;
   font-size: 16px;
   line-height: 20px;
-  display: flex;
-  align-items: center;
   letter-spacing: 0.2px;
   color: #FFFFFF;
+  margin: 20px;
+  align-self: flex-end;
 }
