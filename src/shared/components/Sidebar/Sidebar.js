@@ -40,7 +40,7 @@ const Sidebar = () => {
           <div className='NavIcon' to='#'>
             <FaIcons.FaBars onClick={showSidebar}/>
             <AiIcons.AiOutlineLogout className='logout' onClick={onLogout}/>
-          </div>
+          </div> 
         </div>
         <SidebarNav sidebar={sidebar}>
           <div className='SidebarWrap'>
@@ -55,7 +55,7 @@ const Sidebar = () => {
         </SidebarNav>
         <div className='AppFooter'>
           <p>Copyright © by Kelompok 6, All Rights Reserved</p>
-      </div> 
+        </div>
       </IconContext.Provider>
     </>
   );

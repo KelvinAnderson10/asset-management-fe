@@ -81,7 +81,7 @@ export const AssetItem = () => {
     <>
         <Sidebar/>
         <form onSubmit={handleSubmit}>
-          <div className='asset-form-container'>
+          <div className='App asset-form-container'>
             <div className='asset-form-box'>
               <label>Add Single Asset</label>
               <div className='asset-form'>
@@ -140,7 +140,7 @@ export const AssetItem = () => {
                   </div>
                   <div className='asset-form-input'>
                     <label className='label-tabel'>Purchase Price</label>
-                    <input type='text' className='form-control' required name='purchasePrice' value={data.purchasePrice} onChange={handleChange}/>
+                    <input type='number' className='form-control' required name='purchasePrice' value={data.purchasePrice} onChange={handleChange}/>
                   </div>
                   <div className='asset-form-input'>
                     <label className='label-tabel'>Purchase Date</label>
@@ -183,7 +183,7 @@ export const AssetItem = () => {
                     <input type='text' className='form-control' required name='assetCode' value={data.assetCode} onChange={handleChange}/>
                   </div>
                   <div className='asset-form-input'>
-                    <label className='label-tabel'>year</label>
+                    <label className='label-tabel'>Year</label>
                     <input type='year' className='form-control' required name='year' value={data.year} onChange={handleChange}/>
                   </div>
                   <div className='asset-form-input'>

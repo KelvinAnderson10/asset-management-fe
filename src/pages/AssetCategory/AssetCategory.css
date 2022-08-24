@@ -1,0 +1,309 @@
+.asset-category-container {
+    display: flex;
+    justify-content: center;
+    height: 88vh;
+    align-items: center;
+    flex-direction: column;
+}
+
+.asset-category-container .asset-category-box{
+  display: flex;
+  flex-direction: column;
+  height: 92%;
+  width: 70%;
+}
+
+.asset-category-box .feature{
+  display: flex;
+  flex-direction: column;
+  height: 30%;
+  width: 100%;
+  align-content: center;
+  align-items: center;
+}
+
+.feature > Button {
+  width: 23%;
+}
+
+.feature .search {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 50%;
+  justify-content: space-around;
+  align-items: flex-end;
+  bottom: 0%;
+}
+
+.form-search{
+  align-items: flex-start;
+  justify-content: flex-start;
+  display: flex;
+  flex-direction: column;
+  font-family: Lato,sans-serif;
+}
+
+.form-search .input-group-append .form-button {
+  width: 40px;
+  height: 40px
+}
+
+.table-header{
+    background-color: #808080;
+    color: white;
+    height: 70px;
+}
+
+.view {
+    color: black;
+}
+
+.edit {
+    color: green;
+}
+
+.delete {
+    color: red;
+}
+
+.detail-view {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(216, 217, 222, 0.40);;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    z-index: 100;
+}
+.card {
+    width: 600px;
+    height: 700px;
+    background: #FFFFFF;
+    border-radius: 60px;
+    /* display: flex; */
+    /* flex-direction: row-reverse; */
+}
+
+.card .row {
+    width: 500px;
+    height: 150px;
+    display: flex;
+    flex-direction: column;
+    align-content: space-between;
+    margin-left: 100px;
+}
+
+.form-update{
+    width: 400px;
+    background: #FFFFFF;
+    border-radius: 30px;
+    padding: 20px 20px 20px 20px;
+}
+
+.pageNumbers {
+    list-style: none;
+    display: flex;
+    float: left;
+}
+
+.pageNumbers li {
+    padding: 5px;
+    background-color: #cccdce;
+    cursor: pointer
+}
+
+.pageNumbers li.active {
+    background-color: #3e4041;
+    color: rgb(255, 255, 255);
+}
+
+.pageNumbers li button {
+    background-color: transparent;
+    order: none;
+    color: rgb(0, 0, 0);
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.pageNumbers li button:hover {
+    background-color: #999;
+    color: black;
+}
+
+.pageNumbers li button:focus {
+    outline: none;
+}
+
+.pagination {
+    float: right;
+    margin: 0 0 5px;
+  }
+  .pagination li a {
+    border: none;
+    font-size: 13px;
+    min-width: 30px;
+    min-height: 30px;
+    color: #999;
+    margin: 0 2px;
+    line-height: 30px;
+    border-radius: 2px !important;
+    text-align: center;
+    padding: 0 6px;
+  }
+  .pagination li a:hover {
+    color: rgb(110, 77, 77);
+  }
+  .pagination li.active a,
+  .pagination li.active a.page-link {
+    background: #03a9f4;
+  }
+  .pagination li.active a:hover {
+    background: #0397d6;
+  }
+  .pagination li.disabled i {
+    color: #ccc;
+  }
+  .pagination li i {
+    font-size: 16px;
+    padding-top: 6px;
+  }
+  .hint-text {
+    float: right;
+    margin-top: 10px;
+    font-size: 13px;
+  }
+
+
+
+.form-control{
+	border-radius: 7px;
+	border: 1.5px solid #E3E6ED;
+  max-width: 500px;
+}
+input.form-control:focus{
+	box-shadow: none;
+	border: 1.5px solid #E3E6ED;
+	background-color: #F7F8FD;
+	letter-spacing: 1px;
+}
+.btn-primary{
+	
+	border-radius: 7px;
+}
+.btn-primary:focus{
+	box-shadow: none;
+}
+
+.form-loc .form-label {
+  text-align: left;
+}
+
+.body {
+  color: #6478a0;
+  height: auto;
+  overflow: hidden;
+  font-family: "Varela Round", sans-serif;
+}
+.table-responsive {
+  margin: 0px 0;
+}
+.table-wrapper {
+  min-width: 900px;
+  max-height: 95vh;
+  background: rgb(248, 248, 248);
+  padding: 20px 25px;
+  border-radius: 3px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+.table-title {
+  padding-bottom: 15px;
+  background: #757a81;
+  color: rgb(255, 255, 255);
+  padding: 16px 20px;
+  margin: -20px -25px 10px;
+  border-radius: 3px 3px 0 0;
+}
+.table-title h2 {
+  margin: 5px 0 0;
+  font-size: 34px;
+}
+.table-title .btn-group {
+  float: left;
+}
+.table-title .btn {
+  color: #fff;
+  float: right;
+  font-size: 14px;
+  border: none;
+  min-width: 50px;
+  border-radius: 2px;
+  border: none;
+  outline: none !important;
+  margin-left: 10px;
+}
+.table-title .btn i {
+  float: left;
+  font-size: 21px;
+  margin-right: 5px;
+}
+.table-title .btn span {
+  float: left;
+  margin-top: 2px;
+}
+table.table tr th,
+table.table tr td {
+  border-color: #ffffff;
+  padding: 12px 15px;
+  vertical-align: middle;
+}
+table.table tr th:first-child {
+  width: 40px;
+}
+table.table tr th:last-child {
+  width: 200px;
+}
+table.table-striped tbody tr:nth-of-type(odd) {
+  background-color: #fcfcfc;
+}
+table.table-striped.table-hover tbody tr:hover {
+  background: #dadada;
+}
+table.table th i {
+  font-size: 13px;
+  margin: 0 5px;
+  cursor: pointer;
+}
+table.table td:last-child i {
+  opacity: 0.9;
+  font-size: 22px;
+  margin: 0 5px;
+}
+table.table td a {
+  font-weight: bold;
+  color: #133b85;
+  display: inline-block;
+  text-decoration: none;
+  outline: none !important;
+}
+table.table td a:hover {
+  color: #2196f3;
+}
+table.table td a.edit {
+  color: #ffc107;
+}
+table.table td a.delete {
+  color: #f44336;
+}
+table.table td i {
+  font-size: 19px;
+}
+table.table .avatar {
+  border-radius: 50%;
+  vertical-align: middle;
+  margin-right: 10px;
+}

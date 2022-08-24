@@ -8,7 +8,8 @@ import {Location} from '../pages/Location/Location'
 import {Vendor} from '../pages/Vendor/Vendor'
 import { PageNotFound } from '../pages/PageNotFound/PageNotFound'
 import { AssetCategory } from '../pages/AssetCategory/AssetCategory'
-// import { AssetCategoryView } from '../pages/AssetCategory/AssetCategoryView'
+
+
 export const AppRouter = () => {
     return (
         <Routes>

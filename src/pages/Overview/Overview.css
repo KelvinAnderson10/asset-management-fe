@@ -1,0 +1,132 @@
+.overview-container{
+    display: flex;
+    justify-content: center;
+    height: 88vh;
+    width: 100vw;
+    align-items: center;
+    align-content: center;
+}
+
+.overview-container .overview-card {
+    background-color:whitesmoke;
+    width: 95%;
+    display: flex;
+    justify-content: center;
+    height: 85vh;
+    align-items: flex-end;
+    flex-direction: column;
+    align-content: flex-end;
+}
+
+.overview-card .overview-box {
+    width: 100%;
+    height: 65vh;
+    box-shadow: 0px 0px 0px 1px rgba(152, 161, 178, 0.1), 0px 1px 4px rgba(69, 75, 87, 0.12), 0px 0px 2px rgba(0, 0, 0, 0.08);
+    border-radius: 10px;
+    overflow-x: scroll;
+}
+
+.overview-card .table-header{
+    background-color:#3B3634;
+    color: white;
+    height: 100px;
+}
+
+.overview-card .col-table{
+    width: 100px;
+    justify-items: center;
+}
+
+.pageNumbers {
+    list-style: none;
+    display: flex;
+    float: left;
+  }
+  
+  .pageNumbers li {
+    padding: 5px;
+    background-color: #cccdce;
+    cursor: pointer;
+  }
+  
+  .pageNumbers li.active {
+    background-color: #3e4041;
+    color: rgb(255, 255, 255);
+  }
+  
+  .pageNumbers li button {
+    background-color: transparent;
+    border: none;
+    color: rgb(0, 0, 0);
+    font-size: 13px;
+    cursor: pointer;
+  }
+  .pageNumbers li button:hover {
+    background-color: #999;
+    color: black;
+  }
+  .pageNumbers li button:focus {
+    outline: none;
+  }
+
+  .pagination {
+    float: right;
+    margin: 0 0 5px;
+  }
+  .pagination li a {
+    border: none;
+    font-size: 13px;
+    min-width: 30px;
+    min-height: 30px;
+    color: #999;
+    margin: 0 2px;
+    line-height: 30px;
+    border-radius: 2px !important;
+    text-align: center;
+    padding: 0 6px;
+  }
+  .pagination li a:hover {
+    color: rgb(110, 77, 77);
+  }
+  .pagination li.active a,
+  .pagination li.active a.page-link {
+    background: #03a9f4;
+  }
+  .pagination li.active a:hover {
+    background: #0397d6;
+  }
+  .pagination li.disabled i {
+    color: #ccc;
+  }
+  .pagination li i {
+    font-size: 16px;
+    padding-top: 6px;
+  }
+  .hint-text {
+    float: right;
+    margin-top: 10px;
+    font-size: 13px;
+  }
+
+.form-control{
+	border-radius: 7px;
+	border: 1.5px solid #E3E6ED;
+  max-width: 280px;
+}
+input.form-control:focus{
+	box-shadow: none;
+	border: 1.5px solid #E3E6ED;
+	background-color: #F7F8FD;
+	letter-spacing: 1px;
+}
+.btn-primary{
+	
+	border-radius: 7px;
+}
+.btn-primary:focus{
+	box-shadow: none;
+}
+
+.form-loc .form-label {
+  text-align: left;
+}
