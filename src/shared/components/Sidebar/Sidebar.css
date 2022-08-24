@@ -27,22 +27,27 @@
 }
 
 .AppFooter {
-  position: absolute;
-  width: 100%;
-  height: 5vh;
-  bottom: 0%;
+  position: fixed;
+  width: 100vw;
+  bottom: 0px;
   background: #383838;
   /* margin-top: 100px; */
+  display: flex;
+  /* align-items: center;
+  justify-content: flex-start; */
+  flex-direction: column;
 }
 
 .AppFooter > p {
-  position: absolute;
-  bottom: 10%;
-  left: 42.2%;
+  width: 100vw;
+  height: 100%;
   font-family: 'Mulish';
   font-style: normal;
   font-weight: 600;
-  font-size: 1em;
-  letter-spacing: 0.08em;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: 0.2px;
   color: #FFFFFF;
+  margin: 20px;
+  align-self: flex-end;
 }
