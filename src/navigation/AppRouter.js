@@ -1,11 +1,12 @@
 import React from 'react'
 import { Routes, Route } from 'react-router-dom'
-import { AssetItem } from '../pages/AssetItem/AssetItem'
+
 import { HomeView } from '../pages/HomePage/HomeView'
 import { LoginView } from '../pages/Login/LoginView'
 import { Overview } from '../pages/Overview/Overview'
 import { Location } from '../pages/Location/Location'
 import { VendorManage } from '../pages/Vendor/Vendor'
+import { AssetItem } from '../pages/AssetItem/AssetItem'
 
 export const AppRouter = () => {
     return (

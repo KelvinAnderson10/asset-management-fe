@@ -103,6 +103,7 @@ export const VendorManage = () => {
         })
       }
       onGetAllVendor();
+      clearForm();
     } catch (error) {
       console.log(error.response);
     } finally {
@@ -286,7 +287,16 @@ export const VendorManage = () => {
       setOrder("ASC");
     }
   };
-  
+  // CLEAR FORM
+  const clearForm = () => {
+    setVendorData({
+      name: '',
+      address: '',
+      phone: '',
+      account_number: '',
+    });
+    
+}
 
   return (
     <>
@@ -488,6 +498,7 @@ export const VendorManage = () => {
                 <div className="form-group">
                   <label className="form-label">Vendor Name <span style={{color :"red"}} >*</span> </label>
                   <input
+                  required
                     type="text"
                     className="form-control"
                     onChange={handleChange}
@@ -500,6 +511,7 @@ export const VendorManage = () => {
                 <div className="form-group mt-3">
                   <label className="form-label">Address <span style={{color :"red"}} >*</span></label>
                   <input
+                  required
                     type="text"
                     className="form-control"
                     onChange={handleChange}
@@ -512,6 +524,7 @@ export const VendorManage = () => {
                 <div className="form-group mt-3">
                   <label className="form-label">Phone Number <span style={{color :"red"}} >*</span></label>
                   <input
+                  required
                     type="text"
                     className="form-control"
                     onChange={handleChange}
@@ -523,6 +536,7 @@ export const VendorManage = () => {
                 <div className="form-group mt-3">
                   <label className="form-label">Account Number <span style={{color :"red"}} >*</span></label>
                   <input
+                  required
                     type="text"
                     className="form-control"
                     onChange={handleChange}
