@@ -7,6 +7,7 @@ import { Overview } from '../pages/Overview/Overview'
 import { Location } from '../pages/Location/Location'
 import { VendorManage } from '../pages/Vendor/Vendor'
 import { AssetItem } from '../pages/AssetItem/AssetItem'
+import { ImportData } from '../pages/Import Data/ImportData'
 
 export const AppRouter = () => {
     return (
@@ -19,6 +20,7 @@ export const AppRouter = () => {
             <Route path='/data-management/product'element={<AssetItem/>}/>
             <Route path='/data-management/vendor'element={<VendorManage/>}/>
             <Route path='/data-management/location'element={<Location/>}/>
+            <Route path='/upload-data' element={<ImportData/>} />
            
             
         </Routes>

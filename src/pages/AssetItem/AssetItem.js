@@ -231,6 +231,14 @@ export const AssetItem = () => {
                     <input accept='image/*' type='file' onChange={imageChange}/>
                   </div>
                   <div className='asset-form-input'>
+                    <label className='label-tabel'>Insurance</label>
+                    <select className='form-control' required name='Insurance' value={data.Insurance} onChange={handleChange}>
+                    <option value="">Select</option>
+                      <option>Sudah</option> 
+                      <option>Belum</option>                 
+                    </select>
+                  </div>
+                  <div className='asset-form-input'>
                     <label className='label-tabel'>Purchase Year</label>
                     <input type='year' className='form-control' required name='Tahun Pembelian' value={data['Tahun Pembelian']} onChange={handleChange}/>
                   </div>
