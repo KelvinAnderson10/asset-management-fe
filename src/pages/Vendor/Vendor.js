@@ -53,7 +53,8 @@ export const VendorManage = () => {
   const [ViewEdit, SetEditShow] = useState(false);
 
   const handleEditShow = (index, item) => {
-    SetRowData(item);
+    setVendorData(item);
+    SetRowData(item)
     console.log("ini index", index);
     setId(index);
     setDelete(true);
@@ -406,7 +407,7 @@ export const VendorManage = () => {
 
                             <a
                               onClick={() => {
-                                handleEditShow(RowData.name, item);
+                                handleEditShow(item.name, item);
                               }}
                               className="edit"
                               data-toggle="modal"

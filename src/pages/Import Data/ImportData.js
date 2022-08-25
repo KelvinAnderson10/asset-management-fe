@@ -12,9 +12,10 @@ export const ImportData = () => {
   const {assetItemService} = useDeps();
 
   const handleSubmit = async () => {
+    
     try {
       const response = await assetItemService.batchInsert(uploadBackendData)
-      console.log(response);
+      console.log('ini respon submit',response);
       alert("UPLOAD DATA SUCCESS !")
     } catch (error) {
       alert(error)

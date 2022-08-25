@@ -1,16 +1,14 @@
 import React, { useEffect,useState } from 'react'
 import { Success } from '../../shared/components/Notification/Success'
 import Sidebar from '../../shared/components/Sidebar/Sidebar'
-import { useDeps } from '../../shared/context/DependencyContext'
-import '../AssetItem/AssetItem.css'
-
+import { useDeps } from "../../shared/context/DependencyContext";
 import { Failed } from '../../shared/components/Notification/Failed';
 import moment from 'moment'
+import './AssetItem.css'
 
-export const AssetItem = () => {
+export const AssetItem= () => {
   const [data, setData] = useState({});
 
-  const [assetCategory, setAssetCategory] = useState([])
   const [selectedImage, setSelectedImage] = useState();
 
   const[subProductName, setSubProductName] = useState([])
@@ -105,7 +103,6 @@ export const AssetItem = () => {
     e.preventDefault();
     
     try {
-
       data['Tahun'] = Number(data['Tahun'])
       data['Harga Perolehan'] = Number(data['Harga Perolehan'])
       data['Total Harga Perolehan'] = Number(data['Total Harga Perolehan'])
@@ -119,13 +116,12 @@ export const AssetItem = () => {
       setData(response.data);
       console.log(response);
       Success('added')
-      e.target.reset()
+      clearForm();
     } catch (error) {
       console.log(error.response);
       Failed();
-      
     } finally {
-      
+      e.target.reset();
     }
     
   }
@@ -135,26 +131,31 @@ export const AssetItem = () => {
   }
 
   const clearForm = () => {
+    setData({})
       setSelectedImage()
   }
 
-
   return (
-    <>
+    <div>
         <Sidebar/>
-        <form onSubmit={handleSubmit}>
-          <div className='asset-form-container'>
-            <div className='asset-form-box'>
-              <label>Add Single Asset</label>
-              <div className='asset-form'>
-                <div className='asset-box-left'>
-                  <div className='asset-form-input'>
-                    <label className='label-tabel'>Asset Name</label>
-                    <input type='text' className='form-control' required name='Nama Barang' value={data["Nama Barang"]} onChange={handleChange}/>
-                  </div>
-                  <div className='asset-form-input'>
-                    <label className='label-tabel'>Subproduct Name</label>
-                    <select className='form-control' required name='Jenis Produk' value={data['Jenis Produk']} onChange={handleChange}>
+        <div className='main-container'>
+        <div className="asset-container">
+
+<form onSubmit={handleSubmit}>
+
+    <div className="row">
+
+        <div className="col">
+
+            <h3 className="title">Add Asset Item</h3>
+
+            <div className="inputBox">
+                <span>Asset Name :</span>
+                <input type='text' required name='Nama Barang' value={data["Nama Barang"]} onChange={handleChange}/>
+            </div>
+            <div className="inputBox">
+                <span>Subproduct Name :</span>
+                <select required name='Jenis Produk' value={data['Jenis Produk']} onChange={handleChange}>
                       <option value="" >Select Subproduct</option> 
                       {
                         subProductName.map((item)=>(
@@ -163,10 +164,10 @@ export const AssetItem = () => {
                       }
       
                     </select>
-                  </div>
-                  <div className='asset-form-input'>
-                    <label className='label-tabel'>Vendor</label>
-                    <select className='form-control' required name='Vendor' value={data.Vendor} onChange={handleChange}>
+            </div>
+            <div className="inputBox">
+                <span>Vendor :</span>
+                <select required name='Vendor' value={data.Vendor} onChange={handleChange}>
                     <option value="">Select Vendor</option>
                       
                       {
@@ -175,10 +176,10 @@ export const AssetItem = () => {
                         ))
                       }
                     </select>
-                  </div>
-                  <div className='asset-form-input'>
-                    <label className='label-tabel'>Location</label>
-                    <select className='form-control' required name='Kode Wilayah' value={data['Kode Wilayah']} onChange={handleChange}>
+            </div>
+            <div className="inputBox">
+                <span>Location :</span>
+                <select required name='Kode Wilayah' value={data['Kode Wilayah']} onChange={handleChange}>
                     <option value="">Select Location</option>
                       {
                         locations.map((item,index)=>(
@@ -186,44 +187,41 @@ export const AssetItem = () => {
                         ))
                       }
                     </select>
-                  </div>
-                  <div className='asset-form-input'>
-                    <label className='label-tabel'>Condition</label>
-                    <select className='form-control' required name='Kondisi' value={data.Kondisi} onChange={handleChange}>
+            </div>
+            <div className="inputBox">
+                <span>Condition :</span>
+                <select  required name='Kondisi' value={data.Kondisi} onChange={handleChange}>
                     <option value="">Select Condition</option>
                       <option>Baik</option> 
                       <option>Rusak</option>
                       <option>Other</option>                 
                     </select>
-                  </div>
-                  <div className='asset-form-input'>
-                    <label className='label-tabel'>PO Number</label>
-                    <input type='text' className='form-control' required name='No. PO / Dokumenen Pendukung' value={data['No. PO / Dokumenen Pendukung']} onChange={handleChange}/>
-                  </div>
-                  <div className='asset-form-input'>
-                    <label className='label-tabel'>Purchase Date</label>
-                    <input type='datetime-local' className='form-control' required name='Tanggal Output' value={data['Tanggal Output']} onChange={handleChange}/>
-                  </div>
-                  <div className='asset-form-input'>
-                    <label className='label-tabel'>BAST</label>
-                    <input type='datetime-local' className='form-control' required name='BAST Output' value={data['BAST Output']} onChange={handleChange}/>
-                  </div>
-                  <div className='asset-form-input'>
-                    <label className='label-tabel'>Purchase Price</label>
-                    <input type='text' className='form-control' required name='Harga Perolehan' value={data['Harga Perolehan']} onChange={handleChange}/>
-                  </div>
-                  <div className='asset-form-input'>
-                    <label className='label-tabel'>Additional Cost</label>
-                    <input type='text' className='form-control' required name='Biaya Lain-Lain' value={data['Biaya Lain-Lain']} onChange={handleChange}/>
-                  </div>
-                  <div className='asset-form-input'>
-                    <label className='label-tabel'>Total Acquisition Cost</label>
-                    <input type='text' className='form-control' required name='Total Harga Perolehan' value={data['Total Harga Perolehan']} onChange={handleChange}/>
-                  </div>
-                  
-                </div>
-                <div className='asset-box-right'>
-                  <div className='asset-image-container'>
+            </div>
+            <div className="inputBox">
+                <span>PO Number :</span>
+                <input type='text' required name='No. PO / Dokumenen Pendukung' value={data['No. PO / Dokumenen Pendukung']} onChange={handleChange}/>
+            </div>
+            <div className="inputBox">
+                <span>Purchase Date :</span>
+                <input type='datetime-local' required name='Tanggal Output' value={data['Tanggal Output']} onChange={handleChange}/>
+            </div>
+            <div className="inputBox">
+                <span>BAST :</span>
+                <input type='datetime-local'  required name='BAST Output' value={data['BAST Output']} onChange={handleChange}/>
+            </div>
+            <div className="inputBox">
+                <span>Purchase Price :</span>
+                <input type='number' required name='Harga Perolehan' value={data['Harga Perolehan']} onChange={handleChange}/>
+            </div>
+            <div className="inputBox">
+                <span>Additional Cost :</span>
+                <input type='number'  required name='Biaya Lain-Lain' value={data['Biaya Lain-Lain']} onChange={handleChange}/>
+            </div>
+            
+            
+        </div>
+        <div className="col">
+        <div className='asset-image-container'>
                     <div className='image-box'>
                         {selectedImage && (<div className='image'> <img src={URL.createObjectURL(selectedImage)}
                           className='image' alt='Thumb'/>
@@ -231,61 +229,69 @@ export const AssetItem = () => {
                           </div>
                         )}
                     </div>
-                    <input accept='image/*' type='file' onChange={imageChange}/>
-                  </div>
-                  <div className='asset-form-input'>
-                    <label className='label-tabel'>Insurance</label>
-                    <select className='form-control' required name='Insurance' value={data.Insurance} onChange={handleChange}>
+                    <input id="upload"  accept='image/*' type='file' onChange={imageChange}/>
+                   
+        </div>
+        <div className="inputBox">
+                <span>Total Acquisition Cost :</span>
+                <input type='text'required name='Total Harga Perolehan' value={data['Total Harga Perolehan']} onChange={handleChange}/>
+            </div>
+            <div className="inputBox">
+                <span>Insurance</span>
+                <select  required name='Insurance' value={data.Insurance} onChange={handleChange}>
                     <option value="">Select</option>
                       <option>Sudah</option> 
                       <option>Belum</option>                 
                     </select>
-                  </div>
-                  <div className='asset-form-input'>
-                    <label className='label-tabel'>Purchase Year</label>
-                    <input type='year' className='form-control' required name='Tahun Pembelian' value={data['Tahun Pembelian']} onChange={handleChange}/>
-                  </div>
-                  <div className='asset-form-input'>
-                    <label className='label-tabel'>User</label>
-                    <input type='text' className='form-control' required name='User' value={data.User} onChange={handleChange}/>
-                  </div>
-                  <div className='asset-form-input'>
-                    <label className='label-tabel'>Initial</label>
-                    <input type='text' className='form-control' required name='Initisal' value={data['Initisal']} onChange={handleChange}/>
-                  </div>
-                  
-                  <div className='asset-form-input'>
-                    <label className='label-tabel'>Asset Code</label>
-                    <select className='form-control' required name='Kode Asset' value={data['Kode Asset']} onChange={handleChange}>
+            </div>
+            
+            <div className="inputBox">
+                <span>Purchase Year :</span>
+                <input type='year' required name='Tahun Pembelian' value={data['Tahun Pembelian']} onChange={handleChange}/>
+            </div>
+            <div className="inputBox">
+                <span>User :</span>
+                <input type='text' required name='User' value={data.User} onChange={handleChange}/>
+            </div>
+            <div className="inputBox">
+                <span>User :</span>
+                <input type='text' required name='Initisal' value={data['Initisal']} onChange={handleChange}/>
+            </div>
+            <div className="inputBox">
+                <span>Asset Code :</span>
+                <select required name='Kode Asset' value={data['Kode Asset']} onChange={handleChange}>
                       <option value="" >Select Asset Code</option> 
                       {
                         subProductName.map((item)=>(
                           <option key={item.subproduct_name} value={item.product_code} >{item.subproduct_name}-{item.product_code}</option>
                         ))
                       }
-      
-                    </select>
-  
-                  </div>
-                  <div className='asset-form-input'>
-                    <label className='label-tabel'>Year</label>
-                    <input type='year' className='form-control' required name='Tahun' value={data.Tahun} onChange={handleChange}/>
-                  </div>
-                  <div className='asset-form-input'>
-                    <label className='label-tabel'>Item Order Code</label>
-                    <input type='text' className='form-control' required name='Kode Urut barang' value={data['Kode Urut barang']} onChange={handleChange}/>
-                  </div>
-                </div>
-                </div>
-                <div className='button-asset'>
+                      </select>
+                <div className="inputBox">
+                <span>Year :</span>
+                <input type='year'  required name='Tahun' value={data.Tahun} onChange={handleChange}/>
+            </div>
+
+            <div className="inputBox">
+                <span>Item Order Code :</span>
+                <input type='text'  required name='Kode Urut barang' value={data['Kode Urut barang']} onChange={handleChange}/>
+            </div>
+            </div>
+            <div className='button-asset'>
                   <button type='submit' className='btn btn-danger button-cancel' onClick={handleCancel}>Cancel</button>
                   <button type='submit' className='btn btn-primary button-submit'>Submit</button>
-                </div>
-            </div>
-          </div>
-        </form>
+                </div>      
+        </div>
         
-    </>
+    </div>
+
     
+                  
+  
+</form>
+
+</div> 
+</div>
+</div>
   )
 }

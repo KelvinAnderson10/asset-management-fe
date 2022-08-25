@@ -29,5 +29,36 @@ export const overviewService = ({doGet, doPut}) => {
         }
     }
 
-    return {getAllAsset, getAssetByAssetName, updateAsset}
+    const getAssetByVendor = async (vendor) => {
+        try {
+            return await doGet({
+                url: `/asset/filter?vendor=${vendor}`
+            })
+        } catch (e) {
+            throw e
+        }
+    }
+
+    const getAssetByLocation = async (location) => {
+        try {
+            return await doGet({
+                url: `/asset/filter?location=${location}`
+            })
+        } catch (e) {
+            throw e
+        }
+    }
+
+    const getAssetByCondition = async (condition) => {
+        try {
+            return await doGet({
+                url: `/asset/filter?condition=${condition}`
+            })
+        } catch (e) {
+            throw e
+        }
+    }
+
+
+    return {getAllAsset, getAssetByAssetName, updateAsset,getAssetByVendor,getAssetByCondition,getAssetByLocation}
 }
