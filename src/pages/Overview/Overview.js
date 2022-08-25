@@ -5,9 +5,11 @@ import { useDeps } from '../../shared/context/DependencyContext'
 import './Overview.css'
 import { OverviewColumn } from './OverviewColumn'
 import { BsArrowDownUp } from 'react-icons/bs'
+import moment from 'moment'
+import 'EditAsset.css'
 
 export const Overview = () => {
-  const {overviewService} = useDeps();
+  const {overviewService, vendorService, locationService, userService} = useDeps();
   const [datas, setDatas] = useState([]);
   const [order, setOrder] = useState('ASC')
   const [rowData, setRowData] = useState([]);
@@ -165,6 +167,136 @@ export const Overview = () => {
     }
   }
 
+  const [assetEdit, setAssetEdit] = useState({})
+  const [editShow, setEditShow] = useState(false)
+  
+  const handleEditClose = () => {
+    setEditShow(false)
+  }
+
+  const handleEditShow = (id, data) => {
+    setEditShow(true)
+    setAssetEdit(data)
+    handleGetAssetById(id)
+  }
+
+  const onSubmitEditAsset = async (id) => {
+    console.log('ini ada', id);
+    try {
+      assetEdit['Tahun'] = Number(assetEdit['Tahun'])
+      assetEdit['Harga Perolehan'] = Number(assetEdit['Harga Perolehan'])
+      assetEdit['Total Harga Perolehan'] = Number(assetEdit['Total Harga Perolehan'])
+      assetEdit['Kode Wilayah'] = Number(assetEdit['Kode Wilayah'])
+      assetEdit['Tahun Pembelian'] = Number(assetEdit['Tahun Pembelian'])
+      assetEdit['Kode Urut barang'] = Number(assetEdit['Kode Urut barang'])
+      assetEdit['Biaya Lain-Lain'] = Number(assetEdit['Biaya Lain-Lain'])
+      assetEdit['BAST Output'] = moment((assetEdit['BAST Output'])).format()
+      assetEdit['Tanggal Output'] = moment((assetEdit['Tanggal Output'])).format()
+      const response = await overviewService.updateAsset(id)
+      console.log(response);
+      setAssetEdit(response)
+      if (response.status === "SUCCESS") {
+        swal({
+          title: "Success!",
+          text: "Your data has been saved!",
+          icon: "success",
+          button: "OK!",
+        });
+      }
+      setEditShow(false)
+      onGetAllAsset();
+    } catch (e) {
+      console.log(error);
+    }
+  }
+
+  const [selectedImage, setSelectedImage] = useState();
+  
+  useEffect(() => {
+    onGetAllSubProduct();
+    onGetAllVendor();
+    onGetAllLocation();
+  }, []);
+
+  const [subProductName, setSubProductName] = useState();
+  // GET ALL SUBPRODUCT NAME
+  const onGetAllSubProduct = async () => {
+    
+    try {
+      const response = await assetItemService.getAllAsset();
+      console.log(response);
+      setSubProductName(response.data);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      
+    }
+  };
+
+  // GET ALL VENDOR
+  const [vendor, setVendor] = useState([]);
+
+  const onGetAllVendor = async () => {
+    
+    try {
+      const response = await vendorService.getAllVendor();
+      console.log(response);
+      setVendor(response.data);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      
+    }
+  };
+
+  // GET ALL LOCATIONS
+  const [locations, setLocations] = useState([]);
+  const onGetAllLocation = async () => {
+    
+    try {
+      const response = await locationService.getAllLocation();
+      console.log(response);
+      setLocations(response.data);
+      
+    } catch (e) {
+      console.log(e);
+    } finally {
+      
+    }
+  };
+
+  // GET ALL USER
+  const [user, setUser] = useState([]);
+  const onGetUser = async()=>{
+    try {
+      const response = await userService.getUserByEmail();
+      console.log('ini response email',response.data);
+      setUser(response.data)
+      
+    } catch (error) {
+    
+    } finally {
+      
+    }
+  }
+
+  const imageChange = (e) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setSelectedImage(e.target.files[0]);
+    }
+  };
+
+  const removeSelectedImage = () => {
+    setSelectedImage();
+  };
+
+  const handleChange = (e) => {
+    const newData = {...assetEdit}
+    newData[e.target.name] = e.target.value
+    setAssetEdit(newData)
+    console.log(newData);
+  }
+
   return (
     <>
         <Sidebar/>
@@ -174,44 +306,45 @@ export const Overview = () => {
             <table className='table table-bordered table-striped table-responsive table-hover'>
                 <thead className='table-header'>
                   <tr>
+                      <th>No</th>
                       <th style={{minWidth: "100px"}}>Action</th>
-                      <th style={{minWidth: "200px"}}>Tanggal Pembelian</th>
-                      <th style={{minWidth: "200px"}}>Tahun</th>
-                      <th style={{minWidth: "200px"}}>No. PO / Dokumenen Pendukung</th>
-                      <th style={{minWidth: "200px"}}>Vendor</th>
-                      <th style={{minWidth: "300px"}}>Nama Barang</th>
-                      <th style={{minWidth: "200px"}}>Harga Perolehan</th>
-                      <th style={{minWidth: "200px"}}>PPN</th>
-                      <th style={{minWidth: "200px"}}>Biaya Lain-Lain</th>
-                      <th style={{minWidth: "200px"}}>Total Harga Perolehan</th>
-                      <th style={{minWidth: "200px"}}>Jenis Produk</th>
-                      <th style={{minWidth: "200px"}}>Kategori Jenis Produk</th>
-                      <th style={{minWidth: "200px"}}>Kategori Aset Tetap</th>
-                      <th style={{minWidth: "200px"}}>BAST Output</th>
-                      <th style={{minWidth: "200px"}}>BAST</th>
-                      <th style={{minWidth: "200px"}}>Kondisi</th>
-                      <th style={{minWidth: "200px"}}>Insurance</th>
-                      <th style={{minWidth: "200px"}}>Lokasi</th>
-                      <th style={{minWidth: "200px"}}>User</th>
-                      <th style={{minWidth: "200px"}}>Jabatan</th>
-                      <th style={{minWidth: "200px"}}>Initisal</th>
-                      <th style={{minWidth: "200px"}}>Kode Wilayah</th>
-                      <th style={{minWidth: "200px"}}>Kode Asset</th>
-                      <th style={{minWidth: "200px"}}>Tahun Pembelian</th>
-                      <th style={{minWidth: "200px"}}>Kode Urut barang</th>
-                      <th style={{minWidth: "200px"}}>Nomor Asset</th>
-                      <th style={{minWidth: "200px"}}>Masa Manfaat (Bulan)</th>
-                      <th style={{minWidth: "200px"}}>Penyusutan Perbulan</th>
-                      <th style={{minWidth: "200px"}}>Total Bulan Penyusutan</th>
-                      <th style={{minWidth: "200px"}}>Total Penyusutan</th>
-                      <th style={{minWidth: "200px"}}>Nilai Asset saat ini</th>
+                      <th style={{minWidth: "200px"}}>Purchase Date</th>
+                      <th onClick={() => sortingNum('Tahun')}  style={{minWidth: "200px"}}>Year <BsArrowDownUp style={{marginLeft:'10%'}}/> </th>
+                      <th onClick={() => sorting('No. PO / Dokumenen Pendukung')} style={{minWidth: "200px"}}>PO Number <BsArrowDownUp style={{marginLeft:'10%'}}/></th>
+                      <th onClick={() => sorting('Vendor')} style={{minWidth: "200px"}}>Vendor Name <BsArrowDownUp style={{marginLeft:'10%'}}/></th>
+                      <th onClick={() => sorting('Nama Barang')} style={{minWidth: "300px"}}>Item Name <BsArrowDownUp style={{marginLeft:'10%'}}/></th>
+                      <th onClick={() => sortingNum('Harga Perolehan')} style={{minWidth: "200px"}}>Acquisition Cost <BsArrowDownUp style={{marginLeft:'10%'}}/></th>
+                      <th onClick={() => sortingNum('PPN')} style={{minWidth: "200px"}}>PPN <BsArrowDownUp style={{marginLeft:'10%'}}/></th>
+                      <th onClick={() => sortingNum('Biaya Lain-Lain')} style={{minWidth: "200px"}}>Additional Cost <BsArrowDownUp style={{marginLeft:'10%'}}/></th>
+                      <th onClick={() => sortingNum('Total Harga Perolehan')} style={{minWidth: "200px"}}>Total Acquisition Cost <BsArrowDownUp style={{marginLeft:'10%'}}/></th>
+                      <th onClick={() => sorting('Jenis Produk')} style={{minWidth: "200px"}}>Asset Category Subproduct Name <BsArrowDownUp style={{marginLeft:'10%'}}/></th>
+                      <th onClick={() => sorting('Kategori Jenis Produk')} style={{minWidth: "200px"}}>Product Name <BsArrowDownUp style={{marginLeft:'10%'}}/></th>
+                      <th onClick={() => sorting('Kategori Aset Tetap')} style={{minWidth: "200px"}}>Asset Category <BsArrowDownUp style={{marginLeft:'10%'}}/></th>
+                      <th onClick={() => sorting('BAST Output')} style={{minWidth: "200px"}}>BAST <BsArrowDownUp style={{marginLeft:'10%'}}/></th>
+                      <th onClick={() => sorting('Kondisi')} style={{minWidth: "200px"}}>Condition <BsArrowDownUp style={{marginLeft:'10%'}}/></th>
+                      <th onClick={() => sorting('Insurance')} style={{minWidth: "200px"}}>Insurance <BsArrowDownUp style={{marginLeft:'10%'}}/></th>
+                      <th onClick={() => sorting('Lokasi')} style={{minWidth: "200px"}}>Location <BsArrowDownUp style={{marginLeft:'10%'}}/></th>
+                      <th onClick={() => sorting('User')} style={{minWidth: "200px"}}>User <BsArrowDownUp style={{marginLeft:'10%'}}/></th>
+                      <th onClick={() => sorting('Jabatan')} style={{minWidth: "200px"}}>Position <BsArrowDownUp style={{marginLeft:'10%'}}/></th>
+                      <th onClick={() => sorting('Initisal')} style={{minWidth: "200px"}}>Initial <BsArrowDownUp style={{marginLeft:'10%'}}/></th>
+                      <th onClick={() => sortingNum('Kode Wilayah')} style={{minWidth: "200px"}}>Location ID <BsArrowDownUp style={{marginLeft:'10%'}}/></th>
+                      <th onClick={() => sorting('Kode Asset')} style={{minWidth: "200px"}}>Product Code <BsArrowDownUp style={{marginLeft:'10%'}}/></th>
+                      <th onClick={() => sortingNum('Tahun Pembelian')} style={{minWidth: "200px"}}>Purchase Year <BsArrowDownUp style={{marginLeft:'10%'}}/></th>
+                      <th onClick={() => sortingNum('Kode Urut barang')} style={{minWidth: "200px"}}>Item Order Code <BsArrowDownUp style={{marginLeft:'10%'}}/></th>
+                      <th onClick={() => sorting('Nomor Asset')} style={{minWidth: "200px"}}>Asset Number <BsArrowDownUp style={{marginLeft:'10%'}}/></th>
+                      <th onClick={() => sortingNum('Masa Manfaat (Bulan)')} style={{minWidth: "200px"}}>Useful Life <BsArrowDownUp style={{marginLeft:'10%'}}/></th>
+                      <th onClick={() => sortingNum('Penyusutan Perbulan')} style={{minWidth: "200px"}}>Monthly Depreciation <BsArrowDownUp style={{marginLeft:'10%'}}/></th>
+                      <th onClick={() => sortingNum('Total Bulan Penyusutan')}style={{minWidth: "200px"}}>Depreciation Month <BsArrowDownUp style={{marginLeft:'10%'}}/></th>
+                      <th onClick={() => sortingNum('Total Penyusutan')} style={{minWidth: "200px"}}>Total Depreciation <BsArrowDownUp style={{marginLeft:'10%'}}/></th>
+                      <th onClick={() => sortingNum('Nilai Asset saat ini')} style={{minWidth: "200px"}}>Current Asset Value <BsArrowDownUp style={{marginLeft:'10%'}}/></th>
                   </tr>
                 </thead>
                 <tbody>
                   {datas.length === 0 ? (
                     <tr>No data found</tr>
-                  ): (currentItems.map((data) => (
+                  ): (currentItems.map((data, index) => (
                     <tr key={data['Nomor Asset']}>
+                      <th>{index+1}</th>
                       <th>
                             <a
                               onClick={() => {
@@ -238,9 +371,9 @@ export const Overview = () => {
                                 &#xf090;
                               </i>
                             </a>
-                            {/* <a
+                            <a
                               onClick={() => {
-                                handleEditShow(rowData['Nomor Asset'], data);
+                                handleEditShow(data['Nomor Asset'], data);
                               }}
                               className="edit"
                               data-toggle="modal"
@@ -253,10 +386,9 @@ export const Overview = () => {
                               >
                                 &#xe3c9;
                               </i>
-                            </a> */}
+                            </a>
                       </th>
                       <td>{data['Tanggal Output']}</td>
-                      <td>{data['Tanggal Pembelian']}</td>
                       <td>{data['Tahun']}</td>
                       <td>{data['No. PO / Dokumenen Pendukung']}</td>
                       <td>{data['Vendor']}</td>
@@ -269,12 +401,12 @@ export const Overview = () => {
                       <td>{data['Kategori Jenis Produk']}</td>
                       <td>{data['Kategori Aset Tetap']}</td>
                       <td>{data['BAST Output']}</td>
-                      <td>{data['BAST']}</td>
                       <td>{data['Kondisi']}</td>
                       <td>{data['Insurance']}</td>
                       <td>{data['Lokasi']}</td>
+                      <td>{data['User']}</td>
                       <td>{data['Jabatan']}</td>
-                      <td>{data['Initial']}</td>
+                      <td>{data['Initisal']}</td>
                       <td>{data['Kode Wilayah']}</td>
                       <td>{data['Kode Asset']}</td>
                       <td>{data['Tahun Pembelian']}</td>
@@ -373,6 +505,162 @@ export const Overview = () => {
             </Modal.Footer>
           </Modal>
         </div>
+        {/* Edit Show */}
+        {handleEditShow &&
+        <div className='main-container'>
+        <div className="asset-container">
+
+          <form onSubmit={handleSubmit}>
+
+              <div className="row">
+
+                  <div className="col">
+
+                      <h3 className="title">Add Asset Item</h3>
+
+                      <div className="inputBox">
+                          <span>Asset Name :</span>
+                          <input type='text' required name='Nama Barang' value={data["Nama Barang"]} onChange={handleChange}/>
+                      </div>
+                      <div className="inputBox">
+                          <span>Subproduct Name :</span>
+                          <select required name='Jenis Produk' value={data['Jenis Produk']} onChange={handleChange}>
+                                <option value="" >Select Subproduct</option> 
+                                {
+                                  subProductName.map((item)=>(
+                                    <option key={item.subproduct_name} value={item.subproduct_name} >{item.subproduct_name}</option>
+                                  ))
+                                }
+                
+                              </select>
+                      </div>
+                      <div className="inputBox">
+                          <span>Vendor :</span>
+                          <select required name='Vendor' value={data.Vendor} onChange={handleChange}>
+                              <option value="">Select Vendor</option>
+                                
+                                {
+                                  vendor.map((item)=>(
+                                    <option key={item.name} value={item.name} >{item.name}</option>
+                                  ))
+                                }
+                              </select>
+                      </div>
+                      <div className="inputBox">
+                          <span>Location :</span>
+                          <select required name='Kode Wilayah' value={data['Kode Wilayah']} onChange={handleChange}>
+                              <option value="">Select Location</option>
+                                {
+                                  locations.map((item,index)=>(
+                                    <option key={item.ID} value={item.ID} >{item.location}</option>
+                                  ))
+                                }
+                              </select>
+                      </div>
+                      <div className="inputBox">
+                          <span>Condition :</span>
+                          <select  required name='Kondisi' value={data.Kondisi} onChange={handleChange}>
+                              <option value="">Select Condition</option>
+                                <option>Baik</option> 
+                                <option>Rusak</option>
+                                <option>Other</option>                 
+                              </select>
+                      </div>
+                      <div className="inputBox">
+                          <span>PO Number :</span>
+                          <input type='text' required name='No. PO / Dokumenen Pendukung' value={data['No. PO / Dokumenen Pendukung']} onChange={handleChange}/>
+                      </div>
+                      <div className="inputBox">
+                          <span>Purchase Date :</span>
+                          <input type='datetime-local' required name='Tanggal Output' value={data['Tanggal Output']} onChange={handleChange}/>
+                      </div>
+                      <div className="inputBox">
+                          <span>BAST :</span>
+                          <input type='datetime-local'  required name='BAST Output' value={data['BAST Output']} onChange={handleChange}/>
+                      </div>
+                      <div className="inputBox">
+                          <span>Purchase Price :</span>
+                          <input type='number' required name='Harga Perolehan' value={data['Harga Perolehan']} onChange={handleChange}/>
+                      </div>
+                      <div className="inputBox">
+                          <span>Additional Cost :</span>
+                          <input type='number'  required name='Biaya Lain-Lain' value={data['Biaya Lain-Lain']} onChange={handleChange}/>
+                      </div>
+                      
+                      
+                  </div>
+                  <div className="col">
+                  <div className='asset-image-container'>
+                              <div className='image-box'>
+                                  {selectedImage && (<div className='image'> <img src={URL.createObjectURL(selectedImage)}
+                                    className='image' alt='Thumb'/>
+                                    <button onClick={removeSelectedImage} className='cancel'>Remove the image</button>
+                                    </div>
+                                  )}
+                              </div>
+                              <input id="upload"  accept='image/*' type='file' onChange={imageChange}/>
+                            
+                  </div>
+                  <div className="inputBox">
+                          <span>Total Acquisition Cost :</span>
+                          <input type='text'required name='Total Harga Perolehan' value={data['Total Harga Perolehan']} onChange={handleChange}/>
+                      </div>
+                      <div className="inputBox">
+                          <span>Insurance</span>
+                          <select  required name='Insurance' value={data.Insurance} onChange={handleChange}>
+                              <option value="">Select</option>
+                                <option>Sudah</option> 
+                                <option>Belum</option>                 
+                              </select>
+                      </div>
+                      
+                      <div className="inputBox">
+                          <span>Purchase Year :</span>
+                          <input type='year' required name='Tahun Pembelian' value={data['Tahun Pembelian']} onChange={handleChange}/>
+                      </div>
+                      <div className="inputBox">
+                          <span>User :</span>
+                          <input type='text' required name='User' value={data.User} onChange={handleChange}/>
+                      </div>
+                      <div className="inputBox">
+                          <span>User :</span>
+                          <input type='text' required name='Initisal' value={data['Initisal']} onChange={handleChange}/>
+                      </div>
+                      <div className="inputBox">
+                          <span>Asset Code :</span>
+                          <select required name='Kode Asset' value={data['Kode Asset']} onChange={handleChange}>
+                                <option value="" >Select Asset Code</option> 
+                                {
+                                  subProductName.map((item)=>(
+                                    <option key={item.subproduct_name} value={item.product_code} >{item.subproduct_name}-{item.product_code}</option>
+                                  ))
+                                }
+                                </select>
+                          <div className="inputBox">
+                          <span>Year :</span>
+                          <input type='year'  required name='Tahun' value={data.Tahun} onChange={handleChange}/>
+                      </div>
+
+                      <div className="inputBox">
+                          <span>Item Order Code :</span>
+                          <input type='text'  required name='Kode Urut barang' value={data['Kode Urut barang']} onChange={handleChange}/>
+                      </div>
+                      </div>
+                      <div className='button-asset'>
+                            <button type='submit' className='btn btn-danger button-cancel' onClick={handleCancel}>Cancel</button>
+                            <button type='submit' className='btn btn-primary button-submit'>Submit</button>
+                          </div>      
+                  </div>
+                  
+              </div>
+
+              
+                            
+            
+          </form>
+
+          </div> 
+          </div> }
     </>
     
   )

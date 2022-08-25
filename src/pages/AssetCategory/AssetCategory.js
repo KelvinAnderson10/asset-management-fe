@@ -54,10 +54,12 @@ export const AssetCategory = () => {
 
   const handleEditShow = (index, item) => {
     SetRowData(item);
+    setAssetCategory(item);
     console.log("ini index", index);
     setId(index);
     SetEditShow(true);
   };
+
   const handleEditClose = () => {
     SetEditShow(false);
   };
@@ -143,13 +145,13 @@ export const AssetCategory = () => {
         try {
           const response = assetCategoryService.deleteAssetCategory(name);
           console.log(response);
+          onGetAllAssetCategory();
           if (response.status === "SUCCESS") {
             Swal.fire(
                 'Deleted!',
                 'Your data has been deleted.',
                 'success')
           }
-          onGetAllAssetCategory();
         } catch (e) {
           console.log(e.response);      
         } finally {
@@ -598,7 +600,6 @@ export const AssetCategory = () => {
                         name="asset_category"
                         value={assetCategory.asset_category}
                         placeholder="Please enter asset_category"
-                        autoFocus
                         required
                     />
                     </div>
@@ -629,7 +630,7 @@ export const AssetCategory = () => {
                     <div className="form-group mt-3">
                     <label className="form-label">Product Name<span style={{color :"red"}} >*</span></label>
                     <input
-                    required
+                        required
                         type="text"
                         className="form-control"
                         onChange={handleChange}

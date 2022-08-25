@@ -22,7 +22,7 @@ export const overviewService = ({doGet, doPut}) => {
     const updateAsset = async (id, newData) => {
         try {
             return await doPut({
-                url: `/asset${id}`, data:newData
+                url: `/asset/${id}`, data:newData
             })
         } catch (e) {
             throw e
