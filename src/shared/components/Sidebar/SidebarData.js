@@ -23,7 +23,7 @@ export const SidebarData = [
     subNav: [
       {
         title: 'Asset Item',
-        path: '/data-management/asset-item',
+        path: '/data-management/asset-inventory',
         icon: <IoIcons.IoIosPaper />,
         cName: 'sub-nav'
       },
