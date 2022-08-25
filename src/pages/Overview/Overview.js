@@ -131,7 +131,24 @@ export const Overview = () => {
     }
   };
 
-  //GetQR
+  const sortingNum = (col) => {
+    if (order === "ASC") {
+        const sorted = [...datas].sort((a, b) =>
+          a[col] > b[col] ? 1 : -1
+        );
+        setDatas(sorted);
+        setOrder("DSC");
+      }
+      if (order === "DSC") {
+        const sorted = [...datas].sort((a, b) =>
+          a[col] < b[col] ? 1 : -1
+        );
+        setDatas(sorted);
+        setOrder("ASC");
+      }
+  }
+
+  //GetById
    const [size, setSize] = useState(400);
    const [bgColor, setBgColor] = useState("ffffff");
 
@@ -157,9 +174,37 @@ export const Overview = () => {
             <table className='table table-bordered table-striped table-responsive table-hover'>
                 <thead className='table-header'>
                   <tr>
-                    {OverviewColumn.map(column => (
-                        <th onClick={() => sorting({column})} className='col-table' scope='col'>{column} {" "} <BsArrowDownUp/></th>
-                    ))}
+                      <th style={{minWidth: "100px"}}>Action</th>
+                      <th style={{minWidth: "200px"}}>Tanggal Pembelian</th>
+                      <th style={{minWidth: "200px"}}>Tahun</th>
+                      <th style={{minWidth: "200px"}}>No. PO / Dokumenen Pendukung</th>
+                      <th style={{minWidth: "200px"}}>Vendor</th>
+                      <th style={{minWidth: "300px"}}>Nama Barang</th>
+                      <th style={{minWidth: "200px"}}>Harga Perolehan</th>
+                      <th style={{minWidth: "200px"}}>PPN</th>
+                      <th style={{minWidth: "200px"}}>Biaya Lain-Lain</th>
+                      <th style={{minWidth: "200px"}}>Total Harga Perolehan</th>
+                      <th style={{minWidth: "200px"}}>Jenis Produk</th>
+                      <th style={{minWidth: "200px"}}>Kategori Jenis Produk</th>
+                      <th style={{minWidth: "200px"}}>Kategori Aset Tetap</th>
+                      <th style={{minWidth: "200px"}}>BAST Output</th>
+                      <th style={{minWidth: "200px"}}>BAST</th>
+                      <th style={{minWidth: "200px"}}>Kondisi</th>
+                      <th style={{minWidth: "200px"}}>Insurance</th>
+                      <th style={{minWidth: "200px"}}>Lokasi</th>
+                      <th style={{minWidth: "200px"}}>User</th>
+                      <th style={{minWidth: "200px"}}>Jabatan</th>
+                      <th style={{minWidth: "200px"}}>Initisal</th>
+                      <th style={{minWidth: "200px"}}>Kode Wilayah</th>
+                      <th style={{minWidth: "200px"}}>Kode Asset</th>
+                      <th style={{minWidth: "200px"}}>Tahun Pembelian</th>
+                      <th style={{minWidth: "200px"}}>Kode Urut barang</th>
+                      <th style={{minWidth: "200px"}}>Nomor Asset</th>
+                      <th style={{minWidth: "200px"}}>Masa Manfaat (Bulan)</th>
+                      <th style={{minWidth: "200px"}}>Penyusutan Perbulan</th>
+                      <th style={{minWidth: "200px"}}>Total Bulan Penyusutan</th>
+                      <th style={{minWidth: "200px"}}>Total Penyusutan</th>
+                      <th style={{minWidth: "200px"}}>Nilai Asset saat ini</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -174,7 +219,7 @@ export const Overview = () => {
                               }}
                               className="view"
                               data-toggle="modal"
-                              style={{ cursor: "pointer" }}
+                              style={{ cursor: "pointer"} }
                             >
                               <i
                                 className="material-icons"

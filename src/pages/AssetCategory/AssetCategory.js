@@ -149,10 +149,9 @@ export const AssetCategory = () => {
                 'Your data has been deleted.',
                 'success')
           }
-          doneAddForm(true)
           onGetAllAssetCategory();
         } catch (e) {
-          console.log(e.response.data);      
+          console.log(e.response);      
         } finally {
           setLoading(false);
         }
@@ -503,7 +502,7 @@ export const AssetCategory = () => {
 
                                 <a
                                 onClick={() => {
-                                    handleEditShow(item.subproduct_name, item);
+                                    handleEditShow(RowData.subproduct_name, item);
                                 }}
                                 className="edit"
                                 data-toggle="modal"
