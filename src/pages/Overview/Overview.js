@@ -3,13 +3,13 @@ import { Button, Modal, Table } from 'react-bootstrap'
 import Sidebar from '../../shared/components/Sidebar/Sidebar'
 import { useDeps } from '../../shared/context/DependencyContext'
 import './Overview.css'
-import { OverviewColumn } from './OverviewColumn'
 import { BsArrowDownUp } from 'react-icons/bs'
 import moment from 'moment'
-import 'EditAsset.css'
+import './EditAsset.css'
+import swal from 'sweetalert'
 
 export const Overview = () => {
-  const {overviewService, vendorService, locationService, userService} = useDeps();
+  const {overviewService, vendorService, locationService, userService, assetCategoryService} = useDeps();
   const [datas, setDatas] = useState([]);
   const [order, setOrder] = useState('ASC')
   const [rowData, setRowData] = useState([]);
@@ -206,7 +206,7 @@ export const Overview = () => {
       setEditShow(false)
       onGetAllAsset();
     } catch (e) {
-      console.log(error);
+      console.log(e);
     }
   }
 
@@ -223,7 +223,7 @@ export const Overview = () => {
   const onGetAllSubProduct = async () => {
     
     try {
-      const response = await assetItemService.getAllAsset();
+      const response = await assetCategoryService.getAllAssetCategory();
       console.log(response);
       setSubProductName(response.data);
     } catch (e) {
@@ -340,7 +340,7 @@ export const Overview = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {datas.length === 0 ? (
+                  {currentItems.length === 0 ? (
                     <tr>No data found</tr>
                   ): (currentItems.map((data, index) => (
                     <tr key={data['Nomor Asset']}>
@@ -506,11 +506,11 @@ export const Overview = () => {
           </Modal>
         </div>
         {/* Edit Show */}
-        {handleEditShow &&
+        {/* {handleEditShow &&
         <div className='main-container'>
         <div className="asset-container">
 
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleEditSubmit}>
 
               <div className="row">
 
@@ -660,7 +660,7 @@ export const Overview = () => {
           </form>
 
           </div> 
-          </div> }
+          </div> } */}
     </>
     
   )

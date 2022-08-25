@@ -18,7 +18,7 @@ export const AssetCategory = () => {
   const [isLoading, setLoading] = useState(false);
   const [doneAddForm, setDoneAddform] = useState(false);
   const { assetCategoryService } = useDeps();
-  const areAllFieldsFilled = assetCategory !== "";
+  const areAllFieldsFilled = assetCategory === "";
 
   const [data, setData] = useState([]);
   const [order, setOrder] = useState("ASC");
@@ -225,7 +225,8 @@ export const AssetCategory = () => {
   };
 
   //Edit Data
-  const handleEdit = async (id) => {
+  const handleEdit = async (e, id) => {
+    e.preventDefault(e)
     console.log("ini id", id);
     try {
       assetCategory.useful_life = Number(assetCategory.useful_life)
@@ -577,7 +578,6 @@ export const AssetCategory = () => {
             {/* ADD MODAL FOR SUBMIT DATABASE */}
 
             <div className="model-box-view">
-              <form onSubmit={handleSubmit}>
               <Modal
                 show={ViewPost}
                 onHide={handlePostClose}
@@ -586,11 +586,11 @@ export const AssetCategory = () => {
             >
                 <Modal.Header closeButton>
                 <Modal.Title>Add New AssetCategory</Modal.Title>
-                
                 </Modal.Header>
                 <Modal.Body>
                 <p style={{color:"red"}}>Please complete all required fields</p>
                 <div>
+                <form onSubmit={handleSubmit}>
                     <div className="form-group">
                     <label className="form-label">Asset Category<span style={{color :"red"}} >*</span> </label>
                     <input
@@ -650,22 +650,19 @@ export const AssetCategory = () => {
                         name="subproduct_name"
                         value={assetCategory.subproduct_name}
                     />
-                    </div>    
-                </div>
-                </Modal.Body>
-                <Modal.Footer>
-                <Button
-                    disabled ={!assetCategory}
+                    </div>
+                    <Button style={{width:'6vw'}}
                     type="submit"
                     className="btn btn-success mt-4"
-                    onClick={handleSubmit}
                     >
                     Add{" "}
                     </Button>
+                    </form>    
+                </div>
+                </Modal.Body>
+                <Modal.Footer>
                 </Modal.Footer>
-            </Modal>
-              </form>
-            
+            </Modal>            
             </div>
 
             {/* EDIT MODAL */}
@@ -678,68 +675,59 @@ export const AssetCategory = () => {
                 keyboard={false}
             >
                 <Modal.Header closeButton>
-                <Modal.Title>Edit </Modal.Title>
+                <Modal.Title>Edit Subproduct {RowData.subproduct_name} </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                 <div>
+                  <form onSubmit={(e) => handleEdit(e, RowData.subproduct_name)}>
                     <div className="form-group">
-                    <label>Asset Category</label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        onChange={handleChange}
-                        placeholder="Please enter asset category"
-                        name="asset_category"
-                        defaultValue={RowData.asset_category}
-                    />
-                    <label>Useful Life</label>
-                    <input
-                        type="number"
-                        className="form-control"
-                        onChange={handleChange}
-                        placeholder="Please enter useful life"
-                        name="useful_life"
-                        defaultValue={RowData.useful_life}
-                    />
-                    <label>Product Code</label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        onChange={handleChange}
-                        placeholder="Please enter product code"
-                        name="product_code"
-                        defaultValue={RowData.product_code}
-                    />
-                    <label>Product Name</label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        onChange={handleChange}
-                        name="product_name"
-                        placeholder="Please enter product name"
-                        defaultValue={RowData.product_name}
-                    />
-                    <label>Subproduct Name</label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        onChange={handleChange}
-                        name="subproduct_name"
-                        placeholder="Please enter subproduct name"
-                        defaultValue={RowData.subproduct_name}
-                    />
-                    </div>
+                      <label>Asset Category</label>
+                      <input
+                          type="text"
+                          className="form-control"
+                          onChange={handleChange}
+                          placeholder="Please enter asset category"
+                          name="asset_category"
+                          defaultValue={RowData.asset_category}
+                      />
+                      <label>Useful Life</label>
+                      <input
+                          type="number"
+                          className="form-control"
+                          onChange={handleChange}
+                          placeholder="Please enter useful life"
+                          name="useful_life"
+                          defaultValue={RowData.useful_life}
+                      />
+                      <label>Product Code</label>
+                      <input
+                          type="text"
+                          className="form-control"
+                          onChange={handleChange}
+                          placeholder="Please enter product code"
+                          name="product_code"
+                          defaultValue={RowData.product_code}
+                      />
+                      <label>Product Name</label>
+                      <input
+                          type="text"
+                          className="form-control"
+                          onChange={handleChange}
+                          name="product_name"
+                          placeholder="Please enter product name"
+                          defaultValue={RowData.product_name}
+                      />
+                      </div>
+                      <Button
+                        type="submit"
+                        className="btn btn-warning mt-4"
+                        >
+                        Save Changes
+                      </Button>
+                  </form>
                 </div>
                 </Modal.Body>
                 <Modal.Footer>
-                <Button
-                    disabled={!areAllFieldsFilled}
-                    type="submit"
-                    className="btn btn-warning mt-4"
-                    onClick={() => handleEdit(RowData.subproduct_name)}
-                    >
-                    Save Changes
-                    </Button>
                 </Modal.Footer>
             </Modal>
             </div>
