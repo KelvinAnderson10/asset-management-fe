@@ -7,41 +7,49 @@
   outline: none; border:none;
   text-transform: capitalize;
   transition: all .2s linear;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: auto;
   background-color: rgba(10, 10, 10, 0.75);
-  z-index: 100;
-}
-
-.asset-container{
   display: flex;
   justify-content: center;
   align-items: center;
-  padding:25px;
-  min-height: 100vh;
-  min-width: 100vw;
-  
-  background: rgb(255, 255, 255);
+  flex-direction: column;
+  z-index: 100;
+}
+
+.main-container .asset-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding:55px;
+  height: 90vh;
 }
 
 .asset-container form{
-  padding:30px;
-  width: 70vw;
-  min-height: 100vh;
+  padding:40px;
+  width: 80vw;
+  height: auto;
   background: rgb(218, 218, 218);
   box-shadow: 0 5px 10px rgba(58, 5, 5, 0.1);
 }
 
 .asset-container form .row{
   display: flex;
-  flex-wrap: wrap;
-  gap:15px;
+  flex-direction: row;
+  
 }
 
 .asset-container form .row .col{
-  flex:1 1 34em;
   display: flex;
   flex-direction: column;
 
 }
+
+
 
 .asset-container form .row .col .title{
   font-size: 30px;
@@ -53,7 +61,7 @@
 }
 
 .asset-container form .row .col .inputBox{
-  margin:10px 0;
+  margin:0px 0;
 }
 
 .asset-container form .row .col .inputBox span{
@@ -63,10 +71,10 @@
 }
 
 .asset-container form .row .col .inputBox input{
-  width: 80%;
+  width: 100%;
   border:1px solid rgb(180, 178, 178);
-  padding:10px 15px;
-  font-size: 15px;
+  padding:8px 20px;
+  font-size: 16px;
   text-transform: none;
   align-items: flex-start;
   display: flex;
@@ -74,9 +82,9 @@
   
 }
 .asset-container form .row .col .inputBox select{
-  width: 80%;
+  width: 100%;
   border:1px solid rgb(236, 236, 236);
-  padding:10px 15px;
+  padding:8px 15px;
   font-size: 15px;
   text-transform: none;
   align-items: flex-start;
@@ -104,33 +112,22 @@
   filter: drop-shadow(0 0 1px #000);
 }
 
-.asset-container form .submit-btn{
-  width: 100%;
-  padding:12px;
-  font-size: 17px;
-  background: #27ae60;
-  color:#fff;
-  margin-top: 5px;
-  cursor: pointer;
-}
 
-.asset-container form .submit-btn:hover{
-  background: #2ecc71;
-}
 .asset-container form .row .col .image-box {
   width: 200px;
   height: 140px;
   background-color: #464646;
-  margin-right: 50px;
-  margin-left: 20px;
+  margin-right: 10px;
+  
 }
 
-.asset-image-container{
+.asset-container form .row .col .asset-image-container{
   display: flex;
   flex-direction: row;
   margin: 20px;
   width: 90%;
   height: 137px;
+  margin-bottom: 10px;
 }
 
 .asset-container form .row .col .button-submit{
@@ -154,10 +151,10 @@
   width: 100%;
   display: flex;
   justify-content: flex-end;
-  margin-bottom: 20px;
+ margin-top: 10px;
 }
 
-input[type="file"]::-webkit-file-upload-button{
+.asset-container form .row .col input[type="file"]::-webkit-file-upload-button{
 padding: 11px 15px;
 border-radius: 50px;
 border: none;
@@ -170,6 +167,6 @@ background-color: #0A2495;
 transition: 0.5s all;
 }
 
-input[type="file"]:hover::-webkit-file-upload-button{
+.asset-container form .row .col input[type="file"]:hover::-webkit-file-upload-button{
   background-color: #1b3ed8;
 }

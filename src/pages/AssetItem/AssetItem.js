@@ -1,14 +1,16 @@
 import React, { useEffect,useState } from 'react'
 import { Success } from '../../shared/components/Notification/Success'
 import Sidebar from '../../shared/components/Sidebar/Sidebar'
+import { useDeps } from '../../shared/context/DependencyContext'
 import '../AssetItem/AssetItem.css'
-import { useDeps } from "../../shared/context/DependencyContext";
+
 import { Failed } from '../../shared/components/Notification/Failed';
 import moment from 'moment'
 
 export const AssetItem = () => {
   const [data, setData] = useState({});
 
+  const [assetCategory, setAssetCategory] = useState([])
   const [selectedImage, setSelectedImage] = useState();
 
   const[subProductName, setSubProductName] = useState([])
@@ -135,6 +137,7 @@ export const AssetItem = () => {
   const clearForm = () => {
       setSelectedImage()
   }
+
 
   return (
     <>

@@ -6,10 +6,11 @@ import './Overview.css'
 import { OverviewColumn } from './OverviewColumn'
 import { BsArrowDownUp } from 'react-icons/bs'
 import moment from 'moment'
-import 'EditAsset.css'
+import './EditAsset.css'
+import swal from "sweetalert";
 
 export const Overview = () => {
-  const {overviewService, vendorService, locationService, userService} = useDeps();
+  const {overviewService, vendorService, locationService, userService,assetItemService,assetCategoryService} = useDeps();
   const [datas, setDatas] = useState([]);
   const [order, setOrder] = useState('ASC')
   const [rowData, setRowData] = useState([]);
@@ -160,6 +161,23 @@ export const Overview = () => {
         const response = await overviewService.getAssetByAssetName(name);
         setRowData(response.data)
         setViewShow(true)
+       
+    } catch (e) {
+        console.log(e);
+    } finally {
+      setLoading(false)
+    }
+  }
+  // GET ID FOR EDIT SHOW
+  const handleEditAssetById= async (name) => {
+    console.log("ini respons edit",name);
+    setLoading(true)
+    try {
+        const response = await overviewService.getAssetByAssetName(name);
+        // setRowData(response.data)
+        setAssetEdit(response.data)
+        setEditShow(true)
+       console.log();
     } catch (e) {
         console.log(e);
     } finally {
@@ -174,14 +192,15 @@ export const Overview = () => {
     setEditShow(false)
   }
 
-  const handleEditShow = (id, data) => {
+  const handleEditShow = (id) => {
     setEditShow(true)
-    setAssetEdit(data)
-    handleGetAssetById(id)
+    // setAssetEdit(data)
+    handleEditAssetById(id)
   }
 
-  const onSubmitEditAsset = async (id) => {
-    console.log('ini ada', id);
+  const onSubmitEditAsset = async (e) => {
+    e.preventDefault();
+    console.log('ini submit response', assetEdit);
     try {
       assetEdit['Tahun'] = Number(assetEdit['Tahun'])
       assetEdit['Harga Perolehan'] = Number(assetEdit['Harga Perolehan'])
@@ -190,11 +209,13 @@ export const Overview = () => {
       assetEdit['Tahun Pembelian'] = Number(assetEdit['Tahun Pembelian'])
       assetEdit['Kode Urut barang'] = Number(assetEdit['Kode Urut barang'])
       assetEdit['Biaya Lain-Lain'] = Number(assetEdit['Biaya Lain-Lain'])
-      assetEdit['BAST Output'] = moment((assetEdit['BAST Output'])).format()
-      assetEdit['Tanggal Output'] = moment((assetEdit['Tanggal Output'])).format()
-      const response = await overviewService.updateAsset(id)
+      // assetEdit['BAST Output'] = moment((assetEdit['BAST Output'])).format('MMMM Do YYYY, h:mm:ss a')
+     
+      // assetEdit['Tanggal Output'] = moment((assetEdit['Tanggal Output'])).format('MMMM Do YYYY, h:mm:ss a')
+      const response = await overviewService.updateAsset(assetEdit['Nomor Asset'],assetEdit)
       console.log(response);
       setAssetEdit(response)
+
       if (response.status === "SUCCESS") {
         swal({
           title: "Success!",
@@ -206,7 +227,7 @@ export const Overview = () => {
       setEditShow(false)
       onGetAllAsset();
     } catch (e) {
-      console.log(error);
+      console.log(e);
     }
   }
 
@@ -218,12 +239,12 @@ export const Overview = () => {
     onGetAllLocation();
   }, []);
 
-  const [subProductName, setSubProductName] = useState();
+  const [subProductName, setSubProductName] = useState([]);
   // GET ALL SUBPRODUCT NAME
   const onGetAllSubProduct = async () => {
     
     try {
-      const response = await assetItemService.getAllAsset();
+      const response = await assetCategoryService.getAllAssetCategory();
       console.log(response);
       setSubProductName(response.data);
     } catch (e) {
@@ -295,6 +316,10 @@ export const Overview = () => {
     newData[e.target.name] = e.target.value
     setAssetEdit(newData)
     console.log(newData);
+  }
+
+  const handleCancel = (e) => {
+    e.target.reset()
   }
 
   return (
@@ -373,7 +398,7 @@ export const Overview = () => {
                             </a>
                             <a
                               onClick={() => {
-                                handleEditShow(data['Nomor Asset'], data);
+                                handleEditShow(data['Nomor Asset']);
                               }}
                               className="edit"
                               data-toggle="modal"
@@ -506,25 +531,26 @@ export const Overview = () => {
           </Modal>
         </div>
         {/* Edit Show */}
-        {handleEditShow &&
+
+        {editShow && (
         <div className='main-container'>
         <div className="asset-container">
 
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={onSubmitEditAsset}>
 
               <div className="row">
 
                   <div className="col">
 
-                      <h3 className="title">Add Asset Item</h3>
+                      <h3 className="title">Edit Asset Item</h3>
 
                       <div className="inputBox">
                           <span>Asset Name :</span>
-                          <input type='text' required name='Nama Barang' value={data["Nama Barang"]} onChange={handleChange}/>
+                          <input type='text' required name='Nama Barang' value={assetEdit["Nama Barang"]} onChange={handleChange}/>
                       </div>
                       <div className="inputBox">
                           <span>Subproduct Name :</span>
-                          <select required name='Jenis Produk' value={data['Jenis Produk']} onChange={handleChange}>
+                          <select required name='Jenis Produk' value={assetEdit['Jenis Produk']} onChange={handleChange}>
                                 <option value="" >Select Subproduct</option> 
                                 {
                                   subProductName.map((item)=>(
@@ -536,19 +562,19 @@ export const Overview = () => {
                       </div>
                       <div className="inputBox">
                           <span>Vendor :</span>
-                          <select required name='Vendor' value={data.Vendor} onChange={handleChange}>
+                          <select required name='Vendor' value={assetEdit.Vendor} onChange={handleChange}>
                               <option value="">Select Vendor</option>
                                 
                                 {
                                   vendor.map((item)=>(
-                                    <option key={item.name} value={item.name} >{item.name}</option>
+                                    <option key={item.name} value={assetEdit.name} >{item.name}</option>
                                   ))
                                 }
                               </select>
                       </div>
                       <div className="inputBox">
                           <span>Location :</span>
-                          <select required name='Kode Wilayah' value={data['Kode Wilayah']} onChange={handleChange}>
+                          <select required name='Kode Wilayah' value={assetEdit['Kode Wilayah']} onChange={handleChange}>
                               <option value="">Select Location</option>
                                 {
                                   locations.map((item,index)=>(
@@ -559,7 +585,7 @@ export const Overview = () => {
                       </div>
                       <div className="inputBox">
                           <span>Condition :</span>
-                          <select  required name='Kondisi' value={data.Kondisi} onChange={handleChange}>
+                          <select  required name='Kondisi' value={assetEdit.Kondisi} onChange={handleChange}>
                               <option value="">Select Condition</option>
                                 <option>Baik</option> 
                                 <option>Rusak</option>
@@ -568,25 +594,28 @@ export const Overview = () => {
                       </div>
                       <div className="inputBox">
                           <span>PO Number :</span>
-                          <input type='text' required name='No. PO / Dokumenen Pendukung' value={data['No. PO / Dokumenen Pendukung']} onChange={handleChange}/>
+                          <input type='text' required name='No. PO / Dokumenen Pendukung' value={assetEdit['No. PO / Dokumenen Pendukung']} onChange={handleChange}/>
                       </div>
-                      <div className="inputBox">
+                      {/* <div className="inputBox">
                           <span>Purchase Date :</span>
-                          <input type='datetime-local' required name='Tanggal Output' value={data['Tanggal Output']} onChange={handleChange}/>
+                          <input type='datetime-local' required name='Tanggal Output' value={assetEdit['Tanggal Output']} onChange={handleChange}/>
                       </div>
                       <div className="inputBox">
                           <span>BAST :</span>
-                          <input type='datetime-local'  required name='BAST Output' value={data['BAST Output']} onChange={handleChange}/>
-                      </div>
+                          <input type='datetime-local'  required name='BAST Output' value={assetEdit['BAST Output']} onChange={handleChange}/>
+                      </div> */}
                       <div className="inputBox">
                           <span>Purchase Price :</span>
-                          <input type='number' required name='Harga Perolehan' value={data['Harga Perolehan']} onChange={handleChange}/>
+                          <input type='number' required name='Harga Perolehan' value={assetEdit['Harga Perolehan']} onChange={handleChange}/>
                       </div>
                       <div className="inputBox">
                           <span>Additional Cost :</span>
-                          <input type='number'  required name='Biaya Lain-Lain' value={data['Biaya Lain-Lain']} onChange={handleChange}/>
+                          <input type='number'  required name='Biaya Lain-Lain' value={assetEdit['Biaya Lain-Lain']} onChange={handleChange}/>
                       </div>
-                      
+                      <div className="inputBox">
+                          <span>Total Acquisition Cost :</span>
+                          <input type='text'required name='Total Harga Perolehan' value={assetEdit['Total Harga Perolehan']} onChange={handleChange}/>
+                      </div>
                       
                   </div>
                   <div className="col">
@@ -601,13 +630,10 @@ export const Overview = () => {
                               <input id="upload"  accept='image/*' type='file' onChange={imageChange}/>
                             
                   </div>
-                  <div className="inputBox">
-                          <span>Total Acquisition Cost :</span>
-                          <input type='text'required name='Total Harga Perolehan' value={data['Total Harga Perolehan']} onChange={handleChange}/>
-                      </div>
+                 
                       <div className="inputBox">
                           <span>Insurance</span>
-                          <select  required name='Insurance' value={data.Insurance} onChange={handleChange}>
+                          <select  required name='Insurance' value={assetEdit.Insurance} onChange={handleChange}>
                               <option value="">Select</option>
                                 <option>Sudah</option> 
                                 <option>Belum</option>                 
@@ -616,19 +642,19 @@ export const Overview = () => {
                       
                       <div className="inputBox">
                           <span>Purchase Year :</span>
-                          <input type='year' required name='Tahun Pembelian' value={data['Tahun Pembelian']} onChange={handleChange}/>
+                          <input type='year' required name='Tahun Pembelian' value={assetEdit['Tahun Pembelian']} onChange={handleChange}/>
                       </div>
                       <div className="inputBox">
                           <span>User :</span>
-                          <input type='text' required name='User' value={data.User} onChange={handleChange}/>
+                          <input type='text' required name='User' value={assetEdit.User} onChange={handleChange}/>
                       </div>
                       <div className="inputBox">
                           <span>User :</span>
-                          <input type='text' required name='Initisal' value={data['Initisal']} onChange={handleChange}/>
+                          <input type='text' required name='Initisal' value={assetEdit['Initisal']} onChange={handleChange}/>
                       </div>
                       <div className="inputBox">
                           <span>Asset Code :</span>
-                          <select required name='Kode Asset' value={data['Kode Asset']} onChange={handleChange}>
+                          <select required name='Kode Asset' value={assetEdit['Kode Asset']} onChange={handleChange}>
                                 <option value="" >Select Asset Code</option> 
                                 {
                                   subProductName.map((item)=>(
@@ -638,16 +664,16 @@ export const Overview = () => {
                                 </select>
                           <div className="inputBox">
                           <span>Year :</span>
-                          <input type='year'  required name='Tahun' value={data.Tahun} onChange={handleChange}/>
+                          <input type='year'  required name='Tahun' value={assetEdit.Tahun} onChange={handleChange}/>
                       </div>
 
                       <div className="inputBox">
                           <span>Item Order Code :</span>
-                          <input type='text'  required name='Kode Urut barang' value={data['Kode Urut barang']} onChange={handleChange}/>
+                          <input type='text'  required name='Kode Urut barang' value={assetEdit['Kode Urut barang']} onChange={handleChange}/>
                       </div>
                       </div>
                       <div className='button-asset'>
-                            <button type='submit' className='btn btn-danger button-cancel' onClick={handleCancel}>Cancel</button>
+                            <button type='submit' className='btn btn-danger button-cancel' onClick={handleEditClose}>Cancel</button>
                             <button type='submit' className='btn btn-primary button-submit'>Submit</button>
                           </div>      
                   </div>
@@ -660,7 +686,9 @@ export const Overview = () => {
           </form>
 
           </div> 
-          </div> }
+          </div> 
+        )
+        }
     </>
     
   )
