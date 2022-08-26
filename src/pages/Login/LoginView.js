@@ -47,9 +47,18 @@ const validateEmail = async (e) => {
     setOTP(response.OTP);
   };
 
+  const setCookie = (cName, cValue, expMinutes) => {
+    let date = new Date();
+    date.setTime(date.getTime() + (expMinutes*60*1000));
+    const expires = "expires=" + date.toUTCString();
+    document.cookie = cName + "=" + cValue + "; " + expires + "; path=/";
+  }
+
+
   const validateOTP = () => {
     console.log(OTPInput);
     if (OTPInput == OTP) {
+        setCookie("OTP", OTP, 1)
         navigate('/home', {replace: true})
     } else {
       Failed('Wrong OTP')
@@ -69,7 +78,7 @@ const validateEmail = async (e) => {
           <input
             onChange={(e) => setEmail(e.target.value)}
             type="email"
-            placeholder="email address"
+            placeholder="Email Address"
           ></input>
           <button
             onClick={(e) => {

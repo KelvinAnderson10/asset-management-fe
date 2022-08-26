@@ -1,6 +1,6 @@
 .Nav {
-    background:#383838;
-    height: 100px;
+    background:#580409;
+    height: 7vh;
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -16,7 +16,7 @@
 .NavIcon {
   margin-left: 2rem;
   font-size: 2rem;
-  height: 80px;
+  height: 6vh;
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -31,7 +31,10 @@
   width: 100vw;
   bottom: 0px;
   background: #383838;
+  /* margin-top: 100px; */
   display: flex;
+  /* align-items: center;
+  justify-content: flex-start; */
   flex-direction: column;
 }
 
