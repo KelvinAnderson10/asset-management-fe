@@ -112,6 +112,7 @@
 	border-radius: 7px;
 	border: 1.5px solid #E3E6ED;
   max-width: 280px;
+  
 }
 input.form-control:focus{
 	box-shadow: none;
@@ -236,11 +237,17 @@ input.form-control:focus{
   height: 200%;
 }
 
-.image-view{
+.image-view > img{
   width: 200px;
   height: 200px;
   background-color: darkblue;
   margin-left: 30%;
   border-radius: 20px;
   box-shadow: 5px 5px 3px #3e4041;
+}
+
+
+
+.view-modal{
+  max-width: 30% !important;
 }

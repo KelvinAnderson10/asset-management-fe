@@ -193,7 +193,7 @@ export const Overview = () => {
       res = datesplit[0]
       response.data['BAST Output'] = res
 
-
+      console.log('response img',response.data['Asset Image'])
       console.log("ini tanggal output",date);
       setAssetEdit(response.data);
     } catch (e) {
@@ -216,6 +216,24 @@ export const Overview = () => {
     handleEditAssetById(id);
   };
 
+
+    // UPLOAD IMAGE
+    const [selectedImage, setSelectedImage] = useState();
+    const [imageBase64, setImageBase64] = useState("")
+    let reader = new FileReader();
+
+  const imageChange = (e) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setSelectedImage(e.target.files[0]);
+      reader.readAsDataURL(e.target.files[0]);
+      reader.onload = () => {setImageBase64(reader.result)}
+    }
+  };
+
+  const removeSelectedImage = () => {
+    setSelectedImage();
+  };
+
   const onSubmitEditAsset = async (e) => {
     e.preventDefault();
     console.log("ini submit response", assetEdit);
@@ -230,14 +248,18 @@ export const Overview = () => {
       assetEdit["Kode Urut barang"] = Number(assetEdit["Kode Urut barang"]);
       assetEdit["Biaya Lain-Lain"] = Number(assetEdit["Biaya Lain-Lain"]);
       assetEdit['BAST Output'] = moment((assetEdit['BAST Output'])).format()
-
       assetEdit['Tanggal Output'] = moment((assetEdit['Tanggal Output'])).format()
+
+      assetEdit["Asset Image"] = imageBase64
+
       const response = await overviewService.updateAsset(
         assetEdit["Nomor Asset"],
         assetEdit
       );
       console.log(response);
       setAssetEdit(response);
+
+      console.log('ini image upload',imageBase64)
 
       if (response.status === "SUCCESS") {
         swal({
@@ -254,7 +276,6 @@ export const Overview = () => {
     }
   };
 
-  const [selectedImage, setSelectedImage] = useState();
 
   useEffect(() => {
     onGetAllSubProduct();
@@ -314,15 +335,6 @@ export const Overview = () => {
     }
   };
 
-  const imageChange = (e) => {
-    if (e.target.files && e.target.files.length > 0) {
-      setSelectedImage(e.target.files[0]);
-    }
-  };
-
-  const removeSelectedImage = () => {
-    setSelectedImage();
-  };
 
   const handleChange = (e) => {
     const newData = { ...assetEdit };
@@ -843,7 +855,7 @@ export const Overview = () => {
         </div>
       </div>
       <div className="model-box-view">
-        <Modal
+        <Modal dialogClassName="view-modal"
           show={viewShow}
           onHide={handleViewClose}
           backdrop="static"
@@ -856,6 +868,7 @@ export const Overview = () => {
             <div>
               <div className="form-group">
                 <div className="image-view">
+                 <img src={rowData["Asset Image"]} ></img>
                 </div>
                 <label>No Asset</label>
                 <input
@@ -1098,6 +1111,8 @@ export const Overview = () => {
                       id="upload"
                       accept="image/*"
                       type="file"
+                      name="Asset Image"
+                      // value={assetEdit["Asset Image"]}
                       onChange={imageChange}
                     />
                   </div>

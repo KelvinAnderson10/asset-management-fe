@@ -58,7 +58,17 @@ export const overviewService = ({doGet, doPut}) => {
             throw e
         }
     }
+    const getAssetByPagination = async (page) => {
+        try {
+            return await doGet({
+                url: `/asset/pagination/${page}`
+            })
+        } catch (e) {
+            throw e
+        }
+    }
+    
 
 
-    return {getAllAsset, getAssetByAssetName, updateAsset,getAssetByVendor,getAssetByCondition,getAssetByLocation}
+    return {getAllAsset, getAssetByAssetName, updateAsset,getAssetByVendor,getAssetByCondition,getAssetByLocation, getAssetByPagination}
 }

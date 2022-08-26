@@ -119,11 +119,20 @@
   width: 200px;
   height: 140px;
   background-color: #464646;
-  margin-right: 50px;
+  margin-right: 10px;
   margin-left: 20px;
+  display: flex;
+}
+.image .cancel {
+  cursor: "pointer";
+  background-color: red;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  width: 100%;
 }
 
-.asset-image-container{
+.asset-container form .row .col .asset-image-container{
   display: flex;
   flex-direction: row;
   margin: 20px;

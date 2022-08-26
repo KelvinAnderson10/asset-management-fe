@@ -182,7 +182,8 @@ export const VendorManage = () => {
   };
 
   //=============== EDIT ROW DATA  ===============================
-  const handleEdit = async (id) => {
+  const handleEdit = async (e,id) => {
+    e.preventDefault()
     console.log("ini id", id);
     try {
       const response = await vendorService.updateVendor(id, vendorData);
@@ -494,6 +495,7 @@ export const VendorManage = () => {
              
             </Modal.Header>
             <Modal.Body>
+              <form onSubmit={handleSubmit}>
             <p style={{color:"red"}}>Please complete all required fields</p>
               <div>
                 <div className="form-group">
@@ -546,16 +548,15 @@ export const VendorManage = () => {
                     value={vendorData.account_number}
                   />
                 </div>
-
+                </div>
                 <Button
-                  disabled ={!vendorData}
                   type="submit"
                   className="btn btn-success mt-4"
-                  onClick={handleSubmit}
                 >
                   Add{" "}
                 </Button>
-              </div>
+              
+              </form>
             </Modal.Body>
             <Modal.Footer>
               <Button variant="secondary" onClick={hanldePostClose}>
@@ -578,10 +579,12 @@ export const VendorManage = () => {
               <Modal.Title>Edit </Modal.Title>
             </Modal.Header>
             <Modal.Body>
+              <form onSubmit={(e)=>handleEdit(e,RowData.name)}>
               <div>
                 <div className="form-group">
                   <label>Vendor Name</label>
                   <input
+                  required
                     type="text"
                     className="form-control"
                     onChange={handleChange}
@@ -591,6 +594,7 @@ export const VendorManage = () => {
                   />
                   <label>Address</label>
                   <input
+                  required
                     type="text"
                     className="form-control"
                     onChange={handleChange}
@@ -600,6 +604,7 @@ export const VendorManage = () => {
                   />
                   <label>Phone</label>
                   <input
+                  required
                     type="text"
                     className="form-control"
                     onChange={handleChange}
@@ -609,6 +614,7 @@ export const VendorManage = () => {
                   />
                   <label>Account Number</label>
                   <input
+                  required
                     type="text"
                     className="form-control"
                     onChange={handleChange}
@@ -617,15 +623,17 @@ export const VendorManage = () => {
                     defaultValue={RowData.account_number}
                   />
                 </div>
+                </div>
                 <Button
-                  disabled={!areAllFieldsFilled}
+               
                   type="submit"
                   className="btn btn-warning mt-4"
-                  onClick={() => handleEdit(RowData.name)}
+                 
                 >
                   Save Changes
                 </Button>
-              </div>
+  
+              </form>
             </Modal.Body>
             <Modal.Footer>
               <Button variant="secondary" onClick={hanldeEditClose}>

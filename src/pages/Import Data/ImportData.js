@@ -60,6 +60,10 @@ export const ImportData = () => {
     <div>
         <Sidebar/>
         <div className='import-container'>
+          <div className='import-card'>
+            <div className='title-container'>
+              <h4>ADD MULTIPLE ASSET</h4>
+            </div>
         <div class='form-upload-container'>
           <form>
             <label htmlFor="upload">Upload File</label>
@@ -73,7 +77,7 @@ export const ImportData = () => {
         </div>
         
         <div>
-          <div className="container">
+          <div className="import-box">
             <br></br>
                   <h2>
                       Upload <b>Assets</b>
@@ -179,6 +183,7 @@ export const ImportData = () => {
         {/* tinggal didesign */}
         {isLoading && <div>Lagi loading</div>}
         </div>   
+        </div>
     </div>
   )
 }

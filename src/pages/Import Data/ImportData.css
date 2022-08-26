@@ -5,11 +5,52 @@
   width: 100vw;
   align-items: center;
   align-content: center;
-  flex-direction: column;
 }
 
-.import-container .form-upload-container{
+.import-container .import-card {
+  background-color:whitesmoke;
+  width: 95%;
+  display: flex;
+  justify-content: center;
+  height: 85vh;
+  /* align-items: flex-end; */
+  flex-direction: column;
+  align-content: flex-end;
+}
+
+.import-card .title-container{
   width: 100%;
-  height: 5%;
-  top: 5%
+  height: 8%;
+  background-color: #a75738;
+  font-size: 2em;
+  text-align: left;
+  padding-left: 2%;
+  
+}
+
+.import-card .form-upload-container{
+  height: 25%;
+  width: 100%;
+  background-color: aqua;
+  
+}
+
+
+.import-card .import-box {
+  width: 100%;
+  height: 65vh;
+  box-shadow: 0px 0px 0px 1px rgba(152, 161, 178, 0.1), 0px 1px 4px rgba(69, 75, 87, 0.12), 0px 0px 2px rgba(0, 0, 0, 0.08);
+  border-radius: 10px;
+  overflow-x: scroll;
+}
+
+.import-card .table-header{
+  background-color:#3B3634;
+  color: white;
+  height: 100px;
+}
+
+.import-card .col-table{
+  width: 100px;
+  justify-items: center;
 }

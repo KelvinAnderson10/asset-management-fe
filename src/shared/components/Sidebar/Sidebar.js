@@ -10,7 +10,7 @@ import '../Sidebar/Sidebar.css'
 import {useAuth} from '../../hook/UseAuth'
 
 const SidebarNav = styled.nav`
-  background: #383838;
+  background: #580409;
   width: 350px;
   height: 100vh;
   display: flex;
