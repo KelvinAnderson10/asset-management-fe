@@ -140,8 +140,13 @@ input.form-control:focus{
   gap: 3%;
   align-items: flex-end;
   /* bottom: 0%; */
-  padding-bottom: 1%;
-  padding-left: 1%;  
+  padding-bottom: 3%;
+  padding-left: 1%; 
+}
+
+.dropdown-menu {
+  max-height: 7vh;
+  overflow-y: scroll;
 }
 
 .search-container .form-search{
@@ -229,4 +234,13 @@ input.form-control:focus{
 .search-container .select-condition {
   width: 35%;
   height: 200%;
+}
+
+.image-view{
+  width: 200px;
+  height: 200px;
+  background-color: darkblue;
+  margin-left: 30%;
+  border-radius: 20px;
+  box-shadow: 5px 5px 3px #3e4041;
 }

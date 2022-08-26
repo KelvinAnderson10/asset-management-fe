@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Button, Modal, Table } from "react-bootstrap";
 import Sidebar from "../../shared/components/Sidebar/Sidebar";
 import { useDeps } from "../../shared/context/DependencyContext";
 import "./Overview.css";
-import { BsArrowDownUp } from "react-icons/bs";
+import {FaSort} from 'react-icons/fa'
+import {CgClose} from 'react-icons/cg'
 import moment from "moment";
 import "./EditAsset.css";
 import swal from "sweetalert";
@@ -335,70 +336,171 @@ export const Overview = () => {
   };
 
 
-  const [searchVendor, setSearchVendor] = useState('')
-  const onChangeSearchVendor = (e) => {
-    const searchVendor = e.target.value;
-    setSearchVendor(searchVendor);
+  // const [searchVendor, setSearchVendor] = useState('')
+  // const onChangeSearchVendor = (e) => {
+  //   const searchVendor = e.target.value;
+  //   setSearchVendor(searchVendor);
+  // };
+
+  // const onSearchVendor= async () => {
+  //   // e.preventDefault();
+  //   setLoading(true);
+  //   try {
+  //     if (searchVendor.length !== 0) {
+  //       const response = await overviewService.getAllAsset();
+  //       console.log(response);
+  //       setDatas(response.data);
+  //       console.log(response.data);
+  //     } else {
+  //       const response = await overviewService.getAssetByVendor(searchVendor);
+  //       console.log(response);
+  //       setDatas(response.data);
+  //       console.log(response.data); //unde
+  //     }
+      
+  //   } catch (e) {
+  //     console.log(e);
+  //   } finally {
+  //     setLoading(false)
+  //   }
+  // };
+
+
+  // const [searchLocation, setSearchLocation] = useState('')
+  // const onChangeSearchLocation = (e) => {
+  //   const searchLocation = e.target.value;
+  //   setSearchLocation(searchLocation);
+  // };
+
+  // const onSearchLocation= async () => {
+  //   // e.preventDefault();
+  //   setLoading(true);
+  //   try {
+  //     if (searchLocation.length === 0) {
+  //       const response = await overviewService.getAllAsset();
+  //       console.log(response);
+  //       setDatas(response.data);
+  //       console.log(response.data);
+  //     } else {
+  //       const response = await overviewService.getAssetByLocation(searchLocation);
+  //       console.log(response);
+  //       setDatas(response.data);
+  //       console.log(response.data);
+  //     }
+      
+  //   } catch (e) {
+  //     console.log(e);
+  //   } finally {
+  //     setLoading(false)
+  //   }
+  // };
+
+  // const [searchCondition, setSearchCondition] = useState('')
+  // const onChangeSearchCondition = (e) => {
+  //   const searchCondition = e.target.value;
+  //   setSearchCondition(searchCondition);
+  // };
+
+  // const onSearchCondition= async () => {
+  //   // e.preventDefault();
+  //   setLoading(true);
+  //   try {
+  //     if (searchCondition.length === 0) {
+  //       const response = await overviewService.getAllAsset();
+  //       console.log(response);
+  //       setDatas(response.data);
+  //       console.log(response.data);
+  //     } else {
+  //       const response = await overviewService.getAssetByCondition(searchCondition);
+  //       console.log(response);
+  //       setDatas(response.data);
+  //       console.log(response.data);
+  //     }
+  //   } catch (e) {
+  //     console.log(e);
+  //   } finally {
+  //     setLoading(false)
+  //   }
+  // };
+
+
+  //Search
+
+  const [filter, setFilter] = useState('');
+  const [dropdownName, setDropdownName] = useState('');
+  const [fill, setFill] = useState(true);
+  const ref = useRef(null) ;
+
+  const onChangeFilter = (e) => {
+    setFilter(e.target.value);
   };
 
-  const onSearchVendor= async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      const response = await overviewService.getAssetByVendor(searchVendor);
-      console.log(response);
-      setDatas(response.data);
-      console.log(response.data);
-    } catch (e) {
-      console.log(e);
-    } finally {
-      setLoading(false)
+  const onChangeDropdown= (dropdownName) => {
+    setDropdownName(dropdownName)
+    setFill(false)
+  }
+
+  const onFilter = async () => {
+    console.log(filter)
+    console.log(dropdownName)
+    if (dropdownName === 'Vendor') {
+      try {
+        if (filter.length === 0) {
+          const response = await overviewService.getAllAsset();
+          console.log(response);
+          setDatas(response.data);
+          console.log(response.data);
+        } else {
+          const response = await overviewService.getAssetByVendor(filter);
+          console.log(response);
+          setDatas(response.data);
+          console.log(response.data); //unde
+        }   
+      } catch (e) {
+        console.log(e);
+      }
+    } else if (dropdownName === 'Location') {
+      try {
+        if (filter.length === 0) {
+          const response = await overviewService.getAllAsset();
+          console.log(response);
+          setDatas(response.data);
+          console.log(response.data);
+        } else {
+          const response = await overviewService.getAssetByLocation(filter);
+          console.log(response);
+          setDatas(response.data);
+          console.log(response.data); //unde
+        }   
+      } catch (e) {
+        console.log(e);
+      }
+    } else {
+      try {
+        if (filter.length === 0) {
+          const response = await overviewService.getAllAsset();
+          console.log(response);
+          setDatas(response.data);
+          console.log(response.data);
+        } else {
+          const response = await overviewService.getAssetByCondition(filter);
+          console.log(response);
+          setDatas(response.data);
+          console.log(response.data); //unde
+        }   
+      } catch (e) {
+        console.log(e);
+      }
     }
-  };
+  }
 
 
-  const [searchLocation, setSearchLocation] = useState('')
-  const onChangeSearchLocation = (e) => {
-    const searchLocation = e.target.value;
-    setSearchLocation(searchLocation);
-  };
+  const onClearForm = () => {
+    ref.current.value = ''; 
+    onGetAllAsset();
+  }
 
-  const onSearchLocation= async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      const response = await overviewService.getAssetByLocation(searchLocation);
-      console.log(response);
-      setDatas(response.data);
-      console.log(response.data);
-    } catch (e) {
-      console.log(e);
-    } finally {
-      setLoading(false)
-    }
-  };
-
-  const [searchCondition, setSearchCondition] = useState('')
-  const onChangeSearchCondition = (e) => {
-    const searchCondition = e.target.value;
-    setSearchCondition(searchCondition);
-  };
-
-  const onSearchCondition= async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      const response = await overviewService.getAssetByCondition(searchCondition);
-      console.log(response);
-      setDatas(response.data);
-      console.log(response.data);
-    } catch (e) {
-      console.log(e);
-    } finally {
-      setLoading(false)
-    }
-  };
-
+  
 
   return (
     <>
@@ -406,58 +508,23 @@ export const Overview = () => {
       <div className="overview-container">
         <div className="overview-card">
           <div className="search-container">
-  
-                <form className='form-search' onSubmit={onSearchVendor}>
-                   
-                    <div className="input-group">
-                    <input
-                        placeholder="Search by Vendor"
-                        value={searchVendor}
-                        onChange={onChangeSearchVendor}
-                        type="text"
-                        className="form-control"
-                    />
-                    <div className="input-group-append">
-                        <button value="submit" className="btn btn-primary form-button">
-                        <i className="fa fa-search" aria-hidden="true"></i>
-                        </button>
-                    </div>
-                    </div>
-                </form>
-                <form className='form-search' onSubmit={onSearchLocation}>
-                    
-                    <div className="input-group">
-                    <input
-                        placeholder="Search by Location"
-                        value={searchLocation}
-                        onChange={onChangeSearchLocation}
-                        type="text"
-                        className="form-control"
-                    />
-                    <div className="input-group-append">
-                        <button value="submit" className="btn btn-primary form-button">
+              <div className="input-group mb-3 dropdown">
+                <button className="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Search by {dropdownName}</button>
+                <ul className="dropdown-menu" >
+                  <li><a className="dropdown-item" onClick={() => {onChangeDropdown('Vendor')}}>Vendor</a></li>
+                  <li><a className="dropdown-item" onClick={() => {onChangeDropdown('Location')}}>Location</a></li>
+                  <li><a className="dropdown-item" onClick={() => {onChangeDropdown('Condition')}}>Condition</a></li>
+                </ul>
+                <input ref={ref} disabled={fill} type="text" className="form-control" aria-label="Text input with dropdown button" onChange={onChangeFilter}/>
+                <div className="input-group-append">
+                        <button value="submit" className="btn btn-primary form-button" onClick={onFilter}>
                         <i className="fa fa-search"></i>
                         </button>
-                    </div>
-                    </div>
-                </form>
-            
-                <div className="select-menu">
-        <div className="select-btn">
-            <span className="sBtn-text">Condition</span>
-            <select required className="select-condition"
-            onClick={onSearchCondition}
-                      name="Kondisi"
-                      value={searchCondition}
-                      onChange={onChangeSearchCondition}>
-                      <option>Baik</option>
-                      <option>Rusak</option>
-                      <option>Other</option>
-            </select>
-            
-        </div>
-    </div>
-
+                        <button value="submit" className="btn btn-danger form-button" onClick={onClearForm}>
+                        <i className="fa fa-times"></i>
+                        </button>
+                </div>
+              </div>
           </div>
 
           <div className="overview-box">
@@ -469,197 +536,199 @@ export const Overview = () => {
                   <th 
                     onClick={() => sorting("Tanggal Output")} 
                     style={{ minWidth: "200px" }}>
-                    Purchase Date <BsArrowDownUp style={{ marginLeft: "10%" }} />
+                    Purchase Date <FaSort style={{ marginLeft: "10%" }} />
                   </th>
                   <th
                     onClick={() => sortingNum("Tahun")}
                     style={{ minWidth: "200px" }}
                   >
-                    Year <BsArrowDownUp style={{ marginLeft: "10%" }} />
+                    Year <FaSort style={{ marginLeft: "10%" }} />
                   </th>
                   <th
                     onClick={() => sorting("No. PO / Dokumenen Pendukung")}
                     style={{ minWidth: "200px" }}
                   >
-                    PO Number <BsArrowDownUp style={{ marginLeft: "10%" }} />
+                    PO Number <FaSort style={{ marginLeft: "10%" }} />
                   </th>
                   <th
                     onClick={() => sorting("Vendor")}
                     style={{ minWidth: "200px" }}
                   >
-                    Vendor Name <BsArrowDownUp style={{ marginLeft: "10%" }} />
+                    Vendor Name <FaSort style={{ marginLeft: "10%" }} />
                   </th>
                   <th
                     onClick={() => sorting("Nama Barang")}
                     style={{ minWidth: "300px" }}
                   >
-                    Item Name <BsArrowDownUp style={{ marginLeft: "10%" }} />
+                    Item Name <FaSort style={{ marginLeft: "10%" }} />
                   </th>
                   <th
                     onClick={() => sortingNum("Harga Perolehan")}
                     style={{ minWidth: "200px" }}
                   >
                     Acquisition Cost{" "}
-                    <BsArrowDownUp style={{ marginLeft: "10%" }} />
+                    <FaSort style={{ marginLeft: "10%" }} />
                   </th>
                   <th
                     onClick={() => sortingNum("PPN")}
                     style={{ minWidth: "200px" }}
                   >
-                    PPN <BsArrowDownUp style={{ marginLeft: "10%" }} />
+                    PPN <FaSort style={{ marginLeft: "10%" }} />
                   </th>
                   <th
                     onClick={() => sortingNum("Biaya Lain-Lain")}
                     style={{ minWidth: "200px" }}
                   >
                     Additional Cost{" "}
-                    <BsArrowDownUp style={{ marginLeft: "10%" }} />
+                    <FaSort style={{ marginLeft: "10%" }} />
                   </th>
                   <th
                     onClick={() => sortingNum("Total Harga Perolehan")}
                     style={{ minWidth: "250px" }}
                   >
                     Total Acquisition Cost{" "}
-                    <BsArrowDownUp style={{ marginLeft: "10%" }} />
+                    <FaSort style={{ marginLeft: "10%" }} />
                   </th>
                   <th
                     onClick={() => sorting("Jenis Produk")}
                     style={{ minWidth: "230px" }}
                   >
                     Asset Category Subproduct Name{" "}
-                    <BsArrowDownUp style={{ marginLeft: "10%" }} />
+                    <FaSort style={{ marginLeft: "10%" }} />
                   </th>
                   <th
                     onClick={() => sorting("Kategori Jenis Produk")}
                     style={{ minWidth: "200px" }}
                   >
-                    Product Name <BsArrowDownUp style={{ marginLeft: "10%" }} />
+                    Product Name <FaSort style={{ marginLeft: "10%" }} />
                   </th>
                   <th
                     onClick={() => sorting("Kategori Aset Tetap")}
                     style={{ minWidth: "200px" }}
                   >
                     Asset Category{" "}
-                    <BsArrowDownUp style={{ marginLeft: "10%" }} />
+                    <FaSort style={{ marginLeft: "10%" }} />
                   </th>
                   <th
                     onClick={() => sorting("BAST Output")}
                     style={{ minWidth: "200px" }}
                   >
-                    BAST <BsArrowDownUp style={{ marginLeft: "10%" }} />
+                    BAST <FaSort style={{ marginLeft: "10%" }} />
                   </th>
                   <th
                     onClick={() => sorting("Kondisi")}
                     style={{ minWidth: "200px" }}
                   >
-                    Condition <BsArrowDownUp style={{ marginLeft: "10%" }} />
+                    Condition <FaSort style={{ marginLeft: "10%" }} />
                   </th>
                   <th
                     onClick={() => sorting("Insurance")}
                     style={{ minWidth: "200px" }}
                   >
-                    Insurance <BsArrowDownUp style={{ marginLeft: "10%" }} />
+                    Insurance <FaSort style={{ marginLeft: "10%" }} />
                   </th>
                   <th
                     onClick={() => sorting("Lokasi")}
                     style={{ minWidth: "200px" }}
                   >
-                    Location <BsArrowDownUp style={{ marginLeft: "10%" }} />
+                    Location <FaSort style={{ marginLeft: "10%" }} />
                   </th>
                   <th
                     onClick={() => sorting("User")}
                     style={{ minWidth: "200px" }}
                   >
-                    User <BsArrowDownUp style={{ marginLeft: "10%" }} />
+                    User <FaSort style={{ marginLeft: "10%" }} />
                   </th>
                   <th
                     onClick={() => sorting("Jabatan")}
                     style={{ minWidth: "200px" }}
                   >
-                    Position <BsArrowDownUp style={{ marginLeft: "10%" }} />
+                    Position <FaSort style={{ marginLeft: "10%" }} />
                   </th>
                   <th
                     onClick={() => sorting("Initisal")}
                     style={{ minWidth: "200px" }}
                   >
-                    Initial <BsArrowDownUp style={{ marginLeft: "10%" }} />
+                    Initial <FaSort style={{ marginLeft: "10%" }} />
                   </th>
                   <th
                     onClick={() => sortingNum("Kode Wilayah")}
                     style={{ minWidth: "200px" }}
                   >
-                    Location ID <BsArrowDownUp style={{ marginLeft: "10%" }} />
+                    Location ID <FaSort style={{ marginLeft: "10%" }} />
                   </th>
                   <th
                     onClick={() => sorting("Kode Asset")}
                     style={{ minWidth: "200px" }}
                   >
-                    Product Code <BsArrowDownUp style={{ marginLeft: "10%" }} />
+                    Product Code <FaSort style={{ marginLeft: "10%" }} />
                   </th>
                   <th
                     onClick={() => sortingNum("Tahun Pembelian")}
                     style={{ minWidth: "200px" }}
                   >
                     Purchase Year{" "}
-                    <BsArrowDownUp style={{ marginLeft: "10%" }} />
+                    <FaSort style={{ marginLeft: "10%" }} />
                   </th>
                   <th
                     onClick={() => sortingNum("Kode Urut barang")}
                     style={{ minWidth: "200px" }}
                   >
                     Item Order Code{" "}
-                    <BsArrowDownUp style={{ marginLeft: "10%" }} />
+                    <FaSort style={{ marginLeft: "10%" }} />
                   </th>
                   <th
                     onClick={() => sorting("Nomor Asset")}
                     style={{ minWidth: "200px" }}
                   >
-                    Asset Number <BsArrowDownUp style={{ marginLeft: "10%" }} />
+                    Asset Number <FaSort style={{ marginLeft: "10%" }} />
                   </th>
                   <th
                     onClick={() => sortingNum("Masa Manfaat (Bulan)")}
                     style={{ minWidth: "200px" }}
                   >
-                    Useful Life <BsArrowDownUp style={{ marginLeft: "10%" }} />
+                    Useful Life <FaSort style={{ marginLeft: "10%" }} />
                   </th>
                   <th
                     onClick={() => sortingNum("Penyusutan Perbulan")}
                     style={{ minWidth: "200px" }}
                   >
                     Monthly Depreciation{" "}
-                    <BsArrowDownUp style={{ marginLeft: "10%" }} />
+                    <FaSort style={{ marginLeft: "10%" }} />
                   </th>
                   <th
                     onClick={() => sortingNum("Total Bulan Penyusutan")}
                     style={{ minWidth: "200px" }}
                   >
                     Depreciation Month{" "}
-                    <BsArrowDownUp style={{ marginLeft: "10%" }} />
+                    <FaSort style={{ marginLeft: "10%" }} />
                   </th>
                   <th
                     onClick={() => sortingNum("Total Penyusutan")}
                     style={{ minWidth: "200px" }}
                   >
                     Total Depreciation{" "}
-                    <BsArrowDownUp style={{ marginLeft: "10%" }} />
+                    <FaSort style={{ marginLeft: "10%" }} />
                   </th>
                   <th
                     onClick={() => sortingNum("Nilai Asset saat ini")}
                     style={{ minWidth: "200px" }}
                   >
                     Current Asset Value{" "}
-                    <BsArrowDownUp style={{ marginLeft: "10%" }} />
+                    <FaSort style={{ marginLeft: "10%" }} />
                   </th>
                 </tr>
               </thead>
               <tbody>
                 {datas.length === 0 ? (
-                  <tr colspan={'31'}>No data found</tr>
+                  <tr> 
+                    <th colspan='31'>No data found</th>
+                  </tr>
                 ) : (
                   currentItems.map((data, index) => (
                     <tr key={data["Nomor Asset"]}>
                       <th>{index + 1}</th>
-                      <th>
+                      <th style={{fontSize:'30px'}}>
                         <a
                           onClick={() => {
                             handleViewShow(setRowData(data));
@@ -672,20 +741,21 @@ export const Overview = () => {
                             className="material-icons"
                             data-toggle="tooltip"
                             title="View"
-                            style={{width: '30px'}} 
+                            style={{fontSize: '25px'}} 
                           >
                             &#xe8f4;
                           </i>
                         </a>
                         <a
                           target="_blank"
-                          href={`http://api.qrserver.com/v1/create-qr-code/?data=Nomor Asset: ${data["Nomor Asset"]}%0A Purchase Date: ${data['Tanggal Output']}%0A Asset Name: ${data["Nama Barang"]}%0A Asset Category: ${data["Kategori Jenis Produk"]}%0A Product Name: ${data["Jenis Produk"]}%0A Location: ${data["Lokasi"]}%0A No PO: ${data["No. PO / Dokumenen Pendukung"]}%0A Lifetime: ${data['Masa Manfaat (Bulan)']}%0A Value: ${data['Nilai Asset saat ini']}&size=${size}x${size}&bgcolor=${bgColor}`}
+                          href={`http://api.qrserver.com/v1/create-qr-code/?data=Asset Number: ${data["Nomor Asset"]}%0A Purchase Date: ${data['Tanggal Output']}%0A Asset Name: ${data["Nama Barang"]}%0A Asset Category: ${data["Kategori Jenis Produk"]}%0A Product Name: ${data["Jenis Produk"]}%0A Location: ${data["Lokasi"]}%0A PO Number: ${data["No. PO / Dokumenen Pendukung"]}%0A Lifetime: ${data['Masa Manfaat (Bulan)']}%0A Value: ${data['Nilai Asset saat ini']}%0A Vendor: ${data['Vendor']}&size=${size}x${size}&bgcolor=${bgColor}`}
                           download="QRCode"
                         >
                           <i
                             className="material-icons"
                             data-toggle="tooltip"
                             title="View"
+                            style={{fontSize: '25px'}} 
                           >
                             &#xf090;
                           </i>
@@ -702,6 +772,7 @@ export const Overview = () => {
                             className="material-icons"
                             data-toggle="tooltip"
                             title="Edit"
+                            style={{fontSize: '25px'}} 
                           >
                             &#xe3c9;
                           </i>
@@ -744,7 +815,7 @@ export const Overview = () => {
           </div>
           <div className="clearfix">
             <div className="hint-text">
-              Showing <b> {itemPerPage} </b> out of <b>{datas.length}</b>{" "}
+              Showing <b> {currentItems.length} </b> out of <b>{datas.length}</b>{" "}
               enteries
             </div>
           </div>
@@ -784,6 +855,8 @@ export const Overview = () => {
           <Modal.Body>
             <div>
               <div className="form-group">
+                <div className="image-view">
+                </div>
                 <label>No Asset</label>
                 <input
                   type="text"
@@ -824,6 +897,34 @@ export const Overview = () => {
                   type="text"
                   className="form-control"
                   value={rowData["No. PO / Dokumenen Pendukung"]}
+                  readOnly
+                />
+                <label>Location</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={rowData["Lokasi"]}
+                  readOnly
+                />
+                <label>Vendor</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={rowData["Vendor"]}
+                  readOnly
+                />
+                <label>Lifetime</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={rowData["Masa Manfaat (Bulan)"]}
+                  readOnly
+                />
+                <label>Current Asset Value</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={rowData["Nilai Asset saat ini"]}
                   readOnly
                 />
               </div>
@@ -982,13 +1083,14 @@ export const Overview = () => {
                             src={URL.createObjectURL(selectedImage)}
                             className="image"
                             alt="Thumb"
+                            style={{width:'200px', height:'140px'}}
                           />
-                          <button
-                            onClick={removeSelectedImage}
-                            className="cancel"
-                          >
-                            Remove the image
-                          </button>
+                            <button
+                              onClick={removeSelectedImage}
+                              className="cancel"
+                            >
+                              Remove the image
+                            </button>
                         </div>
                       )}
                     </div>
@@ -1032,10 +1134,11 @@ export const Overview = () => {
                       name="User"
                       value={assetEdit.User}
                       onChange={handleChange}
+                      readOnly
                     />
                   </div>
                   <div className="inputBox">
-                    <span>User :</span>
+                    <span>Initial :</span>
                     <input
                       type="text"
                       required

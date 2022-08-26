@@ -1,0 +1,15 @@
+.import-container{
+  display: flex;
+  justify-content: center;
+  height: 88vh;
+  width: 100vw;
+  align-items: center;
+  align-content: center;
+  flex-direction: column;
+}
+
+.import-container .form-upload-container{
+  width: 100%;
+  height: 5%;
+  top: 5%
+}

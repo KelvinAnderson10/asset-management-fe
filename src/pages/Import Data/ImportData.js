@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Sidebar from '../../shared/components/Sidebar/Sidebar'
 import * as XLSX from 'xlsx';
 import { useDeps } from '../../shared/context/DependencyContext';
-
+import './ImportData.css'
 export const ImportData = () => {
   const [excelData, setExcelData] = useState([])
   const [doneUploadExcel, setDoneUploadExcel] = useState(false)
@@ -59,16 +59,20 @@ export const ImportData = () => {
   return (
     <div>
         <Sidebar/>
-        <form>
-          <label htmlFor="upload">Upload File</label>
-          <input
-              type="file"
-              name="upload"
-              id="upload"
-              onChange={readUploadFile}
-          />
-      </form>
-        <div className="body">
+        <div className='import-container'>
+        <div class='form-upload-container'>
+          <form>
+            <label htmlFor="upload">Upload File</label>
+            <input
+                type="file"
+                name="upload"
+                id="upload"
+                onChange={readUploadFile}
+            />
+          </form>
+        </div>
+        
+        <div>
           <div className="container">
             <br></br>
                   <h2>
@@ -174,9 +178,7 @@ export const ImportData = () => {
 
         {/* tinggal didesign */}
         {isLoading && <div>Lagi loading</div>}
-
-    
-    
+        </div>   
     </div>
   )
 }

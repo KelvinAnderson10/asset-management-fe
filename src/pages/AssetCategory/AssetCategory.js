@@ -173,9 +173,10 @@ export const AssetCategory = () => {
     setLoading(true);
     try {
       const response = await assetCategoryService.getDataBySubproductLike(searchSubproduct);
+      console.log('ini keyword', searchSubproduct)
       console.log(response);
       setData(response.data);
-      console.log(response.data);
+      console.log('ini search', response.data);
     } catch (e) {
       console.log(e);
     } finally {

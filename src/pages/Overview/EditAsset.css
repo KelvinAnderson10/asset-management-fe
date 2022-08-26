@@ -35,6 +35,7 @@
   height: auto;
   background: rgb(218, 218, 218);
   box-shadow: 0 5px 10px rgba(58, 5, 5, 0.1);
+  border-radius: 20px;
 }
 
 .asset-edit-container form .row{
@@ -118,7 +119,16 @@
   height: 140px;
   background-color: #464646;
   margin-right: 10px;
-  
+  display: flex;
+}
+
+.image .cancel {
+  cursor: "pointer";
+  background-color: red;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  width: 100%;
 }
 
 .asset-edit-container form .row .col .asset-image-container{
