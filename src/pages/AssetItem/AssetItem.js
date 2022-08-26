@@ -247,18 +247,18 @@ export const AssetItem= () => {
             
             <div className="inputBox">
                 <span>Purchase Year :</span>
-                <input type='year' required name='Tahun Pembelian' value={data['Tahun Pembelian']} onChange={handleChange}/>
+                <input type='number' required name='Tahun Pembelian' value={data['Tahun Pembelian']} onChange={handleChange}/>
             </div>
             <div className="inputBox">
                 <span>User :</span>
                 <input type='text' required name='User' value={data.User} onChange={handleChange}/>
             </div>
             <div className="inputBox">
-                <span>User :</span>
+                <span>Initisal :</span>
                 <input type='text' required name='Initisal' value={data['Initisal']} onChange={handleChange}/>
             </div>
             <div className="inputBox">
-                <span>Asset Code :</span>
+                {/* <span>Asset Code :</span>
                 <select required name='Kode Asset' value={data['Kode Asset']} onChange={handleChange}>
                       <option value="" >Select Asset Code</option> 
                       {
@@ -266,10 +266,10 @@ export const AssetItem= () => {
                           <option key={item.subproduct_name} value={item.product_code} >{item.subproduct_name}-{item.product_code}</option>
                         ))
                       }
-                      </select>
+                      </select> */}
                 <div className="inputBox">
                 <span>Year :</span>
-                <input type='year'  required name='Tahun' value={data.Tahun} onChange={handleChange}/>
+                <input type='number'  required name='Tahun' value={data.Tahun} onChange={handleChange}/>
             </div>
 
             <div className="inputBox">

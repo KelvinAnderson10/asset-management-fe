@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500;600&display=swap');
 
-.main-container{
+.edit-container{
   font-family: 'Poppins', sans-serif;
   margin:0; padding:0;
   box-sizing: border-box;
@@ -21,7 +21,7 @@
   z-index: 100;
 }
 
-.main-container .asset-container{
+.edit-container .asset-edit-container{
   display: flex;
   justify-content: center;
   align-items: center;
@@ -29,7 +29,7 @@
   height: 90vh;
 }
 
-.asset-container form{
+.asset-edit-container form{
   padding:40px;
   width: 80vw;
   height: auto;
@@ -37,13 +37,13 @@
   box-shadow: 0 5px 10px rgba(58, 5, 5, 0.1);
 }
 
-.asset-container form .row{
+.asset-edit-container form .row{
   display: flex;
   flex-direction: row;
   
 }
 
-.asset-container form .row .col{
+.asset-edit-container form .row .col{
   display: flex;
   flex-direction: column;
 
@@ -51,7 +51,7 @@
 
 
 
-.asset-container form .row .col .title{
+.asset-edit-container form .row .col .title{
   font-size: 30px;
   color: 	#8d0000;
   padding-bottom: 5px;
@@ -60,17 +60,17 @@
   font-weight: bold;
 }
 
-.asset-container form .row .col .inputBox{
+.asset-edit-container form .row .col .inputBox{
   margin:0px 0;
 }
 
-.asset-container form .row .col .inputBox span{
+.asset-edit-container form .row .col .inputBox span{
   margin-bottom: 10px;
   display: block;
   text-align: left;
 }
 
-.asset-container form .row .col .inputBox input{
+.asset-edit-container form .row .col .inputBox input{
   width: 100%;
   border:1px solid rgb(180, 178, 178);
   padding:8px 20px;
@@ -81,7 +81,7 @@
   border-radius:10px;
   
 }
-.asset-container form .row .col .inputBox select{
+.asset-edit-container form .row .col .inputBox select{
   width: 100%;
   border:1px solid rgb(236, 236, 236);
   padding:8px 15px;
@@ -92,28 +92,28 @@
   border-radius:10px;
 }
 
-.asset-container form .row .col .inputBox input:focus{
+.asset-edit-container form .row .col .inputBox input:focus{
   border:2px solid  	#d41c1c;
   outline: none;
 }
 
-.asset-container form .row .col .flex{
+.asset-edit-container form .row .col .flex{
   display: flex;
   gap:15px;
 }
 
-.asset-container form .row .col .flex .inputBox{
+.asset-edit-container form .row .col .flex .inputBox{
   margin-top: 5px;
 }
 
-.asset-container form .row .col .inputBox img{
+.asset-edit-container form .row .col .inputBox img{
   height: 34px;
   margin-top: 5px;
   filter: drop-shadow(0 0 1px #000);
 }
 
 
-.asset-container form .row .col .image-box {
+.asset-edit-container form .row .col .image-box {
   width: 200px;
   height: 140px;
   background-color: #464646;
@@ -121,7 +121,7 @@
   
 }
 
-.asset-container form .row .col .asset-image-container{
+.asset-edit-container form .row .col .asset-image-container{
   display: flex;
   flex-direction: row;
   margin: 20px;
@@ -130,7 +130,7 @@
   margin-bottom: 10px;
 }
 
-.asset-container form .row .col .button-submit{
+.asset-edit-container form .row .col .button-submit{
  
   width: 120px;
   height: 45px;
@@ -139,7 +139,7 @@
   align-items: center;
 }
 
-.asset-container form .row .col .button-cancel{
+.asset-edit-container form .row .col .button-cancel{
   width: 120px;
   height: 45px;
   margin-right: 40px;
@@ -147,14 +147,14 @@
   align-items: center;
 }
 
-.asset-container form .row .col  .button-asset {
+.asset-edit-container form .row .col  .button-asset {
   width: 100%;
   display: flex;
   justify-content: flex-end;
  margin-top: 10px;
 }
 
-.asset-container form .row .col input[type="file"]::-webkit-file-upload-button{
+.asset-edit-container form .row .col input[type="file"]::-webkit-file-upload-button{
 padding: 11px 15px;
 border-radius: 50px;
 border: none;
@@ -167,6 +167,6 @@ background-color: #0A2495;
 transition: 0.5s all;
 }
 
-.asset-container form .row .col input[type="file"]:hover::-webkit-file-upload-button{
+.asset-edit-container form .row .col input[type="file"]:hover::-webkit-file-upload-button{
   background-color: #1b3ed8;
 }

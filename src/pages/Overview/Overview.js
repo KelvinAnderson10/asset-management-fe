@@ -3,7 +3,6 @@ import { Button, Modal, Table } from "react-bootstrap";
 import Sidebar from "../../shared/components/Sidebar/Sidebar";
 import { useDeps } from "../../shared/context/DependencyContext";
 import "./Overview.css";
-import { OverviewColumn } from "./OverviewColumn";
 import { BsArrowDownUp } from "react-icons/bs";
 import moment from "moment";
 import "./EditAsset.css";
@@ -24,7 +23,6 @@ export const Overview = () => {
   const [viewShow, setViewShow] = useState();
   const [asset, setAsset] = useState({});
   const [isLoading, setLoading] = useState(false);
-  const areAllFieldsFilled = asset !== "";
 
   const handleChangeAsset = (e) => {
     const newData = { ...asset };
@@ -447,7 +445,7 @@ export const Overview = () => {
                 <div className="select-menu">
         <div className="select-btn">
             <span className="sBtn-text">Condition</span>
-            <select required
+            <select required className="select-condition"
             onClick={onSearchCondition}
                       name="Kondisi"
                       value={searchCondition}
@@ -467,13 +465,17 @@ export const Overview = () => {
               <thead className="table-header">
                 <tr>
                   <th>No</th>
-                  <th style={{ minWidth: "100px" }}>Action</th>
-                  <th style={{ minWidth: "200px" }}>Purchase Date</th>
+                  <th style={{ minWidth: "150px" }}>Action</th>
+                  <th 
+                    onClick={() => sorting("Tanggal Output")} 
+                    style={{ minWidth: "200px" }}>
+                    Purchase Date <BsArrowDownUp style={{ marginLeft: "10%" }} />
+                  </th>
                   <th
                     onClick={() => sortingNum("Tahun")}
                     style={{ minWidth: "200px" }}
                   >
-                    Year <BsArrowDownUp style={{ marginLeft: "10%" }} />{" "}
+                    Year <BsArrowDownUp style={{ marginLeft: "10%" }} />
                   </th>
                   <th
                     onClick={() => sorting("No. PO / Dokumenen Pendukung")}
@@ -515,14 +517,14 @@ export const Overview = () => {
                   </th>
                   <th
                     onClick={() => sortingNum("Total Harga Perolehan")}
-                    style={{ minWidth: "200px" }}
+                    style={{ minWidth: "250px" }}
                   >
                     Total Acquisition Cost{" "}
                     <BsArrowDownUp style={{ marginLeft: "10%" }} />
                   </th>
                   <th
                     onClick={() => sorting("Jenis Produk")}
-                    style={{ minWidth: "200px" }}
+                    style={{ minWidth: "230px" }}
                   >
                     Asset Category Subproduct Name{" "}
                     <BsArrowDownUp style={{ marginLeft: "10%" }} />
@@ -652,7 +654,7 @@ export const Overview = () => {
               </thead>
               <tbody>
                 {datas.length === 0 ? (
-                  <tr>No data found</tr>
+                  <tr colspan={'31'}>No data found</tr>
                 ) : (
                   currentItems.map((data, index) => (
                     <tr key={data["Nomor Asset"]}>
@@ -664,19 +666,20 @@ export const Overview = () => {
                           }}
                           className="view"
                           data-toggle="modal"
-                          style={{ cursor: "pointer" }}
+                          style={{ cursor: "pointer", width: '50%'}}
                         >
                           <i
                             className="material-icons"
                             data-toggle="tooltip"
                             title="View"
+                            style={{width: '30px'}} 
                           >
                             &#xe8f4;
                           </i>
                         </a>
                         <a
                           target="_blank"
-                          href={`http://api.qrserver.com/v1/create-qr-code/?data=Nomor Asset: ${data["Nomor Asset"]}%0A Asset Name: ${data["Nama Barang"]}%0A Asset Category: ${data["Kategori Jenis Produk"]}%0A Product Name: ${data["Jenis Produk"]}%0A Location: ${data["Lokasi"]}%0A No PO: ${data["No. PO / Dokumenen Pendukung"]}&size=${size}x${size}&bgcolor=${bgColor}`}
+                          href={`http://api.qrserver.com/v1/create-qr-code/?data=Nomor Asset: ${data["Nomor Asset"]}%0A Purchase Date: ${data['Tanggal Output']}%0A Asset Name: ${data["Nama Barang"]}%0A Asset Category: ${data["Kategori Jenis Produk"]}%0A Product Name: ${data["Jenis Produk"]}%0A Location: ${data["Lokasi"]}%0A No PO: ${data["No. PO / Dokumenen Pendukung"]}%0A Lifetime: ${data['Masa Manfaat (Bulan)']}%0A Value: ${data['Nilai Asset saat ini']}&size=${size}x${size}&bgcolor=${bgColor}`}
                           download="QRCode"
                         >
                           <i
@@ -836,8 +839,8 @@ export const Overview = () => {
       {/* Edit Show */}
 
       {editShow && (
-        <div className="main-container">
-          <div className="asset-container">
+        <div className="edit-container">
+          <div className="asset-edit-container">
             <form onSubmit={onSubmitEditAsset}>
               <div className="row">
                 <div className="col">
@@ -1014,7 +1017,7 @@ export const Overview = () => {
                   <div className="inputBox">
                     <span>Purchase Year :</span>
                     <input
-                      type="year"
+                      type="number"
                       required
                       name="Tahun Pembelian"
                       value={assetEdit["Tahun Pembelian"]}
@@ -1042,7 +1045,7 @@ export const Overview = () => {
                     />
                   </div>
                   <div className="inputBox">
-                    <span>Asset Code :</span>
+                    {/* <span>Asset Code :</span>
                     <select
                       required
                       name="Kode Asset"
@@ -1058,11 +1061,11 @@ export const Overview = () => {
                           {item.subproduct_name}-{item.product_code}
                         </option>
                       ))}
-                    </select>
+                    </select> */}
                     <div className="inputBox">
                       <span>Year :</span>
                       <input
-                        type="year"
+                        type="number"
                         required
                         name="Tahun"
                         value={assetEdit.Tahun}

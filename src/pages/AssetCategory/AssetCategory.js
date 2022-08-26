@@ -225,7 +225,8 @@ export const AssetCategory = () => {
   };
 
   //Edit Data
-  const handleEdit = async (id) => {
+  const handleEdit = async (e, id) => {
+    e.preventDefault()
     console.log("ini id", id);
     try {
       assetCategory.useful_life = Number(assetCategory.useful_life)
@@ -431,10 +432,10 @@ export const AssetCategory = () => {
             </div>
             </div>
 
-            <div className="body">
-            <div className="container">
-                <div className="table-responsive" style={{'width':'100%'}}>
-                <div className="table-wrapper">
+            <div className="body container table-wrapper table-responsive">
+            {/* <div className="container table-wrapper table-responsive"> */}
+                {/* <div className="table-wrapper table-responsive" style={{'width':'100%'}}> */}
+                {/* <div className="table-wrapper"> */}
                     <div className="table-title">
                     <div className="row">
                         <div className="col-xs-6">
@@ -569,15 +570,14 @@ export const AssetCategory = () => {
                         </li>
                     </ul>
                     </div>
-                </div>
-                </div>
-            </div>
+                {/* </div> */}
+                {/* </div> */}
+            {/* </div> */}
             </div>
 
             {/* ADD MODAL FOR SUBMIT DATABASE */}
 
             <div className="model-box-view">
-              <form onSubmit={handleSubmit}>
               <Modal
                 show={ViewPost}
                 onHide={handlePostClose}
@@ -589,6 +589,7 @@ export const AssetCategory = () => {
                 
                 </Modal.Header>
                 <Modal.Body>
+                <form onSubmit={handleSubmit}>
                 <p style={{color:"red"}}>Please complete all required fields</p>
                 <div>
                     <div className="form-group">
@@ -652,19 +653,19 @@ export const AssetCategory = () => {
                     />
                     </div>    
                 </div>
-                </Modal.Body>
-                <Modal.Footer>
                 <Button
-                    disabled ={!assetCategory}
                     type="submit"
                     className="btn btn-success mt-4"
-                    onClick={handleSubmit}
                     >
                     Add{" "}
                     </Button>
+                </form>
+                </Modal.Body>
+                <Modal.Footer>
+                
                 </Modal.Footer>
             </Modal>
-              </form>
+             
             
             </div>
 
@@ -678,9 +679,10 @@ export const AssetCategory = () => {
                 keyboard={false}
             >
                 <Modal.Header closeButton>
-                <Modal.Title>Edit </Modal.Title>
+                <Modal.Title>Edit {RowData.subproduct_name}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
+                <form onSubmit={(e) => handleEdit(e, RowData.subproduct_name)}>
                 <div>
                     <div className="form-group">
                     <label>Asset Category</label>
@@ -719,7 +721,7 @@ export const AssetCategory = () => {
                         placeholder="Please enter product name"
                         defaultValue={RowData.product_name}
                     />
-                    <label>Subproduct Name</label>
+                    {/* <label>Subproduct Name</label>
                     <input
                         type="text"
                         className="form-control"
@@ -727,19 +729,20 @@ export const AssetCategory = () => {
                         name="subproduct_name"
                         placeholder="Please enter subproduct name"
                         defaultValue={RowData.subproduct_name}
-                    />
+                    /> */}
                     </div>
                 </div>
-                </Modal.Body>
-                <Modal.Footer>
-                <Button
-                    disabled={!areAllFieldsFilled}
+                  <Button
+                    // disabled={!areAllFieldsFilled}
                     type="submit"
                     className="btn btn-warning mt-4"
-                    onClick={() => handleEdit(RowData.subproduct_name)}
+                    // onClick={() => handleEdit(RowData.subproduct_name)}
                     >
                     Save Changes
                     </Button>
+                </form>
+                </Modal.Body>
+                <Modal.Footer>
                 </Modal.Footer>
             </Modal>
             </div>
