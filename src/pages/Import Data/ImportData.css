@@ -5,6 +5,7 @@
   width: 100vw;
   align-items: center;
   align-content: center;
+  position: absolute;
 }
 
 .import-container .import-card {
