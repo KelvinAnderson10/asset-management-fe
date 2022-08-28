@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Button, Modal, Table } from "react-bootstrap";
-import Sidebar from "../../shared/components/Sidebar/Sidebar";
+import Sidebar from "../../shared/components/Sidebar2/Sidebar";
 import { useDeps } from "../../shared/context/DependencyContext";
 import "./Overview.css";
 import {FaSort} from 'react-icons/fa'
@@ -516,7 +516,7 @@ export const Overview = () => {
 
   return (
     <>
-      <Sidebar />
+      <Sidebar>
       <div className="overview-container">
         <div className="overview-card">
           <div className="search-container">
@@ -734,7 +734,7 @@ export const Overview = () => {
               <tbody>
                 {datas.length === 0 ? (
                   <tr> 
-                    <th colspan='31'>No data found</th>
+                    <th colspan='31'>Data is not found</th>
                   </tr>
                 ) : (
                   currentItems.map((data, index) => (
@@ -1075,16 +1075,6 @@ export const Overview = () => {
                       onChange={handleChange}
                     />
                   </div>
-                  <div className="inputBox">
-                    <span>Total Acquisition Cost :</span>
-                    <input
-                      type="number"
-                      required
-                      name="Total Harga Perolehan"
-                      value={assetEdit["Total Harga Perolehan"]}
-                      onChange={handleChange}
-                    />
-                  </div>
                 </div>
                 <div className="col">
                   <div className="asset-image-container">
@@ -1116,7 +1106,27 @@ export const Overview = () => {
                       onChange={imageChange}
                     />
                   </div>
-
+                  <div className="inputBox">
+                  <span>PPN :</span>
+                  <input
+                    type="text"
+                    required
+                    name="PPN"
+                    value={assetEdit["PPN"]}
+                    onChange={handleChange}
+                    style={{width:'95%'}}
+                  />
+                </div>
+                  <div className="inputBox">
+                    <span>Total Acquisition Cost :</span>
+                    <input
+                      type="number"
+                      required
+                      name="Total Harga Perolehan"
+                      value={assetEdit["Total Harga Perolehan"]}
+                      onChange={handleChange}
+                    />
+                  </div>
                   <div className="inputBox">
                     <span>Insurance</span>
                     <select
@@ -1223,6 +1233,7 @@ export const Overview = () => {
           </div>
         </div>
       )}
+      </Sidebar>
     </>
   );
 };

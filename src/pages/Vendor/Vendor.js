@@ -1,6 +1,6 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
-import Sidebar from "../../shared/components/Sidebar/Sidebar";
+import React, { useEffect, useState, useRef } from "react";
+import Sidebar from "../../shared/components/Sidebar2/Sidebar";
 import { useDeps } from "../../shared/context/DependencyContext";
 import { FiPlus } from "react-icons/fi";
 import { Link } from "react-router-dom";
@@ -300,11 +300,18 @@ export const VendorManage = () => {
     
 }
 
+const ref = useRef(null) ;
+const onClearForm = () => {
+  ref.current.value = ''; 
+  onGetAllVendor();
+}
+
   return (
     <>
-      <Sidebar />
+      <Sidebar>
       <div>
-             
+      <div className="body">
+          <div className="container">
           <div className="vendor-container-item" >
             <Button
               variant="primary"
@@ -330,6 +337,9 @@ export const VendorManage = () => {
                 <button value="submit" className="btn btn-primary">
                   <i className="fas fa-search"></i>
                 </button>
+                <button value="submit" className="btn btn-danger form-button" onClick={onClearForm}>
+                        <i className="fa fa-times"></i>
+                </button>
               </div>
             </div>
           </form>
@@ -340,8 +350,6 @@ export const VendorManage = () => {
 
         
 
-        <div className="body">
-          <div className="container">
             <div className="table-responsive">
               <div className="table-wrapper">
                 <div className="table-title">
@@ -379,7 +387,9 @@ export const VendorManage = () => {
                   </thead>
                   <tbody>
                     {data.length === 0 ? (
-                      <tr>No data Found</tr>
+                      <tr>
+                        <th colspan='6'>Data is not found</th>
+                      </tr>
                     ) : (
                       currentItems.map((item, index) => (
                         <tr key={item.ID}>
@@ -702,6 +712,7 @@ export const VendorManage = () => {
           </Modal>
         </div>
       </div>
+      </Sidebar>
     </>
   );
 };

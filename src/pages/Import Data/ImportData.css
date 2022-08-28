@@ -18,21 +18,43 @@
   align-content: flex-end;
 }
 
-.import-card .title-container{
+.title-container{
   width: 100%;
-  height: 8%;
-  background-color: #a75738;
+  height: 8vh;
   font-size: 2em;
   text-align: left;
-  padding-left: 2%;
-  
+  /* padding-left: 2%; */
+  display: flex;
+  align-items: center;
+  padding-top: 1%;
 }
 
-.import-card .form-upload-container{
+.note{
+  width: 100%;
+  height: 15vh;
+  background: #6dadb7;
+  margin-top: 1em;
+  border-radius: 10px;
+  color: white;
+  display: flex;
+  padding: 1.5%;
+  flex-direction: column;
+  /* align-content: flex-start; */
+ align-items: flex-start;
+}
+
+.note .content-note{
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.form-upload-container{
   height: 25%;
   width: 100%;
-  background-color: aqua;
-  
+  /* background-color: aqua; */
+  display: flex;
+  align-items: flex-start;
 }
 
 

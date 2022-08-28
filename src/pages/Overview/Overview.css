@@ -1,21 +1,23 @@
-.overview-container{
+main .overview-container{
     display: flex;
     justify-content: center;
-    height: 88vh;
-    width: 100vw;
+    min-height: 94vh;
+    min-width: 97vw;
     align-items: center;
     align-content: center;
+    padding-left: 20px;
 }
 
-.overview-container .overview-card {
+main .overview-container .overview-card {
     background-color:whitesmoke;
-    width: 95%;
+    width: 90vw;
     display: flex;
     justify-content: center;
-    height: 85vh;
+    height: 90vh;
     align-items: flex-end;
     flex-direction: column;
     align-content: flex-end;
+    border-radius: 10px;
 }
 
 .overview-card .overview-box {
@@ -29,7 +31,7 @@
 .overview-card .table-header{
     background-color:#3B3634;
     color: white;
-    height: 100px;
+    /* height: ; */
 }
 
 .overview-card .col-table{
@@ -141,7 +143,7 @@ input.form-control:focus{
   gap: 3%;
   align-items: flex-end;
   /* bottom: 0%; */
-  padding-bottom: 3%;
+  /* padding-bottom: 3%; */
   padding-left: 1%; 
 }
 

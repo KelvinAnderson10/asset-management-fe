@@ -57,6 +57,7 @@ const Sidebar = () => {
           <p>Copyright © by Kelompok 6, All Rights Reserved</p>
         </div>
       </IconContext.Provider>
+      
     </>
   );
 };

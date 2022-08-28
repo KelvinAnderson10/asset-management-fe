@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Sidebar from '../../shared/components/Sidebar/Sidebar'
+import Sidebar from '../../shared/components/Sidebar2/Sidebar'
 import * as XLSX from 'xlsx';
 import { useDeps } from '../../shared/context/DependencyContext';
 import './ImportData.css'
@@ -57,16 +57,18 @@ export const ImportData = () => {
   }, [excelData])
 
   return (
-    <div>
-        <Sidebar/>
-        <div className='import-container'>
-          <div className='import-card'>
+    <>
+        <Sidebar>
+        <div className='body'>
+          <div className='container'>
             <div className='title-container'>
               <h4>ADD MULTIPLE ASSET</h4>
             </div>
         <div class='form-upload-container'>
+          <div>
+          {/* <label htmlFor="upload">Upload File</label> */}
+          </div>
           <form>
-            <label htmlFor="upload">Upload File</label>
             <input
                 type="file"
                 name="upload"
@@ -75,13 +77,23 @@ export const ImportData = () => {
             />
           </form>
         </div>
+        <div className='note'>
+            <h5>Notes</h5>
+            <div className='content-note'>
+              <ul>
+                <li>1. Any date format should be customize as 'd-mmmm-y' format.</li>
+                <li>2. Fields such as Harga Perolehan, PPN and Biaya Lain-Lain should be in 'Number' format.</li>
+                <li>3. Some fields are mandatory. (Download 'Upload Guidelines' or 'Template' above for more information).</li>
+              </ul>
+            </div>
+        </div>
         
         <div>
           <div className="import-box">
             <br></br>
-                  <h2>
+                  <h3>
                       Upload <b>Assets</b>
-                  </h2>
+                  </h3>
             <div className="table-responsive">
               <div className="table-wrapper">
                 <div className="table-title">
@@ -184,6 +196,7 @@ export const ImportData = () => {
         {isLoading && <div>Lagi loading</div>}
         </div>   
         </div>
-    </div>
+        </Sidebar>
+    </>
   )
 }

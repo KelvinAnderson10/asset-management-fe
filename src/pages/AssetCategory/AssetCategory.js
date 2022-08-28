@@ -1,6 +1,6 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
-import Sidebar from "../../shared/components/Sidebar/Sidebar";
+import React, { useEffect, useState, useRef } from "react";
+import Sidebar from "../../shared/components/Sidebar2/Sidebar";
 import { useDeps } from "../../shared/context/DependencyContext";
 import { FiPlus } from "react-icons/fi";
 import { Link } from "react-router-dom";
@@ -163,67 +163,130 @@ export const AssetCategory = () => {
   };
 
   //Search
-  const onChangeSearchSubproduct = (e) => {
-    const searchSubproduct = e.target.value;
-    setSearchSubproduct(searchSubproduct);
+  // const onChangeSearchSubproduct = (e) => {
+  //   const searchSubproduct = e.target.value;
+  //   setSearchSubproduct(searchSubproduct);
+  // };
+
+  // const onSearchSubproduct = async (e) => {
+  //   e.preventDefault();
+  //   setLoading(true);
+  //   try {
+  //     const response = await assetCategoryService.getDataBySubproductLike(searchSubproduct);
+  //     console.log('ini keyword', searchSubproduct)
+  //     console.log(response);
+  //     setData(response.data);
+  //     console.log('ini search', response.data);
+  //   } catch (e) {
+  //     console.log(e);
+  //   } finally {
+  //     setLoading(false)
+  //   }
+  // };
+
+  // const [searchProduct, setSearchProduct] = useState('')
+  // const onChangeSearchProduct = (e) => {
+  //   const searchProduct = e.target.value;
+  //   setSearchProduct(searchProduct);
+  // };
+
+  // const onSearchProduct = async (e) => {
+  //   e.preventDefault();
+  //   setLoading(true);
+  //   try {
+  //     const response = await assetCategoryService.getDataByProductLike(searchProduct);
+  //     console.log(response);
+  //     setData(response.data);
+  //     console.log(response.data);
+  //   } catch (e) {
+  //     console.log(e);
+  //   } finally {
+  //     setLoading(false)
+  //   }
+  // };
+
+  // const [searchAssetCategory, setSearchAssetCategory] = useState('')
+  // const onChangeSearchAssetCategory = (e) => {
+  //   setSearchAssetCategory(e.target.value);
+  // };
+
+  // const onSearchAssetCategory = async (e) => {
+  //   e.preventDefault();
+  //   setLoading(true);
+  //   try {
+  //     const response = await assetCategoryService.getDataByAssetCategoryLike(searchAssetCategory);
+  //     console.log(response);
+  //     setData(response.data);
+  //     console.log(response.data);
+  //   } catch (e) {
+  //     console.log(e);
+  //   } finally {
+  //     setLoading(false)
+  //   }
+  // };
+
+  //Filter
+  const [filter, setFilter] = useState('');
+  const [dropdownName, setDropdownName] = useState('');
+  const [fill, setFill] = useState(true);
+  const ref = useRef(null) ;
+
+  const onChangeFilter = (e) => {
+    setFilter(e.target.value);
   };
 
-  const onSearchSubproduct = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      const response = await assetCategoryService.getDataBySubproductLike(searchSubproduct);
-      console.log('ini keyword', searchSubproduct)
-      console.log(response);
-      setData(response.data);
-      console.log('ini search', response.data);
-    } catch (e) {
-      console.log(e);
-    } finally {
-      setLoading(false)
+  const onChangeDropdown= (dropdownName) => {
+    setDropdownName(dropdownName)
+    setFill(false)
+  }
+
+  const onFilter = async () => {
+    console.log(filter)
+    console.log(dropdownName)
+    if (dropdownName === 'Subproduct') {
+      setLoading(true);
+      try {
+        const response = await assetCategoryService.getDataBySubproductLike(filter);
+        console.log('ini keyword', searchSubproduct)
+        console.log(response);
+        setData(response.data);
+        console.log('ini search', response.data);
+      } catch (e) {
+        console.log(e);
+      } finally {
+        setLoading(false)
+      }
+    } else if (dropdownName === 'Product') {
+      setLoading(true);
+      try {
+        const response = await assetCategoryService.getDataByProductLike(filter);
+        console.log(response);
+        setData(response.data);
+        console.log(response.data);
+      } catch (e) {
+        console.log(e);
+      } finally {
+        setLoading(false)
+      }
+    } else {
+      setLoading(true);
+      try {
+        const response = await assetCategoryService.getDataByAssetCategoryLike(filter);
+        console.log(response);
+        setData(response.data);
+        console.log(response.data);
+      } catch (e) {
+        console.log(e);
+      } finally {
+        setLoading(false)
+      }
     }
-  };
+  }
 
-  const [searchProduct, setSearchProduct] = useState('')
-  const onChangeSearchProduct = (e) => {
-    const searchProduct = e.target.value;
-    setSearchProduct(searchProduct);
-  };
-
-  const onSearchProduct = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      const response = await assetCategoryService.getDataByProductLike(searchProduct);
-      console.log(response);
-      setData(response.data);
-      console.log(response.data);
-    } catch (e) {
-      console.log(e);
-    } finally {
-      setLoading(false)
-    }
-  };
-
-  const [searchAssetCategory, setSearchAssetCategory] = useState('')
-  const onChangeSearchAssetCategory = (e) => {
-    setSearchAssetCategory(e.target.value);
-  };
-
-  const onSearchAssetCategory = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      const response = await assetCategoryService.getDataByAssetCategoryLike(searchAssetCategory);
-      console.log(response);
-      setData(response.data);
-      console.log(response.data);
-    } catch (e) {
-      console.log(e);
-    } finally {
-      setLoading(false)
-    }
-  };
+  const onClearForm = () => {
+    ref.current.value = ''; 
+    onGetAllAssetCategory();
+  }
 
   //Edit Data
   const handleEdit = async (e, id) => {
@@ -365,11 +428,29 @@ export const AssetCategory = () => {
 
   return (
     <>
-      <Sidebar />
-      <div className="asset-category-container">
-        <div className="asset-category-box">
+      <Sidebar>
+      <div className="body">
+        <div className="container">
             <div className="feature" >
-                <Button
+            {/* <div className="search"> */}
+            <div className="input-group mb-3 dropdown">
+                <button className="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Search by {dropdownName}</button>
+                <ul className="dropdown-menu" >
+                  <li><a className="dropdown-item" onClick={() => {onChangeDropdown('Subproduct')}}>Subproduct</a></li>
+                  <li><a className="dropdown-item" onClick={() => {onChangeDropdown('Product')}}>Product</a></li>
+                  <li><a className="dropdown-item" onClick={() => {onChangeDropdown('Asset Category')}}>Asset Category</a></li>
+                </ul>
+                <input ref={ref} disabled={fill} type="text" className="form-control" aria-label="Text input with dropdown button" onChange={onChangeFilter}/>
+                <div className="input-group-append">
+                        <button value="submit" className="btn btn-primary form-button" onClick={onFilter}>
+                        <i className="fa fa-search"></i>
+                        </button>
+                        <button value="submit" className="btn btn-danger form-button" onClick={onClearForm}>
+                        <i className="fa fa-times"></i>
+                        </button>
+                </div>
+            </div>
+            <Button
                 variant="primary"
                 onClick={() => {
                     handlePostShow();
@@ -377,60 +458,8 @@ export const AssetCategory = () => {
                 >
                 <FiPlus />
                 Add New Asset Category
-                </Button>
-            <div className="search">
-                <form className='form-search' onSubmit={onSearchSubproduct}>
-                    <label>Subproduct Name</label>
-                    <div className="input-group">
-                    <input
-                        placeholder="Search"
-                        value={searchSubproduct}
-                        onChange={onChangeSearchSubproduct}
-                        type="text"
-                        className="form-control"
-                    />
-                    <div className="input-group-append">
-                        <button value="submit" className="btn btn-primary form-button">
-                        <i className="fa fa-search" aria-hidden="true"></i>
-                        </button>
-                    </div>
-                    </div>
-                </form>
-                <form className='form-search' onSubmit={onSearchProduct}>
-                    <label>Product Name</label>
-                    <div className="input-group">
-                    <input
-                        placeholder="Search"
-                        value={searchProduct}
-                        onChange={onChangeSearchProduct}
-                        type="text"
-                        className="form-control"
-                    />
-                    <div className="input-group-append">
-                        <button value="submit" className="btn btn-primary form-button">
-                        <i className="fa fa-search"></i>
-                        </button>
-                    </div>
-                    </div>
-                </form>
-                <form className='form-search' onSubmit={onSearchAssetCategory}>
-                    <label>Asset Category</label>
-                    <div className="input-group">
-                    <input
-                        placeholder="Search"
-                        value={searchAssetCategory}
-                        onChange={onChangeSearchAssetCategory}
-                        type="text"
-                        className="form-control"
-                    />
-                    <div className="input-group-append">
-                        <button value="submit" className="btn btn-primary form-button">
-                        <i className="fa fa-search"></i>
-                        </button>
-                    </div>
-                    </div>
-                </form>
-            </div>
+                </Button>                
+            {/* </div> */}
             </div>
 
             <div className="body container table-wrapper table-responsive">
@@ -476,7 +505,9 @@ export const AssetCategory = () => {
                     </thead>
                     <tbody>
                         {data.length === 0 ? (
-                        <tr>No data Found</tr>
+                        <tr>
+                          <th colspan='7'>Data is not found</th>
+                        </tr>
                         ) : (
                         currentItems.map((item, index) => (
                             <tr key={item.subproduct_name}>
@@ -804,6 +835,7 @@ export const AssetCategory = () => {
             </div>
         </div>
       </div>
+      </Sidebar>
     </>
   );
 };

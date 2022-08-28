@@ -11,7 +11,8 @@ import { ImportData } from '../pages/Import Data/ImportData'
 
 import { PageNotFound } from '../pages/PageNotFound/PageNotFound'
 import { AssetCategory } from '../pages/AssetCategory/AssetCategory'
-import UploadAndDisplayImage from '../pages/AssetItem/tesimg'
+// import UploadAndDisplayImage from '../pages/AssetItem/tesimg'
+import Sidebar from '../shared/components/Sidebar2/Sidebar'
 
 
 export const AppRouter = () => {
@@ -20,7 +21,7 @@ export const AppRouter = () => {
             <Route index element={<LoginView></LoginView>}></Route>
             <Route path='/home' element={<HomeView/>}/>  
             <Route path='/main' element={<Overview/>}/>
-            <Route path='/data-management'element={<UploadAndDisplayImage/>}/> 
+            {/* <Route path='/data-management'element={<AssetItem/>}/>  */}
             <Route path='/data-management/asset-item'element={<AssetItem/>}/>
             <Route path='/data-management/asset-category'element={<AssetCategory/>}/>
             <Route path='/data-management/vendor'element={<VendorManage/>}/>
