@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Sidebar from '../../shared/components/Sidebar2/Sidebar'
+import Sidebar from '../../shared/components/Sidebar/Sidebar'
 import * as XLSX from 'xlsx';
 import { useDeps } from '../../shared/context/DependencyContext';
 import './ImportData.css'

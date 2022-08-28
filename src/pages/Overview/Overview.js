@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Button, Modal, Table } from "react-bootstrap";
-import Sidebar from "../../shared/components/Sidebar2/Sidebar";
+import Sidebar from "../../shared/components/Sidebar/Sidebar";
 import { useDeps } from "../../shared/context/DependencyContext";
 import "./Overview.css";
 import {FaSort} from 'react-icons/fa'

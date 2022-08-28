@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Success } from "../../shared/components/Notification/Success";
-import Sidebar from "../../shared/components/Sidebar2/Sidebar";
+import Sidebar from "../../shared/components/Sidebar/Sidebar";
 import { useDeps } from "../../shared/context/DependencyContext";
 import { Failed } from "../../shared/components/Notification/Failed";
 import moment from "moment";

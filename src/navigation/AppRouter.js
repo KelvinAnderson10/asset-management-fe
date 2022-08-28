@@ -11,8 +11,7 @@ import { ImportData } from '../pages/Import Data/ImportData'
 
 import { PageNotFound } from '../pages/PageNotFound/PageNotFound'
 import { AssetCategory } from '../pages/AssetCategory/AssetCategory'
-// import UploadAndDisplayImage from '../pages/AssetItem/tesimg'
-import Sidebar from '../shared/components/Sidebar2/Sidebar'
+
 
 
 export const AppRouter = () => {

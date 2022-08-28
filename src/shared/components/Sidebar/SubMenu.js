@@ -1,76 +1,107 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import styled from 'styled-components';
+import { AnimatePresence, motion } from "framer-motion";
+import React, { useState, useEffect } from "react";
+import { FaAngleDown } from "react-icons/fa";
+import { NavLink } from "react-router-dom";
+import './Sidebar.css'
 
-const SidebarLink = styled(Link)`
-  display: flex;
-  color: #e1e9fc;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
-  list-style: none;
-  height: 100px;
-  text-decoration: none;
-  font-size: 25px;
+const menuAnimation = {
+  hidden: {
+    opacity: 0,
+    height: 0,
+    padding: 0,
+    transition: { duration: 0.3, when: "afterChildren" },
+  },
+  show: {
+    opacity: 1,
+    height: "auto",
+    transition: {
+      duration: 0.3,
+      when: "beforeChildren",
+    },
+  },
+};
+const menuItemAnimation = {
+  hidden: (i) => ({
+    padding: 0,
+    x: "-100%",
+    transition: {
+      duration: (i + 1) * 0.1,
+    },
+  }),
+  show: (i) => ({
+    x: 0,
+    transition: {
+      duration: (i + 1) * 0.1,
+    },
+  }),
+};
 
-  &:hover {
-    background: #252831;
-    border-left: 4px solid #632ce4;
-    cursor: pointer;
-  }
-`;
+const SubMenu = ({ route, showAnimation, isOpen, setIsOpen }) => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+    setIsOpen(true);
+  };
 
-const SidebarLabel = styled.span`
-  margin-left: 16px;
-`;
-
-const DropdownLink = styled(Link)`
-  background: #414757;
-  height: 60px;
-  padding-left: 3rem;
-  display: flex;
-  align-items: center;
-  text-decoration: none;
-  color: #f5f5f5;
-  font-size: 25px;
-
-  &:hover {
-    background: #632ce4;
-    cursor: pointer;
-  }
-`;
-
-const SubMenu = ({ item }) => {
-  const [subnav, setSubnav] = useState(false);
-
-  const showSubnav = () => setSubnav(!subnav);
-
+  useEffect(() => {
+    if (!isOpen) {
+      setIsMenuOpen(false);
+    }
+  }, [isOpen]);
   return (
     <>
-      <SidebarLink to={item.path} onClick={item.subNav && showSubnav}>
-        <div>
-          {item.icon}
-          <SidebarLabel>{item.title}</SidebarLabel>
+      <div className="menu" onClick={toggleMenu}>
+        <div className="menu_item">
+          <div className="icon">{route.icon}</div>
+          <AnimatePresence>
+            {isOpen && (
+              <motion.div
+                variants={showAnimation}
+                initial="hidden"
+                animate="show"
+                exit="hidden"
+                className="link_text"
+              >
+                {route.name}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
-        <div>
-          {item.subNav && subnav
-            ? item.iconOpened
-            : item.subNav
-            ? item.iconClosed
-            : null}
-        </div>
-      </SidebarLink>
-      {subnav &&
-        item.subNav.map((item, index) => {
-          return (
-            <DropdownLink to={item.path} key={index}>
-              {item.icon}
-              <SidebarLabel>{item.title}</SidebarLabel>
-            </DropdownLink>
-          );
-        })}
+        {isOpen && (
+          <motion.div
+            animate={
+              isMenuOpen
+                ? {
+                    rotate: -90,
+                  }
+                : { rotate: 0 }
+            }
+          >
+            <FaAngleDown />
+          </motion.div>
+        )}
+      </div>{" "}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            variants={menuAnimation}
+            initial="hidden"
+            animate="show"
+            exit="hidden"
+            className="menu_container"
+          >
+            {route.subRoutes.map((subRoute, i) => (
+              <motion.div variants={menuItemAnimation} key={i} custom={i}>
+                <NavLink to={subRoute.path} className="link">
+                  <div className="icon">{subRoute.icon}</div>
+                  <motion.div className="link_text">{subRoute.name}</motion.div>
+                </NavLink>
+              </motion.div>
+            ))}
+          </motion.div>
+        )}{" "}
+      </AnimatePresence>
     </>
-
   );
 };
 
