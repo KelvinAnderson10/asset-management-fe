@@ -5,6 +5,7 @@
   width: 100vw;
   align-items: center;
   align-content: center;
+  position: absolute;
 }
 
 .import-container .import-card {
@@ -27,6 +28,16 @@
   display: flex;
   align-items: center;
   padding-top: 1%;
+}
+
+.download-excel {
+  width: 10vw;
+  height:3vh;
+  background-color: whitesmoke;
+  border-radius: 10px;
+  color: white;
+  border: 0em;
+  margin-left: 10px;
 }
 
 .note{
@@ -52,7 +63,6 @@
 .form-upload-container{
   height: 25%;
   width: 100%;
-  /* background-color: aqua; */
   display: flex;
   align-items: flex-start;
 }
