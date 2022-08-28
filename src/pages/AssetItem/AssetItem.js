@@ -20,6 +20,7 @@ export const AssetItem = () => {
     onGetAllSubProduct();
     onGetAllVendor();
     onGetAllLocation();
+    onGetUser();
   }, []);
   // GET ALL SUBPRODUCT NAME
   const onGetAllSubProduct = async () => {
@@ -64,8 +65,8 @@ export const AssetItem = () => {
   const [user, setUser] = useState([]);
   const onGetUser = async () => {
     try {
-      const response = await userService.getUserByEmail();
-      console.log("ini response email", response.data);
+      const response = await userService.getAllUser();
+      console.log("ini response name", response.data);
       setUser(response.data);
     } catch (error) {
     } finally {
@@ -120,7 +121,7 @@ export const AssetItem = () => {
   };
 
   const handleCancel = (e) => {
-    e.target.reset();
+    clearForm();
   };
 
   const clearForm = () => {
@@ -333,13 +334,22 @@ export const AssetItem = () => {
                 </div>
                 <div className="inputBox">
                   <span>User :</span>
-                  <input
-                    type="text"
+                  <select
                     required
                     name="User"
-                    value={data.User}
+                    value={data.user}
                     onChange={handleChange}
-                  />
+                  >
+                    <option value="">Select User</option>
+                    {user.map((item) => (
+                      <option
+                        key={item.name}
+                        value={item.name}
+                      >
+                        {item.name}
+                      </option>
+                    ))}
+                  </select>
                 </div>
                 <div className="inputBox">
                   <span>Initisal :</span>

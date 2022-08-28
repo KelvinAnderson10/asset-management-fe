@@ -6,7 +6,7 @@ import { FiPlus } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import "./style.css";
 import Swal from 'sweetalert2'
-import { BsArrowDownUp } from "react-icons/bs";
+import {FaSort} from 'react-icons/fa'
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import swal from "sweetalert";
@@ -320,7 +320,7 @@ export const VendorManage = () => {
           <form onSubmit={onSearchLocation}>
             <div className="input-group ">
               <input
-                placeholder="Search"
+                placeholder="Search Vendor Name"
                 value={searchLocation}
                 onChange={onChangeSearchLocation}
                 type="text"
@@ -334,13 +334,7 @@ export const VendorManage = () => {
             </div>
           </form>
           </div>
-        
-        
-        
-
-        
-
-        <div className="body">
+     <div className="body">
           <div className="container">
             <div className="table-responsive">
               <div className="table-wrapper">
@@ -360,19 +354,19 @@ export const VendorManage = () => {
                       <th>No</th>
                       <th onClick={() => sorting("name")}>
                         {" "}
-                        <BsArrowDownUp /> Name
+                        <FaSort /> Name
                       </th>
                       <th onClick={() => sorting("address")}>
                         {" "}
-                        <BsArrowDownUp /> Address
+                        <FaSort /> Address
                       </th>
                       <th onClick={() => sorting("phone")}>
                         {" "}
-                        <BsArrowDownUp /> Phone
+                        <FaSort /> Phone
                       </th>
                       <th onClick={() => sorting("accountNumber")}>
                         {" "}
-                        <BsArrowDownUp /> Acount Number
+                        <FaSort /> Acount Number
                       </th>
                       <th>Actions</th>
                     </tr>
@@ -445,7 +439,7 @@ export const VendorManage = () => {
                 </table>
                 <div className="clearfix">
                   <div className="hint-text">
-                    Showing <b>{itemsPerPage}</b> out of <b>{data.length}</b>{" "}
+                    Showing <b>{currentItems.length}</b> out of <b>{data.length}</b>{" "}
                     entries
                   </div>
                   <ul className="pageNumbers">
@@ -491,7 +485,7 @@ export const VendorManage = () => {
             keyboard={false}
           >
             <Modal.Header closeButton>
-              <Modal.Title>Add new Vendor</Modal.Title>
+              <Modal.Title>Add New Vendor</Modal.Title>
              
             </Modal.Header>
             <Modal.Body>
@@ -576,22 +570,12 @@ export const VendorManage = () => {
             keyboard={false}
           >
             <Modal.Header closeButton>
-              <Modal.Title>Edit </Modal.Title>
+              <Modal.Title>Edit Vendor Data </Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <form onSubmit={(e)=>handleEdit(e,RowData.name)}>
               <div>
                 <div className="form-group">
-                  <label>Vendor Name</label>
-                  <input
-                  required
-                    type="text"
-                    className="form-control"
-                    onChange={handleChange}
-                    placeholder="Please enter Location Name"
-                    name="name"
-                    defaultValue={RowData.name}
-                  />
                   <label>Address</label>
                   <input
                   required

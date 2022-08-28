@@ -6,7 +6,8 @@ import { FiPlus } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import "./style.css";
 import Swal from "sweetalert2";
-import { BsArrowDownUp } from "react-icons/bs";
+import {FaSort} from 'react-icons/fa'
+
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import swal from "sweetalert";
@@ -341,7 +342,7 @@ export const Location = () => {
                       <th>No</th>
                       <th onClick={() => sorting("location")}>
                         {" "}
-                        <BsArrowDownUp /> Location
+                        <FaSort /> Location
                       </th>
                       <th>Actions</th>
                     </tr>
@@ -411,7 +412,7 @@ export const Location = () => {
                 </table>
                 <div className="clearfix">
                   <div className="hint-text">
-                    Showing <b>{itemsPerPage}</b> out of <b>{data.length}</b>{" "}
+                    Showing <b>{currentItems.length}</b> out of <b>{data.length}</b>{" "}
                     entries
                   </div>
                   <ul className="pageNumbers">

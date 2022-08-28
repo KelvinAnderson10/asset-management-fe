@@ -5,19 +5,18 @@ const AuthContext = createContext({});
 
 export const AuthProvider = ({children}) => {
     const navigate = useNavigate();
-    const [user, setUser] = useState()
-    const onLogin = (userCred) => {
-        window.localStorage.setItem('userCred', userCred);
-        setUser(userCred)
+    const [userOTP, setUserOTP] = useState()
+
+    const setCookie = (cName, cValue, expMinutes) => {
+        let date = new Date();
+        date.setTime(date.getTime() + (expMinutes*60*1000));
+        const expires = "expires=" + date.toUTCString();
+        document.cookie = cName + "=" + cValue + "; " + expires + "; path=/";
+        setUserOTP(cName, cValue, expMinutes)
         navigate('/home', {replace: true})
-    }
-    const onLogout = () => {
-        window.localStorage.clear();
-        setUser(null)
-        navigate('/', {replace: true})
-    }
+      }
     return (
-        <AuthContext.Provider value={{user, onLogin, onLogout}}>
+        <AuthContext.Provider value={{userOTP,setCookie}}>
             {children}
         </AuthContext.Provider>
     )
