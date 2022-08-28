@@ -8,6 +8,7 @@ import {CgClose} from 'react-icons/cg'
 import moment from "moment";
 import "./EditAsset.css";
 import swal from "sweetalert";
+import Loading from "../../shared/components/Loading/Loading";
 
 export const Overview = () => {
   const {
@@ -50,12 +51,15 @@ export const Overview = () => {
   //CRUD
   //Get All
   const onGetAllAsset = async () => {
+    setLoading(true)
     try {
       const response = await overviewService.getAllAsset();
       setDatas(response.data);
       console.log(response);
     } catch (e) {
       console.log(e);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -519,8 +523,11 @@ export const Overview = () => {
       <Sidebar>
       <div className="overview-container">
         <div className="overview-card">
+          <div className="title-overview">
+            <a>ASSET OVERVIEW</a>
+          </div>
           <div className="search-container">
-              <div className="input-group mb-3 dropdown">
+              <div className="input-group mb-3 dropup">
                 <button className="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Search by {dropdownName}</button>
                 <ul className="dropdown-menu" >
                   <li><a className="dropdown-item" onClick={() => {onChangeDropdown('Vendor')}}>Vendor</a></li>
@@ -944,9 +951,6 @@ export const Overview = () => {
             </div>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={handleViewClose}>
-              Close
-            </Button>
           </Modal.Footer>
         </Modal>
       </div>
@@ -1114,7 +1118,7 @@ export const Overview = () => {
                     name="PPN"
                     value={assetEdit["PPN"]}
                     onChange={handleChange}
-                    style={{width:'95%'}}
+                    // style={{width:'95%'}}
                   />
                 </div>
                   <div className="inputBox">
@@ -1233,6 +1237,7 @@ export const Overview = () => {
           </div>
         </div>
       )}
+      {isLoading && <Loading/>}
       </Sidebar>
     </>
   );

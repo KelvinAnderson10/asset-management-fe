@@ -19,6 +19,21 @@ export const userService = ({ doGet,doPost }) => {
         throw e;
     }
 }
+const getUserByName = async (name) => {
+  try {
+    return await doGet({ url: `/login/${name}` });
+  } catch (e) {
+    throw e;
+  }
+};
 
-  return { getUserByEmail, createUser };
+const getAllUser = async () => {
+  try {
+    return await doGet({ url: `/user` });
+  } catch (e) {
+    throw e;
+  }
+};
+
+  return { getUserByEmail, createUser,getUserByName, getAllUser };
 };

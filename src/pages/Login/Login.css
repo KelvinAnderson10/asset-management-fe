@@ -1,0 +1,274 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+.image-container {
+  background: url("../../assets/images/login_bg.svg") center no-repeat;
+  background-size: cover;
+  height: 100vh;
+  opacity: .9;
+}
+
+
+.image-container >h1{
+  font-family: "Poppins";
+  color: rgb(243, 243, 243);
+ margin: 32% 30% 0% 5%;
+ font-size: 65px;
+ text-align: justify;
+ font-weight: bold;
+ letter-spacing: 1px;
+ text-shadow: 5px 4px 4px #8a0b0b;
+}
+.image-container >h2{
+  color: white;
+ margin: 1% 40% 0% 5%;
+ font-size: 65px;
+ text-align: justify;
+ font-weight: bold;
+ letter-spacing: 4px;
+ text-shadow: 5px 4px 4px #8a0b0b;
+}
+.form-container {
+  background-color: #f3f3f3;
+  display: flex;
+  justify-content: center;
+
+
+}
+
+.form-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100%;
+  
+  
+}
+.form-box .border-form{
+  border: 4px solid #cc2103;
+  padding: 20%;
+  border-top-left-radius: 100px;
+  border-bottom-right-radius: 100px;
+}
+.form-box .logo img{
+  top: 0;
+  font-size: large;
+}
+
+
+.form-box > h4 {
+  font-size: 20px;
+  font-family: "Roboto";
+  color: rgb(160, 160, 160);
+  font-weight: 400;
+  text-align: center;
+  letter-spacing: 1.3px;
+  color: #8b8d97;
+  white-space: nowrap;
+}
+.form-box > h6 {
+  font-size: 14px;
+  font-family: "Roboto";
+  color: rgb(160, 160, 160);
+  margin-bottom: 60px;
+  font-weight: 400;
+  line-height: 20px;
+  text-align: center;
+  letter-spacing: 0.5px;
+  color: #8b8d97;
+  white-space: nowrap;
+}
+
+.form-box > h2 {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: bold;
+  font-size: 2.2em;
+  line-height: 50px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  white-space: nowrap;
+  /* letter-spacing: 1.3px; */
+  color: rgb(131, 0, 0);
+  text-shadow: 2px 2px #b1b1b1;
+  /* text-align: center !important; */
+}
+.form-box .label-email {
+  font-family: "Poppins";
+  text-align: left;
+  color: #504f4f;
+}
+.form-box > h5 {
+  font-family: "Mulish";
+  font-style: normal;
+  font-weight: bold;
+  font-size: 19px;
+  line-height: 24px;
+  letter-spacing: 0.4px;
+  color: #a4a6b3;
+  opacity: 0.7;
+  margin: 2%;
+  white-space: nowrap;
+}
+
+.form-box .form-input {
+  position: relative;
+}
+
+.form-box .form-input input {
+  width: 100%;
+  height: 40px;
+  margin-bottom: 20px;
+  border: none;
+  border-radius: 5px;
+  outline: none;
+  background: rgb(255, 255, 255);
+  padding: .3em 3.8em; 
+}
+
+.form-box .form-input span {
+  position: absolute;
+  top: 8px;
+  padding-left: 20px;
+  color: #777;
+}
+
+.form-box .form-input input::placeholder {
+  padding-left: 0px;
+}
+
+.form-box .form-input input:focus,
+.form-box .form-input input:valid {
+  border-bottom: 2px solid #5c0303;
+}
+
+.form-box input[type="checkbox"]:not(:checked) + label:before {
+  background: transparent;
+  border: 2px solid #fff;
+  width: 15px;
+  height: 15px;
+}
+
+.form-box
+  .custom-checkbox
+  .custom-control-input:checked
+  ~ .custom-control-label::before {
+  background-color: #48403d;
+  border: 0px;
+}
+
+.form-box button[type="submit"] {
+  border: none;
+  cursor: pointer;
+  width: 150px;
+  height: 40px;
+  border-right: 5px;
+  background-color: rgb(131, 0, 0);
+  color: rgb(255, 255, 255);
+  font-weight: bold;
+  transition: 0.5s;
+  letter-spacing: 7px;
+}
+
+.form-box button[type="submit"]:hover {
+  box-shadow: 0px 9px 10px -2px rgba(0, 0, 0, 0.55);
+  -webkit-box-shadow: 0px 9px 10px -2px rgba(0, 0, 0, 0.55);
+  -moz-box-shadow: 0px 9px 10px -2px rgba(0, 0, 0, 0.55);
+}
+
+
+.login-box >p{
+    position: absolute;
+    margin-left: 1ch;
+    font-style: normal;
+    font-weight: 800;
+    font-size: 11em;
+    line-height: 11%;
+    
+    color: #FFFFFF; 
+    text-shadow: 0.01em 0.05em #565555;
+}
+
+.otpContainer {
+  padding: 16px;
+}
+
+.otpInputContainer {
+  width: 45px;
+  height: 45px;
+  padding: 0;
+  font-size: 24px;
+  text-align: center;
+  margin-right: 12px;
+  text-transform: uppercase;
+  color: #494949;
+  font-family: SF Pro Text, SF Pro Icons, Helvetica Neue, Helvetica, Arial,
+    sans-serif;
+  border: 1px solid #d6d6d6;
+  border-radius: 4px;
+  background: #fff;
+  background-clip: padding-box;
+}
+
+.otpInputContainer:focus {
+  appearance: none;
+  outline: 0;
+  box-shadow: 0 0 0 3px rgba(250, 0, 0, 0.5);
+}
+
+.otpForm {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  /* padding: 5%; */
+  /* border-radius: 50px; */
+  background-color: rgba(10, 10, 10, 0.75);
+  /* background-color: white; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 100;
+}
+
+.card {
+  background-color: rgb(243, 243, 243);
+  width: auto;
+  height: auto;
+}
+
+
+.otpForm button[type="submit"] {
+    border: none;
+    cursor: pointer;
+    width: 150px;
+    height: 40px;
+    border-right: 5px;
+    background-color: rgb(131, 0, 0);
+    color: rgb(255, 255, 255);
+    font-weight: bold;
+    transition: 0.5s;
+    letter-spacing: 7px;
+  }
+
+  .otpForm .card > h3{
+    color: #7c0404;
+    font-family: "Poppins";
+  }
+  .otpForm .card > h5{
+    font-size: 14px;
+  font-family: "Roboto";
+  color: rgb(160, 160, 160);
+  text-align: center;
+  letter-spacing: 0.3px;
+  color: #9fa2b4;
+  white-space: nowrap;
+  }
+
+.otpForm .x .otp-button{
+    margin-left: 90%;
+}
+

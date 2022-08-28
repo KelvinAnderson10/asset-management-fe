@@ -15,11 +15,8 @@ export const HomeView = () => {
     return (
         <div className="home-container">
             <div className= "home-header">
-                <img style={{width:'8vw', height:'4vh'}} src={logo}></img>
-                <div className="home-header-right">
-                    <p>Home</p>
-                    <p onClick={onLogout}>Logout</p> 
-                </div>
+                <img src={logo}></img>
+                <p onClick={onLogout}>Logout</p> 
             </div>
             <div className= "home-box">
                 <div className= "outlier"/>

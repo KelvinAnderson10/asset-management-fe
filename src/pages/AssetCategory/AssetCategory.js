@@ -3,10 +3,8 @@ import React, { useEffect, useState, useRef } from "react";
 import Sidebar from "../../shared/components/Sidebar/Sidebar";
 import { useDeps } from "../../shared/context/DependencyContext";
 import { FiPlus } from "react-icons/fi";
-import { Link } from "react-router-dom";
-// import "./style.css";
 import Swal from 'sweetalert2'
-import { BsArrowDownUp } from "react-icons/bs";
+import { FaSort } from "react-icons/fa";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import swal from "sweetalert";
@@ -482,23 +480,23 @@ export const AssetCategory = () => {
                         <th>No</th>
                         <th onClick={() => sorting("asset_category")}>
                             {" "}
-                            <BsArrowDownUp /> Asset Category
+                            <FaSort /> Asset Category
                         </th>
                         <th onClick={() => sortingNum("useful_life")}>
                             {" "}
-                            <BsArrowDownUp /> Useful Life
+                            <FaSort /> Useful Life
                         </th>
                         <th onClick={() => sorting("product_code")}>
                             {" "}
-                            <BsArrowDownUp /> Product Code
+                            <FaSort /> Product Code
                         </th>
                         <th onClick={() => sorting("product_name")}>
                             {" "}
-                            <BsArrowDownUp /> Product Name
+                            <FaSort /> Product Name
                         </th>
                         <th onClick={() => sorting("subproduct_name")}>
                             {" "}
-                            <BsArrowDownUp /> Subproduct Name
+                            <FaSort /> Subproduct Name
                         </th>
                         <th>Actions</th>
                         </tr>

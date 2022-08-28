@@ -6,6 +6,8 @@ import './ImportData.css'
 import guidelines from '../../assets/file/guidelines.xlsx'
 import template from '../../assets/file/template.xlsx'
 import Loading from '../../shared/components/Loading/Loading';
+import {Success} from '../../shared/components/Notification/Success';
+import {Failed} from '../../shared/components/Notification/Failed';
 
 export const ImportData = () => {
   const [excelData, setExcelData] = useState([])
@@ -16,13 +18,12 @@ export const ImportData = () => {
   const {assetItemService} = useDeps();
 
   const handleSubmit = async () => {
-    
     try {
       const response = await assetItemService.batchInsert(uploadBackendData)
       console.log('ini respon submit',response);
-      alert("UPLOAD DATA SUCCESS !")
+      Success('upload')
     } catch (error) {
-      alert(error)
+      Failed(`Upload failed because ${error.response.data.error.Detail}`)
       console.log(error);
     }
   }
@@ -194,17 +195,19 @@ export const ImportData = () => {
                     </table>
                   </div>
                 </div>
+                  {/* <br></br>
+                  <br></br>
+                  <br></br>
+                  <br></br> */}
+                  <div className='button-save'>
+                  <button className='btn btn-primary' onClick={handleSubmit}>Save</button>
+                  </div>
+                  {/* <button>Clear</button> */}
+                  {/* <br></br>
                   <br></br>
                   <br></br>
                   <br></br>
-                  <br></br>
-                  <button onClick={handleSubmit}>Save</button>
-                  <button>Clear</button>
-                  <br></br>
-                  <br></br>
-                  <br></br>
-                  <br></br>
-                  <br></br>
+                  <br></br> */}
               </div>
             </div>
 

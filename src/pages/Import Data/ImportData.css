@@ -86,3 +86,10 @@
   width: 100px;
   justify-items: center;
 }
+
+.import-box .button-save {
+  width: 100%;
+  height: 5vh;
+  margin-top: 5vh;
+  margin-bottom: 5vh;
+}

@@ -75,6 +75,8 @@ main {
   padding: 5px 10px;
   border-right: 4px solid transparent;
   transition: 0.2s cubic-bezier(0.6, -0.28, 0.735, 0.045);
+  outline: none;
+  text-decoration: none;
 }
 .link:hover {
   border-right: 4px solid white;

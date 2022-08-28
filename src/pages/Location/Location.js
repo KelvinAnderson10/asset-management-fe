@@ -6,7 +6,8 @@ import { FiPlus } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import "./style.css";
 import Swal from "sweetalert2";
-import { BsArrowDownUp } from "react-icons/bs";
+import {FaSort} from 'react-icons/fa'
+
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import swal from "sweetalert";
@@ -180,7 +181,8 @@ export const Location = () => {
   };
 
   const ref = useRef(null) ;
-  const onClearForm = () => {
+  const onClearForm = (e) => {
+    e.preventDefault()
     ref.current.value = ''; 
     onGetAllLocation();
   }
@@ -310,17 +312,18 @@ export const Location = () => {
             <FiPlus />
             Add New Location
           </Button>
-          <form onSubmit={onSearchLocation}>
+          <form>
             <div className="input-group">
               <input
+                ref={ref}
                 placeholder="Search"
-                value={searchLocation}
+                // value={searchLocation}
                 onChange={onChangeSearchLocation}
                 type="text"
                 className="form-control"
               />
               <div className="input-group-append">
-                <button value="submit" className="btn btn-primary">
+                <button value="submit" className="btn btn-primary" onClick={onSearchLocation}>
                   <i className="fas fa-search"></i>
                 </button>
                 <button value="submit" className="btn btn-danger form-button" onClick={onClearForm}>
@@ -349,7 +352,7 @@ export const Location = () => {
                       <th>No</th>
                       <th onClick={() => sorting("location")}>
                         {" "}
-                        <BsArrowDownUp /> Location
+                        <FaSort /> Location
                       </th>
                       <th>Actions</th>
                     </tr>
@@ -421,7 +424,7 @@ export const Location = () => {
                 </table>
                 <div className="clearfix">
                   <div className="hint-text">
-                    Showing <b>{itemsPerPage}</b> out of <b>{data.length}</b>{" "}
+                    Showing <b>{currentItems.length}</b> out of <b>{data.length}</b>{" "}
                     entries
                   </div>
                   <ul className="pageNumbers">
