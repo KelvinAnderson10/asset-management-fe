@@ -8,6 +8,7 @@ import {CgClose} from 'react-icons/cg'
 import moment from "moment";
 import "./EditAsset.css";
 import swal from "sweetalert";
+import Loading from "../../shared/components/Loading/Loading";
 
 export const Overview = () => {
   const {
@@ -50,12 +51,15 @@ export const Overview = () => {
   //CRUD
   //Get All
   const onGetAllAsset = async () => {
+    setLoading(true)
     try {
       const response = await overviewService.getAllAsset();
       setDatas(response.data);
       console.log(response);
     } catch (e) {
       console.log(e);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -516,11 +520,14 @@ export const Overview = () => {
 
   return (
     <>
-      <Sidebar />
+      <Sidebar>
       <div className="overview-container">
         <div className="overview-card">
+          <div className="title-overview">
+            <a>ASSET OVERVIEW</a>
+          </div>
           <div className="search-container">
-              <div className="input-group mb-3 dropdown">
+              <div className="input-group mb-3 dropup">
                 <button className="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Search by {dropdownName}</button>
                 <ul className="dropdown-menu" >
                   <li><a className="dropdown-item" onClick={() => {onChangeDropdown('Vendor')}}>Vendor</a></li>
@@ -734,7 +741,7 @@ export const Overview = () => {
               <tbody>
                 {datas.length === 0 ? (
                   <tr> 
-                    <th colspan='31'>No data found</th>
+                    <th colspan='31'>Data is not found</th>
                   </tr>
                 ) : (
                   currentItems.map((data, index) => (
@@ -944,9 +951,6 @@ export const Overview = () => {
             </div>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={handleViewClose}>
-              Close
-            </Button>
           </Modal.Footer>
         </Modal>
       </div>
@@ -1075,16 +1079,6 @@ export const Overview = () => {
                       onChange={handleChange}
                     />
                   </div>
-                  <div className="inputBox">
-                    <span>Total Acquisition Cost :</span>
-                    <input
-                      type="number"
-                      required
-                      name="Total Harga Perolehan"
-                      value={assetEdit["Total Harga Perolehan"]}
-                      onChange={handleChange}
-                    />
-                  </div>
                 </div>
                 <div className="col">
                   <div className="asset-image-container">
@@ -1116,7 +1110,27 @@ export const Overview = () => {
                       onChange={imageChange}
                     />
                   </div>
-
+                  <div className="inputBox">
+                  <span>PPN :</span>
+                  <input
+                    type="text"
+                    required
+                    name="PPN"
+                    value={assetEdit["PPN"]}
+                    onChange={handleChange}
+                    // style={{width:'95%'}}
+                  />
+                </div>
+                  <div className="inputBox">
+                    <span>Total Acquisition Cost :</span>
+                    <input
+                      type="number"
+                      required
+                      name="Total Harga Perolehan"
+                      value={assetEdit["Total Harga Perolehan"]}
+                      onChange={handleChange}
+                    />
+                  </div>
                   <div className="inputBox">
                     <span>Insurance</span>
                     <select
@@ -1223,6 +1237,8 @@ export const Overview = () => {
           </div>
         </div>
       )}
+      {isLoading && <Loading/>}
+      </Sidebar>
     </>
   );
 };

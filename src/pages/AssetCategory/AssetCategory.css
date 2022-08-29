@@ -13,13 +13,19 @@
   width: 70%;
 }
 
-.asset-category-box .feature{
+.feature{
   display: flex;
-  flex-direction: column;
-  height: 30%;
-  width: 100%;
-  align-content: center;
+  flex-direction: row;
+  /* height: 25%;
+  width: 100%; */
+  /* align-content: flex-end; */
   align-items: center;
+  /* justify-content: flex-end; */
+  /* justify-items: flex-end; */
+  /* justify-content: space-around; */
+  /* gap: 0px 61.5%; */
+  margin-top: 2em;
+  margin-bottom: 2em;
 }
 
 .feature > Button {

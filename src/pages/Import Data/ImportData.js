@@ -3,9 +3,11 @@ import Sidebar from '../../shared/components/Sidebar/Sidebar'
 import * as XLSX from 'xlsx';
 import { useDeps } from '../../shared/context/DependencyContext';
 import './ImportData.css'
-import guidelines from '../../guidelines.xlsx'
-import template from '../../template.xlsx'
+import guidelines from '../../assets/file/guidelines.xlsx'
+import template from '../../assets/file/template.xlsx'
 import Loading from '../../shared/components/Loading/Loading';
+import {Success} from '../../shared/components/Notification/Success';
+import {Failed} from '../../shared/components/Notification/Failed';
 
 export const ImportData = () => {
   const [excelData, setExcelData] = useState([])
@@ -16,13 +18,19 @@ export const ImportData = () => {
   const {assetItemService} = useDeps();
 
   const handleSubmit = async () => {
-    
     try {
       const response = await assetItemService.batchInsert(uploadBackendData)
       console.log('ini respon submit',response);
-      alert("UPLOAD DATA SUCCESS !")
+      Success('upload')
     } catch (error) {
-      alert(error)
+      if (error.response.data.error.Detail){
+        
+        Failed(`Upload failed because ${error.response.data.error.Detail}`)
+
+      } else{
+        Failed(`Upload failed because column ${error.response.data.error.Field} is in wrong format`)
+      }
+      
       console.log(error);
     }
   }
@@ -63,41 +71,56 @@ export const ImportData = () => {
   }, [excelData])
 
   return (
-    <div>
-        <Sidebar/>
+    <>
+        <Sidebar>
         <div>
-            <div className='import-container'>
-              <div className='import-card'>
+            <div className='body'>
+              <div className='container'>
                 <div className='title-container'>
                   <h4>ADD MULTIPLE ASSET</h4>
                 </div>
             <div class='form-upload-container'>
+          <div>
+          {/* <label htmlFor="upload">Upload File</label> */}
+          </div>
               <form>
-                <label htmlFor="upload">Upload File</label>
-                <input
+                    <input
                     type="file"
                     name="upload"
                     id="upload"
                     onChange={readUploadFile}
                 />
               </form>
-              <button>
+              <button className='download-excel'>
                   <a href={guidelines} download="Upload Guidelines.xlsx">Download Guidelines</a>
-                  </button>
-                  <button>
+              </button>
+              <button className='download-excel'>
                   <a href={template} download="Template.xlsx">Download Template</a>
               </button>
             </div>
+            {/* <div className='download-excel'>
+              
+            </div>  */}
+        <div className='note'>
+            <h5>Notes</h5>
+            <div className='content-note'>
+              <ul>
+                <li>1. Any date format should be customize as 'd-mmmm-y' format.</li>
+                <li>2. Fields such as Harga Perolehan, PPN and Biaya Lain-Lain should be in 'Number' format.</li>
+                <li>3. Some fields are mandatory. (Download 'Upload Guidelines' or 'Template' above for more information).</li>
+              </ul>
+            </div>
+        </div>
             
             <div>
               <div className="import-box">
                 <br></br>
-                      <h2>
+                      <h3>
                           Upload <b>Assets</b>
-                      </h2>
+                      </h3>
                 <div className="table-responsive">
                   <div className="table-wrapper">
-                    <div className="table-title">
+                    <div className="">
                       <div className="row">
                         <div className="col-xs-8">
                         </div>
@@ -105,7 +128,7 @@ export const ImportData = () => {
                     </div>
 
                     <table className="table table-striped table-hover">
-                      <thead>
+                      <thead className= "table-secondary">
                         <tr>
                           <th>Tanggal Pembelian</th>
                           <th>Tahun</th>
@@ -179,17 +202,19 @@ export const ImportData = () => {
                     </table>
                   </div>
                 </div>
+                  {/* <br></br>
+                  <br></br>
+                  <br></br>
+                  <br></br> */}
+                  <div className='button-save'>
+                  <button className='btn btn-primary' onClick={handleSubmit}>Save</button>
+                  </div>
+                  {/* <button>Clear</button> */}
+                  {/* <br></br>
                   <br></br>
                   <br></br>
                   <br></br>
-                  <br></br>
-                  <button onClick={handleSubmit}>Save</button>
-                  <button>Clear</button>
-                  <br></br>
-                  <br></br>
-                  <br></br>
-                  <br></br>
-                  <br></br>
+                  <br></br> */}
               </div>
             </div>
 
@@ -199,6 +224,7 @@ export const ImportData = () => {
             {isLoading && <Loading/>}
         </div>
         
-    </div>
+        </Sidebar>
+    </>
   )
 }

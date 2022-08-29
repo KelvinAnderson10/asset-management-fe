@@ -1,12 +1,12 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Sidebar from "../../shared/components/Sidebar/Sidebar";
 import { useDeps } from "../../shared/context/DependencyContext";
 import { FiPlus } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import "./style.css";
 import Swal from 'sweetalert2'
-import { BsArrowDownUp } from "react-icons/bs";
+import {FaSort} from 'react-icons/fa'
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import swal from "sweetalert";
@@ -300,11 +300,19 @@ export const VendorManage = () => {
     
 }
 
+const ref = useRef(null) ;
+const onClearForm = (e) => {
+  e.preventDefault()
+  ref.current.value = ''; 
+  onGetAllVendor();
+}
+
   return (
     <>
-      <Sidebar />
+      <Sidebar>
       <div>
-             
+      <div className="body">
+          <div className="container">
           <div className="vendor-container-item" >
             <Button
               variant="primary"
@@ -317,18 +325,22 @@ export const VendorManage = () => {
             </Button>
           
           
-          <form onSubmit={onSearchLocation}>
+          <form>
             <div className="input-group ">
               <input
-                placeholder="Search"
-                value={searchLocation}
+                placeholder="Search Vendor Name"
+                // value={searchLocation}
                 onChange={onChangeSearchLocation}
                 type="text"
                 className="form-control"
+                ref={ref}
               />
               <div className="input-group-append">
-                <button value="submit" className="btn btn-primary">
+                <button value="submit" className="btn btn-primary" onClick={onSearchLocation}>
                   <i className="fas fa-search"></i>
+                </button>
+                <button value="submit" className="btn btn-danger form-button" onClick={onClearForm}>
+                        <i className="fa fa-times"></i>
                 </button>
               </div>
             </div>
@@ -340,8 +352,6 @@ export const VendorManage = () => {
 
         
 
-        <div className="body">
-          <div className="container">
             <div className="table-responsive">
               <div className="table-wrapper">
                 <div className="table-title">
@@ -360,26 +370,28 @@ export const VendorManage = () => {
                       <th>No</th>
                       <th onClick={() => sorting("name")}>
                         {" "}
-                        <BsArrowDownUp /> Name
+                        <FaSort /> Name
                       </th>
                       <th onClick={() => sorting("address")}>
                         {" "}
-                        <BsArrowDownUp /> Address
+                        <FaSort /> Address
                       </th>
                       <th onClick={() => sorting("phone")}>
                         {" "}
-                        <BsArrowDownUp /> Phone
+                        <FaSort /> Phone
                       </th>
                       <th onClick={() => sorting("accountNumber")}>
                         {" "}
-                        <BsArrowDownUp /> Acount Number
+                        <FaSort /> Acount Number
                       </th>
                       <th>Actions</th>
                     </tr>
                   </thead>
                   <tbody>
                     {data.length === 0 ? (
-                      <tr>No data Found</tr>
+                      <tr>
+                        <th colspan='6'>Data is not found</th>
+                      </tr>
                     ) : (
                       currentItems.map((item, index) => (
                         <tr key={item.ID}>
@@ -445,7 +457,7 @@ export const VendorManage = () => {
                 </table>
                 <div className="clearfix">
                   <div className="hint-text">
-                    Showing <b>{itemsPerPage}</b> out of <b>{data.length}</b>{" "}
+                    Showing <b>{currentItems.length}</b> out of <b>{data.length}</b>{" "}
                     entries
                   </div>
                   <ul className="pageNumbers">
@@ -491,7 +503,7 @@ export const VendorManage = () => {
             keyboard={false}
           >
             <Modal.Header closeButton>
-              <Modal.Title>Add new Vendor</Modal.Title>
+              <Modal.Title>Add New Vendor</Modal.Title>
              
             </Modal.Header>
             <Modal.Body>
@@ -576,22 +588,12 @@ export const VendorManage = () => {
             keyboard={false}
           >
             <Modal.Header closeButton>
-              <Modal.Title>Edit </Modal.Title>
+              <Modal.Title>Edit Vendor Data </Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <form onSubmit={(e)=>handleEdit(e,RowData.name)}>
               <div>
                 <div className="form-group">
-                  <label>Vendor Name</label>
-                  <input
-                  required
-                    type="text"
-                    className="form-control"
-                    onChange={handleChange}
-                    placeholder="Please enter Location Name"
-                    name="name"
-                    defaultValue={RowData.name}
-                  />
                   <label>Address</label>
                   <input
                   required
@@ -702,6 +704,7 @@ export const VendorManage = () => {
           </Modal>
         </div>
       </div>
+      </Sidebar>
     </>
   );
 };

@@ -9,21 +9,21 @@
   transition: all .2s linear;
 }
 
-.asset-container{
+main .asset-container{
   display: flex;
   justify-content: center;
   align-items: center;
   padding:25px;
-  min-height: 100vh;
-  min-width: 100vw;
+  min-height: 94vh;
+  min-width: 97vw;
   
   background: rgb(255, 255, 255);
 }
 
 .asset-container form{
-  padding:30px;
-  width: 70vw;
-  min-height: 100vh;
+  padding: 5%;
+  width: 75vw;
+  min-height: 80vh;
   background: rgb(218, 218, 218);
   box-shadow: 0 5px 10px rgba(58, 5, 5, 0.1);
 }
@@ -38,6 +38,7 @@
   flex:1 1 34em;
   display: flex;
   flex-direction: column;
+  padding-left: 10px;
 
 }
 

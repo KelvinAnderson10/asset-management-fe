@@ -20,6 +20,7 @@ export const AssetItem = () => {
     onGetAllSubProduct();
     onGetAllVendor();
     onGetAllLocation();
+    onGetUser();
   }, []);
   // GET ALL SUBPRODUCT NAME
   const onGetAllSubProduct = async () => {
@@ -64,8 +65,8 @@ export const AssetItem = () => {
   const [user, setUser] = useState([]);
   const onGetUser = async () => {
     try {
-      const response = await userService.getUserByEmail();
-      console.log("ini response email", response.data);
+      const response = await userService.getAllUser();
+      console.log("ini response name", response.data);
       setUser(response.data);
     } catch (error) {
     } finally {
@@ -120,7 +121,7 @@ export const AssetItem = () => {
   };
 
   const handleCancel = (e) => {
-    e.target.reset();
+    clearForm();
   };
 
   const clearForm = () => {
@@ -131,9 +132,9 @@ export const AssetItem = () => {
   // UPLOAD IMAGE
 
   return (
-    <div>
-      <Sidebar />
-      <div className="main-container">
+    <>
+      <Sidebar>
+      {/* <div className="main-container"> */}
         <div className="asset-container">
           <form onSubmit={handleSubmit}>
             <div className="row">
@@ -148,6 +149,7 @@ export const AssetItem = () => {
                     name="Nama Barang"
                     value={data["Nama Barang"]}
                     onChange={handleChange}
+                    style={{width:'95%'}}
                   />
                 </div>
                 <div className="inputBox">
@@ -157,6 +159,7 @@ export const AssetItem = () => {
                     name="Jenis Produk"
                     value={data["Jenis Produk"]}
                     onChange={handleChange}
+                    style={{width:'95%'}}
                   >
                     <option value="">Select Subproduct</option>
                     {subProductName.map((item) => (
@@ -176,6 +179,7 @@ export const AssetItem = () => {
                     name="Vendor"
                     value={data.Vendor}
                     onChange={handleChange}
+                    style={{width:'95%'}}
                   >
                     <option value="">Select Vendor</option>
 
@@ -193,6 +197,7 @@ export const AssetItem = () => {
                     name="Kode Wilayah"
                     value={data["Kode Wilayah"]}
                     onChange={handleChange}
+                    style={{width:'95%'}}
                   >
                     <option value="">Select Location</option>
                     {locations.map((item, index) => (
@@ -209,6 +214,7 @@ export const AssetItem = () => {
                     name="Kondisi"
                     value={data.Kondisi}
                     onChange={handleChange}
+                    style={{width:'95%'}}
                   >
                     <option value="">Select Condition</option>
                     <option>Baik</option>
@@ -224,6 +230,7 @@ export const AssetItem = () => {
                     name="No. PO / Dokumenen Pendukung"
                     value={data["No. PO / Dokumenen Pendukung"]}
                     onChange={handleChange}
+                    style={{width:'95%'}}
                   />
                 </div>
                 <div className="inputBox">
@@ -234,6 +241,7 @@ export const AssetItem = () => {
                     name="Tanggal Output"
                     value={data["Tanggal Output"]}
                     onChange={handleChange}
+                    style={{width:'95%'}}
                   />
                 </div>
                 <div className="inputBox">
@@ -244,6 +252,7 @@ export const AssetItem = () => {
                     name="BAST Output"
                     value={data["BAST Output"]}
                     onChange={handleChange}
+                    style={{width:'95%'}}
                   />
                 </div>
                 <div className="inputBox">
@@ -254,6 +263,7 @@ export const AssetItem = () => {
                     name="Harga Perolehan"
                     value={data["Harga Perolehan"]}
                     onChange={handleChange}
+                    style={{width:'95%'}}
                   />
                 </div>
                 <div className="inputBox">
@@ -264,6 +274,7 @@ export const AssetItem = () => {
                     name="Biaya Lain-Lain"
                     value={data["Biaya Lain-Lain"]}
                     onChange={handleChange}
+                    style={{width:'95%'}}
                   />
                 </div>
               </div>
@@ -298,6 +309,17 @@ export const AssetItem = () => {
                   />
                 </div>
                 <div className="inputBox">
+                  <span>PPN :</span>
+                  <input
+                    type="text"
+                    required
+                    name="PPN"
+                    value={data["PPN"]}
+                    onChange={handleChange}
+                    style={{width:'95%'}}
+                  />
+                </div>
+                <div className="inputBox">
                   <span>Total Acquisition Cost :</span>
                   <input
                     type="text"
@@ -305,6 +327,7 @@ export const AssetItem = () => {
                     name="Total Harga Perolehan"
                     value={data["Total Harga Perolehan"]}
                     onChange={handleChange}
+                    style={{width:'95%'}}
                   />
                 </div>
                 <div className="inputBox">
@@ -314,6 +337,7 @@ export const AssetItem = () => {
                     name="Insurance"
                     value={data.Insurance}
                     onChange={handleChange}
+                    style={{width:'95%'}}
                   >
                     <option value="">Select</option>
                     <option>Sudah</option>
@@ -329,17 +353,28 @@ export const AssetItem = () => {
                     name="Tahun Pembelian"
                     value={data["Tahun Pembelian"]}
                     onChange={handleChange}
+                    style={{width:'95%'}}
                   />
                 </div>
                 <div className="inputBox">
                   <span>User :</span>
-                  <input
-                    type="text"
+                  <select
                     required
                     name="User"
-                    value={data.User}
+                    value={data.user}
                     onChange={handleChange}
-                  />
+                    style={{width:'95%'}}
+                  >
+                    <option value="" >Select User</option>
+                    {user.map((item) => (
+                      <option
+                        key={item.name}
+                        value={item.name}
+                      >
+                        {item.name}
+                      </option>
+                    ))}
+                  </select>
                 </div>
                 <div className="inputBox">
                   <span>Initisal :</span>
@@ -349,6 +384,7 @@ export const AssetItem = () => {
                     name="Initisal"
                     value={data["Initisal"]}
                     onChange={handleChange}
+                    style={{width:'95%'}}
                   />
                 </div>
                 <div className="inputBox">
@@ -369,6 +405,8 @@ export const AssetItem = () => {
                       name="Tahun"
                       value={data.Tahun}
                       onChange={handleChange}
+                      style={{width:'95%'}}
+                      
                     />
                   </div>
 
@@ -380,6 +418,7 @@ export const AssetItem = () => {
                       name="Kode Urut barang"
                       value={data["Kode Urut barang"]}
                       onChange={handleChange}
+                      style={{width:'95%'}}
                     />
                   </div>
                 </div>
@@ -402,7 +441,8 @@ export const AssetItem = () => {
             </div>
           </form>
         </div>
-      </div>
-    </div>
+      {/* </div> */}
+      </Sidebar>
+    </>
   );
 };

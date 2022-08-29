@@ -1,6 +1,6 @@
 .loadingScreen {
     z-index: 1000;
-    position: relative;
+    position: absolute;
     display: flex;
     justify-content: center;
     height: 100vh;
