@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import logo from "../../assets/images/narindo_logo_black.svg";
 import { Auth } from "two-step-auth";
 import { useDeps } from "../../shared/context/DependencyContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 import { Failed } from "../../shared/components/Notification/Failed";
 import "./Login.css";
 import AuthCode from "react-auth-code-input";
@@ -19,12 +19,12 @@ export const Login = () => {
   const { setCookie } = useAuth();
   console.log(useAuth());
 
-  useEffect(() => {
-    validateEmail();
-  }, []);
+  // useEffect(() => {
+  //   validateEmail();
+  // }, []);
 
   const validateEmail = async (e) => {
-    e.preventDefault();
+   e.preventDefault()
     try {
       const response = await userService.getUserByEmail(email);
       console.log("ini response email", response.data.email);
@@ -46,17 +46,22 @@ export const Login = () => {
     setOTP(response.OTP);
   };
 
-  // const setCookie = (cName, cValue, expMinutes) => {
-  //   let date = new Date();
-  //   date.setTime(date.getTime() + expMinutes * 60 * 1000);
-  //   const expires = "expires=" + date.toUTCString();
-  //   document.cookie = cName + "=" + cValue + "; " + expires + "; path=/";
-  // };
+  const getCookie = (cName) => {
+    const name = cName + "=";
+    const cDecoded = decodeURIComponent(document.cookie); //to be careful
+    const cArr = cDecoded .split('; ');
+    let res;
+    cArr.forEach(val => {
+        if (val.indexOf(name) === 0) res = val.substring(name.length);
+    })
+    console.log("ini get cookie",res);
+    return (res)
+}
 
   const validateOTP = () => {
     console.log(OTPInput);
     if (OTPInput == OTP) {
-      setCookie("OTP", OTP, 10);
+      setCookie("OTP", OTP, 1);
     } else {
       Failed("Wrong OTP");
     }
@@ -68,7 +73,11 @@ export const Login = () => {
   };
 
   return (
+    
+  
     <div>
+      {getCookie("OTP") &&  <Navigate to='/main'></Navigate>}
+
       <div className="container-fluid">
         <div className="row">
           <div className="col-lg-9 col-md-5 d-none d-md-block image-container">
@@ -149,5 +158,6 @@ export const Login = () => {
         )}
       </div>
     </div>
+                
   );
 };

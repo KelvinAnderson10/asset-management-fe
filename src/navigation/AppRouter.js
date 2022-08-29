@@ -20,7 +20,7 @@ export const AppRouter = () => {
   return (
     <Routes>
       <Route index element={<Login/>}></Route>
-      {/* <Route element={<ProtectedPage></ProtectedPage>}> */}
+      <Route element={<ProtectedPage></ProtectedPage>}>
         <Route path="/home" element={<HomeView />} />
         <Route path="/main" element={<Overview />} />
         <Route path="/data-management/asset-item" element={<AssetItem />} />
@@ -28,9 +28,8 @@ export const AppRouter = () => {
         <Route path="/data-management/vendor" element={<VendorManage />} />
         <Route path="/data-management/location" element={<Location />} />
         <Route path="/upload-data" element={<ImportData />} />
-
         <Route path="*" element={<PageNotFound />} />
-      {/* </Route> */}
+      </Route>
     </Routes>
   );
 };

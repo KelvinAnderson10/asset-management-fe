@@ -23,7 +23,14 @@ export const ImportData = () => {
       console.log('ini respon submit',response);
       Success('upload')
     } catch (error) {
-      Failed(`Upload failed because ${error.response.data.error.Detail}`)
+      if (error.response.data.error.Detail){
+        
+        Failed(`Upload failed because ${error.response.data.error.Detail}`)
+
+      } else{
+        Failed(`Upload failed because column ${error.response.data.error.Field} is in wrong format`)
+      }
+      
       console.log(error);
     }
   }
@@ -112,8 +119,8 @@ export const ImportData = () => {
                           Upload <b>Assets</b>
                       </h3>
                 <div className="table-responsive">
-                  <div className="import-table-wrapper">
-                    <div className="import-table-title">
+                  <div className="table-wrapper">
+                    <div className="">
                       <div className="row">
                         <div className="col-xs-8">
                         </div>
