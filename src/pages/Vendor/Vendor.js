@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Sidebar from "../../shared/components/Sidebar/Sidebar";
 import { useDeps } from "../../shared/context/DependencyContext";
 import { FiPlus } from "react-icons/fi";
@@ -53,7 +53,8 @@ export const VendorManage = () => {
   const [ViewEdit, SetEditShow] = useState(false);
 
   const handleEditShow = (index, item) => {
-    SetRowData(item);
+    setVendorData(item);
+    SetRowData(item)
     console.log("ini index", index);
     setId(index);
     setDelete(true);
@@ -181,7 +182,8 @@ export const VendorManage = () => {
   };
 
   //=============== EDIT ROW DATA  ===============================
-  const handleEdit = async (id) => {
+  const handleEdit = async (e,id) => {
+    e.preventDefault()
     console.log("ini id", id);
     try {
       const response = await vendorService.updateVendor(id, vendorData);
@@ -298,11 +300,18 @@ export const VendorManage = () => {
     
 }
 
+const ref = useRef(null) ;
+const onClearForm = () => {
+  ref.current.value = ''; 
+  onGetAllVendor();
+}
+
   return (
     <>
-      <Sidebar />
+      <Sidebar>
       <div>
-             
+      <div className="body">
+          <div className="container">
           <div className="vendor-container-item" >
             <Button
               variant="primary"
@@ -328,6 +337,9 @@ export const VendorManage = () => {
                 <button value="submit" className="btn btn-primary">
                   <i className="fas fa-search"></i>
                 </button>
+                <button value="submit" className="btn btn-danger form-button" onClick={onClearForm}>
+                        <i className="fa fa-times"></i>
+                </button>
               </div>
             </div>
           </form>
@@ -338,8 +350,6 @@ export const VendorManage = () => {
 
         
 
-        <div className="body">
-          <div className="container">
             <div className="table-responsive">
               <div className="table-wrapper">
                 <div className="table-title">
@@ -377,7 +387,9 @@ export const VendorManage = () => {
                   </thead>
                   <tbody>
                     {data.length === 0 ? (
-                      <tr>No data Found</tr>
+                      <tr>
+                        <th colspan='6'>Data is not found</th>
+                      </tr>
                     ) : (
                       currentItems.map((item, index) => (
                         <tr key={item.ID}>
@@ -406,7 +418,7 @@ export const VendorManage = () => {
 
                             <a
                               onClick={() => {
-                                handleEditShow(RowData.name, item);
+                                handleEditShow(item.name, item);
                               }}
                               className="edit"
                               data-toggle="modal"
@@ -493,6 +505,7 @@ export const VendorManage = () => {
              
             </Modal.Header>
             <Modal.Body>
+              <form onSubmit={handleSubmit}>
             <p style={{color:"red"}}>Please complete all required fields</p>
               <div>
                 <div className="form-group">
@@ -545,16 +558,15 @@ export const VendorManage = () => {
                     value={vendorData.account_number}
                   />
                 </div>
-
+                </div>
                 <Button
-                  disabled ={!vendorData}
                   type="submit"
                   className="btn btn-success mt-4"
-                  onClick={handleSubmit}
                 >
                   Add{" "}
                 </Button>
-              </div>
+              
+              </form>
             </Modal.Body>
             <Modal.Footer>
               <Button variant="secondary" onClick={hanldePostClose}>
@@ -577,10 +589,12 @@ export const VendorManage = () => {
               <Modal.Title>Edit </Modal.Title>
             </Modal.Header>
             <Modal.Body>
+              <form onSubmit={(e)=>handleEdit(e,RowData.name)}>
               <div>
                 <div className="form-group">
                   <label>Vendor Name</label>
                   <input
+                  required
                     type="text"
                     className="form-control"
                     onChange={handleChange}
@@ -590,6 +604,7 @@ export const VendorManage = () => {
                   />
                   <label>Address</label>
                   <input
+                  required
                     type="text"
                     className="form-control"
                     onChange={handleChange}
@@ -599,6 +614,7 @@ export const VendorManage = () => {
                   />
                   <label>Phone</label>
                   <input
+                  required
                     type="text"
                     className="form-control"
                     onChange={handleChange}
@@ -608,6 +624,7 @@ export const VendorManage = () => {
                   />
                   <label>Account Number</label>
                   <input
+                  required
                     type="text"
                     className="form-control"
                     onChange={handleChange}
@@ -616,15 +633,17 @@ export const VendorManage = () => {
                     defaultValue={RowData.account_number}
                   />
                 </div>
+                </div>
                 <Button
-                  disabled={!areAllFieldsFilled}
+               
                   type="submit"
                   className="btn btn-warning mt-4"
-                  onClick={() => handleEdit(RowData.name)}
+                 
                 >
                   Save Changes
                 </Button>
-              </div>
+  
+              </form>
             </Modal.Body>
             <Modal.Footer>
               <Button variant="secondary" onClick={hanldeEditClose}>
@@ -693,6 +712,7 @@ export const VendorManage = () => {
           </Modal>
         </div>
       </div>
+      </Sidebar>
     </>
   );
 };

@@ -17,11 +17,14 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: white;
+  background-color: rgb(255, 255, 255);
   flex-wrap: wrap;
-  height: 340px;
+  height: 380px;
   width: 360px;
   border-radius: 10px;
+  /* box-shadow: 1px 1px 5px 4px rgba(181,4,4,0.46);
+  -webkit-box-shadow: 1px 1px 5px 4px rgba(181,4,4,0.46);
+  -moz-box-shadow: 1px 1px 5px 4px rgba(181,4,4,0.46); */
 }
 
 .formContainer {
@@ -30,7 +33,7 @@
   align-items: baseline;
   background-color: white;
   flex-wrap: wrap;
-  padding: 3%;
+  width: 90%;
   
 }
 
@@ -52,7 +55,7 @@
   font-family: "Poppins";
   font-style: normal;
   font-weight: bold;
-  font-size: 26px;
+  font-size: 30px;
   line-height: 30px;
   text-align: center;
   letter-spacing: 0.3px;
@@ -73,7 +76,7 @@
   white-space: nowrap;
 }
 
-.formContainer > button {
+.columnContainerLogin .formContainer > button {
   background: #ac1a19;
   /* button / accent default */
     box-sizing: border-box;
@@ -85,16 +88,18 @@
   font-weight: 600;
   font-size: 20px;
   line-height: 20px;
+  letter-spacing: 5px;
   /* identical to box height, or 143% */
   align-self: center;
-  margin-top: 10px;
-  height: 35px;
+  margin-top: 20px;
+  height: 4vh;
+  
 }
 
-.formContainer > label {
+.columnContainerLogin .formContainer > label {
   font-family: "Poppins";
   font-weight: bold;
-  font-size: 18px;
+  font-size: 20px;
   line-height: 15px;
   letter-spacing: 0.5px;
   text-transform: uppercase;
@@ -103,11 +108,21 @@
 
   /* grayscale / gray */
 
-  color: #151516;
+  color: #161515;
 }
 
-.formContainer > input{
+.columnContainerLogin .formContainer > input{
   height: 40px;
+  width: 100%;
+  border-radius: 10px;
+  border: 3px solid #969494;
+  display: flex;
+  margin-top: 6px;
+}
+
+.columnContainerLogin .formContainer > input:focus{
+  border:3px solid  	#d41c1c;
+  outline: none;
 }
 
 .otpContainer {

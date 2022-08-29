@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Sidebar from "../../shared/components/Sidebar/Sidebar";
 import { useDeps } from "../../shared/context/DependencyContext";
 import { FiPlus } from "react-icons/fi";
@@ -18,7 +18,7 @@ export const AssetCategory = () => {
   const [isLoading, setLoading] = useState(false);
   const [doneAddForm, setDoneAddform] = useState(false);
   const { assetCategoryService } = useDeps();
-  const areAllFieldsFilled = assetCategory === "";
+  const areAllFieldsFilled = assetCategory !== "";
 
   const [data, setData] = useState([]);
   const [order, setOrder] = useState("ASC");
@@ -163,70 +163,134 @@ export const AssetCategory = () => {
   };
 
   //Search
-  const onChangeSearchSubproduct = (e) => {
-    const searchSubproduct = e.target.value;
-    setSearchSubproduct(searchSubproduct);
+  // const onChangeSearchSubproduct = (e) => {
+  //   const searchSubproduct = e.target.value;
+  //   setSearchSubproduct(searchSubproduct);
+  // };
+
+  // const onSearchSubproduct = async (e) => {
+  //   e.preventDefault();
+  //   setLoading(true);
+  //   try {
+  //     const response = await assetCategoryService.getDataBySubproductLike(searchSubproduct);
+  //     console.log('ini keyword', searchSubproduct)
+  //     console.log(response);
+  //     setData(response.data);
+  //     console.log('ini search', response.data);
+  //   } catch (e) {
+  //     console.log(e);
+  //   } finally {
+  //     setLoading(false)
+  //   }
+  // };
+
+  // const [searchProduct, setSearchProduct] = useState('')
+  // const onChangeSearchProduct = (e) => {
+  //   const searchProduct = e.target.value;
+  //   setSearchProduct(searchProduct);
+  // };
+
+  // const onSearchProduct = async (e) => {
+  //   e.preventDefault();
+  //   setLoading(true);
+  //   try {
+  //     const response = await assetCategoryService.getDataByProductLike(searchProduct);
+  //     console.log(response);
+  //     setData(response.data);
+  //     console.log(response.data);
+  //   } catch (e) {
+  //     console.log(e);
+  //   } finally {
+  //     setLoading(false)
+  //   }
+  // };
+
+  // const [searchAssetCategory, setSearchAssetCategory] = useState('')
+  // const onChangeSearchAssetCategory = (e) => {
+  //   setSearchAssetCategory(e.target.value);
+  // };
+
+  // const onSearchAssetCategory = async (e) => {
+  //   e.preventDefault();
+  //   setLoading(true);
+  //   try {
+  //     const response = await assetCategoryService.getDataByAssetCategoryLike(searchAssetCategory);
+  //     console.log(response);
+  //     setData(response.data);
+  //     console.log(response.data);
+  //   } catch (e) {
+  //     console.log(e);
+  //   } finally {
+  //     setLoading(false)
+  //   }
+  // };
+
+  //Filter
+  const [filter, setFilter] = useState('');
+  const [dropdownName, setDropdownName] = useState('');
+  const [fill, setFill] = useState(true);
+  const ref = useRef(null) ;
+
+  const onChangeFilter = (e) => {
+    setFilter(e.target.value);
   };
 
-  const onSearchSubproduct = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      const response = await assetCategoryService.getDataBySubproductLike(searchSubproduct);
-      console.log(response);
-      setData(response.data);
-      console.log(response.data);
-    } catch (e) {
-      console.log(e);
-    } finally {
-      setLoading(false)
+  const onChangeDropdown= (dropdownName) => {
+    setDropdownName(dropdownName)
+    setFill(false)
+  }
+
+  const onFilter = async () => {
+    console.log(filter)
+    console.log(dropdownName)
+    if (dropdownName === 'Subproduct') {
+      setLoading(true);
+      try {
+        const response = await assetCategoryService.getDataBySubproductLike(filter);
+        console.log('ini keyword', searchSubproduct)
+        console.log(response);
+        setData(response.data);
+        console.log('ini search', response.data);
+      } catch (e) {
+        console.log(e);
+      } finally {
+        setLoading(false)
+      }
+    } else if (dropdownName === 'Product') {
+      setLoading(true);
+      try {
+        const response = await assetCategoryService.getDataByProductLike(filter);
+        console.log(response);
+        setData(response.data);
+        console.log(response.data);
+      } catch (e) {
+        console.log(e);
+      } finally {
+        setLoading(false)
+      }
+    } else {
+      setLoading(true);
+      try {
+        const response = await assetCategoryService.getDataByAssetCategoryLike(filter);
+        console.log(response);
+        setData(response.data);
+        console.log(response.data);
+      } catch (e) {
+        console.log(e);
+      } finally {
+        setLoading(false)
+      }
     }
-  };
+  }
 
-  const [searchProduct, setSearchProduct] = useState('')
-  const onChangeSearchProduct = (e) => {
-    const searchProduct = e.target.value;
-    setSearchProduct(searchProduct);
-  };
-
-  const onSearchProduct = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      const response = await assetCategoryService.getDataByProductLike(searchProduct);
-      console.log(response);
-      setData(response.data);
-      console.log(response.data);
-    } catch (e) {
-      console.log(e);
-    } finally {
-      setLoading(false)
-    }
-  };
-
-  const [searchAssetCategory, setSearchAssetCategory] = useState('')
-  const onChangeSearchAssetCategory = (e) => {
-    setSearchAssetCategory(e.target.value);
-  };
-
-  const onSearchAssetCategory = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      const response = await assetCategoryService.getDataByAssetCategoryLike(searchAssetCategory);
-      console.log(response);
-      setData(response.data);
-      console.log(response.data);
-    } catch (e) {
-      console.log(e);
-    } finally {
-      setLoading(false)
-    }
-  };
+  const onClearForm = () => {
+    ref.current.value = ''; 
+    onGetAllAssetCategory();
+  }
 
   //Edit Data
   const handleEdit = async (e, id) => {
-    e.preventDefault(e)
+    e.preventDefault()
     console.log("ini id", id);
     try {
       assetCategory.useful_life = Number(assetCategory.useful_life)
@@ -364,11 +428,29 @@ export const AssetCategory = () => {
 
   return (
     <>
-      <Sidebar />
-      <div className="asset-category-container">
-        <div className="asset-category-box">
+      <Sidebar>
+      <div className="body">
+        <div className="container">
             <div className="feature" >
-                <Button
+            {/* <div className="search"> */}
+            <div className="input-group mb-3 dropdown">
+                <button className="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Search by {dropdownName}</button>
+                <ul className="dropdown-menu" >
+                  <li><a className="dropdown-item" onClick={() => {onChangeDropdown('Subproduct')}}>Subproduct</a></li>
+                  <li><a className="dropdown-item" onClick={() => {onChangeDropdown('Product')}}>Product</a></li>
+                  <li><a className="dropdown-item" onClick={() => {onChangeDropdown('Asset Category')}}>Asset Category</a></li>
+                </ul>
+                <input ref={ref} disabled={fill} type="text" className="form-control" aria-label="Text input with dropdown button" onChange={onChangeFilter}/>
+                <div className="input-group-append">
+                        <button value="submit" className="btn btn-primary form-button" onClick={onFilter}>
+                        <i className="fa fa-search"></i>
+                        </button>
+                        <button value="submit" className="btn btn-danger form-button" onClick={onClearForm}>
+                        <i className="fa fa-times"></i>
+                        </button>
+                </div>
+            </div>
+            <Button
                 variant="primary"
                 onClick={() => {
                     handlePostShow();
@@ -376,66 +458,14 @@ export const AssetCategory = () => {
                 >
                 <FiPlus />
                 Add New Asset Category
-                </Button>
-            <div className="search">
-                <form className='form-search' onSubmit={onSearchSubproduct}>
-                    <label>Subproduct Name</label>
-                    <div className="input-group">
-                    <input
-                        placeholder="Search"
-                        value={searchSubproduct}
-                        onChange={onChangeSearchSubproduct}
-                        type="text"
-                        className="form-control"
-                    />
-                    <div className="input-group-append">
-                        <button value="submit" className="btn btn-primary form-button">
-                        <i className="fa fa-search" aria-hidden="true"></i>
-                        </button>
-                    </div>
-                    </div>
-                </form>
-                <form className='form-search' onSubmit={onSearchProduct}>
-                    <label>Product Name</label>
-                    <div className="input-group">
-                    <input
-                        placeholder="Search"
-                        value={searchProduct}
-                        onChange={onChangeSearchProduct}
-                        type="text"
-                        className="form-control"
-                    />
-                    <div className="input-group-append">
-                        <button value="submit" className="btn btn-primary form-button">
-                        <i className="fa fa-search"></i>
-                        </button>
-                    </div>
-                    </div>
-                </form>
-                <form className='form-search' onSubmit={onSearchAssetCategory}>
-                    <label>Asset Category</label>
-                    <div className="input-group">
-                    <input
-                        placeholder="Search"
-                        value={searchAssetCategory}
-                        onChange={onChangeSearchAssetCategory}
-                        type="text"
-                        className="form-control"
-                    />
-                    <div className="input-group-append">
-                        <button value="submit" className="btn btn-primary form-button">
-                        <i className="fa fa-search"></i>
-                        </button>
-                    </div>
-                    </div>
-                </form>
-            </div>
+                </Button>                
+            {/* </div> */}
             </div>
 
-            <div className="body">
-            <div className="container">
-                <div className="table-responsive" style={{'width':'100%'}}>
-                <div className="table-wrapper">
+            <div className="body container table-wrapper table-responsive">
+            {/* <div className="container table-wrapper table-responsive"> */}
+                {/* <div className="table-wrapper table-responsive" style={{'width':'100%'}}> */}
+                {/* <div className="table-wrapper"> */}
                     <div className="table-title">
                     <div className="row">
                         <div className="col-xs-6">
@@ -475,7 +505,9 @@ export const AssetCategory = () => {
                     </thead>
                     <tbody>
                         {data.length === 0 ? (
-                        <tr>No data Found</tr>
+                        <tr>
+                          <th colspan='7'>Data is not found</th>
+                        </tr>
                         ) : (
                         currentItems.map((item, index) => (
                             <tr key={item.subproduct_name}>
@@ -570,9 +602,9 @@ export const AssetCategory = () => {
                         </li>
                     </ul>
                     </div>
-                </div>
-                </div>
-            </div>
+                {/* </div> */}
+                {/* </div> */}
+            {/* </div> */}
             </div>
 
             {/* ADD MODAL FOR SUBMIT DATABASE */}
@@ -588,6 +620,7 @@ export const AssetCategory = () => {
                 <Modal.Title>Add New AssetCategory</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
+                <form onSubmit={handleSubmit}>
                 <p style={{color:"red"}}>Please complete all required fields</p>
                 <div>
                 <form onSubmit={handleSubmit}>
@@ -650,19 +683,22 @@ export const AssetCategory = () => {
                         name="subproduct_name"
                         value={assetCategory.subproduct_name}
                     />
-                    </div>
-                    <Button style={{width:'6vw'}}
+                    </div>    
+                </div>
+                <Button
                     type="submit"
                     className="btn btn-success mt-4"
                     >
                     Add{" "}
                     </Button>
-                    </form>    
-                </div>
+                </form>
                 </Modal.Body>
                 <Modal.Footer>
+                
                 </Modal.Footer>
-            </Modal>            
+            </Modal>
+             
+            
             </div>
 
             {/* EDIT MODAL */}
@@ -675,57 +711,69 @@ export const AssetCategory = () => {
                 keyboard={false}
             >
                 <Modal.Header closeButton>
-                <Modal.Title>Edit Subproduct {RowData.subproduct_name} </Modal.Title>
+                <Modal.Title>Edit {RowData.subproduct_name}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
+                <form onSubmit={(e) => handleEdit(e, RowData.subproduct_name)}>
                 <div>
                   <form onSubmit={(e) => handleEdit(e, RowData.subproduct_name)}>
                     <div className="form-group">
-                      <label>Asset Category</label>
-                      <input
-                          type="text"
-                          className="form-control"
-                          onChange={handleChange}
-                          placeholder="Please enter asset category"
-                          name="asset_category"
-                          defaultValue={RowData.asset_category}
-                      />
-                      <label>Useful Life</label>
-                      <input
-                          type="number"
-                          className="form-control"
-                          onChange={handleChange}
-                          placeholder="Please enter useful life"
-                          name="useful_life"
-                          defaultValue={RowData.useful_life}
-                      />
-                      <label>Product Code</label>
-                      <input
-                          type="text"
-                          className="form-control"
-                          onChange={handleChange}
-                          placeholder="Please enter product code"
-                          name="product_code"
-                          defaultValue={RowData.product_code}
-                      />
-                      <label>Product Name</label>
-                      <input
-                          type="text"
-                          className="form-control"
-                          onChange={handleChange}
-                          name="product_name"
-                          placeholder="Please enter product name"
-                          defaultValue={RowData.product_name}
-                      />
-                      </div>
-                      <Button
-                        type="submit"
-                        className="btn btn-warning mt-4"
-                        >
-                        Save Changes
-                      </Button>
-                  </form>
+                    <label>Asset Category</label>
+                    <input
+                        type="text"
+                        className="form-control"
+                        onChange={handleChange}
+                        placeholder="Please enter asset category"
+                        name="asset_category"
+                        defaultValue={RowData.asset_category}
+                    />
+                    <label>Useful Life</label>
+                    <input
+                        type="number"
+                        className="form-control"
+                        onChange={handleChange}
+                        placeholder="Please enter useful life"
+                        name="useful_life"
+                        defaultValue={RowData.useful_life}
+                    />
+                    <label>Product Code</label>
+                    <input
+                        type="text"
+                        className="form-control"
+                        onChange={handleChange}
+                        placeholder="Please enter product code"
+                        name="product_code"
+                        defaultValue={RowData.product_code}
+                    />
+                    <label>Product Name</label>
+                    <input
+                        type="text"
+                        className="form-control"
+                        onChange={handleChange}
+                        name="product_name"
+                        placeholder="Please enter product name"
+                        defaultValue={RowData.product_name}
+                    />
+                    {/* <label>Subproduct Name</label>
+                    <input
+                        type="text"
+                        className="form-control"
+                        onChange={handleChange}
+                        name="subproduct_name"
+                        placeholder="Please enter subproduct name"
+                        defaultValue={RowData.subproduct_name}
+                    /> */}
+                    </div>
                 </div>
+                  <Button
+                    // disabled={!areAllFieldsFilled}
+                    type="submit"
+                    className="btn btn-warning mt-4"
+                    // onClick={() => handleEdit(RowData.subproduct_name)}
+                    >
+                    Save Changes
+                    </Button>
+                </form>
                 </Modal.Body>
                 <Modal.Footer>
                 </Modal.Footer>
@@ -788,6 +836,7 @@ export const AssetCategory = () => {
             </div>
         </div>
       </div>
+      </Sidebar>
     </>
   );
 };

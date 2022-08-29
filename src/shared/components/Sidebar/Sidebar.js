@@ -1,62 +1,208 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, NavLink, useNavigate } from "react-router-dom";
+import { FaBars, FaHome, FaLock, FaMoneyBill, FaUser } from "react-icons/fa";
+import { BiAnalyse, BiSearch } from "react-icons/bi";
+import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import SidebarMenu from "./SubMenu";
+import * as GoIcons from 'react-icons/go';
+import * as IoIcons from 'react-icons/io';
+import * as BiIcons from 'react-icons/bi';
 import * as FaIcons from 'react-icons/fa';
+import './Sidebar.css'
 import * as AiIcons from 'react-icons/ai';
-import { SidebarData } from './SidebarData';
-import SubMenu from './SubMenu';
-import { IconContext } from 'react-icons/lib';
-import '../Sidebar/Sidebar.css'
-import {useAuth} from '../../hook/UseAuth'
 
-const SidebarNav = styled.nav`
-  background: #383838;
-  width: 350px;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  position: fixed;
-  top: 0;
-  left: ${({ sidebar }) => (sidebar ? '0' : '-100%')};
-  transition: 350ms;
-  z-index: 10;
-`;
+const routes = [
+  {
+    path: "/main",
+    name: "Overview",
+    icon: <FaHome />,
+  },
+  {
+    path: "/data-management",
+    name: "Data Management",
+    icon: <GoIcons.GoDatabase/>,
+    subRoutes: [
+        {
+          path: "/data-management/asset-item",
+          name: "Asset Item",
+          icon: <IoIcons.IoIosPaper/>,
+        },
+        {
+          path: "/data-management/asset-category",
+          name: "Asset Category",
+          icon: <BiIcons.BiCategoryAlt/>,
+        },
+        {
+          path: "/data-management/vendor",
+          name: "Vendor",
+          icon: <FaIcons.FaStore/>,
+        },
+        {
+            path: "/data-management/location",
+            name: "Location",
+            icon: <GoIcons.GoLocation/>,
+          },
+      ],
+  },
+  {
+    path: "/upload-data",
+    name: "Import Data",
+    icon: <FaIcons.FaFileUpload/>,
+  },
+];
 
-const Sidebar = () => {
+const Sidebar = ({children}) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const toggle = () => setIsOpen(!isOpen);
+  const inputAnimation = {
+    hidden: {
+      width: 0,
+      padding: 0,
+      transition: {
+        duration: 0.2,
+      },
+    },
+    show: {
+      width: "140px",
+      padding: "5px 15px",
+      transition: {
+        duration: 0.2,
+      },
+    },
+  };
+
+  const showAnimation = {
+    hidden: {
+      width: 0,
+      opacity: 0,
+      transition: {
+        duration: 0.5,
+      },
+    },
+    show: {
+      opacity: 1,
+      width: "auto",
+      transition: {
+        duration: 0.5,
+      },
+    },
+  };
+
   const navigate = useNavigate();
-  // const onLogout = useAuth()
   const onLogout = () => {
     navigate('/', {replace: true})
   }
 
-  const [sidebar, setSidebar] = useState(false);
-  const showSidebar = () => setSidebar(!sidebar);
- 
-
   return (
     <>
-      <IconContext.Provider value={{ color: '#fff' }}>
-        <div className='Nav'>
-          <div className='NavIcon' to='#'>
-            <FaIcons.FaBars onClick={showSidebar}/>
-            <AiIcons.AiOutlineLogout className='logout' onClick={onLogout}/>
-          </div> 
-        </div>
-        <SidebarNav sidebar={sidebar}>
-          <div className='SidebarWrap'>
-            <div className='NavIcon' to='#'>
-              <AiIcons.AiOutlineClose onClick={showSidebar}/>
+      <div className="main-container">
+        <motion.div
+          animate={{
+            width: isOpen ? "300px" : "50px",
+
+            transition: {
+              duration: 0.5,
+              type: "spring",
+              damping: 10,
+            },
+          }}
+          className={`sidebar`}
+        >
+          <div className="top_section">
+            <AnimatePresence>
+              {isOpen && (
+                <motion.h1
+                  variants={showAnimation}
+                  initial="hidden"
+                  animate="show"
+                  exit="hidden"
+                  className="logo"
+                >
+                  Narindo
+                </motion.h1>
+              )}
+            </AnimatePresence>
+            <div className="bars">
+              <FaBars onClick={toggle} />
             </div>
-            {/* <img src='../src/assets/images/narindo_logo_black.svg'/> */}
-            {SidebarData.map((item, index) => {
-              return <SubMenu item={item} key={index} />;
-            })}
           </div>
-        </SidebarNav>
-        <div className='AppFooter'>
-          <p>Copyright © by Kelompok 6, All Rights Reserved</p>
-        </div>
-      </IconContext.Provider>
+          {/* <div className="search">
+            <div className="search_icon">
+              <BiSearch />
+            </div>
+            <AnimatePresence>
+              {isOpen && (
+                <motion.input
+                  initial="hidden"
+                  animate="show"
+                  exit="hidden"
+                  variants={inputAnimation}
+                  type="text"
+                  placeholder="Search"
+                />
+              )}
+            </AnimatePresence>
+          </div> */}
+          <section className="routes">
+            {routes.map((route, index) => {
+              if (route.subRoutes) {
+                return (
+                  <SidebarMenu
+                    setIsOpen={setIsOpen}
+                    route={route}
+                    showAnimation={showAnimation}
+                    isOpen={isOpen}
+                  />
+                );
+              }
+     
+              return (
+                <NavLink
+                  to={route.path}
+                  key={index}
+                  className="link"
+                  activeClassName="active"
+                >
+                  <div className="icon">{route.icon}</div>
+                  <AnimatePresence>
+                    {isOpen && (
+                      <motion.div
+                        variants={showAnimation}
+                        initial="hidden"
+                        animate="show"
+                        exit="hidden"
+                        className="link_text"
+                      >
+                        {route.name}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </NavLink>
+              );
+            })}
+          </section>
+          <AnimatePresence>
+              {isOpen && (
+                <motion.h1
+                  variants={showAnimation}
+                  initial="hidden"
+                  animate="show"
+                  exit="hidden"
+                  className='footer-main'
+                >
+                  <p>Copyright © by Group 6, All Rights Reserved</p>
+                </motion.h1>
+              )}
+            </AnimatePresence>          
+        </motion.div>
+
+        <main>
+          <nav class="navbar navbar-expand-lg header-main">
+          <AiIcons.AiOutlineLogout className='logout' onClick={onLogout}/>
+          </nav>
+          {children}
+          </main>
+      </div>
     </>
   );
 };
