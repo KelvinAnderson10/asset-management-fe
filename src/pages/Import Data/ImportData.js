@@ -21,12 +21,10 @@ export const ImportData = () => {
     try {
       const response = await assetItemService.batchInsert(uploadBackendData)
       console.log('ini respon submit',response);
-      Success('upload')
+      Success('uploaded')
     } catch (error) {
       if (error.response.data.error.Detail){
-        
         Failed(`Upload failed because ${error.response.data.error.Detail}`)
-
       } else{
         Failed(`Upload failed because column ${error.response.data.error.Field} is in wrong format`)
       }

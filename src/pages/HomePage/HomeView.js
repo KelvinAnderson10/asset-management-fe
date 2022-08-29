@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import '../HomePage/HomeView.css'
 import logo from '../../assets/images/default.png'
+import { useAuth } from "../../services/UseAuth";
 
 export const HomeView = () => {
     const navigate = useNavigate();
@@ -9,9 +10,13 @@ export const HomeView = () => {
       navigate('/main', {replace: true})
     }
 
+    const { eraseCookie } = useAuth()
+
     const onLogout = () => {
-        navigate('/', {replace: true})
-    }
+    eraseCookie("OTP")
+    navigate('/', {replace: true})
+    } 
+
     return (
         <div className="home-container">
             <div className= "home-header">
@@ -26,7 +31,7 @@ export const HomeView = () => {
                     </div>
             </div>
             <button className="home-button" onClick={onButton}>
-                <p>Manage your asset</p>
+                <p>Click to continue</p>
             </button>
         </div>
     )

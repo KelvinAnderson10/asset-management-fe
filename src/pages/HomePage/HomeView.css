@@ -31,7 +31,7 @@
     font-family: Arial, Helvetica, sans-serif;
     font-style: normal;
     font-weight: 700;
-    font-size: 1.2em;
+    font-size: 1.9vh;
     /* line-height: 1em; */
     letter-spacing: 0.4px;
     padding-right: 1.5em;
@@ -75,7 +75,7 @@
     margin-left: 1ch;
     font-style: normal;
     font-weight: 800;
-    font-size: 8em;
+    font-size: 11vh;
     line-height: 11%;
     letter-spacing: 0.ch;
 
@@ -89,8 +89,8 @@
     height: 7vh;
     left: 42%;
     bottom: 5.5%;
-    background: #FFFFFF;
-    box-shadow: 1em 1em 1em rgba(254, 254, 254, 0.25);
+    background: rgb(131, 0, 0);
+    box-shadow: 0.5em 0.5em rgba(254, 254, 254, 0.25);
     border-radius: 50px;
     border: #F5F0F2;
 }
@@ -98,7 +98,7 @@
 .home-button > p {
     font-style: normal;
     font-weight: 600;
-    font-size: 1.5em;
+    font-size: 2.5vh;
     padding-top: 12px;
-    color: #ABA6A6;
+    color: #ffffff;
 }

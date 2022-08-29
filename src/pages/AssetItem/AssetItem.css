@@ -14,7 +14,7 @@ main .asset-container{
   justify-content: center;
   align-items: center;
   padding:25px;
-  min-height: 94vh;
+  min-height: 90vh;
   min-width: 97vw;
   
   background: rgb(255, 255, 255);
@@ -144,9 +144,9 @@ main .asset-container{
 .asset-container form .row .col .button-submit{
  
   width: 120px;
-  height: 45px;
+  height: 50px;
   margin-right: 4vh;
-  font-size: 20px;
+  font-size: 25px;
   align-items: center;
 }
 
@@ -162,7 +162,7 @@ main .asset-container{
   width: 100%;
   display: flex;
   justify-content: flex-end;
-  margin-bottom: 20px;
+  margin-top: 6vh;
 }
 
 input[type="file"]::-webkit-file-upload-button{

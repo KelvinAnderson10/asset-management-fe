@@ -61,7 +61,7 @@ export const Login = () => {
   const validateOTP = () => {
     console.log(OTPInput);
     if (OTPInput == OTP) {
-      setCookie("OTP", OTP, 20);
+      setCookie("OTP", OTP, 90);
     } else {
       Failed("Wrong OTP");
     }

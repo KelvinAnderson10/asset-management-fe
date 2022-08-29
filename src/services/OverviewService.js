@@ -58,6 +58,7 @@ export const overviewService = ({doGet, doPut}) => {
             throw e
         }
     }
+
     const getAssetByPagination = async (page) => {
         try {
             return await doGet({
@@ -67,8 +68,47 @@ export const overviewService = ({doGet, doPut}) => {
             throw e
         }
     }
+
+    const getAssetBySubproduct = async (subproduct) => {
+        try {
+            return await doGet({
+                url: `/asset/filter?subproduct=${subproduct}`
+            })
+        } catch (e) {
+            throw e
+        }
+    }
     
+    const getAssetByItemName = async (name) => {
+        try {
+            return await doGet({
+                url: `/asset/filter?name=${name}`
+            })
+        } catch (e) {
+            throw e
+        }
+    }
+
+    const getAssetByProduct = async (product) => {
+        try {
+            return await doGet({
+                url: `/asset/filter?product=${product}`
+            })
+        } catch (e) {
+            throw e
+        }
+    }
+
+    const getAssetByCategory = async (category) => {
+        try {
+            return await doGet({
+                url: `/asset/filter?category=${category}`
+            })
+        } catch (e) {
+            throw e
+        }
+    }
 
 
-    return {getAllAsset, getAssetByAssetName, updateAsset,getAssetByVendor,getAssetByCondition,getAssetByLocation, getAssetByPagination}
+    return {getAllAsset, getAssetByAssetName, updateAsset,getAssetByVendor,getAssetByCondition,getAssetByLocation, getAssetByPagination, getAssetBySubproduct, getAssetByItemName, getAssetByProduct, getAssetByCategory}
 }
