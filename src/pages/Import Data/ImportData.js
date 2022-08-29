@@ -112,8 +112,8 @@ export const ImportData = () => {
                           Upload <b>Assets</b>
                       </h3>
                 <div className="table-responsive">
-                  <div className="table-wrapper">
-                    <div className="table-title">
+                  <div className="import-table-wrapper">
+                    <div className="import-table-title">
                       <div className="row">
                         <div className="col-xs-8">
                         </div>
@@ -121,7 +121,7 @@ export const ImportData = () => {
                     </div>
 
                     <table className="table table-striped table-hover">
-                      <thead>
+                      <thead className= "table-secondary">
                         <tr>
                           <th>Tanggal Pembelian</th>
                           <th>Tahun</th>
