@@ -17,7 +17,7 @@ export const Login = () => {
   const { userService } = useDeps();
   const navigate = useNavigate();
   const { setCookie } = useAuth();
-
+  
 
 
 
@@ -26,18 +26,18 @@ export const Login = () => {
     try {
       const response = await userService.getUserByEmail(email); 
       setEmail(response.data.email);
-      login(email);
+
+      setOTP(response.otp);
       setShowOTPForm(true);
+      
     } catch (error) {
       Failed("Email not registered yet, Please input a valid email");
     } finally {
+      console.log("ini OTP",OTP)
     }
   };
 
-  const login = async (emailAddress) => {
-    const response = await Auth(emailAddress, "Narindo Asset Management");
-    setOTP(response.OTP);
-  };
+ 
 
   const getCookie = (cName) => {
     const name = cName + "=";

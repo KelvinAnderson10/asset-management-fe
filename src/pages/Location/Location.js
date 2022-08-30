@@ -306,15 +306,7 @@ export const Location = () => {
       <div className="body">
       <div className="container">
         <div className="loc-container-item">
-          <Button
-            variant="primary"
-            onClick={() => {
-              handlePostShow();
-            }}
-          >
-            <FiPlus />
-            Add New Location
-          </Button>
+          
           <form>
             <div className="input-group">
               <input
@@ -335,6 +327,15 @@ export const Location = () => {
               </div>
             </div>
           </form>
+          <Button
+            variant="primary"
+            onClick={() => {
+              handlePostShow();
+            }}
+          >
+            <FiPlus />
+            Add New Location
+          </Button>
         </div>
 
             <div className="table-responsive">
@@ -359,7 +360,7 @@ export const Location = () => {
                       </th>
                       <th onClick={() => sortingNum("ID")}>
                         {" "}
-                        <FaSort /> Location ID
+                        <FaSort /> Area Code
                       </th>
                       <th>Actions</th>
                     </tr>

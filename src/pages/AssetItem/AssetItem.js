@@ -6,6 +6,8 @@ import { Failed } from "../../shared/components/Notification/Failed";
 import moment from "moment";
 import "./AssetItem.css";
 import Loading from "../../shared/components/Loading/Loading";
+import UploadLoading from "../../shared/components/Loading/UploadLoading";
+import AssetLoading from "../../shared/components/Loading/AssetItemLoad";
 
 export const AssetItem = () => {
   const [data, setData] = useState({});
@@ -238,7 +240,7 @@ export const AssetItem = () => {
                   />
                 </div>
                 <div className="inputBox">
-                  <span>Purchase Date :</span>
+                  <span>Purchase Date (mm/dd/yyyy, hh:mm:ss) :</span>
                   <input
                     type="datetime-local"
                     required
@@ -249,7 +251,7 @@ export const AssetItem = () => {
                   />
                 </div>
                 <div className="inputBox">
-                  <span>BAST :</span>
+                  <span>BAST (mm/dd/yyyy, hh:mm:ss)  :</span>
                   <input
                     type="datetime-local"
                     required
@@ -309,7 +311,6 @@ export const AssetItem = () => {
                     accept="image/*"
                     type="file"
                     name="Asset Image"
-                    // value={data["Asset Image"]}
                     onChange={imageChange}
                   />
                 </div>
@@ -381,16 +382,6 @@ export const AssetItem = () => {
                     style={{width:'95%'}}
                   />
                 </div>
-                {/* <div className="inputBox"> */}
-                  {/* <span>Asset Code :</span>
-                <select required name='Kode Asset' value={data['Kode Asset']} onChange={handleChange}>
-                      <option value="" >Select Asset Code</option> 
-                      {
-                        subProductName.map((item)=>(
-                          <option key={item.subproduct_name} value={item.product_code} >{item.subproduct_name}-{item.product_code}</option>
-                        ))
-                      }
-                      </select> */}
                   <div className="inputBox">
                     <span>Year :</span>
                     <input
@@ -428,14 +419,14 @@ export const AssetItem = () => {
                     type="submit"
                     className="btn btn-primary button-submit"
                   >
-                    Submit
+                    SUBMIT
                   </button>
                 </div>
               </div>
             </div>
           </form>
         </div>
-      {isLoading && <Loading/>}
+      {isLoading && <AssetLoading/>}
       </Sidebar>
     </>
   );
