@@ -71,9 +71,9 @@ export const Overview = () => {
   const handleClick = (event) => {
     setCurrentPage(Number(event.target.id));
   };
-
+  const totalPages = Math.ceil(datas.length / itemPerPage)
   const pages = [];
-  for (let i = 1; i <= Math.ceil(datas.length / itemPerPage); i++) {
+  for (let i = 1; i <=totalPages ; i++) {
     pages.push(i);
   }
 
@@ -115,6 +115,14 @@ export const Overview = () => {
       setMinPageNumberLimit(minPageNumberLimit - pageNumberLimit);
     }
   };
+  
+  const handleFirstBtn = () =>{
+    setCurrentPage(1)
+  }
+  const handleLastBtn = () =>{
+    console.log(totalPages);
+    setCurrentPage(totalPages)
+  }
 
   let pageIncrementBtn = null;
   if (pages.length > maxPageNumberLimit) {
@@ -755,23 +763,36 @@ export const Overview = () => {
           </div>
           <ul className="pageNumbers">
             <li>
-              <button
+            <a style={{marginRight:'10px'}}
+                onClick={handleFirstBtn}
+                disabled={currentPage == pages[0] ? true : false}
+              >
+                &laquo;
+              </a>
+              <a
                 onClick={handlePrevbtn}
                 disabled={currentPage == pages[0] ? true : false}
               >
                 Prev
-              </button>
+              </a>
             </li>
             {pageDecrementBtn}
             {renderPageNumbers}
             {pageIncrementBtn}
             <li>
-              <button
+              <a
                 onClick={handleNextbtn}
                 disabled={currentPage == pages[pages.length - 1] ? true : false}
               >
                 Next
-              </button>
+              </a>
+              <a
+              style={{marginLeft:'10px'}}
+                onClick={handleLastBtn}
+                // disabled={currentPage == pages[0] ? true : false}
+              >
+                &raquo;
+              </a>
             </li>
           </ul>
             </div>

@@ -5,22 +5,29 @@ import { useDeps } from '../../shared/context/DependencyContext';
 import './ImportData.css'
 import guidelines from '../../assets/file/guidelines.xlsx'
 import template from '../../assets/file/template.xlsx'
-import Loading from '../../shared/components/Loading/Loading';
+
 import {Success} from '../../shared/components/Notification/Success';
 import {Failed} from '../../shared/components/Notification/Failed';
+import UploadLoading from '../../shared/components/Loading/UploadLoading';
+import Loading from '../../shared/components/Loading/Loading';
 
 export const ImportData = () => {
   const [excelData, setExcelData] = useState([])
   const [doneUploadExcel, setDoneUploadExcel] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [isLoadingscd, setIsLoadingscd] = useState(false)
   const [uploadBackendData, setUploadBackendData] = useState([])
+  const [upload, setUpload] = useState(true)
 
   const {assetItemService} = useDeps();
 
   const handleSubmit = async () => {
+    setUpload(false)
+    setIsLoadingscd(true)
+  
     try {
       const response = await assetItemService.batchInsert(uploadBackendData)
- 
+      
       Success('uploaded')
     } catch (error) {
       if (error.response.data.error.Detail){
@@ -28,8 +35,11 @@ export const ImportData = () => {
       } else{
         Failed(`Upload failed because column ${error.response.data.error.Field} is in wrong format`)
       }
-      
       console.log(error);
+
+    }finally{
+      setIsLoadingscd(false)
+      setUpload(true)
     }
   }
 
@@ -57,6 +67,7 @@ export const ImportData = () => {
             setUploadBackendData(json)
             e.target.files = null
             setIsLoading(false)
+            setUpload(false)
         };
         reader.readAsArrayBuffer(e.target.files[0]);
     }
@@ -66,6 +77,7 @@ export const ImportData = () => {
   
     setDoneUploadExcel(true)
     setIsLoading(false)
+    setIsLoadingscd(false)
   }, [excelData])
 
   return (
@@ -75,7 +87,7 @@ export const ImportData = () => {
             <div className='body'>
               <div className='container'>
                 <div className='title-container'>
-                  <h4>ADD MULTIPLE ASSET</h4>
+                  <h4>Add Multiple Asset</h4>
                 </div>
             <div class='form-upload-container'>
           <div>
@@ -113,11 +125,11 @@ export const ImportData = () => {
             <div>
               <div className="import-box">
                 <br></br>
-                      <h3>
+                      {/* <h3>
                           Upload <b>Assets</b>
-                      </h3>
+                      </h3> */}
                 <div className="table-responsive">
-                  <div className="table-wrapper">
+                  <div className="table-import-wrapper">
                     <div className="">
                       <div className="row">
                         <div className="col-xs-8">
@@ -202,7 +214,7 @@ export const ImportData = () => {
                 </div>
 
                   <div className='button-save'>
-                  <button className='btn btn-primary' onClick={handleSubmit}>Save</button>
+                  <button disabled={upload} className='btn btn-primary' onClick={handleSubmit}>Save</button>
                   </div>
 
               </div>
@@ -211,7 +223,8 @@ export const ImportData = () => {
 
             </div>   
             </div>
-            {isLoading && <Loading/>}
+            {isLoading && <Loading/> }
+            {isLoadingscd && <UploadLoading/>}
         </div>
         
         </Sidebar>

@@ -28,6 +28,7 @@ export const VendorManage = () => {
   //For Add New Data Model
   const [ViewPost, SetPostShow] = useState(false);
   const handlePostShow = () => {
+    setVendorData({})
     SetPostShow(true);
   };
   const hanldePostClose = () => {
@@ -291,7 +292,7 @@ export const VendorManage = () => {
     });
     
 }
-
+// CLEAR SEARCH
 const ref = useRef(null) ;
 const onClearForm = (e) => {
   e.preventDefault()
@@ -306,15 +307,7 @@ const onClearForm = (e) => {
       <div className="body">
           <div className="container">
           <div className="vendor-container-item" >
-            <Button
-              variant="primary"
-              onClick={() => {
-                handlePostShow();
-              }}
-            >
-               <FiPlus />
-              Add New Vendor
-            </Button>
+            
           
           
           <form>
@@ -337,6 +330,15 @@ const onClearForm = (e) => {
               </div>
             </div>
           </form>
+          <Button
+              variant="primary"
+              onClick={() => {
+                handlePostShow();
+              }}
+            >
+               <FiPlus />
+              Add New Vendor
+            </Button>
           </div>
         
         

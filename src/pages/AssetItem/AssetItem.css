@@ -21,6 +21,7 @@ main .asset-container{
 }
 
 .asset-container form{
+  border-radius: 2%;
   padding: 5%;
   width: 75vw;
   min-height: 80vh;
@@ -103,15 +104,6 @@ main .asset-container{
   filter: drop-shadow(0 0 1px #000);
 }
 
-.asset-container form .submit-btn{
-  width: 100%;
-  padding:12px;
-  font-size: 17px;
-  background: #27ae60;
-  color:#fff;
-  margin-top: 5px;
-  cursor: pointer;
-}
 
 .asset-container form .submit-btn:hover{
   background: #2ecc71;
@@ -146,8 +138,9 @@ main .asset-container{
   width: 120px;
   height: 50px;
   margin-right: 4vh;
-  font-size: 25px;
+  font-size: 24px;
   align-items: center;
+  font-family: "Poppins";
 }
 
 .asset-container form .row .col .button-cancel{

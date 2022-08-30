@@ -26,6 +26,8 @@ export const AssetCategory = () => {
   //Add New Data Model
   const [ViewPost, SetPostShow] = useState(false);
   const handlePostShow = () => {
+    console.log("ini asset category",assetCategory);
+    setAssetCategory({})
     SetPostShow(true);
   };
   const handlePostClose = () => {
@@ -40,6 +42,7 @@ export const AssetCategory = () => {
   };
 
   const handleChange = (e) => {
+
     const newData = { ...assetCategory };
     newData[e.target.name] = e.target.value;
     setAssetCategory(newData);
@@ -79,6 +82,7 @@ export const AssetCategory = () => {
   //CRUD
   //Add Data
   const handleSubmit = async (e) => {
+
     setLoading(true);
     e.preventDefault();
     try {
@@ -100,11 +104,11 @@ export const AssetCategory = () => {
     } catch (error) {
       const err = error.response.data.error.Detail
 
-      Swal.fire({
-        title: "Failed!",
-        text:`Your data failed to save becasue ${err}`,
-        icon: 'error',
-      })
+      // Swal.fire({
+      //   title: "Failed!",
+      //   text:`Your data failed to save becasue ${err}`,
+      //   icon: 'error',
+      // })
     } finally {
       setLoading(false);
     }
@@ -219,8 +223,7 @@ export const AssetCategory = () => {
     try {
       assetCategory.useful_life = Number(assetCategory.useful_life)
       const response = await assetCategoryService.updateAssetCategory(id, assetCategory);
-     
-      SetRowData(response);
+      setAssetCategory(response);
       setDoneAddform(true);
       if (response.status === "SUCCESS") {
         swal({
