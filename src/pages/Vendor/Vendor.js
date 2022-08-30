@@ -45,7 +45,6 @@ export const VendorManage = () => {
     const newData = { ...vendorData };
     newData[e.target.name] = e.target.value;
     setVendorData(newData);
-    console.log(newData);
   };
 
   //For Edit Model
@@ -55,7 +54,7 @@ export const VendorManage = () => {
   const handleEditShow = (index, item) => {
     setVendorData(item);
     SetRowData(item)
-    console.log("ini index", index);
+
     setId(index);
     setDelete(true);
     SetEditShow(true);
@@ -76,8 +75,6 @@ export const VendorManage = () => {
 
   const handleLocation = (e) => {
     const location = e.target.value;
-
-    console.log(location);
   };
 
   useEffect(() => {
@@ -95,7 +92,6 @@ export const VendorManage = () => {
       setVendorData(response.data);
       SetPostShow(false);
       setDoneAddform(true);
-      console.log(response);
       if (response.status === "SUCCESS") {
         Swal.fire({
           title: "Success!",
@@ -118,7 +114,6 @@ export const VendorManage = () => {
     setLoading(true);
     try {
       const response = await vendorService.getAllVendor();
-      console.log(response);
       setData(response.data);
     } catch (e) {
       console.log(e);
@@ -129,7 +124,6 @@ export const VendorManage = () => {
 
   //================ DELETE LOCATION ===========================
   const onDeleteVendor = async (name) => {
-    console.log(name);
     setLoading(true);
 
     Swal.fire({
@@ -144,7 +138,6 @@ export const VendorManage = () => {
       if (result.isConfirmed) {
         try {
           const response = vendorService.deleteVendor(name);
-          console.log(response);
           onGetAllVendor();
         } catch (e) {
           console.log(e);
@@ -172,9 +165,8 @@ export const VendorManage = () => {
     setLoading(true);
     try {
       const response = await vendorService.getVendorByNameLike(searchLocation);
-      console.log(response);
       setData(response.data);
-      console.log(response.data);
+
     } catch (e) {
       console.log(e);
     } finally {
@@ -184,10 +176,10 @@ export const VendorManage = () => {
   //=============== EDIT ROW DATA  ===============================
   const handleEdit = async (e,id) => {
     e.preventDefault()
-    console.log("ini id", id);
+
     try {
       const response = await vendorService.updateVendor(id, vendorData);
-      console.log(response);
+
       setVendorData(response);
       setDoneAddform(true);
       if (response.status === "SUCCESS") {

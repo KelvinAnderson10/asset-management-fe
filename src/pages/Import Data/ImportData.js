@@ -20,13 +20,11 @@ export const ImportData = () => {
   const handleSubmit = async () => {
     try {
       const response = await assetItemService.batchInsert(uploadBackendData)
-      console.log('ini respon submit',response);
-      Success('upload')
+ 
+      Success('uploaded')
     } catch (error) {
       if (error.response.data.error.Detail){
-        
         Failed(`Upload failed because ${error.response.data.error.Detail}`)
-
       } else{
         Failed(`Upload failed because column ${error.response.data.error.Field} is in wrong format`)
       }
@@ -65,7 +63,7 @@ export const ImportData = () => {
   }
 
   useEffect(() => {
-    console.log(excelData);
+  
     setDoneUploadExcel(true)
     setIsLoading(false)
   }, [excelData])
@@ -202,23 +200,15 @@ export const ImportData = () => {
                     </table>
                   </div>
                 </div>
-                  {/* <br></br>
-                  <br></br>
-                  <br></br>
-                  <br></br> */}
+
                   <div className='button-save'>
                   <button className='btn btn-primary' onClick={handleSubmit}>Save</button>
                   </div>
-                  {/* <button>Clear</button> */}
-                  {/* <br></br>
-                  <br></br>
-                  <br></br>
-                  <br></br>
-                  <br></br> */}
+
               </div>
             </div>
 
-            {/* tinggal didesign */}
+
             </div>   
             </div>
             {isLoading && <Loading/>}

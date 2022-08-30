@@ -3,7 +3,7 @@ import React from 'react'
 export const assetItemService = ({doGet,doPost,doPut,doDelete}) => {
     const getAllAsset = async () => {
         try {
-            return await doGet({url: '/asset-category'})
+            return await doGet({url: '/api/asset-category'})
         } catch (e) {
             throw e;
         }
@@ -12,7 +12,7 @@ export const assetItemService = ({doGet,doPost,doPut,doDelete}) => {
     const createAsset = async (newAsset) => {
         try {
             return await doPost({
-                url: '/asset', data: newAsset
+                url: '/api/asset', data: newAsset
                 
             })
         } catch (e) {
@@ -23,7 +23,7 @@ export const assetItemService = ({doGet,doPost,doPut,doDelete}) => {
     const updateAsset = async (id,newLocation) => {
         try {
             return await doPut({
-                url: `/asset/${id}`, data: newLocation
+                url: `/api/asset/${id}`, data: newLocation
                 
             })
         } catch (e) {
@@ -33,7 +33,7 @@ export const assetItemService = ({doGet,doPost,doPut,doDelete}) => {
 
     const deleteAsset = async (name) => {
         try {
-            return await doDelete({url: `/asset/${name}`
+            return await doDelete({url: `/api/asset/${name}`
          })
         } catch (e) {
             throw e;
@@ -42,7 +42,7 @@ export const assetItemService = ({doGet,doPost,doPut,doDelete}) => {
 
     const getAssetByName = async (name) => {
         try {
-            return await doGet({url: `/asset/${name}`})
+            return await doGet({url: `/api/asset/${name}`})
         } catch (e) {
             throw e;
         }
@@ -51,7 +51,7 @@ export const assetItemService = ({doGet,doPost,doPut,doDelete}) => {
     const batchInsert = async (batchData) => {
         try {
             return await doPost({
-                url: `/asset/batch`, data: batchData})
+                url: `/api/asset/batch`, data: batchData})
         } catch (e) {
             throw e;            
         }

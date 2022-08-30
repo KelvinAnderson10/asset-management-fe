@@ -11,7 +11,6 @@ export const ProtectedPage = () => {
         cArr.forEach(val => {
             if (val.indexOf(name) === 0) res = val.substring(name.length);
         })
-        console.log("ini get cookie",res);
         return (res)
     }
     return getCookie("OTP") ? <Outlet></Outlet> : <Navigate to='/'></Navigate>

@@ -14,9 +14,13 @@ export const AuthProvider = ({children}) => {
         document.cookie = cName + "=" + cValue + "; " + expires + "; path=/";
         setUserOTP(cName, cValue, expMinutes)
         navigate('/home', {replace: true})
-      }
+    }
+
+    const eraseCookie =(name) =>{
+       document.cookie = name + '=; Max-Age=0'
+    } 
     return (
-        <AuthContext.Provider value={{userOTP,setCookie}}>
+        <AuthContext.Provider value={{userOTP,setCookie,eraseCookie}}>
             {children}
         </AuthContext.Provider>
     )

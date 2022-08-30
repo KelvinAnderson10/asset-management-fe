@@ -12,7 +12,7 @@ export const userService = ({ doGet,doPost }) => {
   const createUser = async (newUser) => {
     try {
         return await doPost({
-            url: '/register', data: newUser
+            url: '/api/register', data: newUser
             
         })
     } catch (e) {
@@ -21,7 +21,7 @@ export const userService = ({ doGet,doPost }) => {
 }
 const getUserByName = async (name) => {
   try {
-    return await doGet({ url: `/login/${name}` });
+    return await doGet({ url: `/api/user/${name}` });
   } catch (e) {
     throw e;
   }
@@ -29,7 +29,7 @@ const getUserByName = async (name) => {
 
 const getAllUser = async () => {
   try {
-    return await doGet({ url: `/user` });
+    return await doGet({ url: `/api/user` });
   } catch (e) {
     throw e;
   }

@@ -3,7 +3,7 @@ export const assetCategoryService = ({doPost, doGet, doDelete, doPut}) => {
     const createAssetCategory = async (newData) => {
         try {
             return await doPost({
-                url: '/asset-category', data: newData
+                url: '/api/asset-category', data: newData
             })
         } catch (e) {
             throw e
@@ -13,7 +13,7 @@ export const assetCategoryService = ({doPost, doGet, doDelete, doPut}) => {
     const getAllAssetCategory = async () => {
         try {
             return await doGet({
-                url: '/asset-category'
+                url: '/api/asset-category'
             })
         } catch (e) {
             throw e
@@ -23,7 +23,7 @@ export const assetCategoryService = ({doPost, doGet, doDelete, doPut}) => {
     const deleteAssetCategory = async (name) => {
         try {
             return await doDelete({
-                url:`/asset-category/${name}`
+                url:`/api/asset-category/${name}`
             })
         } catch (e) {
             throw e
@@ -33,7 +33,7 @@ export const assetCategoryService = ({doPost, doGet, doDelete, doPut}) => {
     const getDetailAssetCategory = async (name) => {
         try {
             return await doGet({
-                url: `/asset-category/subproduct/${name}`
+                url: `/api/asset-category/subproduct/${name}`
             })
         } catch (e) {
             throw e
@@ -43,7 +43,7 @@ export const assetCategoryService = ({doPost, doGet, doDelete, doPut}) => {
     const updateAssetCategory = async (name, newData) => {
         try {
             return await doPut({
-                url: `/asset-category/${name}`, data:newData
+                url: `/api/asset-category/${name}`, data:newData
             })
         } catch (e) {
             throw e
@@ -53,7 +53,7 @@ export const assetCategoryService = ({doPost, doGet, doDelete, doPut}) => {
     const getDataBySubproductLike = async (name) => {
         try {
             return await doGet({
-                url: `/asset-category/subproduct/filter?name=${name}`,
+                url: `/api/asset-category/subproduct/filter?name=${name}`,
             })
         } catch (e) {
             throw e
@@ -63,7 +63,7 @@ export const assetCategoryService = ({doPost, doGet, doDelete, doPut}) => {
     const getDataByProductLike = async (name) => {
         try {
             return await doGet({
-                url: `/asset-category/product/filter?name=${name}`
+                url: `/api/asset-category/product/filter?name=${name}`
             })
         } catch (e) {
             throw e
@@ -73,7 +73,7 @@ export const assetCategoryService = ({doPost, doGet, doDelete, doPut}) => {
     const getDataByAssetCategoryLike = async (name) => {
         try {
             return await doGet({
-                url: `/asset-category/filter?name=${name}`
+                url: `/api/asset-category/filter?name=${name}`
             })
         } catch (e) {
             throw e

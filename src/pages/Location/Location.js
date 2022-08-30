@@ -46,7 +46,7 @@ export const Location = () => {
 
   const handleEditShow = (index, item) => {
     SetRowData(item);
-    console.log("ini index", index);
+    
     setId(index);
     setDelete(true);
     SetEditShow(true);
@@ -68,7 +68,7 @@ export const Location = () => {
   const handleLocation = (e) => {
     const location = e.target.value;
     setLocation(location);
-    console.log(location);
+   
   };
 
   useEffect(() => {
@@ -85,7 +85,7 @@ export const Location = () => {
       const response = await locationService.createLocation({
         location,
       });
-      console.log(response);
+     
       setLocation(response);
       setDoneAddform(true);
 
@@ -111,7 +111,7 @@ export const Location = () => {
     setLoading(true);
     try {
       const response = await locationService.getAllLocation();
-      console.log(response);
+   
       setData(response.data);
       SetPostShow(false);
     } catch (e) {
@@ -135,7 +135,7 @@ export const Location = () => {
       if (result.isConfirmed) {
         try {
           const response = locationService.deleteLocation(id);
-          console.log(response);
+          
           onGetAllLocation();
         } catch (e) {
           console.log(e);
@@ -146,18 +146,6 @@ export const Location = () => {
       }
     });
 
-    // setLoading(true);
-    // if (window.confirm("Are you sure Want to Delete?")) {
-    //   try {
-    //     const response = await locationService.deleteLocation(id);
-    //     console.log(response);
-    //     onGetAllLocation();
-    //   } catch (e) {
-    //     console.log(e);
-    //   } finally {
-    //     setLoading(false);
-    //   }
-    // }
   };
 
   //================== SEARCH BY NAME =========================
@@ -171,9 +159,8 @@ export const Location = () => {
     setLoading(true);
     try {
       const response = await locationService.getLocationByName(searchLocation);
-      console.log(response);
       setData(response.data);
-      console.log(response.data);
+     
     } catch (e) {
       console.log(e);
     } finally {
@@ -189,12 +176,12 @@ export const Location = () => {
 
   //=============== EDIT ROW DATA  ===============================
   const handleEdit = async (id) => {
-    console.log("ini id", id);
+
     try {
       const response = await locationService.updateLocation(id, {
         location,
       });
-      console.log(response);
+     
       setLocation(response);
       setDoneAddform(true);
       if (response.status === "SUCCESS") {
@@ -296,6 +283,22 @@ export const Location = () => {
       setOrder("ASC");
     }
   };
+  const sortingNum = (col) => {
+    if (order === "ASC") {
+        const sorted = [...data].sort((a, b) =>
+          a[col] > b[col] ? 1 : -1
+        );
+        setData(sorted);
+        setOrder("DSC");
+      }
+      if (order === "DSC") {
+        const sorted = [...data].sort((a, b) =>
+          a[col] < b[col] ? 1 : -1
+        );
+        setData(sorted);
+        setOrder("ASC");
+      }
+  }
 
   return (
     <>
@@ -354,6 +357,10 @@ export const Location = () => {
                         {" "}
                         <FaSort /> Location
                       </th>
+                      <th onClick={() => sortingNum("ID")}>
+                        {" "}
+                        <FaSort /> Location ID
+                      </th>
                       <th>Actions</th>
                     </tr>
                   </thead>
@@ -367,6 +374,7 @@ export const Location = () => {
                         <tr key={item.ID}>
                           <th>{index + 1}</th>
                           <th>{item.location}</th>
+                          <th>{item.ID}</th>
                           <td>
                             <a
                               onClick={() => {

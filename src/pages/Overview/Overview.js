@@ -30,7 +30,7 @@ export const Overview = () => {
     const newData = { ...asset };
     newData[e.target.name] = e.target.value;
     setAsset(newData);
-    console.log(newData);
+
   };
 
   const handleViewShow = () => {
@@ -55,7 +55,7 @@ export const Overview = () => {
     try {
       const response = await overviewService.getAllAsset();
       setDatas(response.data);
-      console.log(response);
+
     } catch (e) {
       console.log(e);
     } finally {
@@ -178,9 +178,8 @@ export const Overview = () => {
   const [date, setNewDate] = useState();
 
   const handleEditAssetById = async (name) => {
-    console.log("ini respons edit", name);
-    setLoading(true);
-    
+   
+    // setLoading(true);
     try {
       const response = await overviewService.getAssetByAssetName(name);
       // setRowData(response.data)
@@ -196,17 +195,12 @@ export const Overview = () => {
       datesplit = date.split("+") 
       res = datesplit[0]
       response.data['BAST Output'] = res
-
-      console.log('response img',response.data['Asset Image'])
-      console.log("ini tanggal output",date);
       setAssetEdit(response.data);
-      console.log("Ini set image base 64", response.data["Asset Image"]);
       setImageBase64(response.data["Asset Image"])
-      console.log("KALO INI IMAGEBASE64", imageBase64);
     } catch (e) {
       console.log(e);
     } finally {
-      setLoading(false);
+      // setLoading(false);
     }
   };
 
@@ -215,8 +209,8 @@ export const Overview = () => {
 
   useEffect(() => {
     setImageBase64(assetEdit["Asset Image"])
-    console.log("ini di use effect" , assetEdit["Asset Image"]);
-  }, [assetEdit])
+  
+  }, [assetEdit['Asset Image']])
 
   const handleEditClose = () => {
     setEditShow(false);
@@ -226,8 +220,7 @@ export const Overview = () => {
     setEditShow(true);
     // setAssetEdit(data)
     handleEditAssetById(id);
-    console.log("Ini Photo : ",assetEdit["Asset Image"]);
-    console.log("Ini Hook",assetEdit);
+
   };
 
 
@@ -237,6 +230,7 @@ export const Overview = () => {
     let reader = new FileReader();
 
   const imageChange = (e) => {
+    
     if (e.target.files && e.target.files.length > 0) {
       setSelectedImage(e.target.files[0]);
       reader.readAsDataURL(e.target.files[0]);
@@ -250,7 +244,7 @@ export const Overview = () => {
 
   const onSubmitEditAsset = async (e) => {
     e.preventDefault();
-    console.log("ini submit response", assetEdit);
+    setLoading(true)
     try {
       assetEdit["Tahun"] = Number(assetEdit["Tahun"]);
       assetEdit["Harga Perolehan"] = Number(assetEdit["Harga Perolehan"]);
@@ -270,11 +264,8 @@ export const Overview = () => {
         assetEdit["Nomor Asset"],
         assetEdit
       );
-      console.log(response);
+   
       setAssetEdit(response);
-
-      console.log('ini image upload',imageBase64)
-
       if (response.status === "SUCCESS") {
         swal({
           title: "Success!",
@@ -287,6 +278,8 @@ export const Overview = () => {
       onGetAllAsset();
     } catch (e) {
       console.log(e);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -302,7 +295,6 @@ export const Overview = () => {
   const onGetAllSubProduct = async () => {
     try {
       const response = await assetCategoryService.getAllAssetCategory();
-      console.log(response);
       setSubProductName(response.data);
     } catch (e) {
       console.log(e);
@@ -316,7 +308,6 @@ export const Overview = () => {
   const onGetAllVendor = async () => {
     try {
       const response = await vendorService.getAllVendor();
-      console.log(response);
       setVendor(response.data);
     } catch (e) {
       console.log(e);
@@ -329,7 +320,6 @@ export const Overview = () => {
   const onGetAllLocation = async () => {
     try {
       const response = await locationService.getAllLocation();
-      console.log(response);
       setLocations(response.data);
     } catch (e) {
       console.log(e);
@@ -342,7 +332,6 @@ export const Overview = () => {
   const onGetUser = async () => {
     try {
       const response = await userService.getUserByEmail();
-      console.log("ini response email", response.data);
       setUser(response.data);
     } catch (error) {
     } finally {
@@ -354,100 +343,11 @@ export const Overview = () => {
     const newData = { ...assetEdit };
     newData[e.target.name] = e.target.value;
     setAssetEdit(newData);
-    console.log(newData);
   };
 
   const handleCancel = (e) => {
     e.target.reset();
   };
-
-
-  // const [searchVendor, setSearchVendor] = useState('')
-  // const onChangeSearchVendor = (e) => {
-  //   const searchVendor = e.target.value;
-  //   setSearchVendor(searchVendor);
-  // };
-
-  // const onSearchVendor= async () => {
-  //   // e.preventDefault();
-  //   setLoading(true);
-  //   try {
-  //     if (searchVendor.length !== 0) {
-  //       const response = await overviewService.getAllAsset();
-  //       console.log(response);
-  //       setDatas(response.data);
-  //       console.log(response.data);
-  //     } else {
-  //       const response = await overviewService.getAssetByVendor(searchVendor);
-  //       console.log(response);
-  //       setDatas(response.data);
-  //       console.log(response.data); //unde
-  //     }
-      
-  //   } catch (e) {
-  //     console.log(e);
-  //   } finally {
-  //     setLoading(false)
-  //   }
-  // };
-
-
-  // const [searchLocation, setSearchLocation] = useState('')
-  // const onChangeSearchLocation = (e) => {
-  //   const searchLocation = e.target.value;
-  //   setSearchLocation(searchLocation);
-  // };
-
-  // const onSearchLocation= async () => {
-  //   // e.preventDefault();
-  //   setLoading(true);
-  //   try {
-  //     if (searchLocation.length === 0) {
-  //       const response = await overviewService.getAllAsset();
-  //       console.log(response);
-  //       setDatas(response.data);
-  //       console.log(response.data);
-  //     } else {
-  //       const response = await overviewService.getAssetByLocation(searchLocation);
-  //       console.log(response);
-  //       setDatas(response.data);
-  //       console.log(response.data);
-  //     }
-      
-  //   } catch (e) {
-  //     console.log(e);
-  //   } finally {
-  //     setLoading(false)
-  //   }
-  // };
-
-  // const [searchCondition, setSearchCondition] = useState('')
-  // const onChangeSearchCondition = (e) => {
-  //   const searchCondition = e.target.value;
-  //   setSearchCondition(searchCondition);
-  // };
-
-  // const onSearchCondition= async () => {
-  //   // e.preventDefault();
-  //   setLoading(true);
-  //   try {
-  //     if (searchCondition.length === 0) {
-  //       const response = await overviewService.getAllAsset();
-  //       console.log(response);
-  //       setDatas(response.data);
-  //       console.log(response.data);
-  //     } else {
-  //       const response = await overviewService.getAssetByCondition(searchCondition);
-  //       console.log(response);
-  //       setDatas(response.data);
-  //       console.log(response.data);
-  //     }
-  //   } catch (e) {
-  //     console.log(e);
-  //   } finally {
-  //     setLoading(false)
-  //   }
-  // };
 
 
   //Search
@@ -467,53 +367,52 @@ export const Overview = () => {
   }
 
   const onFilter = async () => {
-    console.log(filter)
-    console.log(dropdownName)
     if (dropdownName === 'Vendor') {
       try {
-        if (filter.length === 0) {
-          const response = await overviewService.getAllAsset();
-          console.log(response);
-          setDatas(response.data);
-          console.log(response.data);
-        } else {
-          const response = await overviewService.getAssetByVendor(filter);
-          console.log(response);
-          setDatas(response.data);
-          console.log(response.data); //unde
-        }   
+        const response = await overviewService.getAssetByVendor(filter);
+        setDatas(response.data); 
       } catch (e) {
         console.log(e);
       }
     } else if (dropdownName === 'Location') {
       try {
-        if (filter.length === 0) {
-          const response = await overviewService.getAllAsset();
-          console.log(response);
-          setDatas(response.data);
-          console.log(response.data);
-        } else {
-          const response = await overviewService.getAssetByLocation(filter);
-          console.log(response);
-          setDatas(response.data);
-          console.log(response.data); //unde
-        }   
+        const response = await overviewService.getAssetByLocation(filter);
+        setDatas(response.data);  
+      } catch (e) {
+        console.log(e);
+      }
+    } else if (dropdownName === 'Condition'){
+      try {
+        const response = await overviewService.getAssetByCondition(filter);
+        setDatas(response.data); 
+      } catch (e) {
+        console.log(e);
+      }
+    } else if (dropdownName === 'Item Name') {
+      try {
+        const response = await overviewService.getAssetByItemName(filter);
+        setDatas(response.data);
+      } catch (e) {
+        console.log(e);
+      }
+    } else if (dropdownName === 'Subproduct') {
+      try {
+        const response = await overviewService.getAssetBySubproduct(filter);
+        setDatas(response.data);  
+      } catch (e) {
+        console.log(e);
+      }
+    } else if (dropdownName === 'Product') {
+      try {
+        const response = await overviewService.getAssetByProduct(filter);
+        setDatas(response.data); 
       } catch (e) {
         console.log(e);
       }
     } else {
       try {
-        if (filter.length === 0) {
-          const response = await overviewService.getAllAsset();
-          console.log(response);
-          setDatas(response.data);
-          console.log(response.data);
-        } else {
-          const response = await overviewService.getAssetByCondition(filter);
-          console.log(response);
-          setDatas(response.data);
-          console.log(response.data); //unde
-        }   
+        const response = await overviewService.getAssetByCategory(filter);
+        setDatas(response.data);
       } catch (e) {
         console.log(e);
       }
@@ -531,18 +430,24 @@ export const Overview = () => {
   return (
     <>
       <Sidebar>
-      <div className="overview-container">
-        <div className="overview-card">
-          <div className="title-overview">
-            <a>ASSET OVERVIEW</a>
-          </div>
-          <div className="search-container">
-              <div className="input-group mb-3 dropup">
+        <div className="body">
+          <div className="overview-container">
+            <div className="overview-card">
+              <div className="title-overview">
+                <p>List of Assets</p>
+              </div>
+              <div className="table-container">
+                <div className="search-overview">
+                <div className="input-group mb-3">
                 <button className="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Search by {dropdownName}</button>
                 <ul className="dropdown-menu" >
                   <li><a className="dropdown-item" onClick={() => {onChangeDropdown('Vendor')}}>Vendor</a></li>
                   <li><a className="dropdown-item" onClick={() => {onChangeDropdown('Location')}}>Location</a></li>
                   <li><a className="dropdown-item" onClick={() => {onChangeDropdown('Condition')}}>Condition</a></li>
+                  <li><a className="dropdown-item" onClick={() => {onChangeDropdown('Item Name')}}>Item Name</a></li>
+                  <li><a className="dropdown-item" onClick={() => {onChangeDropdown('Subproduct')}}>Subproduct</a></li>
+                  <li><a className="dropdown-item" onClick={() => {onChangeDropdown('Product')}}>Product</a></li>
+                  <li><a className="dropdown-item" onClick={() => {onChangeDropdown('Category')}}>Category</a></li>
                 </ul>
                 <input ref={ref} disabled={fill} type="text" className="form-control" aria-label="Text input with dropdown button" onChange={onChangeFilter}/>
                 <div className="input-group-append">
@@ -554,295 +459,295 @@ export const Overview = () => {
                         </button>
                 </div>
               </div>
-          </div>
-
-          <div className="overview-box">
-            <table className="table table-bordered table-striped table-responsive table-hover">
-              <thead className="table-header">
-                <tr>
-                  <th>No</th>
-                  <th style={{ minWidth: "150px" }}>Action</th>
-                  <th 
-                    onClick={() => sorting("Tanggal Output")} 
-                    style={{ minWidth: "200px" }}>
-                    Purchase Date <FaSort style={{ marginLeft: "10%" }} />
-                  </th>
-                  <th
-                    onClick={() => sortingNum("Tahun")}
-                    style={{ minWidth: "200px" }}
-                  >
-                    Year <FaSort style={{ marginLeft: "10%" }} />
-                  </th>
-                  <th
-                    onClick={() => sorting("No. PO / Dokumenen Pendukung")}
-                    style={{ minWidth: "200px" }}
-                  >
-                    PO Number <FaSort style={{ marginLeft: "10%" }} />
-                  </th>
-                  <th
-                    onClick={() => sorting("Vendor")}
-                    style={{ minWidth: "200px" }}
-                  >
-                    Vendor Name <FaSort style={{ marginLeft: "10%" }} />
-                  </th>
-                  <th
-                    onClick={() => sorting("Nama Barang")}
-                    style={{ minWidth: "300px" }}
-                  >
-                    Item Name <FaSort style={{ marginLeft: "10%" }} />
-                  </th>
-                  <th
-                    onClick={() => sortingNum("Harga Perolehan")}
-                    style={{ minWidth: "200px" }}
-                  >
-                    Acquisition Cost{" "}
-                    <FaSort style={{ marginLeft: "10%" }} />
-                  </th>
-                  <th
-                    onClick={() => sortingNum("PPN")}
-                    style={{ minWidth: "200px" }}
-                  >
-                    PPN <FaSort style={{ marginLeft: "10%" }} />
-                  </th>
-                  <th
-                    onClick={() => sortingNum("Biaya Lain-Lain")}
-                    style={{ minWidth: "200px" }}
-                  >
-                    Additional Cost{" "}
-                    <FaSort style={{ marginLeft: "10%" }} />
-                  </th>
-                  <th
-                    onClick={() => sortingNum("Total Harga Perolehan")}
-                    style={{ minWidth: "250px" }}
-                  >
-                    Total Acquisition Cost{" "}
-                    <FaSort style={{ marginLeft: "10%" }} />
-                  </th>
-                  <th
-                    onClick={() => sorting("Jenis Produk")}
-                    style={{ minWidth: "230px" }}
-                  >
-                    Asset Category Subproduct Name{" "}
-                    <FaSort style={{ marginLeft: "10%" }} />
-                  </th>
-                  <th
-                    onClick={() => sorting("Kategori Jenis Produk")}
-                    style={{ minWidth: "200px" }}
-                  >
-                    Product Name <FaSort style={{ marginLeft: "10%" }} />
-                  </th>
-                  <th
-                    onClick={() => sorting("Kategori Aset Tetap")}
-                    style={{ minWidth: "200px" }}
-                  >
-                    Asset Category{" "}
-                    <FaSort style={{ marginLeft: "10%" }} />
-                  </th>
-                  <th
-                    onClick={() => sorting("BAST Output")}
-                    style={{ minWidth: "200px" }}
-                  >
-                    BAST <FaSort style={{ marginLeft: "10%" }} />
-                  </th>
-                  <th
-                    onClick={() => sorting("Kondisi")}
-                    style={{ minWidth: "200px" }}
-                  >
-                    Condition <FaSort style={{ marginLeft: "10%" }} />
-                  </th>
-                  <th
-                    onClick={() => sorting("Insurance")}
-                    style={{ minWidth: "200px" }}
-                  >
-                    Insurance <FaSort style={{ marginLeft: "10%" }} />
-                  </th>
-                  <th
-                    onClick={() => sorting("Lokasi")}
-                    style={{ minWidth: "200px" }}
-                  >
-                    Location <FaSort style={{ marginLeft: "10%" }} />
-                  </th>
-                  <th
-                    onClick={() => sorting("User")}
-                    style={{ minWidth: "200px" }}
-                  >
-                    User <FaSort style={{ marginLeft: "10%" }} />
-                  </th>
-                  <th
-                    onClick={() => sorting("Jabatan")}
-                    style={{ minWidth: "200px" }}
-                  >
-                    Position <FaSort style={{ marginLeft: "10%" }} />
-                  </th>
-                  <th
-                    onClick={() => sorting("Initisal")}
-                    style={{ minWidth: "200px" }}
-                  >
-                    Initial <FaSort style={{ marginLeft: "10%" }} />
-                  </th>
-                  <th
-                    onClick={() => sortingNum("Kode Wilayah")}
-                    style={{ minWidth: "200px" }}
-                  >
-                    Location ID <FaSort style={{ marginLeft: "10%" }} />
-                  </th>
-                  <th
-                    onClick={() => sorting("Kode Asset")}
-                    style={{ minWidth: "200px" }}
-                  >
-                    Product Code <FaSort style={{ marginLeft: "10%" }} />
-                  </th>
-                  <th
-                    onClick={() => sortingNum("Tahun Pembelian")}
-                    style={{ minWidth: "200px" }}
-                  >
-                    Purchase Year{" "}
-                    <FaSort style={{ marginLeft: "10%" }} />
-                  </th>
-                  <th
-                    onClick={() => sortingNum("Kode Urut barang")}
-                    style={{ minWidth: "200px" }}
-                  >
-                    Item Order Code{" "}
-                    <FaSort style={{ marginLeft: "10%" }} />
-                  </th>
-                  <th
-                    onClick={() => sorting("Nomor Asset")}
-                    style={{ minWidth: "200px" }}
-                  >
-                    Asset Number <FaSort style={{ marginLeft: "10%" }} />
-                  </th>
-                  <th
-                    onClick={() => sortingNum("Masa Manfaat (Bulan)")}
-                    style={{ minWidth: "200px" }}
-                  >
-                    Useful Life <FaSort style={{ marginLeft: "10%" }} />
-                  </th>
-                  <th
-                    onClick={() => sortingNum("Penyusutan Perbulan")}
-                    style={{ minWidth: "200px" }}
-                  >
-                    Monthly Depreciation{" "}
-                    <FaSort style={{ marginLeft: "10%" }} />
-                  </th>
-                  <th
-                    onClick={() => sortingNum("Total Bulan Penyusutan")}
-                    style={{ minWidth: "200px" }}
-                  >
-                    Depreciation Month{" "}
-                    <FaSort style={{ marginLeft: "10%" }} />
-                  </th>
-                  <th
-                    onClick={() => sortingNum("Total Penyusutan")}
-                    style={{ minWidth: "200px" }}
-                  >
-                    Total Depreciation{" "}
-                    <FaSort style={{ marginLeft: "10%" }} />
-                  </th>
-                  <th
-                    onClick={() => sortingNum("Nilai Asset saat ini")}
-                    style={{ minWidth: "200px" }}
-                  >
-                    Current Asset Value{" "}
-                    <FaSort style={{ marginLeft: "10%" }} />
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {datas.length === 0 ? (
-                  <tr> 
-                    <th colspan='31'>Data is not found</th>
-                  </tr>
-                ) : (
-                  currentItems.map((data, index) => (
-                    <tr key={data["Nomor Asset"]}>
-                      <th>{index + 1}</th>
-                      <th style={{fontSize:'30px'}}>
-                        <a
-                          onClick={() => {
-                            handleViewShow(setRowData(data));
-                          }}
-                          className="view"
-                          data-toggle="modal"
-                          style={{ cursor: "pointer", width: '50%'}}
-                        >
-                          <i
-                            className="material-icons"
-                            data-toggle="tooltip"
-                            title="View"
-                            style={{fontSize: '25px'}} 
-                          >
-                            &#xe8f4;
-                          </i>
-                        </a>
-                        <a
-                          target="_blank"
-                          href={`http://api.qrserver.com/v1/create-qr-code/?data=Asset Number: ${data["Nomor Asset"]}%0A Purchase Date: ${data['Tanggal Output']}%0A Asset Name: ${data["Nama Barang"]}%0A Asset Category: ${data["Kategori Jenis Produk"]}%0A Product Name: ${data["Jenis Produk"]}%0A Location: ${data["Lokasi"]}%0A PO Number: ${data["No. PO / Dokumenen Pendukung"]}%0A Lifetime: ${data['Masa Manfaat (Bulan)']}%0A Value: ${data['Nilai Asset saat ini']}%0A Vendor: ${data['Vendor']}&size=${size}x${size}&bgcolor=${bgColor}`}
-                          download="QRCode"
-                        >
-                          <i
-                            className="material-icons"
-                            data-toggle="tooltip"
-                            title="View"
-                            style={{fontSize: '25px'}} 
-                          >
-                            &#xf090;
-                          </i>
-                        </a>
-                        <a
-                          onClick={() => {
-                            handleEditShow(data["Nomor Asset"]);
-                          }}
-                          className="edit"
-                          data-toggle="modal"
-                          style={{ cursor: "pointer" }}
-                        >
-                          <i
-                            className="material-icons"
-                            data-toggle="tooltip"
-                            title="Edit"
-                            style={{fontSize: '25px'}} 
-                          >
-                            &#xe3c9;
-                          </i>
-                        </a>
+              </div>
+              <div className="table-box">
+                  <table className="table table-bordered table-striped table-responsive table-hover">
+                  <thead className="table-header">
+                    <tr>
+                      <th>No</th>
+                      <th style={{ minWidth: "150px" }}>Action</th>
+                      <th 
+                        onClick={() => sorting("Tanggal Output")} 
+                        style={{ minWidth: "200px" }}>
+                        Purchase Date <FaSort style={{ marginLeft: "10%" }} />
                       </th>
-                      <td>{data["Tanggal Output"]}</td>
-                      <td>{data["Tahun"]}</td>
-                      <td>{data["No. PO / Dokumenen Pendukung"]}</td>
-                      <td>{data["Vendor"]}</td>
-                      <td>{data["Nama Barang"]}</td>
-                      <td>{data["Harga Perolehan"]}</td>
-                      <td>{data["PPN"]}</td>
-                      <td>{data["Biaya Lain-Lain"]}</td>
-                      <td>{data["Total Harga Perolehan"]}</td>
-                      <td>{data["Jenis Produk"]}</td>
-                      <td>{data["Kategori Jenis Produk"]}</td>
-                      <td>{data["Kategori Aset Tetap"]}</td>
-                      <td>{data["BAST Output"]}</td>
-                      <td>{data["Kondisi"]}</td>
-                      <td>{data["Insurance"]}</td>
-                      <td>{data["Lokasi"]}</td>
-                      <td>{data["User"]}</td>
-                      <td>{data["Jabatan"]}</td>
-                      <td>{data["Initisal"]}</td>
-                      <td>{data["Kode Wilayah"]}</td>
-                      <td>{data["Kode Asset"]}</td>
-                      <td>{data["Tahun Pembelian"]}</td>
-                      <td>{data["Kode Urut barang"]}</td>
-                      <td>{data["Nomor Asset"]}</td>
-                      <td>{data["Masa Manfaat (Bulan)"]}</td>
-                      <td>{data["Penyusutan Perbulan"]}</td>
-                      <td>{data["Total Bulan Penyusutan"]}</td>
-                      <td>{data["Total Penyusutan"]}</td>
-                      <td>{data["Nilai Asset saat ini"]}</td>
+                      <th
+                        onClick={() => sortingNum("Tahun")}
+                        style={{ minWidth: "200px" }}
+                      >
+                        Year <FaSort style={{ marginLeft: "10%" }} />
+                      </th>
+                      <th
+                        onClick={() => sorting("No. PO / Dokumenen Pendukung")}
+                        style={{ minWidth: "200px" }}
+                      >
+                        PO Number <FaSort style={{ marginLeft: "10%" }} />
+                      </th>
+                      <th
+                        onClick={() => sorting("Vendor")}
+                        style={{ minWidth: "200px" }}
+                      >
+                        Vendor Name <FaSort style={{ marginLeft: "10%" }} />
+                      </th>
+                      <th
+                        onClick={() => sorting("Nama Barang")}
+                        style={{ minWidth: "300px" }}
+                      >
+                        Item Name <FaSort style={{ marginLeft: "10%" }} />
+                      </th>
+                      <th
+                        onClick={() => sortingNum("Harga Perolehan")}
+                        style={{ minWidth: "230px" }}
+                      >
+                        Acquisition Cost{" "}
+                        <FaSort style={{ marginLeft: "10%" }} />
+                      </th>
+                      <th
+                        onClick={() => sortingNum("PPN")}
+                        style={{ minWidth: "200px" }}
+                      >
+                        PPN <FaSort style={{ marginLeft: "10%" }} />
+                      </th>
+                      <th
+                        onClick={() => sortingNum("Biaya Lain-Lain")}
+                        style={{ minWidth: "200px" }}
+                      >
+                        Additional Cost{" "}
+                        <FaSort style={{ marginLeft: "10%" }} />
+                      </th>
+                      <th
+                        onClick={() => sortingNum("Total Harga Perolehan")}
+                        style={{ minWidth: "270px" }}
+                      >
+                        Total Acquisition Cost{" "}
+                        <FaSort style={{ marginLeft: "10%" }} />
+                      </th>
+                      <th
+                        onClick={() => sorting("Jenis Produk")}
+                        style={{ minWidth: "220px" }}
+                      >
+                        Subproduct Name{" "}
+                        <FaSort style={{ marginLeft: "10%" }} />
+                      </th>
+                      <th
+                        onClick={() => sorting("Kategori Jenis Produk")}
+                        style={{ minWidth: "200px" }}
+                      >
+                        Product Name <FaSort style={{ marginLeft: "10%" }} />
+                      </th>
+                      <th
+                        onClick={() => sorting("Kategori Aset Tetap")}
+                        style={{ minWidth: "200px" }}
+                      >
+                        Asset Category{" "}
+                        <FaSort style={{ marginLeft: "10%" }} />
+                      </th>
+                      <th
+                        onClick={() => sorting("BAST Output")}
+                        style={{ minWidth: "200px" }}
+                      >
+                        BAST <FaSort style={{ marginLeft: "10%" }} />
+                      </th>
+                      <th
+                        onClick={() => sorting("Kondisi")}
+                        style={{ minWidth: "200px" }}
+                      >
+                        Condition <FaSort style={{ marginLeft: "10%" }} />
+                      </th>
+                      <th
+                        onClick={() => sorting("Insurance")}
+                        style={{ minWidth: "200px" }}
+                      >
+                        Insurance <FaSort style={{ marginLeft: "10%" }} />
+                      </th>
+                      <th
+                        onClick={() => sorting("Lokasi")}
+                        style={{ minWidth: "200px" }}
+                      >
+                        Location <FaSort style={{ marginLeft: "10%" }} />
+                      </th>
+                      <th
+                        onClick={() => sorting("User")}
+                        style={{ minWidth: "200px" }}
+                      >
+                        User <FaSort style={{ marginLeft: "10%" }} />
+                      </th>
+                      <th
+                        onClick={() => sorting("Jabatan")}
+                        style={{ minWidth: "200px" }}
+                      >
+                        Position <FaSort style={{ marginLeft: "10%" }} />
+                      </th>
+                      <th
+                        onClick={() => sorting("Initisal")}
+                        style={{ minWidth: "200px" }}
+                      >
+                        Initial <FaSort style={{ marginLeft: "10%" }} />
+                      </th>
+                      <th
+                        onClick={() => sortingNum("Kode Wilayah")}
+                        style={{ minWidth: "200px" }}
+                      >
+                        Location ID <FaSort style={{ marginLeft: "10%" }} />
+                      </th>
+                      <th
+                        onClick={() => sorting("Kode Asset")}
+                        style={{ minWidth: "200px" }}
+                      >
+                        Product Code <FaSort style={{ marginLeft: "10%" }} />
+                      </th>
+                      <th
+                        onClick={() => sortingNum("Tahun Pembelian")}
+                        style={{ minWidth: "200px" }}
+                      >
+                        Purchase Year{" "}
+                        <FaSort style={{ marginLeft: "10%" }} />
+                      </th>
+                      <th
+                        onClick={() => sortingNum("Kode Urut barang")}
+                        style={{ minWidth: "220px" }}
+                      >
+                        Item Order Code{" "}
+                        <FaSort style={{ marginLeft: "10%" }} />
+                      </th>
+                      <th
+                        onClick={() => sorting("Nomor Asset")}
+                        style={{ minWidth: "200px" }}
+                      >
+                        Asset Number <FaSort style={{ marginLeft: "10%" }} />
+                      </th>
+                      <th
+                        onClick={() => sortingNum("Masa Manfaat (Bulan)")}
+                        style={{ minWidth: "200px" }}
+                      >
+                        Useful Life <FaSort style={{ marginLeft: "10%" }} />
+                      </th>
+                      <th
+                        onClick={() => sortingNum("Penyusutan Perbulan")}
+                        style={{ minWidth: "250px" }}
+                      >
+                        Monthly Depreciation{" "}
+                        <FaSort style={{ marginLeft: "10%" }} />
+                      </th>
+                      <th
+                        onClick={() => sortingNum("Total Bulan Penyusutan")}
+                        style={{ minWidth: "240px" }}
+                      >
+                        Depreciation Month{" "}
+                        <FaSort style={{ marginLeft: "10%" }} />
+                      </th>
+                      <th
+                        onClick={() => sortingNum("Total Penyusutan")}
+                        style={{ minWidth: "230px" }}
+                      >
+                        Total Depreciation{" "}
+                        <FaSort style={{ marginLeft: "10%" }} />
+                      </th>
+                      <th
+                        onClick={() => sortingNum("Nilai Asset saat ini")}
+                        style={{ minWidth: "240px" }}
+                      >
+                        Current Asset Value{" "}
+                        <FaSort style={{ marginLeft: "10%" }} />
+                      </th>
                     </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
-          <div className="clearfix">
+                  </thead>
+                  <tbody>
+                    {datas.length === 0 ? (
+                      <tr> 
+                        <th colspan='31'>Data is not found</th>
+                      </tr>
+                    ) : (
+                      currentItems.map((data, index) => (
+                        <tr key={data["Nomor Asset"]}>
+                          <th>{index + 1}</th>
+                          <th style={{fontSize:'30px'}}>
+                            <a
+                              onClick={() => {
+                                handleViewShow(setRowData(data));
+                              }}
+                              className="view"
+                              data-toggle="modal"
+                              style={{ cursor: "pointer", width: '50%'}}
+                            >
+                              <i
+                                className="material-icons"
+                                data-toggle="tooltip"
+                                title="View"
+                                style={{fontSize: '25px', color:'darkblue'}} 
+                              >
+                                &#xe8f4;
+                              </i>
+                            </a>
+                            <a
+                              target="_blank"
+                              href={`http://api.qrserver.com/v1/create-qr-code/?data=Asset Number: ${data["Nomor Asset"]}%0A Purchase Date: ${data['Tanggal Output']}%0A Asset Name: ${data["Nama Barang"]}%0A Asset Category: ${data["Kategori Jenis Produk"]}%0A Product Name: ${data["Jenis Produk"]}%0A Location: ${data["Lokasi"]}%0A PO Number: ${data["No. PO / Dokumenen Pendukung"]}%0A Lifetime: ${data['Masa Manfaat (Bulan)']}%0A Value: ${data['Nilai Asset saat ini']}%0A Vendor: ${data['Vendor']}&size=${size}x${size}&bgcolor=${bgColor}`}
+                              download="QRCode"
+                            >
+                              <i
+                                className="material-icons"
+                                data-toggle="tooltip"
+                                title="View"
+                                style={{fontSize: '25px', color:'black'}} 
+                              >
+                                &#xe00a;
+                              </i>
+                            </a>
+                            <a
+                              onClick={() => {
+                                handleEditShow(data["Nomor Asset"]);
+                              }}
+                              className="edit"
+                              data-toggle="modal"
+                              style={{ cursor: "pointer" }}
+                            >
+                              <i
+                                className="material-icons"
+                                data-toggle="tooltip"
+                                title="Edit"
+                                style={{fontSize: '25px'}} 
+                              >
+                                &#xe3c9;
+                              </i>
+                            </a>
+                          </th>
+                          <td>{data["Tanggal Output"]}</td>
+                          <td>{data["Tahun"]}</td>
+                          <td>{data["No. PO / Dokumenen Pendukung"]}</td>
+                          <td>{data["Vendor"]}</td>
+                          <td>{data["Nama Barang"]}</td>
+                          <td>{data["Harga Perolehan"]}</td>
+                          <td>{data["PPN"]}</td>
+                          <td>{data["Biaya Lain-Lain"]}</td>
+                          <td>{data["Total Harga Perolehan"]}</td>
+                          <td>{data["Jenis Produk"]}</td>
+                          <td>{data["Kategori Jenis Produk"]}</td>
+                          <td>{data["Kategori Aset Tetap"]}</td>
+                          <td>{data["BAST Output"]}</td>
+                          <td>{data["Kondisi"]}</td>
+                          <td>{data["Insurance"]}</td>
+                          <td>{data["Lokasi"]}</td>
+                          <td>{data["User"]}</td>
+                          <td>{data["Jabatan"]}</td>
+                          <td>{data["Initisal"]}</td>
+                          <td>{data["Kode Wilayah"]}</td>
+                          <td>{data["Kode Asset"]}</td>
+                          <td>{data["Tahun Pembelian"]}</td>
+                          <td>{data["Kode Urut barang"]}</td>
+                          <td>{data["Nomor Asset"]}</td>
+                          <td>{data["Masa Manfaat (Bulan)"]}</td>
+                          <td>{data["Penyusutan Perbulan"]}</td>
+                          <td>{data["Total Bulan Penyusutan"]}</td>
+                          <td>{data["Total Penyusutan"]}</td>
+                          <td>{data["Nilai Asset saat ini"]}</td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+                </div>
+              </div>
+              <div className="clearfix" style={{marginRight:'2vw'}}>
             <div className="hint-text">
               Showing <b> {currentItems.length} </b> out of <b>{datas.length}</b>{" "}
               enteries
@@ -869,9 +774,10 @@ export const Overview = () => {
               </button>
             </li>
           </ul>
+            </div>
+          </div>
         </div>
-      </div>
-      <div className="model-box-view">
+        <div className="model-box-view">
         <Modal dialogClassName="view-modal"
           show={viewShow}
           onHide={handleViewClose}
@@ -964,7 +870,6 @@ export const Overview = () => {
           </Modal.Footer>
         </Modal>
       </div>
-      {/* Edit Show */}
 
       {editShow && (
         <div className="edit-container">
@@ -1063,7 +968,6 @@ export const Overview = () => {
                   <div className="inputBox">
                           <span>Purchase Date :</span>
                           <input type='datetime-local' required name='Tanggal Output' value={assetEdit['Tanggal Output']} onChange={handleChange}/>
-                          {/* <input type='datetime-local' required name='Tanggal Output' value="2017-06-01T08:30" onChange={handleChange}/> */}
                       </div>
                       <div className="inputBox">
                           <span>BAST :</span>
@@ -1112,7 +1016,6 @@ export const Overview = () => {
                       )}
                     </div>
                     <input
-                      // value={assetEdit["Asset Image"]}
                       id="upload"
                       accept="image/*"
                       type="file"
@@ -1120,7 +1023,7 @@ export const Overview = () => {
                       onChange={imageChange}
                     />
                   </div>
-                  <div className="inputBox">
+                  <div className="inputBox" style={{marginTop:'30px'}}>
                   <span>PPN :</span>
                   <input
                     type="text"
@@ -1128,7 +1031,6 @@ export const Overview = () => {
                     name="PPN"
                     value={assetEdit["PPN"]}
                     onChange={handleChange}
-                    // style={{width:'95%'}}
                   />
                 </div>
                   <div className="inputBox">
@@ -1177,23 +1079,6 @@ export const Overview = () => {
                     />
                   </div>
                   <div className="inputBox">
-                    {/* <span>Asset Code :</span>
-                    <select
-                      required
-                      name="Kode Asset"
-                      value={assetEdit["Kode Asset"]}
-                      onChange={handleChange}
-                    >
-                      <option value="">Select Asset Code</option>
-                      {subProductName.map((item) => (
-                        <option
-                          key={item.subproduct_name}
-                          value={item.product_code}
-                        >
-                          {item.subproduct_name}-{item.product_code}
-                        </option>
-                      ))}
-                    </select> */}
                     <div className="inputBox">
                       <span>Year :</span>
                       <input

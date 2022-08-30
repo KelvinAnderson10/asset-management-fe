@@ -66,9 +66,10 @@
 }
 
 .asset-edit-container form .row .col .inputBox span{
-  margin-bottom: 10px;
+  margin-bottom: 5px;
   display: block;
   text-align: left;
+  margin-top: 10px;
 }
 
 .asset-edit-container form .row .col .inputBox input{

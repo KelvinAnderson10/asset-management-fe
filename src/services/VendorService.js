@@ -3,7 +3,7 @@ import React from 'react'
 export const vendorService = ({doGet,doPost,doPut,doDelete}) => {
     const getAllVendor = async () => {
         try {
-            return await doGet({url: '/vendor'})
+            return await doGet({url: '/api/vendor'})
         } catch (e) {
             throw e;
         }
@@ -12,7 +12,7 @@ export const vendorService = ({doGet,doPost,doPut,doDelete}) => {
     const createVendor = async (newLocation) => {
         try {
             return await doPost({
-                url: '/vendor', data: newLocation
+                url: '/api/vendor', data: newLocation
                 
             })
         } catch (e) {
@@ -23,7 +23,7 @@ export const vendorService = ({doGet,doPost,doPut,doDelete}) => {
     const updateVendor = async (id,newLocation) => {
         try {
             return await doPut({
-                url: `/vendor/${id}`, data: newLocation
+                url: `/api/vendor/${id}`, data: newLocation
                 
             })
         } catch (e) {
@@ -33,7 +33,7 @@ export const vendorService = ({doGet,doPost,doPut,doDelete}) => {
 
     const deleteVendor = async (name) => {
         try {
-            return await doDelete({url: `/vendor/${name}`
+            return await doDelete({url: `/api/vendor/${name}`
          })
         } catch (e) {
             throw e;
@@ -41,7 +41,7 @@ export const vendorService = ({doGet,doPost,doPut,doDelete}) => {
     }
     const getVendorById = async (id) => {
         try {
-            return await doGet({url: `/vendor/${id}`})
+            return await doGet({url: `/api/vendor/${id}`})
         } catch (e) {
             throw e;
         }
@@ -49,7 +49,7 @@ export const vendorService = ({doGet,doPost,doPut,doDelete}) => {
 
     const getVendorByNameLike = async (title) => {
         try {
-            return await doGet({url: `/vendor/filter?name=${title}`})
+            return await doGet({url: `/api/vendor/filter?name=${title}`})
         } catch (e) {
             throw e;
         }
@@ -57,7 +57,7 @@ export const vendorService = ({doGet,doPost,doPut,doDelete}) => {
 
     const getVendorByName = async (title) => {
         try {
-            return await doGet({url: `/vendor/${title}`})
+            return await doGet({url: `/api/vendor/${title}`})
         } catch (e) {
             throw e;
         }

@@ -10,6 +10,7 @@ import * as BiIcons from 'react-icons/bi';
 import * as FaIcons from 'react-icons/fa';
 import './Sidebar.css'
 import * as AiIcons from 'react-icons/ai';
+import { useAuth } from "../../../services/UseAuth";
 
 const routes = [
   {
@@ -88,10 +89,13 @@ const Sidebar = ({children}) => {
     },
   };
 
+  const { eraseCookie } = useAuth()
+
   const navigate = useNavigate();
   const onLogout = () => {
-    navigate('/', {replace: true})
-  }
+  eraseCookie("OTP")
+  navigate('/', {replace: true})
+  } 
 
   return (
     <>

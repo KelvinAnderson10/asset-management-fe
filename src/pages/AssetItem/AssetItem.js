@@ -5,10 +5,11 @@ import { useDeps } from "../../shared/context/DependencyContext";
 import { Failed } from "../../shared/components/Notification/Failed";
 import moment from "moment";
 import "./AssetItem.css";
+import Loading from "../../shared/components/Loading/Loading";
 
 export const AssetItem = () => {
   const [data, setData] = useState({});
-
+  const [isLoading, setIsLoading] = useState(false)
   const [selectedImage, setSelectedImage] = useState();
   const [imageBase64, setImageBase64] = useState("")
   let reader = new FileReader();
@@ -27,7 +28,7 @@ export const AssetItem = () => {
   const onGetAllSubProduct = async () => {
     try {
       const response = await assetItemService.getAllAsset();
-      console.log(response);
+     
       setSubProductName(response.data);
     } catch (e) {
       console.log(e);
@@ -41,7 +42,7 @@ export const AssetItem = () => {
   const onGetAllVendor = async () => {
     try {
       const response = await vendorService.getAllVendor();
-      console.log(response);
+     
       setVendor(response.data);
     } catch (e) {
       console.log(e);
@@ -54,7 +55,7 @@ export const AssetItem = () => {
   const onGetAllLocation = async () => {
     try {
       const response = await locationService.getAllLocation();
-      console.log(response);
+     
       setLocations(response.data);
     } catch (e) {
       console.log(e);
@@ -67,7 +68,7 @@ export const AssetItem = () => {
   const onGetUser = async () => {
     try {
       const response = await userService.getAllUser();
-      console.log("ini response name", response.data);
+     
       setUser(response.data);
     } catch (error) {
     } finally {
@@ -91,12 +92,12 @@ export const AssetItem = () => {
     const newData = { ...data };
     newData[e.target.name] = e.target.value;
     setData(newData);
-    console.log(newData);
+  
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setIsLoading(true)
     try {
       data["Tahun"] = Number(data["Tahun"]);
       data["Harga Perolehan"] = Number(data["Harga Perolehan"]);
@@ -111,14 +112,15 @@ export const AssetItem = () => {
 
       const response = await assetItemService.createAsset(data);
       setData(response.data);
-      console.log(response);
+     
       Success("added");
       clearForm();
     } catch (error) {
       console.log(error.response);
-      Failed();
+      Failed(error.response.data.error.Detail);
     } finally {
       e.target.reset();
+      setIsLoading(false)
     }
   };
 
@@ -138,7 +140,7 @@ export const AssetItem = () => {
       <Sidebar>
       {/* <div className="main-container"> */}
         <div className="asset-container">
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={(e)=>{handleSubmit(e)}}>
             <div className="row">
               <div className="col">
                 <h3 className="title">Add Asset Item</h3>
@@ -307,7 +309,7 @@ export const AssetItem = () => {
                     accept="image/*"
                     type="file"
                     name="Asset Image"
-                    value={data["Asset Image"]}
+                    // value={data["Asset Image"]}
                     onChange={imageChange}
                   />
                 </div>
@@ -379,7 +381,7 @@ export const AssetItem = () => {
                     style={{width:'95%'}}
                   />
                 </div>
-                <div className="inputBox">
+                {/* <div className="inputBox"> */}
                   {/* <span>Asset Code :</span>
                 <select required name='Kode Asset' value={data['Kode Asset']} onChange={handleChange}>
                       <option value="" >Select Asset Code</option> 
@@ -405,7 +407,7 @@ export const AssetItem = () => {
                   <div className="inputBox">
                     <span>Item Order Code :</span>
                     <input
-                      type="text"
+                      type="number"
                       required
                       name="Kode Urut barang"
                       value={data["Kode Urut barang"]}
@@ -413,15 +415,15 @@ export const AssetItem = () => {
                       style={{width:'95%'}}
                     />
                   </div>
-                </div>
+                {/* </div> */}
                 <div className="button-asset">
-                  <button
+                  {/* <button
                     type="submit"
                     className="btn btn-danger button-cancel"
                     onClick={handleCancel}
                   >
                     Cancel
-                  </button>
+                  </button> */}
                   <button
                     type="submit"
                     className="btn btn-primary button-submit"
@@ -433,7 +435,7 @@ export const AssetItem = () => {
             </div>
           </form>
         </div>
-      {/* </div> */}
+      {isLoading && <Loading/>}
       </Sidebar>
     </>
   );
