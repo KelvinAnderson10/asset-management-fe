@@ -28,7 +28,7 @@ export const AssetItem = () => {
   const onGetAllSubProduct = async () => {
     try {
       const response = await assetItemService.getAllAsset();
-      console.log(response);
+     
       setSubProductName(response.data);
     } catch (e) {
       console.log(e);
@@ -42,7 +42,7 @@ export const AssetItem = () => {
   const onGetAllVendor = async () => {
     try {
       const response = await vendorService.getAllVendor();
-      console.log(response);
+     
       setVendor(response.data);
     } catch (e) {
       console.log(e);
@@ -55,7 +55,7 @@ export const AssetItem = () => {
   const onGetAllLocation = async () => {
     try {
       const response = await locationService.getAllLocation();
-      console.log(response);
+     
       setLocations(response.data);
     } catch (e) {
       console.log(e);
@@ -68,7 +68,7 @@ export const AssetItem = () => {
   const onGetUser = async () => {
     try {
       const response = await userService.getAllUser();
-      console.log("ini response name", response.data);
+     
       setUser(response.data);
     } catch (error) {
     } finally {
@@ -92,7 +92,7 @@ export const AssetItem = () => {
     const newData = { ...data };
     newData[e.target.name] = e.target.value;
     setData(newData);
-    console.log(newData);
+  
   };
 
   const handleSubmit = async (e) => {
@@ -112,7 +112,7 @@ export const AssetItem = () => {
 
       const response = await assetItemService.createAsset(data);
       setData(response.data);
-      console.log(response);
+     
       Success("added");
       clearForm();
     } catch (error) {

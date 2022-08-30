@@ -30,7 +30,7 @@ export const Overview = () => {
     const newData = { ...asset };
     newData[e.target.name] = e.target.value;
     setAsset(newData);
-    console.log(newData);
+
   };
 
   const handleViewShow = () => {
@@ -55,7 +55,7 @@ export const Overview = () => {
     try {
       const response = await overviewService.getAllAsset();
       setDatas(response.data);
-      console.log(response);
+
     } catch (e) {
       console.log(e);
     } finally {
@@ -178,7 +178,7 @@ export const Overview = () => {
   const [date, setNewDate] = useState();
 
   const handleEditAssetById = async (name) => {
-    console.log("ini respons edit", name);
+   
     // setLoading(true);
     try {
       const response = await overviewService.getAssetByAssetName(name);
@@ -195,13 +195,8 @@ export const Overview = () => {
       datesplit = date.split("+") 
       res = datesplit[0]
       response.data['BAST Output'] = res
-
-      console.log('response img',response.data['Asset Image'])
-      console.log("ini tanggal output",date);
       setAssetEdit(response.data);
-      console.log("Ini set image base 64", response.data["Asset Image"]);
       setImageBase64(response.data["Asset Image"])
-      console.log("KALO INI IMAGEBASE64", imageBase64);
     } catch (e) {
       console.log(e);
     } finally {
@@ -214,7 +209,7 @@ export const Overview = () => {
 
   useEffect(() => {
     setImageBase64(assetEdit["Asset Image"])
-    console.log("ini di use effect" , assetEdit["Asset Image"]);
+  
   }, [assetEdit['Asset Image']])
 
   const handleEditClose = () => {
@@ -225,8 +220,7 @@ export const Overview = () => {
     setEditShow(true);
     // setAssetEdit(data)
     handleEditAssetById(id);
-    console.log("Ini Photo : ",assetEdit["Asset Image"]);
-    console.log("Ini Hook",assetEdit);
+
   };
 
 
@@ -236,15 +230,11 @@ export const Overview = () => {
     let reader = new FileReader();
 
   const imageChange = (e) => {
-    console.log(e.target.files);
+    
     if (e.target.files && e.target.files.length > 0) {
       setSelectedImage(e.target.files[0]);
       reader.readAsDataURL(e.target.files[0]);
       reader.onload = () => {setImageBase64(reader.result)}
-      // const newData = {...assetEdit};
-      // newData['Asset Image'] = reader.result
-      // setAssetEdit(newData)
-      console.log('reader result', reader.result);
     }
   };
 
@@ -254,7 +244,6 @@ export const Overview = () => {
 
   const onSubmitEditAsset = async (e) => {
     e.preventDefault();
-    console.log("ini submit response", assetEdit);
     setLoading(true)
     try {
       assetEdit["Tahun"] = Number(assetEdit["Tahun"]);
@@ -275,11 +264,8 @@ export const Overview = () => {
         assetEdit["Nomor Asset"],
         assetEdit
       );
-      console.log(response);
+   
       setAssetEdit(response);
-
-      console.log('ini image upload',imageBase64)
-
       if (response.status === "SUCCESS") {
         swal({
           title: "Success!",
@@ -309,7 +295,6 @@ export const Overview = () => {
   const onGetAllSubProduct = async () => {
     try {
       const response = await assetCategoryService.getAllAssetCategory();
-      console.log(response);
       setSubProductName(response.data);
     } catch (e) {
       console.log(e);
@@ -323,7 +308,6 @@ export const Overview = () => {
   const onGetAllVendor = async () => {
     try {
       const response = await vendorService.getAllVendor();
-      console.log(response);
       setVendor(response.data);
     } catch (e) {
       console.log(e);
@@ -336,7 +320,6 @@ export const Overview = () => {
   const onGetAllLocation = async () => {
     try {
       const response = await locationService.getAllLocation();
-      console.log(response);
       setLocations(response.data);
     } catch (e) {
       console.log(e);
@@ -349,7 +332,6 @@ export const Overview = () => {
   const onGetUser = async () => {
     try {
       const response = await userService.getUserByEmail();
-      console.log("ini response email", response.data);
       setUser(response.data);
     } catch (error) {
     } finally {
@@ -359,10 +341,8 @@ export const Overview = () => {
 
   const handleChange = (e) => {
     const newData = { ...assetEdit };
-    console.log('data awal', newData);
     newData[e.target.name] = e.target.value;
     setAssetEdit(newData);
-    console.log('data akhir', newData);
   };
 
   const handleCancel = (e) => {
@@ -387,68 +367,52 @@ export const Overview = () => {
   }
 
   const onFilter = async () => {
-    console.log(filter)
-    console.log(dropdownName)
     if (dropdownName === 'Vendor') {
       try {
         const response = await overviewService.getAssetByVendor(filter);
-        console.log(response);
-        setDatas(response.data);
-        console.log(response.data);   
+        setDatas(response.data); 
       } catch (e) {
         console.log(e);
       }
     } else if (dropdownName === 'Location') {
       try {
         const response = await overviewService.getAssetByLocation(filter);
-        console.log(response);
-        setDatas(response.data);
-        console.log(response.data)   
+        setDatas(response.data);  
       } catch (e) {
         console.log(e);
       }
     } else if (dropdownName === 'Condition'){
       try {
         const response = await overviewService.getAssetByCondition(filter);
-        console.log(response);
-        setDatas(response.data);
-        console.log(response.data);   
+        setDatas(response.data); 
       } catch (e) {
         console.log(e);
       }
     } else if (dropdownName === 'Item Name') {
       try {
         const response = await overviewService.getAssetByItemName(filter);
-        console.log(response);
         setDatas(response.data);
-        console.log(response.data);   
       } catch (e) {
         console.log(e);
       }
     } else if (dropdownName === 'Subproduct') {
       try {
         const response = await overviewService.getAssetBySubproduct(filter);
-        console.log(response);
-        setDatas(response.data);
-        console.log(response.data);   
+        setDatas(response.data);  
       } catch (e) {
         console.log(e);
       }
     } else if (dropdownName === 'Product') {
       try {
         const response = await overviewService.getAssetByProduct(filter);
-        console.log(response);
-        setDatas(response.data);
-        console.log(response.data);   
+        setDatas(response.data); 
       } catch (e) {
         console.log(e);
       }
     } else {
       try {
         const response = await overviewService.getAssetByCategory(filter);
-        console.log(response);
         setDatas(response.data);
-        console.log(response.data);   
       } catch (e) {
         console.log(e);
       }

@@ -17,17 +17,14 @@ export const Login = () => {
   const { userService } = useDeps();
   const navigate = useNavigate();
   const { setCookie } = useAuth();
-  console.log(useAuth());
 
-  // useEffect(() => {
-  //   validateEmail();
-  // }, []);
+
+
 
   const validateEmail = async (e) => {
    e.preventDefault()
     try {
-      const response = await userService.getUserByEmail(email);
-      console.log("ini response email", response.data.email);
+      const response = await userService.getUserByEmail(email); 
       setEmail(response.data.email);
       login(email);
       setShowOTPForm(true);
@@ -39,10 +36,6 @@ export const Login = () => {
 
   const login = async (emailAddress) => {
     const response = await Auth(emailAddress, "Narindo Asset Management");
-    console.log(response);
-    console.log(response.mail);
-    console.log(response.OTP);
-    console.log(response.success);
     setOTP(response.OTP);
   };
 
@@ -54,12 +47,11 @@ export const Login = () => {
     cArr.forEach(val => {
         if (val.indexOf(name) === 0) res = val.substring(name.length);
     })
-    console.log("ini get cookie",res);
+
     return (res)
 }
 
   const validateOTP = () => {
-    console.log(OTPInput);
     if (OTPInput == OTP) {
       setCookie("OTP", OTP, 90);
     } else {

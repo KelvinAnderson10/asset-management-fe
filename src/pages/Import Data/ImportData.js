@@ -20,7 +20,7 @@ export const ImportData = () => {
   const handleSubmit = async () => {
     try {
       const response = await assetItemService.batchInsert(uploadBackendData)
-      console.log('ini respon submit',response);
+ 
       Success('uploaded')
     } catch (error) {
       if (error.response.data.error.Detail){
@@ -63,7 +63,7 @@ export const ImportData = () => {
   }
 
   useEffect(() => {
-    console.log(excelData);
+  
     setDoneUploadExcel(true)
     setIsLoading(false)
   }, [excelData])
@@ -200,23 +200,15 @@ export const ImportData = () => {
                     </table>
                   </div>
                 </div>
-                  {/* <br></br>
-                  <br></br>
-                  <br></br>
-                  <br></br> */}
+
                   <div className='button-save'>
                   <button className='btn btn-primary' onClick={handleSubmit}>Save</button>
                   </div>
-                  {/* <button>Clear</button> */}
-                  {/* <br></br>
-                  <br></br>
-                  <br></br>
-                  <br></br>
-                  <br></br> */}
+
               </div>
             </div>
 
-            {/* tinggal didesign */}
+
             </div>   
             </div>
             {isLoading && <Loading/>}
