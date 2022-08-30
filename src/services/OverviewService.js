@@ -82,7 +82,7 @@ export const overviewService = ({doGet, doPut}) => {
     const getAssetByItemName = async (name) => {
         try {
             return await doGet({
-                url: `/asset/filter?name=${name}`
+                url: `/api/asset/filter?name=${name}`
             })
         } catch (e) {
             throw e
@@ -92,7 +92,7 @@ export const overviewService = ({doGet, doPut}) => {
     const getAssetByProduct = async (product) => {
         try {
             return await doGet({
-                url: `/asset/filter?product=${product}`
+                url: `/api/asset/filter?product=${product}`
             })
         } catch (e) {
             throw e
@@ -102,7 +102,7 @@ export const overviewService = ({doGet, doPut}) => {
     const getAssetByCategory = async (category) => {
         try {
             return await doGet({
-                url: `/asset/filter?category=${category}`
+                url: `/api/asset/filter?category=${category}`
             })
         } catch (e) {
             throw e

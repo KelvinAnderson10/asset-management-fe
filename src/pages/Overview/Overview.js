@@ -55,7 +55,6 @@ export const Overview = () => {
     try {
       const response = await overviewService.getAllAsset();
       setDatas(response.data);
-
     } catch (e) {
       console.log(e);
     } finally {
@@ -663,7 +662,7 @@ export const Overview = () => {
                   <tbody>
                     {datas.length === 0 ? (
                       <tr> 
-                        <th colspan='31'>Data is not found</th>
+                        <th colSpan='31'>Data is not found</th>
                       </tr>
                     ) : (
                       currentItems.map((data, index) => (

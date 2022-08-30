@@ -13,7 +13,7 @@ export const HomeView = () => {
     const { eraseCookie } = useAuth()
 
     const onLogout = () => {
-    eraseCookie("OTP")
+    eraseCookie()
     navigate('/', {replace: true})
     } 
 

@@ -368,7 +368,7 @@ export const Location = () => {
                   <tbody>
                     {data.length === 0 ? (
                       <tr>
-                        <th colspan='3'>Data is not found</th>
+                        <th colSpan='4'>Data is not found</th>
                       </tr>
                     ) : (
                       currentItems.map((item, index) => (
@@ -482,6 +482,7 @@ export const Location = () => {
               <Modal.Title>Add new Location</Modal.Title>
             </Modal.Header>
             <Modal.Body>
+              <form onSubmit={handleSubmit}>
             <p style={{color:"red"}}>Please complete all required fields</p>
               <div>
                 <div className="form-group">
@@ -499,11 +500,12 @@ export const Location = () => {
                 <Button
                   type="submit"
                   className="btn btn-success mt-4"
-                  onClick={handleSubmit}
                 >
                   Add{" "}
                 </Button>
+                
               </div>
+              </form>
             </Modal.Body>
             <Modal.Footer>
               <Button variant="secondary" onClick={hanldePostClose}>
