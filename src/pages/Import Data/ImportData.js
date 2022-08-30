@@ -24,16 +24,18 @@ export const ImportData = () => {
   const handleSubmit = async () => {
     setUpload(false)
     setIsLoadingscd(true)
-  
+    
     try {
       const response = await assetItemService.batchInsert(uploadBackendData)
-      
       Success('uploaded')
     } catch (error) {
       if (error.response.data.error.Detail){
         Failed(`Upload failed because ${error.response.data.error.Detail}`)
-      } else{
+
+      } else if (error.response.data.error.Field){
         Failed(`Upload failed because column ${error.response.data.error.Field} is in wrong format`)
+      } else{
+        Failed(`Upload failed because one of data in subproduct column doesn't exist`)
       }
       console.log(error);
 
@@ -60,7 +62,7 @@ export const ImportData = () => {
             const sheetName = workbook.SheetNames[0];           // Sheetnya, misal produk berarti di index ke 2
             const worksheet = workbook.Sheets[sheetName];
             let json = XLSX.utils.sheet_to_json(worksheet);
-            
+            console.log(json)
             // Notes : yang dikirim ke backend tetap const json, const excelData hanya untuk tampilan
             setExcelData(json)
 
