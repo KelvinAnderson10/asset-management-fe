@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Success } from "../../shared/components/Notification/Success";
 import Sidebar from "../../shared/components/Sidebar/Sidebar";
 import { useDeps } from "../../shared/context/DependencyContext";
@@ -15,6 +15,7 @@ export const AssetItem = () => {
   const [subProductName, setSubProductName] = useState([]);
   const { assetItemService, vendorService, locationService, userService } =
     useDeps();
+  const ref = useRef(null)
 
   useEffect(() => {
     onGetAllSubProduct();
@@ -83,6 +84,7 @@ export const AssetItem = () => {
 
   const removeSelectedImage = () => {
     setSelectedImage();
+    ref.current.value = '';
   };
 
   const handleChange = (e) => {
@@ -98,14 +100,14 @@ export const AssetItem = () => {
     try {
       data["Tahun"] = Number(data["Tahun"]);
       data["Harga Perolehan"] = Number(data["Harga Perolehan"]);
-      data["Total Harga Perolehan"] = Number(data["Total Harga Perolehan"]);
       data["Kode Wilayah"] = Number(data["Kode Wilayah"]);
       data["Tahun Pembelian"] = Number(data["Tahun Pembelian"]);
       data["Kode Urut barang"] = Number(data["Kode Urut barang"]);
       data["Biaya Lain-Lain"] = Number(data["Biaya Lain-Lain"]);
       data["BAST Output"] = moment(data["BAST Output"]).format();
       data["Tanggal Output"] = moment(data["Tanggal Output"]).format();
-      data["Asset Image"] = imageBase64
+      data["Asset Image"] = imageBase64;
+      data["PPN"] = Number(data["PPN"]);
 
       const response = await assetItemService.createAsset(data);
       setData(response.data);
@@ -299,7 +301,8 @@ export const AssetItem = () => {
                       </div>
                     )}
                   </div>
-                  <input
+                  <input 
+                    ref={ref}
                     id="upload"
                     accept="image/*"
                     type="file"
@@ -311,21 +314,10 @@ export const AssetItem = () => {
                 <div className="inputBox">
                   <span>PPN :</span>
                   <input
-                    type="text"
+                    type="number"
                     required
                     name="PPN"
                     value={data["PPN"]}
-                    onChange={handleChange}
-                    style={{width:'95%'}}
-                  />
-                </div>
-                <div className="inputBox">
-                  <span>Total Acquisition Cost :</span>
-                  <input
-                    type="text"
-                    required
-                    name="Total Harga Perolehan"
-                    value={data["Total Harga Perolehan"]}
                     onChange={handleChange}
                     style={{width:'95%'}}
                   />

@@ -200,6 +200,9 @@ export const Overview = () => {
       console.log('response img',response.data['Asset Image'])
       console.log("ini tanggal output",date);
       setAssetEdit(response.data);
+      console.log("Ini set image base 64", response.data["Asset Image"]);
+      setImageBase64(response.data["Asset Image"])
+      console.log("KALO INI IMAGEBASE64", imageBase64);
     } catch (e) {
       console.log(e);
     } finally {
@@ -210,6 +213,11 @@ export const Overview = () => {
   const [assetEdit, setAssetEdit] = useState({});
   const [editShow, setEditShow] = useState(false);
 
+  useEffect(() => {
+    setImageBase64(assetEdit["Asset Image"])
+    console.log("ini di use effect" , assetEdit["Asset Image"]);
+  }, [assetEdit])
+
   const handleEditClose = () => {
     setEditShow(false);
   };
@@ -218,11 +226,13 @@ export const Overview = () => {
     setEditShow(true);
     // setAssetEdit(data)
     handleEditAssetById(id);
+    console.log("Ini Photo : ",assetEdit["Asset Image"]);
+    console.log("Ini Hook",assetEdit);
   };
 
 
     // UPLOAD IMAGE
-    const [selectedImage, setSelectedImage] = useState();
+    const [selectedImage, setSelectedImage] = useState(true);
     const [imageBase64, setImageBase64] = useState("")
     let reader = new FileReader();
 
@@ -1087,11 +1097,11 @@ export const Overview = () => {
                         <div className="image">
                           {" "}
                           <img
-                            src={URL.createObjectURL(selectedImage)}
+                            src={imageBase64}
                             className="image"
                             alt="Thumb"
                             style={{width:'200px', height:'140px'}}
-                          />
+                            />
                             <button
                               onClick={removeSelectedImage}
                               className="cancel"
@@ -1102,11 +1112,11 @@ export const Overview = () => {
                       )}
                     </div>
                     <input
+                      // value={assetEdit["Asset Image"]}
                       id="upload"
                       accept="image/*"
                       type="file"
                       name="Asset Image"
-                      // value={assetEdit["Asset Image"]}
                       onChange={imageChange}
                     />
                   </div>
@@ -1121,16 +1131,6 @@ export const Overview = () => {
                     // style={{width:'95%'}}
                   />
                 </div>
-                  <div className="inputBox">
-                    <span>Total Acquisition Cost :</span>
-                    <input
-                      type="number"
-                      required
-                      name="Total Harga Perolehan"
-                      value={assetEdit["Total Harga Perolehan"]}
-                      onChange={handleChange}
-                    />
-                  </div>
                   <div className="inputBox">
                     <span>Insurance</span>
                     <select
