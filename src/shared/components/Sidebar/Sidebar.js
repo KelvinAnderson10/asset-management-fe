@@ -50,6 +50,18 @@ const routes = [
     name: "Import Data",
     icon: <FaIcons.FaFileUpload/>,
   },
+  {
+    path: "",
+    name: "System Monitoring",
+    icon: <GoIcons.GoDatabase/>,
+    subRoutes: [
+        {
+          path: "",
+          name: "Event Logs",
+          icon: <IoIcons.IoIosPaper/>,
+        },
+      ],
+  },
 ];
 
 const Sidebar = ({children}) => {
