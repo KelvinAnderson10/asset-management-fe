@@ -84,7 +84,7 @@
   font-family: "Poppins";
   font-style: normal;
   font-weight: bold;
-  font-size: 2.2em;
+  font-size: 2em;
   line-height: 50px;
   margin-top: 15px;
   margin-bottom: 15px;
@@ -234,6 +234,7 @@
   z-index: 100;
 }
 
+
 .card {
   background-color: rgb(243, 243, 243);
   width: auto;
@@ -265,6 +266,15 @@
   text-align: center;
   letter-spacing: 0.3px;
   color: #9fa2b4;
+  white-space: nowrap;
+  }
+
+  .otpForm .card .message {
+  font-size: 12px;
+  font-family: "Roboto";
+  color: rgb(177, 39, 39);
+  text-align: center;
+  letter-spacing: 0.3px;
   white-space: nowrap;
   }
 

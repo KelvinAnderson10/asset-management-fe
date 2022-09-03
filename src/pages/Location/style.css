@@ -232,7 +232,10 @@ input.form-control:focus{
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  flex-direction: row;
+ 	/* gap: 0px 61.5%; */
+  /* margin-left: 24em; */
   margin-top: 2em;
-  margin-bottom: 0.5em;
-  justify-content: space-around;
+  margin-bottom: 2em;
+  justify-content: space-between;
 }

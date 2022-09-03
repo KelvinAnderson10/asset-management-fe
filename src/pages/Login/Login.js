@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import logo from "../../assets/images/narindo_logo_black.svg";
 import { Auth } from "two-step-auth";
 import { useDeps } from "../../shared/context/DependencyContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 import { Failed } from "../../shared/components/Notification/Failed";
 import "./Login.css";
 import AuthCode from "react-auth-code-input";
 import { Card } from "react-bootstrap";
 import { useAuth } from "../../services/UseAuth";
+import Loading from "../../shared/components/Loading/Loading";
 
 export const Login = () => {
   const [email, setEmail] = useState("");
@@ -17,46 +18,44 @@ export const Login = () => {
   const { userService } = useDeps();
   const navigate = useNavigate();
   const { setCookie } = useAuth();
-  console.log(useAuth());
+  const [isLoading, setLoading] = useState(false)
+  
 
-  useEffect(() => {
-    validateEmail();
-  }, []);
+
 
   const validateEmail = async (e) => {
-    e.preventDefault();
+    setLoading(true)
+   e.preventDefault()
     try {
-      const response = await userService.getUserByEmail(email);
-      console.log("ini response email", response.data.email);
+      const response = await userService.getUserByEmail(email); 
       setEmail(response.data.email);
-      login(email);
+      setOTP(response.otp);
       setShowOTPForm(true);
     } catch (error) {
       Failed("Email not registered yet, Please input a valid email");
     } finally {
+      console.log("ini OTP",OTP)
+      setLoading(false)
     }
   };
 
-  const login = async (emailAddress) => {
-    const response = await Auth(emailAddress, "Narindo Asset Management");
-    console.log(response);
-    console.log(response.mail);
-    console.log(response.OTP);
-    console.log(response.success);
-    setOTP(response.OTP);
-  };
+ 
 
-  // const setCookie = (cName, cValue, expMinutes) => {
-  //   let date = new Date();
-  //   date.setTime(date.getTime() + expMinutes * 60 * 1000);
-  //   const expires = "expires=" + date.toUTCString();
-  //   document.cookie = cName + "=" + cValue + "; " + expires + "; path=/";
-  // };
+  const getCookie = (cName) => {
+    const name = cName + "=";
+    const cDecoded = decodeURIComponent(document.cookie); //to be careful
+    const cArr = cDecoded .split('; ');
+    let res;
+    cArr.forEach(val => {
+        if (val.indexOf(name) === 0) res = val.substring(name.length);
+    })
+
+    return (res)
+}
 
   const validateOTP = () => {
-    console.log(OTPInput);
     if (OTPInput == OTP) {
-      setCookie("OTP", OTP, 1);
+      setCookie("OTP", OTP, 90);
     } else {
       Failed("Wrong OTP");
     }
@@ -68,7 +67,11 @@ export const Login = () => {
   };
 
   return (
+    
+  
     <div>
+      {getCookie("OTP") &&  <Navigate to='/main'></Navigate>}
+
       <div className="container-fluid">
         <div className="row">
           <div className="col-lg-9 col-md-5 d-none d-md-block image-container">
@@ -139,15 +142,18 @@ export const Login = () => {
                   containerClassName="otpContainer"
                   inputClassName="otpInputContainer"
                 ></AuthCode>
-                <br></br>
+                <h6 className="message">If you cant'find the OTP in your inbox, please check your spam folder</h6>
                 <button type="submit" onClick={validateOTP} className="btn">
+                
                   SUBMIT
                 </button>
               </Card.Body>
             </Card>
           </div>
         )}
+        {isLoading && <Loading/> }
       </div>
     </div>
+                
   );
 };

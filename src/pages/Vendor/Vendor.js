@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Sidebar from "../../shared/components/Sidebar/Sidebar";
 import { useDeps } from "../../shared/context/DependencyContext";
 import { FiPlus } from "react-icons/fi";
@@ -28,6 +28,7 @@ export const VendorManage = () => {
   //For Add New Data Model
   const [ViewPost, SetPostShow] = useState(false);
   const handlePostShow = () => {
+    setVendorData({})
     SetPostShow(true);
   };
   const hanldePostClose = () => {
@@ -45,7 +46,6 @@ export const VendorManage = () => {
     const newData = { ...vendorData };
     newData[e.target.name] = e.target.value;
     setVendorData(newData);
-    console.log(newData);
   };
 
   //For Edit Model
@@ -55,7 +55,7 @@ export const VendorManage = () => {
   const handleEditShow = (index, item) => {
     setVendorData(item);
     SetRowData(item)
-    console.log("ini index", index);
+
     setId(index);
     setDelete(true);
     SetEditShow(true);
@@ -76,8 +76,6 @@ export const VendorManage = () => {
 
   const handleLocation = (e) => {
     const location = e.target.value;
-
-    console.log(location);
   };
 
   useEffect(() => {
@@ -95,7 +93,6 @@ export const VendorManage = () => {
       setVendorData(response.data);
       SetPostShow(false);
       setDoneAddform(true);
-      console.log(response);
       if (response.status === "SUCCESS") {
         Swal.fire({
           title: "Success!",
@@ -118,7 +115,6 @@ export const VendorManage = () => {
     setLoading(true);
     try {
       const response = await vendorService.getAllVendor();
-      console.log(response);
       setData(response.data);
     } catch (e) {
       console.log(e);
@@ -129,7 +125,6 @@ export const VendorManage = () => {
 
   //================ DELETE LOCATION ===========================
   const onDeleteVendor = async (name) => {
-    console.log(name);
     setLoading(true);
 
     Swal.fire({
@@ -144,7 +139,6 @@ export const VendorManage = () => {
       if (result.isConfirmed) {
         try {
           const response = vendorService.deleteVendor(name);
-          console.log(response);
           onGetAllVendor();
         } catch (e) {
           console.log(e);
@@ -172,9 +166,8 @@ export const VendorManage = () => {
     setLoading(true);
     try {
       const response = await vendorService.getVendorByNameLike(searchLocation);
-      console.log(response);
       setData(response.data);
-      console.log(response.data);
+
     } catch (e) {
       console.log(e);
     } finally {
@@ -184,10 +177,10 @@ export const VendorManage = () => {
   //=============== EDIT ROW DATA  ===============================
   const handleEdit = async (e,id) => {
     e.preventDefault()
-    console.log("ini id", id);
+
     try {
       const response = await vendorService.updateVendor(id, vendorData);
-      console.log(response);
+
       setVendorData(response);
       setDoneAddform(true);
       if (response.status === "SUCCESS") {
@@ -299,14 +292,45 @@ export const VendorManage = () => {
     });
     
 }
+// CLEAR SEARCH
+const ref = useRef(null) ;
+const onClearForm = (e) => {
+  e.preventDefault()
+  ref.current.value = ''; 
+  onGetAllVendor();
+}
 
   return (
     <>
-      <Sidebar />
+      <Sidebar>
       <div>
-             
+      <div className="body">
+          <div className="container">
           <div className="vendor-container-item" >
-            <Button
+            
+          
+          
+          <form>
+            <div className="input-group ">
+              <input
+                placeholder="Search Vendor Name"
+                // value={searchLocation}
+                onChange={onChangeSearchLocation}
+                type="text"
+                className="form-control"
+                ref={ref}
+              />
+              <div className="input-group-append">
+                <button value="submit" className="btn btn-primary" onClick={onSearchLocation}>
+                  <i className="fas fa-search"></i>
+                </button>
+                <button value="submit" className="btn btn-danger form-button" onClick={onClearForm}>
+                        <i className="fa fa-times"></i>
+                </button>
+              </div>
+            </div>
+          </form>
+          <Button
               variant="primary"
               onClick={() => {
                 handlePostShow();
@@ -315,27 +339,13 @@ export const VendorManage = () => {
                <FiPlus />
               Add New Vendor
             </Button>
-          
-          
-          <form onSubmit={onSearchLocation}>
-            <div className="input-group ">
-              <input
-                placeholder="Search Vendor Name"
-                value={searchLocation}
-                onChange={onChangeSearchLocation}
-                type="text"
-                className="form-control"
-              />
-              <div className="input-group-append">
-                <button value="submit" className="btn btn-primary">
-                  <i className="fas fa-search"></i>
-                </button>
-              </div>
-            </div>
-          </form>
           </div>
-     <div className="body">
-          <div className="container">
+        
+        
+        
+
+        
+
             <div className="table-responsive">
               <div className="table-wrapper">
                 <div className="table-title">
@@ -373,7 +383,9 @@ export const VendorManage = () => {
                   </thead>
                   <tbody>
                     {data.length === 0 ? (
-                      <tr>No data Found</tr>
+                      <tr>
+                        <th colspan='6'>Data is not found</th>
+                      </tr>
                     ) : (
                       currentItems.map((item, index) => (
                         <tr key={item.ID}>
@@ -686,6 +698,7 @@ export const VendorManage = () => {
           </Modal>
         </div>
       </div>
+      </Sidebar>
     </>
   );
 };

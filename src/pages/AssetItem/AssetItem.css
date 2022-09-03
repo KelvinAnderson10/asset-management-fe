@@ -9,21 +9,22 @@
   transition: all .2s linear;
 }
 
-.asset-container{
+main .asset-container{
   display: flex;
   justify-content: center;
   align-items: center;
   padding:25px;
-  min-height: 100vh;
-  min-width: 100vw;
+  min-height: 90vh;
+  min-width: 97vw;
   
   background: rgb(255, 255, 255);
 }
 
 .asset-container form{
-  padding:30px;
-  width: 70vw;
-  min-height: 100vh;
+  border-radius: 2%;
+  padding: 5%;
+  width: 75vw;
+  min-height: 80vh;
   background: rgb(218, 218, 218);
   box-shadow: 0 5px 10px rgba(58, 5, 5, 0.1);
 }
@@ -38,6 +39,7 @@
   flex:1 1 34em;
   display: flex;
   flex-direction: column;
+  padding-left: 10px;
 
 }
 
@@ -102,15 +104,6 @@
   filter: drop-shadow(0 0 1px #000);
 }
 
-.asset-container form .submit-btn{
-  width: 100%;
-  padding:12px;
-  font-size: 17px;
-  background: #27ae60;
-  color:#fff;
-  margin-top: 5px;
-  cursor: pointer;
-}
 
 .asset-container form .submit-btn:hover{
   background: #2ecc71;
@@ -143,10 +136,11 @@
 .asset-container form .row .col .button-submit{
  
   width: 120px;
-  height: 45px;
+  height: 50px;
   margin-right: 4vh;
-  font-size: 20px;
+  font-size: 24px;
   align-items: center;
+  font-family: "Poppins";
 }
 
 .asset-container form .row .col .button-cancel{
@@ -161,7 +155,7 @@
   width: 100%;
   display: flex;
   justify-content: flex-end;
-  margin-bottom: 20px;
+  margin-top: 6vh;
 }
 
 input[type="file"]::-webkit-file-upload-button{

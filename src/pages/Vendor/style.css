@@ -224,7 +224,11 @@ input.form-control:focus{
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  /* flex-direction: row-; */
+ 	/* gap: 0px 62.5%; */
+  /* margin-left: 24em; */
   margin-top: 2em;
   margin-bottom: 2em;
-  justify-content: space-around;
+  justify-content: space-between;
 }
+

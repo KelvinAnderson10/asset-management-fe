@@ -3,7 +3,7 @@ import React from 'react'
 export const locationService = ({doGet,doPost,doPut,doDelete}) => {
     const getAllLocation = async () => {
         try {
-            return await doGet({url: '/location'})
+            return await doGet({url: '/api/location'})
         } catch (e) {
             throw e;
         }
@@ -12,7 +12,7 @@ export const locationService = ({doGet,doPost,doPut,doDelete}) => {
     const createLocation = async (newLocation) => {
         try {
             return await doPost({
-                url: '/location', data: newLocation
+                url: '/api/location', data: newLocation
                 
             })
         } catch (e) {
@@ -23,7 +23,7 @@ export const locationService = ({doGet,doPost,doPut,doDelete}) => {
     const updateLocation = async (id,newLocation) => {
         try {
             return await doPut({
-                url: `/location/${id}`, data: newLocation
+                url: `/api/location/${id}`, data: newLocation
                 
             })
         } catch (e) {
@@ -33,7 +33,7 @@ export const locationService = ({doGet,doPost,doPut,doDelete}) => {
 
     const deleteLocation = async (id) => {
         try {
-            return await doDelete({url: `/location/${id}`
+            return await doDelete({url: `/api/location/${id}`
          })
         } catch (e) {
             throw e;
@@ -42,7 +42,7 @@ export const locationService = ({doGet,doPost,doPut,doDelete}) => {
     
     const getLocationById = async (id) => {
         try {
-            return await doGet({url: `/location/${id}`})
+            return await doGet({url: `/api/location/${id}`})
         } catch (e) {
             throw e;
         }
@@ -50,7 +50,7 @@ export const locationService = ({doGet,doPost,doPut,doDelete}) => {
 
     const getLocationByName = async (title) => {
         try {
-            return await doGet({url: `/location/filter?name=${title}`})
+            return await doGet({url: `/api/location/filter?name=${title}`})
         } catch (e) {
             throw e;
         }
