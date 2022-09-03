@@ -1,3 +1,6 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600;700;800&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Encode+Sans:wght@500&display=swap'); 
+
 .import-container{
   display: flex;
   justify-content: center;
@@ -19,30 +22,40 @@
   align-content: flex-end;
 }
 
-.title-container{
+.title-container >h4{
   width: 100%;
   height: 8vh;
-  font-size: 2em;
+  font-size: 1.8em;
+  font-weight: 600;
+  color:  #999;
   text-align: left;
+  letter-spacing: 0.8px;
   /* padding-left: 2%; */
   display: flex;
   align-items: center;
   padding-top: 1%;
+  font-family: "Encode Sans";
+  margin-bottom: 2vh;
 }
 
 .download-excel {
-  width: 10vw;
-  height:3vh;
+  width: 12vw;
+  height:3.5vh;
   background-color: whitesmoke;
   border-radius: 10px;
   color: white;
   border: 0em;
   margin-left: 10px;
+  
+}
+
+.download-excel > a{
+  text-decoration: none;
 }
 
 .note{
   width: 100%;
-  height: 15vh;
+  height: 16vh;
   background: #6dadb7;
   margin-top: 1em;
   border-radius: 10px;
@@ -58,6 +71,7 @@
   display: flex;
   flex-direction: column;
   text-align: left;
+  font-size: 1.5vh;
 }
 
 .form-upload-container{
@@ -85,4 +99,20 @@
 .import-card .col-table{
   width: 100px;
   justify-items: center;
+}
+
+.import-box .button-save {
+  width: 100%;
+  height: 5vh;
+  margin-top: 5vh;
+  margin-bottom: 5vh;
+}
+.table-responsive .table-import-wrapper {
+  /* overflow-x: auto; */
+  width: 3100px;
+  max-height: 95vh;
+  background: rgb(255, 255, 255);
+  padding: 20px 25px;
+  border-radius: 3px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
 }

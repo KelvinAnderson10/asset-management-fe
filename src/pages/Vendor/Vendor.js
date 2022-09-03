@@ -6,7 +6,7 @@ import { FiPlus } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import "./style.css";
 import Swal from 'sweetalert2'
-import { BsArrowDownUp } from "react-icons/bs";
+import {FaSort} from 'react-icons/fa'
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import swal from "sweetalert";
@@ -28,6 +28,7 @@ export const VendorManage = () => {
   //For Add New Data Model
   const [ViewPost, SetPostShow] = useState(false);
   const handlePostShow = () => {
+    setVendorData({})
     SetPostShow(true);
   };
   const hanldePostClose = () => {
@@ -45,7 +46,6 @@ export const VendorManage = () => {
     const newData = { ...vendorData };
     newData[e.target.name] = e.target.value;
     setVendorData(newData);
-    console.log(newData);
   };
 
   //For Edit Model
@@ -55,7 +55,7 @@ export const VendorManage = () => {
   const handleEditShow = (index, item) => {
     setVendorData(item);
     SetRowData(item)
-    console.log("ini index", index);
+
     setId(index);
     setDelete(true);
     SetEditShow(true);
@@ -76,8 +76,6 @@ export const VendorManage = () => {
 
   const handleLocation = (e) => {
     const location = e.target.value;
-
-    console.log(location);
   };
 
   useEffect(() => {
@@ -95,7 +93,6 @@ export const VendorManage = () => {
       setVendorData(response.data);
       SetPostShow(false);
       setDoneAddform(true);
-      console.log(response);
       if (response.status === "SUCCESS") {
         Swal.fire({
           title: "Success!",
@@ -118,7 +115,6 @@ export const VendorManage = () => {
     setLoading(true);
     try {
       const response = await vendorService.getAllVendor();
-      console.log(response);
       setData(response.data);
     } catch (e) {
       console.log(e);
@@ -129,7 +125,6 @@ export const VendorManage = () => {
 
   //================ DELETE LOCATION ===========================
   const onDeleteVendor = async (name) => {
-    console.log(name);
     setLoading(true);
 
     Swal.fire({
@@ -144,7 +139,6 @@ export const VendorManage = () => {
       if (result.isConfirmed) {
         try {
           const response = vendorService.deleteVendor(name);
-          console.log(response);
           onGetAllVendor();
         } catch (e) {
           console.log(e);
@@ -172,9 +166,8 @@ export const VendorManage = () => {
     setLoading(true);
     try {
       const response = await vendorService.getVendorByNameLike(searchLocation);
-      console.log(response);
       setData(response.data);
-      console.log(response.data);
+
     } catch (e) {
       console.log(e);
     } finally {
@@ -184,10 +177,10 @@ export const VendorManage = () => {
   //=============== EDIT ROW DATA  ===============================
   const handleEdit = async (e,id) => {
     e.preventDefault()
-    console.log("ini id", id);
+
     try {
       const response = await vendorService.updateVendor(id, vendorData);
-      console.log(response);
+
       setVendorData(response);
       setDoneAddform(true);
       if (response.status === "SUCCESS") {
@@ -299,9 +292,10 @@ export const VendorManage = () => {
     });
     
 }
-
+// CLEAR SEARCH
 const ref = useRef(null) ;
-const onClearForm = () => {
+const onClearForm = (e) => {
+  e.preventDefault()
   ref.current.value = ''; 
   onGetAllVendor();
 }
@@ -313,28 +307,21 @@ const onClearForm = () => {
       <div className="body">
           <div className="container">
           <div className="vendor-container-item" >
-            <Button
-              variant="primary"
-              onClick={() => {
-                handlePostShow();
-              }}
-            >
-               <FiPlus />
-              Add New Vendor
-            </Button>
+            
           
           
-          <form onSubmit={onSearchLocation}>
+          <form>
             <div className="input-group ">
               <input
-                placeholder="Search"
-                value={searchLocation}
+                placeholder="Search Vendor Name"
+                // value={searchLocation}
                 onChange={onChangeSearchLocation}
                 type="text"
                 className="form-control"
+                ref={ref}
               />
               <div className="input-group-append">
-                <button value="submit" className="btn btn-primary">
+                <button value="submit" className="btn btn-primary" onClick={onSearchLocation}>
                   <i className="fas fa-search"></i>
                 </button>
                 <button value="submit" className="btn btn-danger form-button" onClick={onClearForm}>
@@ -343,6 +330,15 @@ const onClearForm = () => {
               </div>
             </div>
           </form>
+          <Button
+              variant="primary"
+              onClick={() => {
+                handlePostShow();
+              }}
+            >
+               <FiPlus />
+              Add New Vendor
+            </Button>
           </div>
         
         
@@ -368,19 +364,19 @@ const onClearForm = () => {
                       <th>No</th>
                       <th onClick={() => sorting("name")}>
                         {" "}
-                        <BsArrowDownUp /> Name
+                        <FaSort /> Name
                       </th>
                       <th onClick={() => sorting("address")}>
                         {" "}
-                        <BsArrowDownUp /> Address
+                        <FaSort /> Address
                       </th>
                       <th onClick={() => sorting("phone")}>
                         {" "}
-                        <BsArrowDownUp /> Phone
+                        <FaSort /> Phone
                       </th>
                       <th onClick={() => sorting("accountNumber")}>
                         {" "}
-                        <BsArrowDownUp /> Acount Number
+                        <FaSort /> Acount Number
                       </th>
                       <th>Actions</th>
                     </tr>
@@ -455,7 +451,7 @@ const onClearForm = () => {
                 </table>
                 <div className="clearfix">
                   <div className="hint-text">
-                    Showing <b>{itemsPerPage}</b> out of <b>{data.length}</b>{" "}
+                    Showing <b>{currentItems.length}</b> out of <b>{data.length}</b>{" "}
                     entries
                   </div>
                   <ul className="pageNumbers">
@@ -501,7 +497,7 @@ const onClearForm = () => {
             keyboard={false}
           >
             <Modal.Header closeButton>
-              <Modal.Title>Add new Vendor</Modal.Title>
+              <Modal.Title>Add New Vendor</Modal.Title>
              
             </Modal.Header>
             <Modal.Body>
@@ -586,22 +582,12 @@ const onClearForm = () => {
             keyboard={false}
           >
             <Modal.Header closeButton>
-              <Modal.Title>Edit </Modal.Title>
+              <Modal.Title>Edit Vendor Data </Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <form onSubmit={(e)=>handleEdit(e,RowData.name)}>
               <div>
                 <div className="form-group">
-                  <label>Vendor Name</label>
-                  <input
-                  required
-                    type="text"
-                    className="form-control"
-                    onChange={handleChange}
-                    placeholder="Please enter Location Name"
-                    name="name"
-                    defaultValue={RowData.name}
-                  />
                   <label>Address</label>
                   <input
                   required

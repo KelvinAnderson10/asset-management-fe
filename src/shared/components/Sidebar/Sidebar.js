@@ -10,6 +10,7 @@ import * as BiIcons from 'react-icons/bi';
 import * as FaIcons from 'react-icons/fa';
 import './Sidebar.css'
 import * as AiIcons from 'react-icons/ai';
+import { useAuth } from "../../../services/UseAuth";
 
 const routes = [
   {
@@ -48,6 +49,18 @@ const routes = [
     path: "/upload-data",
     name: "Import Data",
     icon: <FaIcons.FaFileUpload/>,
+  },
+  {
+    path: "",
+    name: "System Monitoring",
+    icon: <GoIcons.GoDatabase/>,
+    subRoutes: [
+        {
+          path: "",
+          name: "Event Logs",
+          icon: <IoIcons.IoIosPaper/>,
+        },
+      ],
   },
 ];
 
@@ -88,10 +101,13 @@ const Sidebar = ({children}) => {
     },
   };
 
+  const { eraseCookie } = useAuth()
+
   const navigate = useNavigate();
   const onLogout = () => {
-    navigate('/', {replace: true})
-  }
+  eraseCookie()
+  navigate('/', {replace: true})
+  } 
 
   return (
     <>

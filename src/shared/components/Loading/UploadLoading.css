@@ -1,9 +1,9 @@
-.loadingScreen {
+.uploadloadingScreen {
     z-index: 1000;
     position: absolute;
     display: flex;
     justify-content: center;
-    max-height: 100%;
+    min-height: 150.5vh;
     align-items: center;
     background-color: rgba(10, 10, 10, 0.4);
     /* border-radius: 20px; */
@@ -12,13 +12,13 @@
     right: 0;
     left: 0;
     background-size: contain;
-  }
+}
   
   .gif {
     border-radius: 20px;
   }
   
-  .loadingContainer {
+  .uploadloadingContainer {
     display: flex;
     flex-direction: column;
     background-color: white;
@@ -26,7 +26,7 @@
     border-radius: 30px;
   }
   
-  .loadingContainer > p {
+  .uploadloadingContainer > p {
     font-size: 20px;
     font-weight: bold;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;

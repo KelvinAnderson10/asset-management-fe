@@ -3,10 +3,8 @@ import React, { useEffect, useState, useRef } from "react";
 import Sidebar from "../../shared/components/Sidebar/Sidebar";
 import { useDeps } from "../../shared/context/DependencyContext";
 import { FiPlus } from "react-icons/fi";
-import { Link } from "react-router-dom";
-// import "./style.css";
 import Swal from 'sweetalert2'
-import { BsArrowDownUp } from "react-icons/bs";
+import { FaSort } from "react-icons/fa";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import swal from "sweetalert";
@@ -28,6 +26,8 @@ export const AssetCategory = () => {
   //Add New Data Model
   const [ViewPost, SetPostShow] = useState(false);
   const handlePostShow = () => {
+    console.log("ini asset category",assetCategory);
+    setAssetCategory({})
     SetPostShow(true);
   };
   const handlePostClose = () => {
@@ -42,10 +42,11 @@ export const AssetCategory = () => {
   };
 
   const handleChange = (e) => {
+
     const newData = { ...assetCategory };
     newData[e.target.name] = e.target.value;
     setAssetCategory(newData);
-    console.log(newData);
+    
   };
 
   //Edit Model
@@ -55,7 +56,6 @@ export const AssetCategory = () => {
   const handleEditShow = (index, item) => {
     SetRowData(item);
     setAssetCategory(item);
-    console.log("ini index", index);
     setId(index);
     SetEditShow(true);
   };
@@ -82,6 +82,7 @@ export const AssetCategory = () => {
   //CRUD
   //Add Data
   const handleSubmit = async (e) => {
+
     setLoading(true);
     e.preventDefault();
     try {
@@ -90,7 +91,7 @@ export const AssetCategory = () => {
       setAssetCategory(response.data);
       SetPostShow(false);
       setDoneAddform(true);
-      console.log(response);
+
       if (response.status === "SUCCESS") {
         Swal.fire({
           title: "Success!",
@@ -102,12 +103,12 @@ export const AssetCategory = () => {
       clearForm();
     } catch (error) {
       const err = error.response.data.error.Detail
-      console.log(err);
-      Swal.fire({
-        title: "Failed!",
-        text:`Your data failed to save becasue ${err}`,
-        icon: 'error',
-      })
+
+      // Swal.fire({
+      //   title: "Failed!",
+      //   text:`Your data failed to save becasue ${err}`,
+      //   icon: 'error',
+      // })
     } finally {
       setLoading(false);
     }
@@ -118,7 +119,7 @@ export const AssetCategory = () => {
     setLoading(true);
     try {
       const response = await assetCategoryService.getAllAssetCategory();
-      console.log(response);
+
       setData(response.data);
     } catch (e) {
       console.log(e);
@@ -129,7 +130,7 @@ export const AssetCategory = () => {
 
   //
   const onDeleteAssetCategory = async (name) => {
-    console.log(name);
+
     setLoading(true);
 
     Swal.fire({
@@ -144,86 +145,19 @@ export const AssetCategory = () => {
       if (result.isConfirmed) {
         try {
           const response = assetCategoryService.deleteAssetCategory(name);
-          console.log(response);
           onGetAllAssetCategory();
-          if (response.status === "SUCCESS") {
-            Swal.fire(
-                'Deleted!',
-                'Your data has been deleted.',
-                'success')
-          }
         } catch (e) {
-          console.log(e.response);      
+              console.log(e.response)
         } finally {
           setLoading(false);
         }
+        Swal.fire("Deleted!", "Your data has been deleted.", "success");
       }
     })
 
   };
 
-  //Search
-  // const onChangeSearchSubproduct = (e) => {
-  //   const searchSubproduct = e.target.value;
-  //   setSearchSubproduct(searchSubproduct);
-  // };
-
-  // const onSearchSubproduct = async (e) => {
-  //   e.preventDefault();
-  //   setLoading(true);
-  //   try {
-  //     const response = await assetCategoryService.getDataBySubproductLike(searchSubproduct);
-  //     console.log('ini keyword', searchSubproduct)
-  //     console.log(response);
-  //     setData(response.data);
-  //     console.log('ini search', response.data);
-  //   } catch (e) {
-  //     console.log(e);
-  //   } finally {
-  //     setLoading(false)
-  //   }
-  // };
-
-  // const [searchProduct, setSearchProduct] = useState('')
-  // const onChangeSearchProduct = (e) => {
-  //   const searchProduct = e.target.value;
-  //   setSearchProduct(searchProduct);
-  // };
-
-  // const onSearchProduct = async (e) => {
-  //   e.preventDefault();
-  //   setLoading(true);
-  //   try {
-  //     const response = await assetCategoryService.getDataByProductLike(searchProduct);
-  //     console.log(response);
-  //     setData(response.data);
-  //     console.log(response.data);
-  //   } catch (e) {
-  //     console.log(e);
-  //   } finally {
-  //     setLoading(false)
-  //   }
-  // };
-
-  // const [searchAssetCategory, setSearchAssetCategory] = useState('')
-  // const onChangeSearchAssetCategory = (e) => {
-  //   setSearchAssetCategory(e.target.value);
-  // };
-
-  // const onSearchAssetCategory = async (e) => {
-  //   e.preventDefault();
-  //   setLoading(true);
-  //   try {
-  //     const response = await assetCategoryService.getDataByAssetCategoryLike(searchAssetCategory);
-  //     console.log(response);
-  //     setData(response.data);
-  //     console.log(response.data);
-  //   } catch (e) {
-  //     console.log(e);
-  //   } finally {
-  //     setLoading(false)
-  //   }
-  // };
+  
 
   //Filter
   const [filter, setFilter] = useState('');
@@ -241,16 +175,12 @@ export const AssetCategory = () => {
   }
 
   const onFilter = async () => {
-    console.log(filter)
-    console.log(dropdownName)
+
     if (dropdownName === 'Subproduct') {
       setLoading(true);
       try {
         const response = await assetCategoryService.getDataBySubproductLike(filter);
-        console.log('ini keyword', searchSubproduct)
-        console.log(response);
         setData(response.data);
-        console.log('ini search', response.data);
       } catch (e) {
         console.log(e);
       } finally {
@@ -260,9 +190,7 @@ export const AssetCategory = () => {
       setLoading(true);
       try {
         const response = await assetCategoryService.getDataByProductLike(filter);
-        console.log(response);
         setData(response.data);
-        console.log(response.data);
       } catch (e) {
         console.log(e);
       } finally {
@@ -272,9 +200,9 @@ export const AssetCategory = () => {
       setLoading(true);
       try {
         const response = await assetCategoryService.getDataByAssetCategoryLike(filter);
-        console.log(response);
+        
         setData(response.data);
-        console.log(response.data);
+        
       } catch (e) {
         console.log(e);
       } finally {
@@ -291,12 +219,11 @@ export const AssetCategory = () => {
   //Edit Data
   const handleEdit = async (e, id) => {
     e.preventDefault()
-    console.log("ini id", id);
+  
     try {
       assetCategory.useful_life = Number(assetCategory.useful_life)
       const response = await assetCategoryService.updateAssetCategory(id, assetCategory);
-      console.log(response);
-      SetRowData(response);
+      setAssetCategory(response);
       setDoneAddform(true);
       if (response.status === "SUCCESS") {
         swal({
@@ -309,7 +236,7 @@ export const AssetCategory = () => {
       SetEditShow(false);
       onGetAllAssetCategory();
     } catch (error) {
-      console.log(error.response);
+     
       Swal.fire({
         title: "Failed!",
         text:`Your data failed to save`,
@@ -482,23 +409,23 @@ export const AssetCategory = () => {
                         <th>No</th>
                         <th onClick={() => sorting("asset_category")}>
                             {" "}
-                            <BsArrowDownUp /> Asset Category
+                            <FaSort /> Asset Category
                         </th>
                         <th onClick={() => sortingNum("useful_life")}>
                             {" "}
-                            <BsArrowDownUp /> Useful Life
+                            <FaSort /> Useful Life
                         </th>
                         <th onClick={() => sorting("product_code")}>
                             {" "}
-                            <BsArrowDownUp /> Product Code
+                            <FaSort /> Product Code
                         </th>
                         <th onClick={() => sorting("product_name")}>
                             {" "}
-                            <BsArrowDownUp /> Product Name
+                            <FaSort /> Product Name
                         </th>
                         <th onClick={() => sorting("subproduct_name")}>
                             {" "}
-                            <BsArrowDownUp /> Subproduct Name
+                            <FaSort /> Subproduct Name
                         </th>
                         <th>Actions</th>
                         </tr>

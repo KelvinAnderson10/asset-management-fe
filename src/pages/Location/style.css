@@ -233,8 +233,9 @@ input.form-control:focus{
   flex-direction: row;
   flex-wrap: wrap;
   flex-direction: row;
- 	gap: 0px 61.5%;
+ 	/* gap: 0px 61.5%; */
   /* margin-left: 24em; */
   margin-top: 2em;
   margin-bottom: 2em;
+  justify-content: space-between;
 }

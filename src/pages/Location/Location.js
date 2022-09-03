@@ -6,7 +6,8 @@ import { FiPlus } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import "./style.css";
 import Swal from "sweetalert2";
-import { BsArrowDownUp } from "react-icons/bs";
+import {FaSort} from 'react-icons/fa'
+
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import swal from "sweetalert";
@@ -45,7 +46,7 @@ export const Location = () => {
 
   const handleEditShow = (index, item) => {
     SetRowData(item);
-    console.log("ini index", index);
+    
     setId(index);
     setDelete(true);
     SetEditShow(true);
@@ -67,7 +68,7 @@ export const Location = () => {
   const handleLocation = (e) => {
     const location = e.target.value;
     setLocation(location);
-    console.log(location);
+   
   };
 
   useEffect(() => {
@@ -84,7 +85,7 @@ export const Location = () => {
       const response = await locationService.createLocation({
         location,
       });
-      console.log(response);
+     
       setLocation(response);
       setDoneAddform(true);
 
@@ -110,7 +111,7 @@ export const Location = () => {
     setLoading(true);
     try {
       const response = await locationService.getAllLocation();
-      console.log(response);
+   
       setData(response.data);
       SetPostShow(false);
     } catch (e) {
@@ -134,7 +135,7 @@ export const Location = () => {
       if (result.isConfirmed) {
         try {
           const response = locationService.deleteLocation(id);
-          console.log(response);
+          
           onGetAllLocation();
         } catch (e) {
           console.log(e);
@@ -145,18 +146,6 @@ export const Location = () => {
       }
     });
 
-    // setLoading(true);
-    // if (window.confirm("Are you sure Want to Delete?")) {
-    //   try {
-    //     const response = await locationService.deleteLocation(id);
-    //     console.log(response);
-    //     onGetAllLocation();
-    //   } catch (e) {
-    //     console.log(e);
-    //   } finally {
-    //     setLoading(false);
-    //   }
-    // }
   };
 
   //================== SEARCH BY NAME =========================
@@ -170,9 +159,8 @@ export const Location = () => {
     setLoading(true);
     try {
       const response = await locationService.getLocationByName(searchLocation);
-      console.log(response);
       setData(response.data);
-      console.log(response.data);
+     
     } catch (e) {
       console.log(e);
     } finally {
@@ -180,19 +168,20 @@ export const Location = () => {
   };
 
   const ref = useRef(null) ;
-  const onClearForm = () => {
+  const onClearForm = (e) => {
+    e.preventDefault()
     ref.current.value = ''; 
     onGetAllLocation();
   }
 
   //=============== EDIT ROW DATA  ===============================
   const handleEdit = async (id) => {
-    console.log("ini id", id);
+
     try {
       const response = await locationService.updateLocation(id, {
         location,
       });
-      console.log(response);
+     
       setLocation(response);
       setDoneAddform(true);
       if (response.status === "SUCCESS") {
@@ -294,6 +283,22 @@ export const Location = () => {
       setOrder("ASC");
     }
   };
+  const sortingNum = (col) => {
+    if (order === "ASC") {
+        const sorted = [...data].sort((a, b) =>
+          a[col] > b[col] ? 1 : -1
+        );
+        setData(sorted);
+        setOrder("DSC");
+      }
+      if (order === "DSC") {
+        const sorted = [...data].sort((a, b) =>
+          a[col] < b[col] ? 1 : -1
+        );
+        setData(sorted);
+        setOrder("ASC");
+      }
+  }
 
   return (
     <>
@@ -301,6 +306,27 @@ export const Location = () => {
       <div className="body">
       <div className="container">
         <div className="loc-container-item">
+          
+          <form>
+            <div className="input-group">
+              <input
+                ref={ref}
+                placeholder="Search"
+                // value={searchLocation}
+                onChange={onChangeSearchLocation}
+                type="text"
+                className="form-control"
+              />
+              <div className="input-group-append">
+                <button value="submit" className="btn btn-primary" onClick={onSearchLocation}>
+                  <i className="fas fa-search"></i>
+                </button>
+                <button value="submit" className="btn btn-danger form-button" onClick={onClearForm}>
+                        <i className="fa fa-times"></i>
+                </button>
+              </div>
+            </div>
+          </form>
           <Button
             variant="primary"
             onClick={() => {
@@ -310,25 +336,6 @@ export const Location = () => {
             <FiPlus />
             Add New Location
           </Button>
-          <form onSubmit={onSearchLocation}>
-            <div className="input-group">
-              <input
-                placeholder="Search"
-                value={searchLocation}
-                onChange={onChangeSearchLocation}
-                type="text"
-                className="form-control"
-              />
-              <div className="input-group-append">
-                <button value="submit" className="btn btn-primary">
-                  <i className="fas fa-search"></i>
-                </button>
-                <button value="submit" className="btn btn-danger form-button" onClick={onClearForm}>
-                        <i className="fa fa-times"></i>
-                </button>
-              </div>
-            </div>
-          </form>
         </div>
 
             <div className="table-responsive">
@@ -349,7 +356,11 @@ export const Location = () => {
                       <th>No</th>
                       <th onClick={() => sorting("location")}>
                         {" "}
-                        <BsArrowDownUp /> Location
+                        <FaSort /> Location
+                      </th>
+                      <th onClick={() => sortingNum("ID")}>
+                        {" "}
+                        <FaSort /> Area Code
                       </th>
                       <th>Actions</th>
                     </tr>
@@ -357,13 +368,14 @@ export const Location = () => {
                   <tbody>
                     {data.length === 0 ? (
                       <tr>
-                        <th colspan='3'>Data is not found</th>
+                        <th colSpan='4'>Data is not found</th>
                       </tr>
                     ) : (
                       currentItems.map((item, index) => (
                         <tr key={item.ID}>
                           <th>{index + 1}</th>
                           <th>{item.location}</th>
+                          <th>{item.ID}</th>
                           <td>
                             <a
                               onClick={() => {
@@ -421,7 +433,7 @@ export const Location = () => {
                 </table>
                 <div className="clearfix">
                   <div className="hint-text">
-                    Showing <b>{itemsPerPage}</b> out of <b>{data.length}</b>{" "}
+                    Showing <b>{currentItems.length}</b> out of <b>{data.length}</b>{" "}
                     entries
                   </div>
                   <ul className="pageNumbers">
@@ -470,6 +482,7 @@ export const Location = () => {
               <Modal.Title>Add new Location</Modal.Title>
             </Modal.Header>
             <Modal.Body>
+              <form onSubmit={handleSubmit}>
             <p style={{color:"red"}}>Please complete all required fields</p>
               <div>
                 <div className="form-group">
@@ -487,11 +500,12 @@ export const Location = () => {
                 <Button
                   type="submit"
                   className="btn btn-success mt-4"
-                  onClick={handleSubmit}
                 >
                   Add{" "}
                 </Button>
+                
               </div>
+              </form>
             </Modal.Body>
             <Modal.Footer>
               <Button variant="secondary" onClick={hanldePostClose}>

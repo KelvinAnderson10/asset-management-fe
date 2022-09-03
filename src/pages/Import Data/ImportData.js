@@ -5,25 +5,43 @@ import { useDeps } from '../../shared/context/DependencyContext';
 import './ImportData.css'
 import guidelines from '../../assets/file/guidelines.xlsx'
 import template from '../../assets/file/template.xlsx'
+
+import {Success} from '../../shared/components/Notification/Success';
+import {Failed} from '../../shared/components/Notification/Failed';
+import UploadLoading from '../../shared/components/Loading/UploadLoading';
 import Loading from '../../shared/components/Loading/Loading';
 
 export const ImportData = () => {
   const [excelData, setExcelData] = useState([])
   const [doneUploadExcel, setDoneUploadExcel] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [isLoadingscd, setIsLoadingscd] = useState(false)
   const [uploadBackendData, setUploadBackendData] = useState([])
+  const [upload, setUpload] = useState(true)
 
   const {assetItemService} = useDeps();
 
   const handleSubmit = async () => {
+    setUpload(false)
+    setIsLoadingscd(true)
     
     try {
       const response = await assetItemService.batchInsert(uploadBackendData)
-      console.log('ini respon submit',response);
-      alert("UPLOAD DATA SUCCESS !")
+      Success('uploaded')
     } catch (error) {
-      alert(error)
+      if (error.response.data.error.Detail){
+        Failed(`Upload failed because ${error.response.data.error.Detail}`)
+
+      } else if (error.response.data.error.Field){
+        Failed(`Upload failed because column ${error.response.data.error.Field} is in wrong format`)
+      } else{
+        Failed(`Upload failed because one of data in subproduct column doesn't exist`)
+      }
       console.log(error);
+
+    }finally{
+      setIsLoadingscd(false)
+      setUpload(true)
     }
   }
 
@@ -44,22 +62,24 @@ export const ImportData = () => {
             const sheetName = workbook.SheetNames[0];           // Sheetnya, misal produk berarti di index ke 2
             const worksheet = workbook.Sheets[sheetName];
             let json = XLSX.utils.sheet_to_json(worksheet);
-            
+            console.log(json)
             // Notes : yang dikirim ke backend tetap const json, const excelData hanya untuk tampilan
             setExcelData(json)
 
             setUploadBackendData(json)
             e.target.files = null
             setIsLoading(false)
+            setUpload(false)
         };
         reader.readAsArrayBuffer(e.target.files[0]);
     }
   }
 
   useEffect(() => {
-    console.log(excelData);
+  
     setDoneUploadExcel(true)
     setIsLoading(false)
+    setIsLoadingscd(false)
   }, [excelData])
 
   return (
@@ -69,7 +89,7 @@ export const ImportData = () => {
             <div className='body'>
               <div className='container'>
                 <div className='title-container'>
-                  <h4>ADD MULTIPLE ASSET</h4>
+                  <h4>Add Multiple Asset</h4>
                 </div>
             <div class='form-upload-container'>
           <div>
@@ -107,12 +127,12 @@ export const ImportData = () => {
             <div>
               <div className="import-box">
                 <br></br>
-                      <h3>
+                      {/* <h3>
                           Upload <b>Assets</b>
-                      </h3>
+                      </h3> */}
                 <div className="table-responsive">
-                  <div className="table-wrapper">
-                    <div className="table-title">
+                  <div className="table-import-wrapper">
+                    <div className="">
                       <div className="row">
                         <div className="col-xs-8">
                         </div>
@@ -120,7 +140,7 @@ export const ImportData = () => {
                     </div>
 
                     <table className="table table-striped table-hover">
-                      <thead>
+                      <thead className= "table-secondary">
                         <tr>
                           <th>Tanggal Pembelian</th>
                           <th>Tahun</th>
@@ -194,24 +214,19 @@ export const ImportData = () => {
                     </table>
                   </div>
                 </div>
-                  <br></br>
-                  <br></br>
-                  <br></br>
-                  <br></br>
-                  <button onClick={handleSubmit}>Save</button>
-                  <button>Clear</button>
-                  <br></br>
-                  <br></br>
-                  <br></br>
-                  <br></br>
-                  <br></br>
+
+                  <div className='button-save'>
+                  <button disabled={upload} className='btn btn-primary' onClick={handleSubmit}>Save</button>
+                  </div>
+
               </div>
             </div>
 
-            {/* tinggal didesign */}
+
             </div>   
             </div>
-            {isLoading && <Loading/>}
+            {isLoading && <Loading/> }
+            {isLoadingscd && <UploadLoading/>}
         </div>
         
         </Sidebar>
