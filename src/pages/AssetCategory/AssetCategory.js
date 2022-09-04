@@ -545,12 +545,12 @@ export const AssetCategory = () => {
             >
                 <Modal.Header closeButton>
                 <Modal.Title>Add New AssetCategory</Modal.Title>
-                
                 </Modal.Header>
                 <Modal.Body>
                 <form onSubmit={handleSubmit}>
                 <p style={{color:"red"}}>Please complete all required fields</p>
                 <div>
+                {/* <form onSubmit={handleSubmit}> */}
                     <div className="form-group">
                     <label className="form-label">Asset Category<span style={{color :"red"}} >*</span> </label>
                     <input
@@ -643,6 +643,7 @@ export const AssetCategory = () => {
                 <Modal.Body>
                 <form onSubmit={(e) => handleEdit(e, RowData.subproduct_name)}>
                 <div>
+                  {/* <form onSubmit={(e) => handleEdit(e, RowData.subproduct_name)}> */}
                     <div className="form-group">
                     <label>Asset Category</label>
                     <input

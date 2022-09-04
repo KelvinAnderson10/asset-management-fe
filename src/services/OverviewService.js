@@ -109,6 +109,16 @@ export const overviewService = ({doGet, doPut}) => {
         }
     }
 
+    const getCountAllAsset = async () => {
+        try {
+            return await doGet({
+                url: '/api/asset/total/count'
+            })
+        } catch (e) {
+            throw e
+        }
+    }
 
-    return {getAllAsset, getAssetByAssetName, updateAsset,getAssetByVendor,getAssetByCondition,getAssetByLocation, getAssetByPagination, getAssetBySubproduct, getAssetByItemName, getAssetByProduct, getAssetByCategory}
+
+    return {getAllAsset, getAssetByAssetName, updateAsset,getAssetByVendor,getAssetByCondition,getAssetByLocation, getAssetByPagination, getAssetBySubproduct, getAssetByItemName, getAssetByProduct, getAssetByCategory, getCountAllAsset}
 }
