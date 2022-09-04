@@ -112,7 +112,7 @@ export const overviewService = ({doGet, doPut}) => {
     const getCountAllAsset = async () => {
         try {
             return await doGet({
-                url: '/api/asset/total'
+                url: '/api/asset/total/count'
             })
         } catch (e) {
             throw e
