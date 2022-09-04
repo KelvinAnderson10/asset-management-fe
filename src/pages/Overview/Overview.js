@@ -55,6 +55,7 @@ export const Overview = () => {
     try {
       const response = await overviewService.getAllAsset();
       setDatas(response.data);
+      
     } catch (e) {
       console.log(e);
     } finally {
@@ -192,16 +193,21 @@ export const Overview = () => {
       // setRowData(response.data)
       
       setEditShow(true);
-      let date = response.data['Tanggal Output'].toString()
-      let datesplit = date.split("+") 
-      let res = datesplit[0]
-      response.data['Tanggal Output'] = res
-      setNewDate(res)
+      console.log(response.data)
+      response.data['Tanggal Output'] = moment((response.data['Tanggal Output'])).format('YYYY-MM-DDTHH:MM')
+      response.data['BAST Output'] = moment((response.data['BAST Output'])).format('YYYY-MM-DDTHH:MM')
+      // let res = moment().format('DD/MM/YYYY,HH:MM A');
+      // let date = response.data['Tanggal Output'].toString()
+      // let datesplit = date.split("+") 
+      // let res = datesplit[0]
+      // response.data['Tanggal Output'] = res
+      // setNewDate(res)
 
-      date = response.data['BAST Output'].toString()
-      datesplit = date.split("+") 
-      res = datesplit[0]
-      response.data['BAST Output'] = res
+      // date = response.data['BAST Output'].toString()
+      // datesplit = date.split("+") 
+      // res = datesplit[0]
+      // response.data['BAST Output'] = res
+      console.log('ini tanggal out',response.data['Tanggal Output'])
       setAssetEdit(response.data);
       setImageBase64(response.data["Asset Image"])
     } catch (e) {
@@ -255,8 +261,7 @@ export const Overview = () => {
     try {
       assetEdit["Tahun"] = Number(assetEdit["Tahun"]);
       assetEdit["Harga Perolehan"] = Number(assetEdit["Harga Perolehan"]);
-      assetEdit["Total Harga Perolehan"] = Number(
-        assetEdit["Total Harga Perolehan"]
+      assetEdit["Total Harga Perolehan"] = Number(assetEdit["Total Harga Perolehan"]
       );
       assetEdit["Kode Wilayah"] = Number(assetEdit["Kode Wilayah"]);
       assetEdit["Tahun Pembelian"] = Number(assetEdit["Tahun Pembelian"]);
@@ -349,7 +354,9 @@ export const Overview = () => {
   const handleChange = (e) => {
     const newData = { ...assetEdit };
     newData[e.target.name] = e.target.value;
+    console.log('ini data baru',newData)
     setAssetEdit(newData);
+    
   };
 
   const handleCancel = (e) => {

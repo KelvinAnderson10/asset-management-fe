@@ -114,7 +114,7 @@ export const AssetItem = () => {
 
       const response = await assetItemService.createAsset(data);
       setData(response.data);
-     
+      
       Success("added");
       clearForm();
     } catch (error) {
@@ -272,17 +272,7 @@ export const AssetItem = () => {
                     style={{width:'95%'}}
                   />
                 </div>
-                <div className="inputBox">
-                  <span>Additional Cost :</span>
-                  <input
-                    type="number"
-                    required
-                    name="Biaya Lain-Lain"
-                    value={data["Biaya Lain-Lain"]}
-                    onChange={handleChange}
-                    style={{width:'95%'}}
-                  />
-                </div>
+               
               </div>
               <div className="col">
                 <div className="asset-image-container">
@@ -312,6 +302,17 @@ export const AssetItem = () => {
                     type="file"
                     name="Asset Image"
                     onChange={imageChange}
+                  />
+                </div>
+                <div className="inputBox">
+                  <span>Additional Cost :</span>
+                  <input
+                    type="number"
+                    required
+                    name="Biaya Lain-Lain"
+                    value={data["Biaya Lain-Lain"]}
+                    onChange={handleChange}
+                    style={{width:'95%'}}
                   />
                 </div>
                 <div className="inputBox">
@@ -395,7 +396,7 @@ export const AssetItem = () => {
                     />
                   </div>
 
-                  <div className="inputBox">
+                  {/* <div className="inputBox">
                     <span>Item Order Code :</span>
                     <input
                       type="number"
@@ -405,7 +406,7 @@ export const AssetItem = () => {
                       onChange={handleChange}
                       style={{width:'95%'}}
                     />
-                  </div>
+                  </div> */}
                 {/* </div> */}
                 <div className="button-asset">
                   {/* <button
