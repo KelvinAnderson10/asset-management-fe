@@ -193,16 +193,19 @@ export const Overview = () => {
       // setRowData(response.data)
       
       setEditShow(true);
-      let date = response.data['Tanggal Output'].toString()
-      let datesplit = date.split("+") 
-      let res = datesplit[0]
-      response.data['Tanggal Output'] = res
-      setNewDate(res)
+      response.data['Tanggal Output'] = moment((response.data['Tanggal Output'])).format('YYYY-MM-DDTHH:MM')
+      response.data['BAST Output'] = moment((response.data['BAST Output'])).format('YYYY-MM-DDTHH:MM')
+      // let date = response.data['Tanggal Output'].toString()
+      // let datesplit = date.split("+") 
+      // let res = datesplit[0]
+      // response.data['Tanggal Output'] = res
+      // setNewDate(res)
 
-      date = response.data['BAST Output'].toString()
-      datesplit = date.split("+") 
-      res = datesplit[0]
-      response.data['BAST Output'] = res
+      // date = response.data['BAST Output'].toString()
+      // datesplit = date.split("+") 
+      // res = datesplit[0]
+      // response.data['BAST Output'] = res
+      
       setAssetEdit(response.data);
       setImageBase64(response.data["Asset Image"])
     } catch (e) {
