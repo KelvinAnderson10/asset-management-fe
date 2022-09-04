@@ -8,6 +8,7 @@ import "./Login.css";
 import AuthCode from "react-auth-code-input";
 import { Card } from "react-bootstrap";
 import { useAuth } from "../../services/UseAuth";
+import Loading from "../../shared/components/Loading/Loading";
 
 export const Login = () => {
   const [email, setEmail] = useState("");
@@ -17,23 +18,24 @@ export const Login = () => {
   const { userService } = useDeps();
   const navigate = useNavigate();
   const { setCookie } = useAuth();
+  const [isLoading, setLoading] = useState(false)
   
 
 
 
   const validateEmail = async (e) => {
+    setLoading(true)
    e.preventDefault()
     try {
       const response = await userService.getUserByEmail(email); 
       setEmail(response.data.email);
-
       setOTP(response.otp);
       setShowOTPForm(true);
-      
     } catch (error) {
       Failed("Email not registered yet, Please input a valid email");
     } finally {
       console.log("ini OTP",OTP)
+      setLoading(false)
     }
   };
 
@@ -140,14 +142,16 @@ export const Login = () => {
                   containerClassName="otpContainer"
                   inputClassName="otpInputContainer"
                 ></AuthCode>
-                <br></br>
+                <h6 className="message">If you cant'find the OTP in your inbox, please check your spam folder</h6>
                 <button type="submit" onClick={validateOTP} className="btn">
+                
                   SUBMIT
                 </button>
               </Card.Body>
             </Card>
           </div>
         )}
+        {isLoading && <Loading/> }
       </div>
     </div>
                 

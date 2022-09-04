@@ -93,7 +93,7 @@ const Sidebar = ({children}) => {
 
   const navigate = useNavigate();
   const onLogout = () => {
-  eraseCookie();
+  eraseCookie("OTP")
   navigate('/', {replace: true})
   } 
 
