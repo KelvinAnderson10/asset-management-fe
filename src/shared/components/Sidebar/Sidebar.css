@@ -90,6 +90,7 @@ main {
 .link_text {
   white-space: nowrap;
   font-size: 20px;
+  color:#fff;
 }
 
 .menu {
@@ -134,4 +135,8 @@ main {
   letter-spacing: 0.5px;
   margin: 20px;
   margin-top: 250%;
+}
+
+.icon{
+  color: #fff
 }
