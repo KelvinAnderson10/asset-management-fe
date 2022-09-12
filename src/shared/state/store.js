@@ -1,14 +1,5 @@
-import { createStore } from "redux";
+import { configureStore } from "@reduxjs/toolkit";
 
-import { combineReducers } from 'redux';
-
-
-function rootReducer() {
-    return combineReducers({
-        
-    });
-}
-
-export function configureStore(){
-    return createStore(rootReducer())
-}
+export const store = configureStore({
+    
+})

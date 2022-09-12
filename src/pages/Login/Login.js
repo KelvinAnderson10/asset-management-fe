@@ -19,7 +19,13 @@ export const Login = () => {
   const navigate = useNavigate();
   const { setCookie } = useAuth();
   const [isLoading, setLoading] = useState(false)
-  
+  const [user, setUser] = useState({
+    name:'',
+    position:'',
+    role:'',
+    NIK:''
+  })
+
 
 
 
@@ -28,7 +34,10 @@ export const Login = () => {
    e.preventDefault()
     try {
       const response = await userService.getUserByEmail(email); 
+      console.log(response)
       setEmail(response.data.email);
+      setUser(prevObj=>({...prevObj,NIK:(response.data.NIK),name:(response.data.name),position:(response.data.position), role:(response.data.role)}))
+      // setUser(response.data)
       setOTP(response.otp);
       setShowOTPForm(true);
     } catch (error) {
@@ -55,7 +64,8 @@ export const Login = () => {
 
   const validateOTP = () => {
     if (OTPInput == OTP) {
-      setCookie("OTP", OTP, 90);
+      // setCookie("OTP", OTP, 90);
+      setCookie("user",user,200)
     } else {
       Failed("Wrong OTP");
     }
@@ -70,7 +80,7 @@ export const Login = () => {
     
   
     <div>
-      {getCookie("OTP") &&  <Navigate to='/main'></Navigate>}
+      {getCookie("user") &&  <Navigate to='/main'></Navigate>}
 
       <div className="container-fluid">
         <div className="row">
