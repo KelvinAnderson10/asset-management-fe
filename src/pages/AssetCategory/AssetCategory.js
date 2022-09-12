@@ -12,6 +12,7 @@ import './AssetCategory.css'
 import { Failed } from "../../shared/components/Notification/Failed";
 import { Success } from "../../shared/components/Notification/Success";
 import { EVENT } from "../../shared/constants";
+import { useAuth } from "../../services/UseAuth";
 
 export const AssetCategory = () => {
   const [assetCategory, setAssetCategory] = useState({});
@@ -77,6 +78,10 @@ export const AssetCategory = () => {
     onGetAllAssetCategory();
   }, [doneAddForm]);
 
+  useEffect( () => {
+    onGetCookie()
+  }, [])
+
   //CRUD
   //Add Data
   const handleSubmit = async (e) => {
@@ -96,7 +101,7 @@ export const AssetCategory = () => {
       onGetAllAssetCategory();
       let event = {
         event: EVENT.CREATE_ASSET_CATEGORY,
-        nik: '123'
+        user: user.name
       }
       createEventLogAssetCategory(event)
       clearForm();
@@ -142,7 +147,7 @@ export const AssetCategory = () => {
           onGetAllAssetCategory();
           let event = {
             event: EVENT.DELETE_ASSET_CATEGORY,
-            user: 'Yayah Zakiyah'
+            user: user.name
           }
           createEventLogAssetCategory(event)
           Swal.fire("Deleted!", "Your data has been deleted.", "success");
@@ -237,7 +242,7 @@ export const AssetCategory = () => {
       onGetAllAssetCategory();
       let event = {
         event: EVENT.UPDATE_ASSET_CATEGORY,
-        user: 'Yayah Zakiyah'
+        user: user.name
       }
       createEventLogAssetCategory(event)
     } catch (error) {
@@ -366,6 +371,20 @@ export const AssetCategory = () => {
     }
   }
 
+  //Get User
+  const { getCookie } = useAuth();
+  const[user,setUser]= useState({
+    name:'',
+    position:'',
+    role:'',
+    NIK:''
+  })
+  const onGetCookie = ()=>{
+    let savedUserJsonString = getCookie("user")
+    let savedUser = JSON.parse(savedUserJsonString)
+    setUser(prevObj=>({...prevObj,NIK:(savedUser.NIK),name:(savedUser.name),position:(savedUser.position), role:(savedUser.role)}))
+  }
+
   return (
     <>
       <Sidebar>
@@ -444,7 +463,7 @@ export const AssetCategory = () => {
                     <tbody>
                         {data.length === 0 ? (
                         <tr>
-                          <th colspan='7'>Data is not found</th>
+                          <th colspan='8'>Data is not found</th>
                         </tr>
                         ) : (
                         currentItems.map((item, index) => (
@@ -627,6 +646,7 @@ export const AssetCategory = () => {
                     <div className="form-group mt-3">
                     <label className="form-label">PIC<span style={{color :"red"}} >*</span></label>
                     <input
+                    style={{maxWidth:"500px"}}
                         required
                         type="text"
                         className="form-control"
@@ -712,6 +732,7 @@ export const AssetCategory = () => {
                     <div className="form-group mt-3">
                     <label className="form-label">PIC<span style={{color :"red"}} >*</span></label>
                     <input
+                    style={{maxWidth:"500px"}}
                         required
                         type="text"
                         className="form-control"
@@ -720,7 +741,7 @@ export const AssetCategory = () => {
                         name="pic"
                         value={RowData.pic}
                     />
-                    </div> 
+                    </div>  
                     </div>
                 </div>
                   <Button
@@ -792,6 +813,7 @@ export const AssetCategory = () => {
                     />
                     <label>PIC</label>
                     <input
+                    style={{maxWidth:"500px"}}
                         type="text"
                         className="form-control"
                         value={RowData.pic}
