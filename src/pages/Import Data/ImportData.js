@@ -10,6 +10,7 @@ import {Success} from '../../shared/components/Notification/Success';
 import {Failed} from '../../shared/components/Notification/Failed';
 import UploadLoading from '../../shared/components/Loading/UploadLoading';
 import Loading from '../../shared/components/Loading/Loading';
+import { EVENT } from '../../shared/constants';
 
 export const ImportData = () => {
   const [excelData, setExcelData] = useState([])
@@ -19,7 +20,7 @@ export const ImportData = () => {
   const [uploadBackendData, setUploadBackendData] = useState([])
   const [upload, setUpload] = useState(true)
 
-  const {assetItemService} = useDeps();
+  const {assetItemService, eventLogService} = useDeps();
 
   const handleSubmit = async () => {
     setUpload(false)
@@ -38,6 +39,11 @@ export const ImportData = () => {
         Failed(`Upload failed because one of data in subproduct column doesn't exist`)
       }
       console.log(error);
+      let event = {
+        event: EVENT.IMPORT_DATA,
+        user: 'Yayah Zakiyah'
+      }
+      createEventImportData(event)
 
     }finally{
       setIsLoadingscd(false)
@@ -81,6 +87,18 @@ export const ImportData = () => {
     setIsLoading(false)
     setIsLoadingscd(false)
   }, [excelData])
+
+  //Event Log
+  const [event, setEvent] = useState({})
+
+  const createEventImportData = async (eventLoc) => {
+    try {
+      const response = await eventLogService.createEventLog(eventLoc)
+      setEvent(response.data)
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   return (
     <>

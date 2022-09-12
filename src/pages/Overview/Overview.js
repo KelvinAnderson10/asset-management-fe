@@ -10,6 +10,7 @@ import "./EditAsset.css";
 import swal from "sweetalert";
 import Loading from "../../shared/components/Loading/Loading";
 import ReactPaginate from "react-paginate";
+import { EVENT } from "../../shared/constants";
 
 export const Overview = () => {
   const {
@@ -19,6 +20,7 @@ export const Overview = () => {
     userService,
     assetItemService,
     assetCategoryService,
+    eventLogService
   } = useDeps();
   const [datas, setDatas] = useState([]);
   const [order, setOrder] = useState("ASC");
@@ -285,7 +287,13 @@ export const Overview = () => {
         });
       }
       setEditShow(false);
+      
       getAssetsPagination(1)
+      let event = {
+        event: EVENT.UPDATE_ASSET,
+        user: 'Yayah Zakiyah'
+      }
+      createEventLogOverview(event)
     } catch (e) {
       console.log(e);
     } finally {
@@ -380,123 +388,166 @@ export const Overview = () => {
 
   const onFilter = async () => {
     if (dropdownName === 'Vendor') {
-      try {
-        const response = await overviewService.getAssetByVendor(filter);
-        for (let i in response.data) {
-          response.data[i]['Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Harga Perolehan'])
-          response.data[i]['Biaya Lain-Lain'] = 'Rp' + thousands_separators(response.data[i]['Biaya Lain-Lain'])
-          response.data[i]['PPN'] = 'Rp' + thousands_separators(response.data[i]['PPN'])
-          response.data[i]['Penyusutan Perbulan'] = 'Rp' + thousands_separators(response.data[i]['Penyusutan Perbulan'])
-          response.data[i]['Total Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Total Harga Perolehan'])
-          response.data[i]['Total Penyusutan'] = 'Rp' + thousands_separators(response.data[i]['Total Penyusutan'])
-          response.data[i]['Nilai Asset saat ini'] = 'Rp' + thousands_separators(response.data[i]['Nilai Asset saat ini'])
+      if (filter !== ''){
+        try {
+          const response = await overviewService.getAssetByVendor(filter);
+          for (let i in response.data) {
+            response.data[i]['Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Harga Perolehan'])
+            response.data[i]['Biaya Lain-Lain'] = 'Rp' + thousands_separators(response.data[i]['Biaya Lain-Lain'])
+            response.data[i]['PPN'] = 'Rp' + thousands_separators(response.data[i]['PPN'])
+            response.data[i]['Penyusutan Perbulan'] = 'Rp' + thousands_separators(response.data[i]['Penyusutan Perbulan'])
+            response.data[i]['Total Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Total Harga Perolehan'])
+            response.data[i]['Total Penyusutan'] = 'Rp' + thousands_separators(response.data[i]['Total Penyusutan'])
+            response.data[i]['Nilai Asset saat ini'] = 'Rp' + thousands_separators(response.data[i]['Nilai Asset saat ini'])
+            response.data[i]['Tanggal Output'] = moment((response.data[i]['Tanggal Output'])).format('YYYY-MM-DDTHH:MM')
+            response.data[i]['BAST Output'] = moment((response.data[i]['BAST Output'])).format('YYYY-MM-DDTHH:MM')
+          }
+          setDatas(response.data);
+          setPageCount(Math.ceil(datas/10))
+        } catch (e) {
+          console.log(e);
         }
-        setDatas(response.data);
-        setPageCount(Math.ceil(datas/10))
-      } catch (e) {
-        console.log(e);
+      } else {
+        getAssetsPagination(1)
       }
+      
     } else if (dropdownName === 'Location') {
-      try {
-        const response = await overviewService.getAssetByLocation(filter);
-        for (let i in response.data) {
-          response.data[i]['Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Harga Perolehan'])
-          response.data[i]['Biaya Lain-Lain'] = 'Rp' + thousands_separators(response.data[i]['Biaya Lain-Lain'])
-          response.data[i]['PPN'] = 'Rp' + thousands_separators(response.data[i]['PPN'])
-          response.data[i]['Penyusutan Perbulan'] = 'Rp' + thousands_separators(response.data[i]['Penyusutan Perbulan'])
-          response.data[i]['Total Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Total Harga Perolehan'])
-          response.data[i]['Total Penyusutan'] = 'Rp' + thousands_separators(response.data[i]['Total Penyusutan'])
-          response.data[i]['Nilai Asset saat ini'] = 'Rp' + thousands_separators(response.data[i]['Nilai Asset saat ini'])
+      if (filter !== '') {
+        try {
+          const response = await overviewService.getAssetByLocation(filter);
+          for (let i in response.data) {
+            response.data[i]['Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Harga Perolehan'])
+            response.data[i]['Biaya Lain-Lain'] = 'Rp' + thousands_separators(response.data[i]['Biaya Lain-Lain'])
+            response.data[i]['PPN'] = 'Rp' + thousands_separators(response.data[i]['PPN'])
+            response.data[i]['Penyusutan Perbulan'] = 'Rp' + thousands_separators(response.data[i]['Penyusutan Perbulan'])
+            response.data[i]['Total Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Total Harga Perolehan'])
+            response.data[i]['Total Penyusutan'] = 'Rp' + thousands_separators(response.data[i]['Total Penyusutan'])
+            response.data[i]['Nilai Asset saat ini'] = 'Rp' + thousands_separators(response.data[i]['Nilai Asset saat ini'])
+            response.data[i]['Tanggal Output'] = moment((response.data[i]['Tanggal Output'])).format('YYYY-MM-DDTHH:MM')
+            response.data[i]['BAST Output'] = moment((response.data[i]['BAST Output'])).format('YYYY-MM-DDTHH:MM')
+          }
+          setDatas(response.data);
+          setPageCount(Math.ceil(datas/10))  
+        } catch (e) {
+          console.log(e);
         }
-        setDatas(response.data);
-        setPageCount(Math.ceil(datas/10))  
-      } catch (e) {
-        console.log(e);
+      } else {
+        getAssetsPagination(1)
       }
     } else if (dropdownName === 'Condition'){
-      try {
-        const response = await overviewService.getAssetByCondition(filter);
-        for (let i in response.data) {
-          response.data[i]['Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Harga Perolehan'])
-          response.data[i]['Biaya Lain-Lain'] = 'Rp' + thousands_separators(response.data[i]['Biaya Lain-Lain'])
-          response.data[i]['PPN'] = 'Rp' + thousands_separators(response.data[i]['PPN'])
-          response.data[i]['Penyusutan Perbulan'] = 'Rp' + thousands_separators(response.data[i]['Penyusutan Perbulan'])
-          response.data[i]['Total Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Total Harga Perolehan'])
-          response.data[i]['Total Penyusutan'] = 'Rp' + thousands_separators(response.data[i]['Total Penyusutan'])
-          response.data[i]['Nilai Asset saat ini'] = 'Rp' + thousands_separators(response.data[i]['Nilai Asset saat ini'])
+      if (filter) {
+        try {
+          const response = await overviewService.getAssetByCondition(filter);
+          for (let i in response.data) {
+            response.data[i]['Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Harga Perolehan'])
+            response.data[i]['Biaya Lain-Lain'] = 'Rp' + thousands_separators(response.data[i]['Biaya Lain-Lain'])
+            response.data[i]['PPN'] = 'Rp' + thousands_separators(response.data[i]['PPN'])
+            response.data[i]['Penyusutan Perbulan'] = 'Rp' + thousands_separators(response.data[i]['Penyusutan Perbulan'])
+            response.data[i]['Total Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Total Harga Perolehan'])
+            response.data[i]['Total Penyusutan'] = 'Rp' + thousands_separators(response.data[i]['Total Penyusutan'])
+            response.data[i]['Nilai Asset saat ini'] = 'Rp' + thousands_separators(response.data[i]['Nilai Asset saat ini'])
+            response.data[i]['Tanggal Output'] = moment((response.data[i]['Tanggal Output'])).format('YYYY-MM-DDTHH:MM')
+            response.data[i]['BAST Output'] = moment((response.data[i]['BAST Output'])).format('YYYY-MM-DDTHH:MM')
+          }
+          setDatas(response.data);
+          setPageCount(Math.ceil(datas/10)) 
+        } catch (e) {
+          console.log(e);
         }
-        setDatas(response.data);
-        setPageCount(Math.ceil(datas/10)) 
-      } catch (e) {
-        console.log(e);
-      }
+      } else {
+        getAssetsPagination(1)
+      } 
     } else if (dropdownName === 'Item Name') {
-      try {
-        const response = await overviewService.getAssetByItemName(filter);
-        for (let i in response.data) {
-          response.data[i]['Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Harga Perolehan'])
-          response.data[i]['Biaya Lain-Lain'] = 'Rp' + thousands_separators(response.data[i]['Biaya Lain-Lain'])
-          response.data[i]['PPN'] = 'Rp' + thousands_separators(response.data[i]['PPN'])
-          response.data[i]['Penyusutan Perbulan'] = 'Rp' + thousands_separators(response.data[i]['Penyusutan Perbulan'])
-          response.data[i]['Total Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Total Harga Perolehan'])
-          response.data[i]['Total Penyusutan'] = 'Rp' + thousands_separators(response.data[i]['Total Penyusutan'])
-          response.data[i]['Nilai Asset saat ini'] = 'Rp' + thousands_separators(response.data[i]['Nilai Asset saat ini'])
+      if (filter !== '') {
+        try {
+          const response = await overviewService.getAssetByItemName(filter);
+          for (let i in response.data) {
+            response.data[i]['Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Harga Perolehan'])
+            response.data[i]['Biaya Lain-Lain'] = 'Rp' + thousands_separators(response.data[i]['Biaya Lain-Lain'])
+            response.data[i]['PPN'] = 'Rp' + thousands_separators(response.data[i]['PPN'])
+            response.data[i]['Penyusutan Perbulan'] = 'Rp' + thousands_separators(response.data[i]['Penyusutan Perbulan'])
+            response.data[i]['Total Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Total Harga Perolehan'])
+            response.data[i]['Total Penyusutan'] = 'Rp' + thousands_separators(response.data[i]['Total Penyusutan'])
+            response.data[i]['Nilai Asset saat ini'] = 'Rp' + thousands_separators(response.data[i]['Nilai Asset saat ini'])
+            response.data[i]['Tanggal Output'] = moment((response.data[i]['Tanggal Output'])).format('YYYY-MM-DDTHH:MM')
+            response.data[i]['BAST Output'] = moment((response.data[i]['BAST Output'])).format('YYYY-MM-DDTHH:MM')
+          }
+          setDatas(response.data);
+          setPageCount(Math.ceil(datas/10))
+        } catch (e) {
+          console.log(e);
         }
-        setDatas(response.data);
-        setPageCount(Math.ceil(datas/10))
-      } catch (e) {
-        console.log(e);
-      }
+      } else {
+        getAssetsPagination(1)
+      } 
     } else if (dropdownName === 'Subproduct') {
-      try {
-        const response = await overviewService.getAssetBySubproduct(filter);
-        for (let i in response.data) {
-          response.data[i]['Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Harga Perolehan'])
-          response.data[i]['Biaya Lain-Lain'] = 'Rp' + thousands_separators(response.data[i]['Biaya Lain-Lain'])
-          response.data[i]['PPN'] = 'Rp' + thousands_separators(response.data[i]['PPN'])
-          response.data[i]['Penyusutan Perbulan'] = 'Rp' + thousands_separators(response.data[i]['Penyusutan Perbulan'])
-          response.data[i]['Total Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Total Harga Perolehan'])
-          response.data[i]['Total Penyusutan'] = 'Rp' + thousands_separators(response.data[i]['Total Penyusutan'])
-          response.data[i]['Nilai Asset saat ini'] = 'Rp' + thousands_separators(response.data[i]['Nilai Asset saat ini'])
+      if (filter !== 'nil') {
+        try {
+          const response = await overviewService.getAssetBySubproduct(filter);
+          for (let i in response.data) {
+            response.data[i]['Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Harga Perolehan'])
+            response.data[i]['Biaya Lain-Lain'] = 'Rp' + thousands_separators(response.data[i]['Biaya Lain-Lain'])
+            response.data[i]['PPN'] = 'Rp' + thousands_separators(response.data[i]['PPN'])
+            response.data[i]['Penyusutan Perbulan'] = 'Rp' + thousands_separators(response.data[i]['Penyusutan Perbulan'])
+            response.data[i]['Total Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Total Harga Perolehan'])
+            response.data[i]['Total Penyusutan'] = 'Rp' + thousands_separators(response.data[i]['Total Penyusutan'])
+            response.data[i]['Nilai Asset saat ini'] = 'Rp' + thousands_separators(response.data[i]['Nilai Asset saat ini'])
+            response.data[i]['Tanggal Output'] = moment((response.data[i]['Tanggal Output'])).format('YYYY-MM-DDTHH:MM')
+            response.data[i]['BAST Output'] = moment((response.data[i]['BAST Output'])).format('YYYY-MM-DDTHH:MM')
+          }
+          setDatas(response.data);
+          setPageCount(Math.ceil(datas/10))  
+        } catch (e) {
+          console.log(e);
         }
-        setDatas(response.data);
-        setPageCount(Math.ceil(datas/10))  
-      } catch (e) {
-        console.log(e);
+      } else {
+        getAssetsPagination(1)
       }
     } else if (dropdownName === 'Product') {
-      try {
-        const response = await overviewService.getAssetByProduct(filter);
-        for (let i in response.data) {
-          response.data[i]['Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Harga Perolehan'])
-          response.data[i]['Biaya Lain-Lain'] = 'Rp' + thousands_separators(response.data[i]['Biaya Lain-Lain'])
-          response.data[i]['PPN'] = 'Rp' + thousands_separators(response.data[i]['PPN'])
-          response.data[i]['Penyusutan Perbulan'] = 'Rp' + thousands_separators(response.data[i]['Penyusutan Perbulan'])
-          response.data[i]['Total Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Total Harga Perolehan'])
-          response.data[i]['Total Penyusutan'] = 'Rp' + thousands_separators(response.data[i]['Total Penyusutan'])
-          response.data[i]['Nilai Asset saat ini'] = 'Rp' + thousands_separators(response.data[i]['Nilai Asset saat ini'])
+      if (filter !== '') {
+        try {
+          const response = await overviewService.getAssetByProduct(filter);
+          for (let i in response.data) {
+            response.data[i]['Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Harga Perolehan'])
+            response.data[i]['Biaya Lain-Lain'] = 'Rp' + thousands_separators(response.data[i]['Biaya Lain-Lain'])
+            response.data[i]['PPN'] = 'Rp' + thousands_separators(response.data[i]['PPN'])
+            response.data[i]['Penyusutan Perbulan'] = 'Rp' + thousands_separators(response.data[i]['Penyusutan Perbulan'])
+            response.data[i]['Total Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Total Harga Perolehan'])
+            response.data[i]['Total Penyusutan'] = 'Rp' + thousands_separators(response.data[i]['Total Penyusutan'])
+            response.data[i]['Nilai Asset saat ini'] = 'Rp' + thousands_separators(response.data[i]['Nilai Asset saat ini'])
+            response.data[i]['Tanggal Output'] = moment((response.data[i]['Tanggal Output'])).format('YYYY-MM-DDTHH:MM')
+            response.data[i]['BAST Output'] = moment((response.data[i]['BAST Output'])).format('YYYY-MM-DDTHH:MM')
+          }
+          setDatas(response.data);
+          setPageCount(Math.ceil(datas/10)) 
+        } catch (e) {
+          console.log(e);
         }
-        setDatas(response.data);
-        setPageCount(Math.ceil(datas/10)) 
-      } catch (e) {
-        console.log(e);
+      } else {
+        getAssetsPagination(1)
       }
     } else {
-      try {
-        const response = await overviewService.getAssetByCategory(filter);
-        for (let i in response.data) {
-          response.data[i]['Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Harga Perolehan'])
-          response.data[i]['Biaya Lain-Lain'] = 'Rp' + thousands_separators(response.data[i]['Biaya Lain-Lain'])
-          response.data[i]['PPN'] = 'Rp' + thousands_separators(response.data[i]['PPN'])
-          response.data[i]['Penyusutan Perbulan'] = 'Rp' + thousands_separators(response.data[i]['Penyusutan Perbulan'])
-          response.data[i]['Total Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Total Harga Perolehan'])
-          response.data[i]['Total Penyusutan'] = 'Rp' + thousands_separators(response.data[i]['Total Penyusutan'])
-          response.data[i]['Nilai Asset saat ini'] = 'Rp' + thousands_separators(response.data[i]['Nilai Asset saat ini'])
+      if (filter !== '') {
+        try {
+          const response = await overviewService.getAssetByCategory(filter);
+          for (let i in response.data) {
+            response.data[i]['Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Harga Perolehan'])
+            response.data[i]['Biaya Lain-Lain'] = 'Rp' + thousands_separators(response.data[i]['Biaya Lain-Lain'])
+            response.data[i]['PPN'] = 'Rp' + thousands_separators(response.data[i]['PPN'])
+            response.data[i]['Penyusutan Perbulan'] = 'Rp' + thousands_separators(response.data[i]['Penyusutan Perbulan'])
+            response.data[i]['Total Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Total Harga Perolehan'])
+            response.data[i]['Total Penyusutan'] = 'Rp' + thousands_separators(response.data[i]['Total Penyusutan'])
+            response.data[i]['Nilai Asset saat ini'] = 'Rp' + thousands_separators(response.data[i]['Nilai Asset saat ini'])
+            response.data[i]['Tanggal Output'] = moment((response.data[i]['Tanggal Output'])).format('YYYY-MM-DDTHH:MM')
+            response.data[i]['BAST Output'] = moment((response.data[i]['BAST Output'])).format('YYYY-MM-DDTHH:MM')
+          }
+          setDatas(response.data);
+          setPageCount(Math.ceil(datas/10))
+        } catch (e) {
+          console.log(e);
         }
-        setDatas(response.data);
-        setPageCount(Math.ceil(datas/10))
-      } catch (e) {
-        console.log(e);
+      } else {
+        getAssetsPagination(1)
       }
     }
   }
@@ -543,6 +594,8 @@ export const Overview = () => {
         response.data[i]['Total Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Total Harga Perolehan'])
         response.data[i]['Total Penyusutan'] = 'Rp' + thousands_separators(response.data[i]['Total Penyusutan'])
         response.data[i]['Nilai Asset saat ini'] = 'Rp' + thousands_separators(response.data[i]['Nilai Asset saat ini'])
+        response.data[i]['Tanggal Output'] = moment((response.data[i]['Tanggal Output'])).format('YYYY-MM-DDTHH:MM')
+        response.data[i]['BAST Output'] = moment((response.data[i]['BAST Output'])).format('YYYY-MM-DDTHH:MM')
       }
       onCountAsset();
       setDatas(response.data)
@@ -560,16 +613,27 @@ export const Overview = () => {
     getAssetsPagination(currentPage)
   }
   
+  //Event Log
+  const [event, setEvent] = useState({})
+
+  const createEventLogOverview = async (eventLoc) => {
+    try {
+      const response = await eventLogService.createEventLog(eventLoc)
+      setEvent(response.data)
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   return (
     <>
-      <Sidebar>
-        <div className="body">
+      {/* <Sidebar> */}
+        {/* <div className="body"> */}
           <div className="overview-container">
             <div className="overview-card">
-              <div className="title-overview">
+              {/* <div className="title-overview">
                 <p>List of Assets</p>
-              </div>
+              </div> */}
               <div className="table-container">
                 <div className="search-overview">
                 <div className="input-group mb-3">
@@ -601,188 +665,206 @@ export const Overview = () => {
                       <th>No</th>
                       <th style={{ minWidth: "150px" }}>Action</th>
                       <th 
-                        onClick={() => sorting("Tanggal Output")} 
+                        // onClick={() => sorting("Tanggal Output")} 
                         style={{ minWidth: "200px" }}>
-                        Purchase Date <FaSort style={{ marginLeft: "10%" }} />
+                        Purchase Date
+                        {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                       </th>
                       <th
-                        onClick={() => sortingNum("Tahun")}
+                        // onClick={() => sortingNum("Tahun")}
                         style={{ minWidth: "200px" }}
                       >
-                        Year <FaSort style={{ marginLeft: "10%" }} />
+                        Year 
+                        {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                       </th>
                       <th
-                        onClick={() => sorting("No. PO / Dokumenen Pendukung")}
+                        // onClick={() => sorting("No. PO / Dokumenen Pendukung")}
                         style={{ minWidth: "200px" }}
                       >
-                        PO Number <FaSort style={{ marginLeft: "10%" }} />
+                        PO Number 
+                        {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                       </th>
                       <th
-                        onClick={() => sorting("Vendor")}
+                        // onClick={() => sorting("Vendor")}
                         style={{ minWidth: "200px" }}
                       >
-                        Vendor Name <FaSort style={{ marginLeft: "10%" }} />
+                        Vendor Name 
+                        {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                       </th>
                       <th
-                        onClick={() => sorting("Nama Barang")}
+                        // onClick={() => sorting("Nama Barang")}
                         style={{ minWidth: "300px" }}
                       >
-                        Item Name <FaSort style={{ marginLeft: "10%" }} />
+                        Item Name 
+                        {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                       </th>
                       <th
-                        onClick={() => sortingNum("Harga Perolehan")}
+                        // onClick={() => sortingNum("Harga Perolehan")}
                         style={{ minWidth: "230px" }}
                       >
                         Acquisition Cost{" "}
-                        <FaSort style={{ marginLeft: "10%" }} />
+                        {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                       </th>
                       <th
-                        onClick={() => sortingNum("PPN")}
+                        // onClick={() => sortingNum("PPN")}
                         style={{ minWidth: "200px" }}
                       >
-                        PPN <FaSort style={{ marginLeft: "10%" }} />
+                        PPN 
+                        {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                       </th>
                       <th
-                        onClick={() => sortingNum("Biaya Lain-Lain")}
+                        // onClick={() => sortingNum("Biaya Lain-Lain")}
                         style={{ minWidth: "200px" }}
                       >
                         Additional Cost{" "}
-                        <FaSort style={{ marginLeft: "10%" }} />
+                        {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                       </th>
                       <th
-                        onClick={() => sortingNum("Total Harga Perolehan")}
+                        // onClick={() => sortingNum("Total Harga Perolehan")}
                         style={{ minWidth: "270px" }}
                       >
                         Total Acquisition Cost{" "}
-                        <FaSort style={{ marginLeft: "10%" }} />
+                        {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                       </th>
                       <th
-                        onClick={() => sorting("Jenis Produk")}
+                        // onClick={() => sorting("Jenis Produk")}
                         style={{ minWidth: "220px" }}
                       >
                         Subproduct Name{" "}
-                        <FaSort style={{ marginLeft: "10%" }} />
+                        {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                       </th>
                       <th
-                        onClick={() => sorting("Kategori Jenis Produk")}
+                        // onClick={() => sorting("Kategori Jenis Produk")}
                         style={{ minWidth: "200px" }}
                       >
-                        Product Name <FaSort style={{ marginLeft: "10%" }} />
+                        Product Name 
+                        {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                       </th>
                       <th
-                        onClick={() => sorting("Kategori Aset Tetap")}
+                        // onClick={() => sorting("Kategori Aset Tetap")}
                         style={{ minWidth: "200px" }}
                       >
                         Asset Category{" "}
-                        <FaSort style={{ marginLeft: "10%" }} />
+                        {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                       </th>
                       <th
-                        onClick={() => sorting("BAST Output")}
+                        // onClick={() => sorting("BAST Output")}
                         style={{ minWidth: "200px" }}
                       >
-                        BAST <FaSort style={{ marginLeft: "10%" }} />
+                        BAST
+                         {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                       </th>
                       <th
-                        onClick={() => sorting("Kondisi")}
+                        // onClick={() => sorting("Kondisi")}
                         style={{ minWidth: "200px" }}
                       >
-                        Condition <FaSort style={{ marginLeft: "10%" }} />
+                        Condition 
+                        {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                       </th>
                       <th
-                        onClick={() => sorting("Insurance")}
+                        // onClick={() => sorting("Insurance")}
                         style={{ minWidth: "200px" }}
                       >
-                        Insurance <FaSort style={{ marginLeft: "10%" }} />
+                        Insurance 
+                        {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                       </th>
                       <th
-                        onClick={() => sorting("Lokasi")}
+                        // onClick={() => sorting("Lokasi")}
                         style={{ minWidth: "200px" }}
                       >
-                        Location <FaSort style={{ marginLeft: "10%" }} />
+                        Location 
+                        {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                       </th>
                       <th
-                        onClick={() => sorting("User")}
+                        // onClick={() => sorting("User")}
                         style={{ minWidth: "200px" }}
                       >
-                        User <FaSort style={{ marginLeft: "10%" }} />
+                        User 
+                        {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                       </th>
                       <th
-                        onClick={() => sorting("Jabatan")}
+                        // onClick={() => sorting("Jabatan")}
                         style={{ minWidth: "200px" }}
                       >
-                        Position <FaSort style={{ marginLeft: "10%" }} />
+                        Position 
+                        {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                       </th>
                       <th
-                        onClick={() => sorting("Initisal")}
+                        // onClick={() => sorting("Initisal")}
                         style={{ minWidth: "200px" }}
                       >
-                        Initial <FaSort style={{ marginLeft: "10%" }} />
+                        Initial 
+                        {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                       </th>
                       <th
-                        onClick={() => sortingNum("Kode Wilayah")}
+                        // onClick={() => sortingNum("Kode Wilayah")}
                         style={{ minWidth: "200px" }}
                       >
-                        Location ID <FaSort style={{ marginLeft: "10%" }} />
+                        Location ID 
+                        {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                       </th>
                       <th
-                        onClick={() => sorting("Kode Asset")}
+                        // onClick={() => sorting("Kode Asset")}
                         style={{ minWidth: "200px" }}
                       >
-                        Product Code <FaSort style={{ marginLeft: "10%" }} />
+                        Product Code 
+                        {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                       </th>
                       <th
-                        onClick={() => sortingNum("Tahun Pembelian")}
+                        // onClick={() => sortingNum("Tahun Pembelian")}
                         style={{ minWidth: "200px" }}
                       >
                         Purchase Year{" "}
-                        <FaSort style={{ marginLeft: "10%" }} />
+                        {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                       </th>
                       <th
-                        onClick={() => sortingNum("Kode Urut barang")}
+                        // onClick={() => sortingNum("Kode Urut barang")}
                         style={{ minWidth: "220px" }}
                       >
                         Item Order Code{" "}
-                        <FaSort style={{ marginLeft: "10%" }} />
+                        {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                       </th>
                       <th
-                        onClick={() => sorting("Nomor Asset")}
+                        // onClick={() => sorting("Nomor Asset")}
                         style={{ minWidth: "200px" }}
                       >
-                        Asset Number <FaSort style={{ marginLeft: "10%" }} />
+                        Asset Number 
+                        {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                       </th>
                       <th
-                        onClick={() => sortingNum("Masa Manfaat (Bulan)")}
+                        // onClick={() => sortingNum("Masa Manfaat (Bulan)")}
                         style={{ minWidth: "200px" }}
                       >
-                        Useful Life <FaSort style={{ marginLeft: "10%" }} />
+                        Useful Life 
+                        {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                       </th>
                       <th
-                        onClick={() => sortingNum("Penyusutan Perbulan")}
+                        // onClick={() => sortingNum("Penyusutan Perbulan")}
                         style={{ minWidth: "250px" }}
                       >
                         Monthly Depreciation{" "}
-                        <FaSort style={{ marginLeft: "10%" }} />
+                        {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                       </th>
                       <th
-                        onClick={() => sortingNum("Total Bulan Penyusutan")}
+                        // onClick={() => sortingNum("Total Bulan Penyusutan")}
                         style={{ minWidth: "240px" }}
                       >
                         Depreciation Month{" "}
-                        <FaSort style={{ marginLeft: "10%" }} />
+                        {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                       </th>
                       <th
-                        onClick={() => sortingNum("Total Penyusutan")}
+                        // onClick={() => sortingNum("Total Penyusutan")}
                         style={{ minWidth: "230px" }}
                       >
                         Total Depreciation{" "}
-                        <FaSort style={{ marginLeft: "10%" }} />
+                        {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                       </th>
                       <th
-                        onClick={() => sortingNum("Nilai Asset saat ini")}
+                        // onClick={() => sortingNum("Nilai Asset saat ini")}
                         style={{ minWidth: "240px" }}
                       >
                         Current Asset Value{" "}
-                        <FaSort style={{ marginLeft: "10%" }} />
+                        {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                       </th>
                     </tr>
                   </thead>
@@ -815,7 +897,7 @@ export const Overview = () => {
                             </a>
                             <a
                               target="_blank"
-                              href={`http://api.qrserver.com/v1/create-qr-code/?data=Asset Number: ${data["Nomor Asset"]}%0A Purchase Date: ${data['Tanggal Output']}%0A Asset Name: ${data["Nama Barang"]}%0A Asset Category: ${data["Kategori Jenis Produk"]}%0A Product Name: ${data["Jenis Produk"]}%0A Location: ${data["Lokasi"]}%0A PO Number: ${data["No. PO / Dokumenen Pendukung"]}%0A Lifetime: ${data['Masa Manfaat (Bulan)']}%0A Value: ${data['Nilai Asset saat ini']}%0A Vendor: ${data['Vendor']}&size=${size}x${size}&bgcolor=${bgColor}`}
+                              href={`http://api.qrserver.com/v1/create-qr-code/?data= Asset Number: ${data["Nomor Asset"]}%0A Purchase Date: ${data['Tanggal Output']}%0A Asset Name: ${data["Nama Barang"]}%0A Asset Category: ${data["Kategori Jenis Produk"]}%0A Product Name: ${data["Jenis Produk"]}%0A Location: ${data["Lokasi"]}%0A PO Number: ${data["No. PO / Dokumenen Pendukung"]}%0A Lifetime: ${data['Masa Manfaat (Bulan)']}%0A Value: ${data['Nilai Asset saat ini']}%0A Vendor: ${data['Vendor']}&size=${size}x${size}&bgcolor=${bgColor}`}
                               download="QRCode"
                             >
                               <i
@@ -921,29 +1003,31 @@ export const Overview = () => {
               </a>
             </li>
           </ul> */}
-            <ReactPaginate
-            previousLabel={'previous'}
-            nextLabel={'next'}
-            breakLabel={'...'}
-            // pageCount = {Math.ceil(datas.length/10)}
-            pageCount = {pageCount}
-            marginPagesDisplayed={2}
-            pageRangeDisplayed={3}
-            onPageChange={handlePageClick}
-            containerClassName={"pagination justify-content-center"}
-            pageClassName={"page-item"}
-            pageLinkClassName={"page-link"}
-            previousClassName={"page-item"}
-            previousLinkClassName={"page-link"}
-            nextClassName={"page-item"}
-            nextLinkClassName={"page-link"}
-            breakClassName={"page-item"}
-            breakLinkClassName={"page-link"}
-            activeClassName={"active"}
-          />
+          <div className="clearfix" style={{marginRight:'2vw', marginTop:'2vh'}}>
+              <ReactPaginate
+              previousLabel={'prev'}
+              nextLabel={'next'}
+              breakLabel={'...'}
+              // pageCount = {Math.ceil(datas.length/10)}
+              pageCount = {pageCount}
+              marginPagesDisplayed={2}
+              pageRangeDisplayed={3}
+              onPageChange={handlePageClick}
+              containerClassName={"pagination justify-content-center"}
+              pageClassName={"page-item"}
+              pageLinkClassName={"page-link"}
+              previousClassName={"page-item"}
+              previousLinkClassName={"page-link"}
+              nextClassName={"page-item"}
+              nextLinkClassName={"page-link"}
+              breakClassName={"page-item"}
+              breakLinkClassName={"page-link"}
+              activeClassName={"active"}
+            />
+          </div>
             </div>
           </div>
-        </div>
+        {/* </div> */}
         <div className="model-box-view">
         <Modal dialogClassName="view-modal"
           show={viewShow}
@@ -1290,7 +1374,7 @@ export const Overview = () => {
         </div>
       )}
       {isLoading && <Loading/>}
-      </Sidebar>
+      {/* </Sidebar> */}
     </>
   );
 };

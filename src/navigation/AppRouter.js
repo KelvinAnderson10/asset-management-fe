@@ -15,6 +15,7 @@ import { Login } from "../pages/Login/Login";
 import { ProtectedPage } from "../services/ProtectedPage";
 import { FormPO } from "../pages/PurchaseOrder/FormPO";
 import { UserManage } from "../pages/User/User";
+import { Main } from "../pages/Overview/Main";
 
 
 
@@ -25,7 +26,8 @@ export const AppRouter = () => {
       <Route path="/po" element={<FormPO/>} ></Route>
       <Route element={<ProtectedPage></ProtectedPage>}>
         <Route path="/home" element={<HomeView />} />
-        <Route path="/main" element={<Overview />} />
+        <Route path="/main" element={<Main/>} />
+        {/* <Route path="/main" element={<Overview />} /> */}
         <Route path="/data-management/asset-item" element={<AssetItem />} />
         <Route path="/data-management/asset-category" element={<AssetCategory />}/>
         <Route path="/data-management/vendor" element={<VendorManage />} />

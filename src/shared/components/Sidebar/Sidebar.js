@@ -64,18 +64,6 @@ const routesAdmin = [
     name: "Approval Data",
     icon: <BsIcons.BsFillFileEarmarkCheckFill/>,
   },
-  {
-    path: "",
-    name: "System Monitoring",
-    icon: <GoIcons.GoDatabase/>,
-    subRoutes: [
-        {
-          path: "",
-          name: "Event Logs",
-          icon: <IoIcons.IoIosPaper/>,
-        },
-      ],
-  },
 ];
 
 const routesIT = [

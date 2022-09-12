@@ -91,6 +91,7 @@ main {
 .link_text {
   white-space: nowrap;
   font-size: 20px;
+  color:#fff;
 }
 
 .menu {
@@ -140,4 +141,7 @@ main {
 .navbar .user-action {
 	padding: 9px 15px;
 	font-size: 18px;
+}
+.icon{
+  color: #fff
 }

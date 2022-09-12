@@ -10,6 +10,8 @@ import {FaSort} from 'react-icons/fa'
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import swal from "sweetalert";
+import { Failed } from "../../shared/components/Notification/Failed";
+import { EVENT } from "../../shared/constants";
 
 export const VendorManage = () => {
   //Define here local state that store the form Data
@@ -17,7 +19,7 @@ export const VendorManage = () => {
 
   const [isLoading, setLoading] = useState(false);
   const [doneAddForm, setDoneAddform] = useState(false);
-  const { vendorService } = useDeps();
+  const { vendorService, eventLogService } = useDeps();
   const areAllFieldsFilled = vendorData !== "";
 
   const [data, setData] = useState([]);
@@ -102,8 +104,14 @@ export const VendorManage = () => {
       }
       onGetAllVendor();
       clearForm();
+      let event = {
+        event: EVENT.CREATE_VENDOR,
+        user: 'Yayah Zakiyah'
+      }
+      createEventLogVendor(event)
     } catch (error) {
       console.log(error.response);
+      Failed('Your data failed to save because '+ error.response.data.error.Detail)
     } finally {
       setLoading(false);
     }
@@ -140,6 +148,11 @@ export const VendorManage = () => {
         try {
           const response = vendorService.deleteVendor(name);
           onGetAllVendor();
+          let event = {
+            event: EVENT.DELETE_VENDOR,
+            user: 'Yayah Zakiyah'
+          }
+          createEventLogVendor(event)
         } catch (e) {
           console.log(e);
         } finally {
@@ -193,8 +206,14 @@ export const VendorManage = () => {
       }
       SetEditShow(false);
       onGetAllVendor();
+      let event = {
+        event: EVENT.UPDATE_VENDOR,
+        user: 'Yayah Zakiyah'
+      }
+      createEventLogVendor(event)
     } catch (error) {
       console.log(error.response);
+      Failed('Your data failed to save')
     } finally {
       setLoading(false);
     }
@@ -298,6 +317,18 @@ const onClearForm = (e) => {
   e.preventDefault()
   ref.current.value = ''; 
   onGetAllVendor();
+}
+
+//Event Log
+const [event, setEvent] = useState({})
+
+const createEventLogVendor = async (eventLoc) => {
+  try {
+    const response = await eventLogService.createEventLog(eventLoc)
+    setEvent(response.data)
+  } catch (e) {
+    console.log(e);
+  }
 }
 
   return (
@@ -632,9 +663,9 @@ const onClearForm = (e) => {
               </form>
             </Modal.Body>
             <Modal.Footer>
-              <Button variant="secondary" onClick={hanldeEditClose}>
+              {/* <Button variant="secondary" onClick={hanldeEditClose}>
                 Close
-              </Button>
+              </Button> */}
             </Modal.Footer>
           </Modal>
         </div>

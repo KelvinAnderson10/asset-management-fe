@@ -12,12 +12,14 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import swal from "sweetalert";
 import { Success } from "../../shared/components/Notification/Success";
+import { EVENT } from "../../shared/constants";
+import { Failed } from "../../shared/components/Notification/Failed";
 
 export const Location = () => {
   const [location, setLocation] = useState("");
   const [isLoading, setLoading] = useState(false);
   const [doneAddForm, setDoneAddform] = useState(false);
-  const { locationService } = useDeps();
+  const { locationService, eventLogService } = useDeps();
   const areAllFieldsFilled = location != "";
   const [data, setData] = useState([]);
   const [order, setOrder] = useState("ASC");
@@ -98,8 +100,14 @@ export const Location = () => {
         });
       }
       onGetAllLocation();
+      let event = {
+        event: EVENT.CREATE_LOCATION,
+        user: 'Yayah Zakiyah'
+      }
+      createEventLogLocation(event)
     } catch (error) {
       console.log(error.response);
+      Failed('Your data failed to save because '+ error.response.data.error.Detail)
     } finally {
       setLoading(false);
     }
@@ -137,12 +145,18 @@ export const Location = () => {
           const response = locationService.deleteLocation(id);
           
           onGetAllLocation();
+          let event = {
+            event: EVENT.DELETE_LOCATION,
+            user: 'Yayah Zakiyah'
+          }
+          createEventLogLocation(event)
+          Swal.fire("Deleted!", "Your data has been deleted.", "success");
         } catch (e) {
           console.log(e);
+          Failed('Your data failed to delete')
         } finally {
           setLoading(false);
         }
-        Swal.fire("Deleted!", "Your data has been deleted.", "success");
       }
     });
 
@@ -194,8 +208,14 @@ export const Location = () => {
       }
       SetEditShow(false);
       onGetAllLocation();
+      let event = {
+        event: EVENT.UPDATE_LOCATION,
+        user: 'Yayah Zakiyah'
+      }
+      createEventLogLocation(event)
     } catch (error) {
       console.log(error.response);
+      Failed('Your data failed to save')
     } finally {
       setLoading(false);
     }
@@ -300,6 +320,18 @@ export const Location = () => {
       }
   }
 
+  //================== EVENT LOG ===============================
+  const [event, setEvent] = useState({})
+
+  const createEventLogLocation = async (eventLoc) => {
+    try {
+      const response = await eventLogService.createEventLog(eventLoc)
+      setEvent(response.data)
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   return (
     <>
       <Sidebar>
@@ -375,7 +407,7 @@ export const Location = () => {
                         <tr key={item["kode wilayah"]}>
                           <th>{index + 1}</th>
                           <th>{item.location}</th>
-                          <th>{item["kode wilayah"]}</th>
+                          <th>{item['kode wilayah']}</th>
                           <td>
                             <a
                               onClick={() => {
@@ -509,9 +541,9 @@ export const Location = () => {
               </form>
             </Modal.Body>
             <Modal.Footer>
-              <Button variant="secondary" onClick={hanldePostClose}>
+              {/* <Button variant="secondary" onClick={hanldePostClose}>
                 Close
-              </Button>
+              </Button> */}
             </Modal.Footer>
           </Modal>
         </div>
@@ -545,16 +577,16 @@ export const Location = () => {
                   disabled={!areAllFieldsFilled}
                   type="submit"
                   className="btn btn-warning mt-4"
-                  onClick={() => handleEdit(RowData.ID)}
+                  onClick={() => handleEdit(RowData['kode wilayah'])}
                 >
                   Save Changes
                 </Button>
               </div>
             </Modal.Body>
             <Modal.Footer>
-              <Button variant="secondary" onClick={hanldeEditClose}>
+              {/* <Button variant="secondary" onClick={hanldeEditClose}>
                 Close
-              </Button>
+              </Button> */}
             </Modal.Footer>
           </Modal>
         </div>
@@ -578,7 +610,7 @@ export const Location = () => {
                    style={{maxWidth:"500px"}}
                     type="text"
                     className="form-control"
-                    value={RowData["kode wilayah"]}
+                    value={RowData['kode wilayah']}
                     readOnly
                   />
 
@@ -600,9 +632,9 @@ export const Location = () => {
               </div>
             </Modal.Body>
             <Modal.Footer>
-              <Button variant="secondary" onClick={hanldeViewClose}>
+              {/* <Button variant="secondary" onClick={hanldeViewClose}>
                 Close
-              </Button>
+              </Button> */}
             </Modal.Footer>
           </Modal>
         </div>

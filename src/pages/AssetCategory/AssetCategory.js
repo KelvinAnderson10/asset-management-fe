@@ -9,14 +9,16 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import swal from "sweetalert";
 import './AssetCategory.css'
+import { Failed } from "../../shared/components/Notification/Failed";
+import { Success } from "../../shared/components/Notification/Success";
+import { EVENT } from "../../shared/constants";
 
 export const AssetCategory = () => {
   const [assetCategory, setAssetCategory] = useState({});
 
   const [isLoading, setLoading] = useState(false);
   const [doneAddForm, setDoneAddform] = useState(false);
-  const { assetCategoryService } = useDeps();
-  const areAllFieldsFilled = assetCategory !== "";
+  const { assetCategoryService, eventLogService } = useDeps();
 
   const [data, setData] = useState([]);
   const [order, setOrder] = useState("ASC");
@@ -26,7 +28,6 @@ export const AssetCategory = () => {
   //Add New Data Model
   const [ViewPost, SetPostShow] = useState(false);
   const handlePostShow = () => {
-    console.log("ini asset category",assetCategory);
     setAssetCategory({})
     SetPostShow(true);
   };
@@ -42,7 +43,6 @@ export const AssetCategory = () => {
   };
 
   const handleChange = (e) => {
-
     const newData = { ...assetCategory };
     newData[e.target.name] = e.target.value;
     setAssetCategory(newData);
@@ -64,8 +64,6 @@ export const AssetCategory = () => {
     SetEditShow(false);
   };
 
-  const [Delete, setDelete] = useState(false);
-  const [searchSubproduct, setSearchSubproduct] = useState("");
 
   //Pagination Model
   const [currentPage, setcurrentPage] = useState(1);
@@ -93,22 +91,18 @@ export const AssetCategory = () => {
       setDoneAddform(true);
 
       if (response.status === "SUCCESS") {
-        Swal.fire({
-          title: "Success!",
-          text:"Your data has been saved!",
-          icon: 'success',
-        })
+        Success('added')
       } 
       onGetAllAssetCategory();
+      let event = {
+        event: EVENT.CREATE_ASSET_CATEGORY,
+        nik: '123'
+      }
+      createEventLogAssetCategory(event)
       clearForm();
     } catch (error) {
-      const err = error.response.data.error.Detail
-
-      // Swal.fire({
-      //   title: "Failed!",
-      //   text:`Your data failed to save becasue ${err}`,
-      //   icon: 'error',
-      // })
+      console.log(error.response);
+      Failed('Your data failed to save because '+ error.response.data.error.Detail)
     } finally {
       setLoading(false);
     }
@@ -146,12 +140,18 @@ export const AssetCategory = () => {
         try {
           const response = assetCategoryService.deleteAssetCategory(name);
           onGetAllAssetCategory();
+          let event = {
+            event: EVENT.DELETE_ASSET_CATEGORY,
+            user: 'Yayah Zakiyah'
+          }
+          createEventLogAssetCategory(event)
+          Swal.fire("Deleted!", "Your data has been deleted.", "success");
         } catch (e) {
-              console.log(e.response)
+          console.log(e.response)
+          Failed('Your data failed to delete')
         } finally {
           setLoading(false);
         }
-        Swal.fire("Deleted!", "Your data has been deleted.", "success");
       }
     })
 
@@ -235,13 +235,13 @@ export const AssetCategory = () => {
       }
       SetEditShow(false);
       onGetAllAssetCategory();
+      let event = {
+        event: EVENT.UPDATE_ASSET_CATEGORY,
+        user: 'Yayah Zakiyah'
+      }
+      createEventLogAssetCategory(event)
     } catch (error) {
-     
-      Swal.fire({
-        title: "Failed!",
-        text:`Your data failed to save`,
-        icon: 'error',
-      });
+      Failed('Your data failed to save')
     } finally {
       setLoading(false);
     }
@@ -351,7 +351,20 @@ export const AssetCategory = () => {
       subproduct_name:''
     });
     
-}
+  }
+
+  //EventLog
+  const [event, setEvent] = useState({})
+
+  const createEventLogAssetCategory = async (eventLoc) => {
+    try {
+      const response = await eventLogService.createEventLog(eventLoc)
+      setEvent(response.data)
+      console.log(response.data);
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   return (
     <>
@@ -390,9 +403,6 @@ export const AssetCategory = () => {
             </div>
 
             <div className="body container table-wrapper table-responsive">
-            {/* <div className="container table-wrapper table-responsive"> */}
-                {/* <div className="table-wrapper table-responsive" style={{'width':'100%'}}> */}
-                {/* <div className="table-wrapper"> */}
                     <div className="table-title">
                     <div className="row">
                         <div className="col-xs-6">
@@ -427,6 +437,7 @@ export const AssetCategory = () => {
                             {" "}
                             <FaSort /> Subproduct Name
                         </th>
+                        <th>PIC</th>
                         <th>Actions</th>
                         </tr>
                     </thead>
@@ -444,6 +455,7 @@ export const AssetCategory = () => {
                             <th>{item.product_code}</th>
                             <th>{item.product_name}</th>
                             <th>{item.subproduct_name}</th>
+                            <th>{item.pic}</th>
                             <td>
                                 <a
                                 onClick={() => {
@@ -529,9 +541,6 @@ export const AssetCategory = () => {
                         </li>
                     </ul>
                     </div>
-                {/* </div> */}
-                {/* </div> */}
-            {/* </div> */}
             </div>
 
             {/* ADD MODAL FOR SUBMIT DATABASE */}
@@ -550,7 +559,6 @@ export const AssetCategory = () => {
                 <form onSubmit={handleSubmit}>
                 <p style={{color:"red"}}>Please complete all required fields</p>
                 <div>
-                {/* <form onSubmit={handleSubmit}> */}
                     <div className="form-group">
                     <label className="form-label">Asset Category<span style={{color :"red"}} >*</span> </label>
                     <input
@@ -615,7 +623,19 @@ export const AssetCategory = () => {
                         name="subproduct_name"
                         value={assetCategory.subproduct_name}
                     />
-                    </div>    
+                    </div>
+                    <div className="form-group mt-3">
+                    <label className="form-label">PIC<span style={{color :"red"}} >*</span></label>
+                    <input
+                        required
+                        type="text"
+                        className="form-control"
+                        onChange={handleChange}
+                        placeholder="Please enter PIC"
+                        name="pic"
+                        value={assetCategory.pic}
+                    />
+                    </div>      
                 </div>
                 <Button
                     type="submit"
@@ -648,7 +668,6 @@ export const AssetCategory = () => {
                 <Modal.Body>
                 <form onSubmit={(e) => handleEdit(e, RowData.subproduct_name)}>
                 <div>
-                  {/* <form onSubmit={(e) => handleEdit(e, RowData.subproduct_name)}> */}
                     <div className="form-group">
                     <label>Asset Category</label>
                     <input
@@ -690,22 +709,23 @@ export const AssetCategory = () => {
                         placeholder="Please enter product name"
                         defaultValue={RowData.product_name}
                     />
-                    {/* <label>Subproduct Name</label>
+                    <div className="form-group mt-3">
+                    <label className="form-label">PIC<span style={{color :"red"}} >*</span></label>
                     <input
+                        required
                         type="text"
                         className="form-control"
                         onChange={handleChange}
-                        name="subproduct_name"
-                        placeholder="Please enter subproduct name"
-                        defaultValue={RowData.subproduct_name}
-                    /> */}
+                        placeholder="Please enter PIC"
+                        name="pic"
+                        value={RowData.pic}
+                    />
+                    </div> 
                     </div>
                 </div>
                   <Button
-                    // disabled={!areAllFieldsFilled}
                     type="submit"
                     className="btn btn-warning mt-4"
-                    // onClick={() => handleEdit(RowData.subproduct_name)}
                     >
                     Save Changes
                     </Button>
@@ -768,6 +788,13 @@ export const AssetCategory = () => {
                         type="text"
                         className="form-control"
                         value={RowData.subproduct_name}
+                        readOnly
+                    />
+                    <label>PIC</label>
+                    <input
+                        type="text"
+                        className="form-control"
+                        value={RowData.pic}
                         readOnly
                     />
                     </div>
