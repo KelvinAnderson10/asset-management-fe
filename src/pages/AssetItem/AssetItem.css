@@ -20,31 +20,31 @@
 }
 
 .asset-container form{
-  border-radius: 2%;
-  padding: 5%;
+  border-radius: 20px;
+  padding: 1%;
   width: 75vw;
   min-height: 80vh;
-  background: rgb(218, 218, 218);
-  box-shadow: 0 5px 10px rgba(58, 5, 5, 0.1);
+  background: rgb(255, 255, 255);
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 35px;
 }
 
 .asset-container form .row{
   display: flex;
   flex-wrap: wrap;
-  gap:15px;
+  gap:10px;
 }
 
 .asset-container form .row .col{
   flex:1 1 34em;
   display: flex;
   flex-direction: column;
-  padding-left: 10px;
+  padding-left: 30px;
 
 }
 
 .asset-container form .row .col .title{
   font-size: 30px;
-  color: 	#8d0000;
+  color: 	#B70621;
   padding-bottom: 5px;
   text-transform: uppercase;
   text-align: left;
@@ -64,7 +64,7 @@
 .asset-container form .row .col .inputBox input{
   width: 80%;
   border:1px solid rgb(180, 178, 178);
-  padding:10px 15px;
+  padding: 8px 15px;
   font-size: 15px;
   text-transform: none;
   align-items: flex-start;
@@ -134,10 +134,10 @@
 
 .asset-container form .row .col .button-submit{
  
-  width: 120px;
-  height: 50px;
+  width: 100px;
+  height: 45px;
   margin-right: 4vh;
-  font-size: 24px;
+  font-size: 22px;
   align-items: center;
   font-family: "Poppins";
 }

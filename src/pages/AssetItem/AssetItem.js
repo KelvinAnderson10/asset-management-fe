@@ -295,18 +295,7 @@ export const AssetItem = () => {
                     style={{width:'95%'}}
                   />
                 </div>
-                <div className="inputBox">
-                  <span>Purchase Price :</span>
-                  <input
-                    type="number"
-                    required
-                    name="Harga Perolehan"
-                    value={data["Harga Perolehan"]}
-                    onChange={handleChange}
-                    style={{width:'95%'}}
-                  />
-                </div>
-               
+             
               </div>
               <div className="col">
                 <div className="asset-image-container">
@@ -339,6 +328,17 @@ export const AssetItem = () => {
                   />
                 </div>
                 <div className="inputBox">
+                  <span>Purchase Price :</span>
+                  <input
+                    type="number"
+                    required
+                    name="Harga Perolehan"
+                    value={data["Harga Perolehan"]}
+                    onChange={handleChange}
+                    style={{width:'95%'}}
+                  />
+                </div>
+                <div className="inputBox">
                   <span>Insurance</span>
                   <select
                     required
@@ -365,25 +365,13 @@ export const AssetItem = () => {
                     {user.map((item) => (
                       <option
                         key={item.name}
-                        value={item.NIK}
+                        value={item.name}
                       >
                         {item.name}
                       </option>
                     ))}
                   </select>
                 </div>
-                  <div className="inputBox">
-                    <span>Year :</span>
-                    <input
-                      type="number"
-                      required
-                      name="Tahun"
-                      value={data.Tahun}
-                      onChange={handleChange}
-                      style={{width:'95%'}}
-                      
-                    />
-                  </div>
                   <div className="inputBox">
                     <span>NO Resi:</span>
                     <input
@@ -405,8 +393,8 @@ export const AssetItem = () => {
                     style={{width:'95%'}}
                   >
                     <option value="">Select Condition</option>
-                    <option>Yes</option>
-                    <option>No</option>
+                    <option value="1" >Yes</option>
+                    <option value="0">No</option>
                   </select>
                   </div>
                 <div className="button-asset">

@@ -116,12 +116,6 @@ const routesUserStaff = [
       ],
   },
   {
-    path: "/upload-data",
-    name: "Import Data",
-    icon: <FaIcons.FaFileUpload/>,
-  },
-  ,
-  {
     path: "/purchase-request",
     name: "Purchase Request",
     icon: <AiIcons.AiFillShopping/>, 
@@ -146,11 +140,6 @@ const routesUserSpv = [
           icon: <IoIcons.IoIosPaper/>,
         },
       ],
-  },
-  {
-    path: "/upload-data",
-    name: "Import Data",
-    icon: <FaIcons.FaFileUpload/>,
   },
   {
     path: "/approval-data",
