@@ -9,6 +9,7 @@ import moment from "moment";
 import "./EditAsset.css";
 import swal from "sweetalert";
 import Loading from "../../shared/components/Loading/Loading";
+import ReactPaginate from "react-paginate";
 
 export const Overview = () => {
   const {
@@ -50,22 +51,21 @@ export const Overview = () => {
 
   //CRUD
   //Get All
-  const onGetAllAsset = async () => {
-    setLoading(true)
-    try {
-      const response = await overviewService.getAllAsset();
-      setDatas(response.data);
-      
-    } catch (e) {
-      console.log(e);
-    } finally {
-      setLoading(false)
-    }
-  };
+  // const onGetAllAsset = async () => {
+  //   setLoading(true)
+  //   try {
+  //     const response = await overviewService.getAllAsset();
+  //     setDatas(response.data);
+  //   } catch (e) {
+  //     console.log(e);
+  //   } finally {
+  //     setLoading(false)
+  //   }
+  // };
 
-  useEffect(() => {
-    onGetAllAsset();
-  }, []);
+  // useEffect(() => {
+  //   onGetAllAsset();
+  // }, []);
 
   //Pagination
   const handleClick = (event) => {
@@ -193,10 +193,8 @@ export const Overview = () => {
       // setRowData(response.data)
       
       setEditShow(true);
-      console.log(response.data)
       response.data['Tanggal Output'] = moment((response.data['Tanggal Output'])).format('YYYY-MM-DDTHH:MM')
       response.data['BAST Output'] = moment((response.data['BAST Output'])).format('YYYY-MM-DDTHH:MM')
-      // let res = moment().format('DD/MM/YYYY,HH:MM A');
       // let date = response.data['Tanggal Output'].toString()
       // let datesplit = date.split("+") 
       // let res = datesplit[0]
@@ -207,7 +205,7 @@ export const Overview = () => {
       // datesplit = date.split("+") 
       // res = datesplit[0]
       // response.data['BAST Output'] = res
-      console.log('ini tanggal out',response.data['Tanggal Output'])
+      
       setAssetEdit(response.data);
       setImageBase64(response.data["Asset Image"])
     } catch (e) {
@@ -287,7 +285,7 @@ export const Overview = () => {
         });
       }
       setEditShow(false);
-      onGetAllAsset();
+      getAssetsPagination(1)
     } catch (e) {
       console.log(e);
     } finally {
@@ -384,49 +382,119 @@ export const Overview = () => {
     if (dropdownName === 'Vendor') {
       try {
         const response = await overviewService.getAssetByVendor(filter);
-        setDatas(response.data); 
+        for (let i in response.data) {
+          response.data[i]['Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Harga Perolehan'])
+          response.data[i]['Biaya Lain-Lain'] = 'Rp' + thousands_separators(response.data[i]['Biaya Lain-Lain'])
+          response.data[i]['PPN'] = 'Rp' + thousands_separators(response.data[i]['PPN'])
+          response.data[i]['Penyusutan Perbulan'] = 'Rp' + thousands_separators(response.data[i]['Penyusutan Perbulan'])
+          response.data[i]['Total Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Total Harga Perolehan'])
+          response.data[i]['Total Penyusutan'] = 'Rp' + thousands_separators(response.data[i]['Total Penyusutan'])
+          response.data[i]['Nilai Asset saat ini'] = 'Rp' + thousands_separators(response.data[i]['Nilai Asset saat ini'])
+        }
+        setDatas(response.data);
+        setPageCount(Math.ceil(datas/10))
       } catch (e) {
         console.log(e);
       }
     } else if (dropdownName === 'Location') {
       try {
         const response = await overviewService.getAssetByLocation(filter);
-        setDatas(response.data);  
+        for (let i in response.data) {
+          response.data[i]['Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Harga Perolehan'])
+          response.data[i]['Biaya Lain-Lain'] = 'Rp' + thousands_separators(response.data[i]['Biaya Lain-Lain'])
+          response.data[i]['PPN'] = 'Rp' + thousands_separators(response.data[i]['PPN'])
+          response.data[i]['Penyusutan Perbulan'] = 'Rp' + thousands_separators(response.data[i]['Penyusutan Perbulan'])
+          response.data[i]['Total Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Total Harga Perolehan'])
+          response.data[i]['Total Penyusutan'] = 'Rp' + thousands_separators(response.data[i]['Total Penyusutan'])
+          response.data[i]['Nilai Asset saat ini'] = 'Rp' + thousands_separators(response.data[i]['Nilai Asset saat ini'])
+        }
+        setDatas(response.data);
+        setPageCount(Math.ceil(datas/10))  
       } catch (e) {
         console.log(e);
       }
     } else if (dropdownName === 'Condition'){
       try {
         const response = await overviewService.getAssetByCondition(filter);
-        setDatas(response.data); 
+        for (let i in response.data) {
+          response.data[i]['Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Harga Perolehan'])
+          response.data[i]['Biaya Lain-Lain'] = 'Rp' + thousands_separators(response.data[i]['Biaya Lain-Lain'])
+          response.data[i]['PPN'] = 'Rp' + thousands_separators(response.data[i]['PPN'])
+          response.data[i]['Penyusutan Perbulan'] = 'Rp' + thousands_separators(response.data[i]['Penyusutan Perbulan'])
+          response.data[i]['Total Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Total Harga Perolehan'])
+          response.data[i]['Total Penyusutan'] = 'Rp' + thousands_separators(response.data[i]['Total Penyusutan'])
+          response.data[i]['Nilai Asset saat ini'] = 'Rp' + thousands_separators(response.data[i]['Nilai Asset saat ini'])
+        }
+        setDatas(response.data);
+        setPageCount(Math.ceil(datas/10)) 
       } catch (e) {
         console.log(e);
       }
     } else if (dropdownName === 'Item Name') {
       try {
         const response = await overviewService.getAssetByItemName(filter);
+        for (let i in response.data) {
+          response.data[i]['Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Harga Perolehan'])
+          response.data[i]['Biaya Lain-Lain'] = 'Rp' + thousands_separators(response.data[i]['Biaya Lain-Lain'])
+          response.data[i]['PPN'] = 'Rp' + thousands_separators(response.data[i]['PPN'])
+          response.data[i]['Penyusutan Perbulan'] = 'Rp' + thousands_separators(response.data[i]['Penyusutan Perbulan'])
+          response.data[i]['Total Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Total Harga Perolehan'])
+          response.data[i]['Total Penyusutan'] = 'Rp' + thousands_separators(response.data[i]['Total Penyusutan'])
+          response.data[i]['Nilai Asset saat ini'] = 'Rp' + thousands_separators(response.data[i]['Nilai Asset saat ini'])
+        }
         setDatas(response.data);
+        setPageCount(Math.ceil(datas/10))
       } catch (e) {
         console.log(e);
       }
     } else if (dropdownName === 'Subproduct') {
       try {
         const response = await overviewService.getAssetBySubproduct(filter);
-        setDatas(response.data);  
+        for (let i in response.data) {
+          response.data[i]['Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Harga Perolehan'])
+          response.data[i]['Biaya Lain-Lain'] = 'Rp' + thousands_separators(response.data[i]['Biaya Lain-Lain'])
+          response.data[i]['PPN'] = 'Rp' + thousands_separators(response.data[i]['PPN'])
+          response.data[i]['Penyusutan Perbulan'] = 'Rp' + thousands_separators(response.data[i]['Penyusutan Perbulan'])
+          response.data[i]['Total Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Total Harga Perolehan'])
+          response.data[i]['Total Penyusutan'] = 'Rp' + thousands_separators(response.data[i]['Total Penyusutan'])
+          response.data[i]['Nilai Asset saat ini'] = 'Rp' + thousands_separators(response.data[i]['Nilai Asset saat ini'])
+        }
+        setDatas(response.data);
+        setPageCount(Math.ceil(datas/10))  
       } catch (e) {
         console.log(e);
       }
     } else if (dropdownName === 'Product') {
       try {
         const response = await overviewService.getAssetByProduct(filter);
-        setDatas(response.data); 
+        for (let i in response.data) {
+          response.data[i]['Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Harga Perolehan'])
+          response.data[i]['Biaya Lain-Lain'] = 'Rp' + thousands_separators(response.data[i]['Biaya Lain-Lain'])
+          response.data[i]['PPN'] = 'Rp' + thousands_separators(response.data[i]['PPN'])
+          response.data[i]['Penyusutan Perbulan'] = 'Rp' + thousands_separators(response.data[i]['Penyusutan Perbulan'])
+          response.data[i]['Total Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Total Harga Perolehan'])
+          response.data[i]['Total Penyusutan'] = 'Rp' + thousands_separators(response.data[i]['Total Penyusutan'])
+          response.data[i]['Nilai Asset saat ini'] = 'Rp' + thousands_separators(response.data[i]['Nilai Asset saat ini'])
+        }
+        setDatas(response.data);
+        setPageCount(Math.ceil(datas/10)) 
       } catch (e) {
         console.log(e);
       }
     } else {
       try {
         const response = await overviewService.getAssetByCategory(filter);
+        for (let i in response.data) {
+          response.data[i]['Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Harga Perolehan'])
+          response.data[i]['Biaya Lain-Lain'] = 'Rp' + thousands_separators(response.data[i]['Biaya Lain-Lain'])
+          response.data[i]['PPN'] = 'Rp' + thousands_separators(response.data[i]['PPN'])
+          response.data[i]['Penyusutan Perbulan'] = 'Rp' + thousands_separators(response.data[i]['Penyusutan Perbulan'])
+          response.data[i]['Total Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Total Harga Perolehan'])
+          response.data[i]['Total Penyusutan'] = 'Rp' + thousands_separators(response.data[i]['Total Penyusutan'])
+          response.data[i]['Nilai Asset saat ini'] = 'Rp' + thousands_separators(response.data[i]['Nilai Asset saat ini'])
+        }
         setDatas(response.data);
+        setPageCount(Math.ceil(datas/10))
       } catch (e) {
         console.log(e);
       }
@@ -436,9 +504,61 @@ export const Overview = () => {
 
   const onClearForm = () => {
     ref.current.value = ''; 
-    onGetAllAsset();
+    getAssetsPagination(1);
   }
 
+  //Pagination From Backend
+  const [items, setItems] = useState([]);
+  const [pageCount, setPageCount] = useState(0)
+
+  useEffect(() => {
+    getAssetsPagination(1)
+  }, [])
+
+  const thousands_separators = (num) => {
+    var num_parts = num.toString().split(".");
+    num_parts[0] = num_parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return num_parts.join(".");
+  }
+
+  const onCountAsset = async () => {
+    try {
+      const response = await overviewService.getCountAllAsset()
+      setPageCount(Math.ceil(response.data/10))
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  const getAssetsPagination = async (currentPage) => {
+    setLoading(true)
+    try{
+
+      const response = await overviewService.getAssetByPagination(currentPage)
+      for (let i in response.data) {
+        response.data[i]['Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Harga Perolehan'])
+        response.data[i]['Biaya Lain-Lain'] = 'Rp' + thousands_separators(response.data[i]['Biaya Lain-Lain'])
+        response.data[i]['PPN'] = 'Rp' + thousands_separators(response.data[i]['PPN'])
+        response.data[i]['Penyusutan Perbulan'] = 'Rp' + thousands_separators(response.data[i]['Penyusutan Perbulan'])
+        response.data[i]['Total Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Total Harga Perolehan'])
+        response.data[i]['Total Penyusutan'] = 'Rp' + thousands_separators(response.data[i]['Total Penyusutan'])
+        response.data[i]['Nilai Asset saat ini'] = 'Rp' + thousands_separators(response.data[i]['Nilai Asset saat ini'])
+      }
+      onCountAsset();
+      setDatas(response.data)
+      console.log(response);
+    } catch (e) {
+      console.log(e);
+    } finally{
+      setLoading(false)
+    }
+  }
+
+  const handlePageClick = async (data) => {
+    console.log(data.selected);
+    let currentPage = data.selected + 1;
+    getAssetsPagination(currentPage)
+  }
   
 
   return (
@@ -672,7 +792,7 @@ export const Overview = () => {
                         <th colSpan='31'>Data is not found</th>
                       </tr>
                     ) : (
-                      currentItems.map((data, index) => (
+                      datas.map((data, index) => (
                         <tr key={data["Nomor Asset"]}>
                           <th>{index + 1}</th>
                           <th style={{fontSize:'30px'}}>
@@ -761,7 +881,7 @@ export const Overview = () => {
                 </table>
                 </div>
               </div>
-              <div className="clearfix" style={{marginRight:'2vw'}}>
+              {/* <div className="clearfix" style={{marginRight:'2vw'}}>
             <div className="hint-text">
               Showing <b> {currentItems.length} </b> out of <b>{datas.length}</b>{" "}
               enteries
@@ -800,7 +920,27 @@ export const Overview = () => {
                 &raquo;
               </a>
             </li>
-          </ul>
+          </ul> */}
+            <ReactPaginate
+            previousLabel={'previous'}
+            nextLabel={'next'}
+            breakLabel={'...'}
+            // pageCount = {Math.ceil(datas.length/10)}
+            pageCount = {pageCount}
+            marginPagesDisplayed={2}
+            pageRangeDisplayed={3}
+            onPageChange={handlePageClick}
+            containerClassName={"pagination justify-content-center"}
+            pageClassName={"page-item"}
+            pageLinkClassName={"page-link"}
+            previousClassName={"page-item"}
+            previousLinkClassName={"page-link"}
+            nextClassName={"page-item"}
+            nextLinkClassName={"page-link"}
+            breakClassName={"page-item"}
+            breakLinkClassName={"page-link"}
+            activeClassName={"active"}
+          />
             </div>
           </div>
         </div>

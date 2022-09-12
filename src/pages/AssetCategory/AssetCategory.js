@@ -545,15 +545,16 @@ export const AssetCategory = () => {
             >
                 <Modal.Header closeButton>
                 <Modal.Title>Add New AssetCategory</Modal.Title>
-                
                 </Modal.Header>
                 <Modal.Body>
                 <form onSubmit={handleSubmit}>
                 <p style={{color:"red"}}>Please complete all required fields</p>
                 <div>
+                {/* <form onSubmit={handleSubmit}> */}
                     <div className="form-group">
                     <label className="form-label">Asset Category<span style={{color :"red"}} >*</span> </label>
                     <input
+                        style={{maxWidth:"500px"}}
                         type="text"
                         className="form-control"
                         onChange={handleChange}
@@ -566,7 +567,8 @@ export const AssetCategory = () => {
                     <div className="form-group mt-3">
                     <label className="form-label">Useful Life<span style={{color :"red"}} >*</span></label>
                     <input
-                    required
+                         style={{maxWidth:"500px"}}
+                        required
                         type="number"
                         className="form-control"
                         onChange={handleChange}
@@ -578,6 +580,7 @@ export const AssetCategory = () => {
                     <div className="form-group mt-3">
                     <label className="form-label">Product Code<span style={{color :"red"}} >*</span></label>
                     <input
+                     style={{maxWidth:"500px"}}
                     required
                         type="text"
                         className="form-control"
@@ -590,6 +593,7 @@ export const AssetCategory = () => {
                     <div className="form-group mt-3">
                     <label className="form-label">Product Name<span style={{color :"red"}} >*</span></label>
                     <input
+                     style={{maxWidth:"500px"}}
                         required
                         type="text"
                         className="form-control"
@@ -602,6 +606,7 @@ export const AssetCategory = () => {
                     <div className="form-group mt-3">
                     <label className="form-label">Subproduct Name<span style={{color :"red"}} >*</span></label>
                     <input
+                     style={{maxWidth:"500px"}}
                         required
                         type="text"
                         className="form-control"
@@ -643,9 +648,11 @@ export const AssetCategory = () => {
                 <Modal.Body>
                 <form onSubmit={(e) => handleEdit(e, RowData.subproduct_name)}>
                 <div>
+                  {/* <form onSubmit={(e) => handleEdit(e, RowData.subproduct_name)}> */}
                     <div className="form-group">
                     <label>Asset Category</label>
                     <input
+                     style={{maxWidth:"500px"}}
                         type="text"
                         className="form-control"
                         onChange={handleChange}
@@ -655,6 +662,7 @@ export const AssetCategory = () => {
                     />
                     <label>Useful Life</label>
                     <input
+                     style={{maxWidth:"500px"}}
                         type="number"
                         className="form-control"
                         onChange={handleChange}
@@ -664,6 +672,7 @@ export const AssetCategory = () => {
                     />
                     <label>Product Code</label>
                     <input
+                     style={{maxWidth:"500px"}}
                         type="text"
                         className="form-control"
                         onChange={handleChange}
@@ -673,6 +682,7 @@ export const AssetCategory = () => {
                     />
                     <label>Product Name</label>
                     <input
+                     style={{maxWidth:"500px"}}
                         type="text"
                         className="form-control"
                         onChange={handleChange}
@@ -722,6 +732,7 @@ export const AssetCategory = () => {
                     <div className="form-group">
                     <label>Asset Category</label>
                     <input
+                     style={{maxWidth:"500px"}}
                         type="text"
                         className="form-control"
                         value={RowData.asset_category}
@@ -729,6 +740,7 @@ export const AssetCategory = () => {
                     />
                     <label>Useful Life</label>
                     <input
+                     style={{maxWidth:"500px"}}
                         type="text"
                         className="form-control"
                         value={RowData.useful_life}
@@ -736,6 +748,7 @@ export const AssetCategory = () => {
                     />
                     <label>Product Code</label>
                     <input
+                     style={{maxWidth:"500px"}}
                         type="text"
                         className="form-control"
                         value={RowData.product_code}
@@ -743,6 +756,7 @@ export const AssetCategory = () => {
                     />
                     <label>Product Name</label>
                     <input
+                     style={{maxWidth:"500px"}}
                         type="text"
                         className="form-control"
                         value={RowData.product_name}
@@ -750,6 +764,7 @@ export const AssetCategory = () => {
                     />
                     <label>Subproduct Name</label>
                     <input
+                     style={{maxWidth:"500px"}}
                         type="text"
                         className="form-control"
                         value={RowData.subproduct_name}

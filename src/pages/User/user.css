@@ -1,0 +1,165 @@
+.pageNumbers {
+    list-style: none;
+    display: flex;
+    float: left;
+  }
+  
+  .pageNumbers li {
+    padding: 5px;
+    background-color: #ffffff;
+    cursor: pointer;
+  }
+  
+  .pageNumbers li.active {
+    background-color: #3e4041;
+    color: rgb(255, 255, 255);
+  }
+  
+  .pageNumbers li button {
+    background-color: transparent;
+    border: none;
+    color: rgb(0, 0, 0);
+    font-size: 13px;
+    cursor: pointer;
+  }
+  .pageNumbers li button:hover {
+    background-color: rgb(236, 230, 230);
+    color: black;
+  }
+  .pageNumbers li button:focus {
+    outline: none;
+  }
+  
+  .loadmore {
+    padding: 1rem;
+    background-color: transparent;
+  
+    color: rgb(0, 0, 0);
+    font-size: 1.2rem;
+    border: 1px solid rgb(146, 56, 56);
+    cursor: pointer;
+  }
+  
+  .pagination {
+    float: right;
+    margin: 0 0 5px;
+  }
+  .pagination li a {
+    border: none;
+    font-size: 13px;
+    min-width: 30px;
+    min-height: 30px;
+    color: #999;
+    margin: 0 2px;
+    line-height: 30px;
+    border-radius: 2px !important;
+    text-align: center;
+    padding: 0 6px;
+  }
+  .pagination li a:hover {
+    color: rgb(110, 77, 77);
+  }
+  .pagination li.active a,
+  .pagination li.active a.page-link {
+    background: #03a9f4;
+  }
+  .pagination li.active a:hover {
+    background: #0397d6;
+  }
+  .pagination li.disabled i {
+    color: #ccc;
+  }
+  .pagination li i {
+    font-size: 16px;
+    padding-top: 6px;
+  }
+  .hint-text {
+    float: right;
+    margin-top: 10px;
+    font-size: 13px;
+  }
+  .body {
+    color: #6478a0;
+    height: auto;
+    overflow: hidden;
+    font-family: "Varela Round", sans-serif;
+  }
+  .table-responsive {
+    margin: 0px 0;
+  }
+  .table-wrapper {
+    min-width: 900px;
+    max-height: 95vh;
+    background: rgb(255, 255, 255);
+    padding: 20px 25px;
+    border-radius: 3px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+  }
+  .table-title {
+    font-family: "Poppins";
+    padding-bottom: 15px;
+    background: #B70621;
+    color: rgb(255, 255, 255);
+    padding: 16px 20px;
+    margin: -20px -25px 10px;
+    border-radius: 3px 3px 0 0;
+  }
+  
+  .search-location{
+    height: 44px;
+    width: 60%;
+    padding: 0;
+    line-height: 30px;
+    font-size: 20px;
+    padding: 0;
+    margin: 3px;
+    margin-left: 20px;
+    border: none;  
+  }
+  .form-user .form-control{
+      border-radius: 7px;
+      border: 1.5px solid #E3E6ED;
+      max-width: 480px;
+  }
+  input.form-control:focus{
+      box-shadow: none;
+      border: 1.5px solid #E3E6ED;
+      background-color: #F7F8FD;
+      letter-spacing: 1px;
+  }
+  .btn-primary{
+      
+      border-radius: 7px;
+  }
+  .btn-primary:focus{
+      box-shadow: none;
+  }
+  
+  .form-loc .form-label {
+    text-align: left;
+  }
+  
+  .user-container-item{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    /* flex-direction: row-; */
+       /* gap: 0px 62.5%; */
+    /* margin-left: 24em; */
+    margin-top: 2em;
+    margin-bottom: 2em;
+    justify-content: space-between;
+  }
+  
+ .inputBoxUser select{
+    width: 100%;
+    background-color: white;
+  border:1px solid rgb(236, 236, 236);
+  padding:8px 15px;
+  font-size: 15px;
+  text-transform: none;
+  align-items: flex-start;
+  display: flex;
+  border-radius:8px;
+  }
+  

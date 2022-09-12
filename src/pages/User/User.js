@@ -4,25 +4,36 @@ import Sidebar from "../../shared/components/Sidebar/Sidebar";
 import { useDeps } from "../../shared/context/DependencyContext";
 import { FiPlus } from "react-icons/fi";
 import { Link } from "react-router-dom";
-import "./style.css";
-import Swal from "sweetalert2";
+import "./user.css";
+import Swal from 'sweetalert2'
 import {FaSort} from 'react-icons/fa'
-
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import swal from "sweetalert";
-import { Success } from "../../shared/components/Notification/Success";
 
-export const Location = () => {
-  const [location, setLocation] = useState("");
+export const UserManage = () => {
+  //Define here local state that store the form Data
+  const [userData, setUserData] = useState({});
+
   const [isLoading, setLoading] = useState(false);
   const [doneAddForm, setDoneAddform] = useState(false);
-  const { locationService } = useDeps();
-  const areAllFieldsFilled = location != "";
+  const { userService, locationService } = useDeps();
+
+
   const [data, setData] = useState([]);
   const [order, setOrder] = useState("ASC");
   const [RowData, SetRowData] = useState([]);
   const [ViewShow, SetViewShow] = useState(false);
+
+  //For Add New Data Model
+  const [ViewPost, SetPostShow] = useState(false);
+  const handlePostShow = () => {
+    setUserData({})
+    SetPostShow(true);
+  };
+  const hanldePostClose = () => {
+    SetPostShow(false);
+  };
 
   const handleViewShow = () => {
     SetViewShow(true);
@@ -31,13 +42,11 @@ export const Location = () => {
     SetViewShow(false);
   };
 
-  //For Add New Data Model
-  const [ViewPost, SetPostShow] = useState(false);
-  const handlePostShow = () => {
-    SetPostShow(true);
-  };
-  const hanldePostClose = () => {
-    SetPostShow(false);
+  const handleChange = (e) => {
+    const newData = { ...userData };
+    newData[e.target.name] = e.target.value;
+    setUserData(newData);
+    console.log(newData)
   };
 
   //For Edit Model
@@ -45,8 +54,9 @@ export const Location = () => {
   const [ViewEdit, SetEditShow] = useState(false);
 
   const handleEditShow = (index, item) => {
-    SetRowData(item);
-    
+    setUserData(item);
+    SetRowData(item)
+
     setId(index);
     setDelete(true);
     SetEditShow(true);
@@ -65,55 +75,60 @@ export const Location = () => {
   const [maxPageNumberLimit, setmaxPageNumberLimit] = useState(5);
   const [minPageNumberLimit, setminPageNumberLimit] = useState(0);
 
-  const handleLocation = (e) => {
-    const location = e.target.value;
-    setLocation(location);
-   
-  };
 
   useEffect(() => {
+    onGetAllUser();
     onGetAllLocation();
   }, [doneAddForm]);
 
-  // ==================CRUD LOCATIONS=============================
+  // ==================CRUD User=============================
 
   //================== Add Data To Table ==========================
   const handleSubmit = async (e) => {
     setLoading(true);
     e.preventDefault();
     try {
-      const response = await locationService.createLocation({
-        location,
-      });
-     
-      setLocation(response);
+        userData["location id"] = Number(userData["location id"]);
+      const response = await userService.createUser(userData);
+      setUserData(response.data);
+      SetPostShow(false);
       setDoneAddform(true);
-
       if (response.status === "SUCCESS") {
-        swal({
+        Swal.fire({
           title: "Success!",
-          text: "Your data has been saved!",
-          icon: "success",
-          button: "OK!",
-        });
+          text:"Your data has been saved!",
+          icon: 'success',
+        })
       }
-      onGetAllLocation();
+      onGetAllUser();
+      clearForm();
     } catch (error) {
       console.log(error.response);
     } finally {
       setLoading(false);
     }
   };
+    // GET ALL LOCATIONS
+    const [locations, setLocations] = useState([]);
+    const onGetAllLocation = async () => {
+      try {
+        const response = await locationService.getAllLocation();
+       
+        setLocations(response.data);
+      } catch (e) {
+        console.log(e);
+      } finally {
+      }
+    };
 
-  //=============== GET ALL LOCATIONS ===================
+  //=============== GET ALL User ===================
 
-  const onGetAllLocation = async () => {
+  const onGetAllUser = async () => {
     setLoading(true);
     try {
-      const response = await locationService.getAllLocation();
-   
+      const response = await userService.getAllUser();
+      console.log(response)
       setData(response.data);
-      SetPostShow(false);
     } catch (e) {
       console.log(e);
     } finally {
@@ -121,34 +136,40 @@ export const Location = () => {
     }
   };
 
+
   //================ DELETE LOCATION ===========================
-  const onDeleteLocation = async (id) => {
+  const onDeleteUser= async (name) => {
+    setLoading(true);
+
     Swal.fire({
-      title: "Are you sure?",
+      title: 'Are you sure?',
       text: "Do you really want to delete this record",
-      icon: "warning",
+      icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes!",
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.isConfirmed) {
         try {
-          const response = locationService.deleteLocation(id);
-          
-          onGetAllLocation();
+          const response = userService.deleteUser(name);
+          onGetAllUser();
         } catch (e) {
           console.log(e);
         } finally {
           setLoading(false);
         }
-        Swal.fire("Deleted!", "Your data has been deleted.", "success");
+        Swal.fire(
+          'Deleted!',
+          'Your file has been deleted.',
+          'success'
+        )
       }
-    });
+    })
 
   };
 
-  //================== SEARCH BY NAME =========================
+  //================== SEARCH BY NAME LIKE ========================
   const onChangeSearchLocation = (e) => {
     const searchLocation = e.target.value;
     setSearchLocation(searchLocation);
@@ -158,31 +179,23 @@ export const Location = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await locationService.getLocationByName(searchLocation);
+      const response = await userService.getUserByName(searchLocation);
       setData(response.data);
-     
+
     } catch (e) {
       console.log(e);
     } finally {
     }
   };
 
-  const ref = useRef(null) ;
-  const onClearForm = (e) => {
-    e.preventDefault()
-    ref.current.value = ''; 
-    onGetAllLocation();
-  }
-
   //=============== EDIT ROW DATA  ===============================
-  const handleEdit = async (id) => {
+  const handleEdit = async (e,id) => {
+    e.preventDefault()
 
     try {
-      const response = await locationService.updateLocation(id, {
-        location,
-      });
-     
-      setLocation(response);
+      const response = await userService.updateUser(id, userData);
+
+      setUserData(response);
       setDoneAddform(true);
       if (response.status === "SUCCESS") {
         swal({
@@ -193,7 +206,7 @@ export const Location = () => {
         });
       }
       SetEditShow(false);
-      onGetAllLocation();
+      onGetAllUser();
     } catch (error) {
       console.log(error.response);
     } finally {
@@ -283,39 +296,40 @@ export const Location = () => {
       setOrder("ASC");
     }
   };
-  const sortingNum = (col) => {
-    if (order === "ASC") {
-        const sorted = [...data].sort((a, b) =>
-          a[col] > b[col] ? 1 : -1
-        );
-        setData(sorted);
-        setOrder("DSC");
-      }
-      if (order === "DSC") {
-        const sorted = [...data].sort((a, b) =>
-          a[col] < b[col] ? 1 : -1
-        );
-        setData(sorted);
-        setOrder("ASC");
-      }
-  }
+  // CLEAR FORM
+  const clearForm = () => {
+    setUserData({
+      name: '',
+      address: '',
+      phone: '',
+      account_number: '',
+    });
+    
+}
+// CLEAR SEARCH
+const ref = useRef(null) ;
+const onClearForm = (e) => {
+  e.preventDefault()
+  ref.current.value = ''; 
+  onGetAllUser();
+}
 
   return (
     <>
       <Sidebar>
+      <div>
       <div className="body">
-      <div className="container">
-        <div className="loc-container-item">
-          
+          <div className="container">
+          <div className="user-container-item" >
           <form>
-            <div className="input-group">
+            <div className="input-group ">
               <input
-                ref={ref}
-                placeholder="Search"
+                placeholder="Search User Name"
                 // value={searchLocation}
                 onChange={onChangeSearchLocation}
                 type="text"
                 className="form-control"
+                ref={ref}
               />
               <div className="input-group-append">
                 <button value="submit" className="btn btn-primary" onClick={onSearchLocation}>
@@ -328,15 +342,20 @@ export const Location = () => {
             </div>
           </form>
           <Button
-            variant="primary"
-            onClick={() => {
-              handlePostShow();
-            }}
-          >
-            <FiPlus />
-            Add New Location
-          </Button>
-        </div>
+              variant="primary"
+              onClick={() => {
+                handlePostShow();
+              }}
+            >
+               <FiPlus />
+              Add New User
+            </Button>
+          </div>
+        
+        
+        
+
+        
 
             <div className="table-responsive">
               <div className="table-wrapper">
@@ -344,7 +363,7 @@ export const Location = () => {
                   <div className="row">
                     <div className="col-xs-6">
                       <h2>
-                        Manage <b>Locations</b>
+                        Manage Users
                       </h2>
                     </div>
                   </div>
@@ -354,13 +373,29 @@ export const Location = () => {
                   <thead>
                     <tr>
                       <th>No</th>
-                      <th onClick={() => sorting("location")}>
+                      <th onClick={() => sorting("NIK")}>
+                        {" "}
+                        <FaSort /> NIK
+                      </th>
+                      <th onClick={() => sorting("email")}>
+                        {" "}
+                        <FaSort /> Email
+                      </th>
+                      <th onClick={() => sorting("name")}>
+                        {" "}
+                        <FaSort /> Name
+                      </th>
+                      <th onClick={() => sorting("role")}>
+                        {" "}
+                        <FaSort /> Role
+                      </th>
+                      <th onClick={() => sorting("position")}>
+                        {" "}
+                        <FaSort /> Position
+                      </th>
+                      <th onClick={() => sorting("location id")}>
                         {" "}
                         <FaSort /> Location
-                      </th>
-                      <th onClick={() => sortingNum("ID")}>
-                        {" "}
-                        <FaSort /> Area Code
                       </th>
                       <th>Actions</th>
                     </tr>
@@ -368,14 +403,18 @@ export const Location = () => {
                   <tbody>
                     {data.length === 0 ? (
                       <tr>
-                        <th colspan='4'>Data is not found</th>
+                        <th colspan='6'>Data is not found</th>
                       </tr>
                     ) : (
                       currentItems.map((item, index) => (
-                        <tr key={item["kode wilayah"]}>
+                        <tr key={item.ID}>
                           <th>{index + 1}</th>
-                          <th>{item.location}</th>
-                          <th>{item["kode wilayah"]}</th>
+                          <th>{item.NIK}</th>
+                          <th>{item.email}</th>
+                          <th>{item.name}</th>
+                          <th>{item.role}</th>
+                          <th>{item.position}</th>
+                          <th>{item.location_id}</th>
                           <td>
                             <a
                               onClick={() => {
@@ -396,7 +435,7 @@ export const Location = () => {
 
                             <a
                               onClick={() => {
-                                handleEditShow(RowData.ID, item);
+                                handleEditShow(item.name, item);
                               }}
                               className="edit"
                               data-toggle="modal"
@@ -412,7 +451,7 @@ export const Location = () => {
                             </a>
 
                             <a
-                              onClick={() => onDeleteLocation(item.ID)}
+                              onClick={() => onDeleteUser(item.name)}
                               className="delete"
                               data-toggle="modal"
                               style={{ cursor: "pointer" }}
@@ -470,7 +509,7 @@ export const Location = () => {
         </div>
 
         {/* ADD MODAL FOR SUBMIT DATABASE */}
-
+        <div className="userModal">
         <div className="model-box-view">
           <Modal
             show={ViewPost}
@@ -479,33 +518,110 @@ export const Location = () => {
             keyboard={false}
           >
             <Modal.Header closeButton>
-              <Modal.Title>Add new Location</Modal.Title>
+              <Modal.Title>Add New User</Modal.Title>
+             
             </Modal.Header>
             <Modal.Body>
               <form onSubmit={handleSubmit}>
             <p style={{color:"red"}}>Please complete all required fields</p>
-              <div>
+                
+              <div className="form-user">
                 <div className="form-group">
-                  <label className="form-label">Location Name <span style={{color :"red"}} >*</span></label>
+                  <label className="form-label">NIK <span style={{color :"red"}} >*</span> </label>
                   <input
-                     style={{maxWidth:"500px"}}
+                  
+                  required
                     type="text"
                     className="form-control"
-                    name="location"
-                    placeholder="Location Name"
-                    required
-                    onChange={handleLocation}
+                    onChange={handleChange}
+                    name="NIK"
+                    value={userData.NIK}
+                    placeholder="Please enter NIK"
+                    autoFocus
                   />
                 </div>
-
+                <div className="form-group mt-3">
+                  <label className="form-label">Email <span style={{color :"red"}} >*</span></label>
+                  <input
+                  required
+                    type="email"
+                    className="form-control"
+                    onChange={handleChange}
+                    placeholder="Please enter email"
+                    name="email"
+                    value={userData.email}
+                    
+                  />
+                </div>
+                <div className="form-group mt-3">
+                  <label className="form-label">Name<span style={{color :"red"}} >*</span></label>
+                  <input
+                  required
+                    type="text"
+                    className="form-control"
+                    onChange={handleChange}
+                    placeholder="Please enter name"
+                    name="name"
+                    value={userData.name}
+                  />
+                </div>
+                <div className="inputBoxUser">
+                  <label className="form-label mt-3">Role <span style={{color :"red"}} >*</span></label>
+                  <select
+                    required
+                    name="role"
+                    value={userData.role}
+                    onChange={handleChange}
+                    style={{width:'100%'}}
+                  >
+                    <option value="">Select</option>
+                    <option>GA</option>
+                    <option>IT</option>
+                    <option>User Cabang</option>
+                  </select>
+                  </div>
+                <div className="inputBoxUser">
+                  <label className="form-label mt-3">Position <span style={{color :"red"}} >*</span></label>
+                  <select
+                    required
+                    name="position"
+                    value={userData.position}
+                    onChange={handleChange}
+                    style={{width:'100%'}}
+                  >
+                    <option value="">Select</option>
+                    <option>Manager</option>
+                    <option>Supervisor</option>
+                    <option>Staff</option>
+                  </select>
+                </div>
+                <div className="inputBoxUser">
+                  <label className="form-label mt-3">Location <span style={{color :"red"}} >*</span></label>
+                  <select
+                    required
+                    name="location id"
+                    value={userData["location id"]}
+                    onChange={handleChange}
+                    style={{width:'100%'}}
+                  >
+                   <option value="">Select Location</option>
+                    {locations.map((item, index) => (
+                      <option key={item["kode wilayah"]} value={item['kode wilayah']}>
+                       {item.location}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                </div>
+                
+                
                 <Button
                   type="submit"
                   className="btn btn-success mt-4"
                 >
                   Add{" "}
                 </Button>
-                
-              </div>
+              
               </form>
             </Modal.Body>
             <Modal.Footer>
@@ -526,30 +642,54 @@ export const Location = () => {
             keyboard={false}
           >
             <Modal.Header closeButton>
-              <Modal.Title>Edit </Modal.Title>
+              <Modal.Title>Edit Vendor Data </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <div>
+              <form onSubmit={(e)=>handleEdit(e,RowData.name)}>
+              <div className="form-user">
                 <div className="form-group">
-                  <label>Location Name</label>
+                  <label>Address</label>
                   <input
-                     style={{maxWidth:"500px"}}
+                  required
                     type="text"
                     className="form-control"
-                    onChange={(e) => setLocation(e.target.value)}
-                    placeholder="Please enter Location Name"
-                    defaultValue={RowData.location}
+                    onChange={handleChange}
+                    placeholder="Please enter Address"
+                    name="address"
+                    defaultValue={RowData.address}
+                  />
+                  <label>Phone</label>
+                  <input
+                  required
+                    type="text"
+                    className="form-control"
+                    onChange={handleChange}
+                    placeholder="Please enter Phone"
+                    name="phone"
+                    defaultValue={RowData.phone}
+                  />
+                  <label>Account Number</label>
+                  <input
+                  required
+                    type="text"
+                    className="form-control"
+                    onChange={handleChange}
+                    name="account_number"
+                    placeholder="Please enter Account Number"
+                    defaultValue={RowData.account_number}
                   />
                 </div>
+                </div>
                 <Button
-                  disabled={!areAllFieldsFilled}
+               
                   type="submit"
                   className="btn btn-warning mt-4"
-                  onClick={() => handleEdit(RowData.ID)}
+                 
                 >
                   Save Changes
                 </Button>
-              </div>
+  
+              </form>
             </Modal.Body>
             <Modal.Footer>
               <Button variant="secondary" onClick={hanldeEditClose}>
@@ -571,23 +711,49 @@ export const Location = () => {
               <Modal.Title>View Data</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <div>
-                <div className="form-group mt-2">
-                  <label>ID Location </label>
+              <div className="form-user">
+                <div className="form-group">
+                <label>NIK </label>
                   <input
-                   style={{maxWidth:"500px"}}
                     type="text"
                     className="form-control"
-                    value={RowData["kode wilayah"]}
+                    value={RowData.NIK}
                     readOnly
                   />
-
-                  <label>Location Name</label>
+                  <label>Username </label>
                   <input
-                   style={{maxWidth:"500px"}}
                     type="text"
                     className="form-control"
-                    value={RowData.location}
+                    value={RowData.name}
+                    readOnly
+                  />
+                  <label>Email </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={RowData.email}
+                    readOnly
+                  />
+                  <label>Role </label>
+                  <input
+            
+                    type="text"
+                    className="form-control"
+                    value={RowData.role}
+                    readOnly
+                  />
+                  <label>Position </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={RowData.position}
+                    readOnly
+                  />
+                  <label>Location ID </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={RowData["location id"]}
                     readOnly
                   />
                 </div>
@@ -606,7 +772,8 @@ export const Location = () => {
             </Modal.Footer>
           </Modal>
         </div>
-      {/* </div> */}
+        </div>
+      </div>
       </Sidebar>
     </>
   );

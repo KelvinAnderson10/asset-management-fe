@@ -3,6 +3,7 @@ import { assetCategoryService } from './AssetCategoryService'
 import { assetItemService } from './AssetItemService'
 import { locationService } from './LocationService'
 import { overviewService } from './OverviewService'
+import { purchaseOrderService } from './PurchaseOrderService'
 import { userService } from './UserService'
 import { vendorService } from './VendorService'
 
@@ -13,6 +14,7 @@ export const ServiceFactory = (apiClient) => {
     assetItemService: assetItemService(apiClient),
     userService: userService(apiClient),
     assetCategoryService: assetCategoryService(apiClient),
-    overviewService: overviewService(apiClient)
+    overviewService: overviewService(apiClient),
+    purchaseOrderService: purchaseOrderService(apiClient)
   }
 }

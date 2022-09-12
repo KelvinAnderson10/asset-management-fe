@@ -1,23 +1,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500;600&display=swap');
 
-.main-container{
+.main-asset-container{
   font-family: 'Poppins', sans-serif;
   margin:0; padding:0;
   box-sizing: border-box;
   outline: none; border:none;
   text-transform: capitalize;
   transition: all .2s linear;
+  /* background-color: #f5f8fb; */
 }
 
-main .asset-container{
+.asset-container{
   display: flex;
   justify-content: center;
   align-items: center;
   padding:25px;
   min-height: 90vh;
   min-width: 97vw;
-  
-  background: rgb(255, 255, 255);
 }
 
 .asset-container form{

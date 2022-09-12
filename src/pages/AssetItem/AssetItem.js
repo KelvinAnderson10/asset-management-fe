@@ -94,6 +94,7 @@ export const AssetItem = () => {
     const newData = { ...data };
     newData[e.target.name] = e.target.value;
     setData(newData);
+    console.log(newData)
   
   };
 
@@ -207,8 +208,8 @@ export const AssetItem = () => {
                   >
                     <option value="">Select Location</option>
                     {locations.map((item, index) => (
-                      <option key={item.ID} value={item.ID}>
-                        {item.location}
+                      <option key={item['kode wilayah']} value={item["kode wilayah"]}>
+                       {item["kode wilayah"]} {item.location}
                       </option>
                     ))}
                   </select>
@@ -365,7 +366,7 @@ export const AssetItem = () => {
                     {user.map((item) => (
                       <option
                         key={item.name}
-                        value={item.name}
+                        value={item.NIK}
                       >
                         {item.name}
                       </option>
