@@ -1,0 +1,98 @@
+.mainhome-container {
+    display: flex;
+    background-color: whitesmoke;
+    width: 97w;
+    /* height: 100%; */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}
+
+.mainhome-container .main-navbar-container {
+    margin-top: 2vh;
+    width: 95vw;
+    height: 8vh;
+    background-color: white;
+    border-radius: 1vh;
+    box-shadow: 1px 2px 2px 3px rgb(221, 219, 219);
+    display: flex;
+    align-items: center;
+    padding-left: 2vw;
+    font-size: 1.5vh;
+}
+
+.main-navbar-container .main-navbar-asset{
+    width: 8vw;
+    height: 60%;
+    background-color: white;
+    border-radius:  0px 1vh 1vh 0px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    border-style: solid;
+    border-width: 1px;
+    border-color:rgb(212, 211, 211);
+}
+
+.main-navbar-container .main-navbar-asset2{
+    width: 8vw;
+    height: 60%;
+    background-color: #0A2495;
+    border-radius:  0px 1vh 1vh 0px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    border-style: solid;
+    border-width: 1px;
+    border-color:rgb(212, 211, 211);
+    color: white;
+}
+
+.main-navbar-asset:hover{
+    background-color:#999;
+    cursor: pointer;
+}
+
+.main-navbar-asset2:hover{
+    background-color:#999;
+    cursor: pointer;
+}
+
+.main-navbar-container .main-navbar-dashboard{
+    width: 8vw;
+    height: 60%;
+    background-color: white;
+    border-radius:  1vh 0px 0px 1vh;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    border-style: solid;
+    border-width: 1px;
+    border-color:rgb(212, 211, 211);
+}
+
+.main-navbar-container .main-navbar-dashboard2{
+    width: 8vw;
+    height: 60%;
+    background-color: #0A2495;
+    border-radius:  1vh 0px 0px 1vh;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    border-style: solid;
+    border-width: 1px;
+    border-color:rgb(212, 211, 211);
+    color: white;
+}
+
+.main-navbar-dashboard:hover{
+    background-color:#999;
+    cursor: pointer;
+}
+
+.main-navbar-dashboard2:hover{
+    background-color:#999;
+    cursor: pointer;
+}
+
