@@ -9,6 +9,7 @@ import Loading from "../../shared/components/Loading/Loading";
 import UploadLoading from "../../shared/components/Loading/UploadLoading";
 import AssetLoading from "../../shared/components/Loading/AssetItemLoad";
 import { EVENT } from "../../shared/constants";
+import { useAuth } from "../../services/UseAuth";
 
 export const AssetItem = () => {
   const [data, setData] = useState({});
@@ -26,6 +27,7 @@ export const AssetItem = () => {
     onGetAllVendor();
     onGetAllLocation();
     onGetUser();
+    onGetCookie()
   }, []);
   // GET ALL SUBPRODUCT NAME
   const onGetAllSubProduct = async () => {
@@ -121,7 +123,7 @@ export const AssetItem = () => {
       clearForm();
       let event = {
         event: EVENT.CREATE_ASSET,
-        user: 'Yayah Zakiyah'
+        user: userEvent.name
       }
       createEventLogAssetItem(event)
     } catch (error) {
@@ -153,10 +155,26 @@ export const AssetItem = () => {
     }
   }
 
+  //Get User
+  const { getCookie } = useAuth();
+  const[userEvent,setUserEvent]= useState({
+    name:'',
+    position:'',
+    role:'',
+    NIK:''
+  })
+  const onGetCookie = ()=>{
+  
+    let savedUserJsonString = getCookie("user")
+    let savedUser = JSON.parse(savedUserJsonString)
+    setUserEvent(prevObj=>({...prevObj,NIK:(savedUser.NIK),name:(savedUser.name),position:(savedUser.position), role:(savedUser.role)}))
+  
+    console.log(userEvent.name)
+  }
+
   return (
     <>
       <Sidebar>
-      {/* <div className="main-container"> */}
         <div className="asset-container">
           <form onSubmit={(e)=>{handleSubmit(e)}}>
             <div className="row">
@@ -354,17 +372,6 @@ export const AssetItem = () => {
                     ))}
                   </select>
                 </div>
-                {/* <div className="inputBox">
-                  <span>Initisal :</span>
-                  <input
-                    type="text"
-                    required
-                    name="Initisal"
-                    value={data["Initisal"]}
-                    onChange={handleChange}
-                    style={{width:'95%'}}
-                  />
-                </div> */}
                   <div className="inputBox">
                     <span>Year :</span>
                     <input
@@ -388,7 +395,6 @@ export const AssetItem = () => {
                       style={{width:'95%'}}
                     />
                   </div>
-
                   <div className="inputBox">
                     <span>PPN :</span>
                     <select
@@ -403,15 +409,7 @@ export const AssetItem = () => {
                     <option>No</option>
                   </select>
                   </div>
-                {/* </div> */}
                 <div className="button-asset">
-                  {/* <button
-                    type="submit"
-                    className="btn btn-danger button-cancel"
-                    onClick={handleCancel}
-                  >
-                    Cancel
-                  </button> */}
                   <button
                     type="submit"
                     className="btn btn-primary button-submit"

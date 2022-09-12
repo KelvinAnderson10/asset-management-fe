@@ -12,6 +12,7 @@ import Modal from "react-bootstrap/Modal";
 import swal from "sweetalert";
 import { Failed } from "../../shared/components/Notification/Failed";
 import { EVENT } from "../../shared/constants";
+import { useAuth } from "../../services/UseAuth";
 
 export const VendorManage = () => {
   //Define here local state that store the form Data
@@ -84,6 +85,10 @@ export const VendorManage = () => {
     onGetAllVendor();
   }, [doneAddForm]);
 
+  useEffect(() => {
+    onGetCookie()
+  }, [])
+
   // ==================CRUD LOCATIONS=============================
 
   //================== Add Data To Table ==========================
@@ -106,7 +111,7 @@ export const VendorManage = () => {
       clearForm();
       let event = {
         event: EVENT.CREATE_VENDOR,
-        user: 'Yayah Zakiyah'
+        user: user.name
       }
       createEventLogVendor(event)
     } catch (error) {
@@ -150,7 +155,7 @@ export const VendorManage = () => {
           onGetAllVendor();
           let event = {
             event: EVENT.DELETE_VENDOR,
-            user: 'Yayah Zakiyah'
+            user: user.name
           }
           createEventLogVendor(event)
         } catch (e) {
@@ -208,7 +213,7 @@ export const VendorManage = () => {
       onGetAllVendor();
       let event = {
         event: EVENT.UPDATE_VENDOR,
-        user: 'Yayah Zakiyah'
+        user: user.name
       }
       createEventLogVendor(event)
     } catch (error) {
@@ -329,6 +334,23 @@ const createEventLogVendor = async (eventLoc) => {
   } catch (e) {
     console.log(e);
   }
+}
+
+//================== GET USER ===============================
+const { getCookie } = useAuth();
+const[user,setUser]= useState({
+  name:'',
+  position:'',
+  role:'',
+  NIK:''
+})
+const onGetCookie = ()=>{
+
+  let savedUserJsonString = getCookie("user")
+  let savedUser = JSON.parse(savedUserJsonString)
+  setUser(prevObj=>({...prevObj,NIK:(savedUser.NIK),name:(savedUser.name),position:(savedUser.position), role:(savedUser.role)}))
+
+  console.log(user.name)
 }
 
   return (

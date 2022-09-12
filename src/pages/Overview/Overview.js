@@ -11,6 +11,7 @@ import swal from "sweetalert";
 import Loading from "../../shared/components/Loading/Loading";
 import ReactPaginate from "react-paginate";
 import { EVENT } from "../../shared/constants";
+import { useAuth } from "../../services/UseAuth";
 
 export const Overview = () => {
   const {
@@ -291,7 +292,7 @@ export const Overview = () => {
       getAssetsPagination(1)
       let event = {
         event: EVENT.UPDATE_ASSET,
-        user: 'Yayah Zakiyah'
+        user: userEvent.name
       }
       createEventLogOverview(event)
     } catch (e) {
@@ -306,6 +307,7 @@ export const Overview = () => {
     onGetAllSubProduct();
     onGetAllVendor();
     onGetAllLocation();
+    onGetCookie()
   }, []);
 
   const [subProductName, setSubProductName] = useState([]);
@@ -559,7 +561,6 @@ export const Overview = () => {
   }
 
   //Pagination From Backend
-  const [items, setItems] = useState([]);
   const [pageCount, setPageCount] = useState(0)
 
   useEffect(() => {
@@ -624,6 +625,23 @@ export const Overview = () => {
       console.log(e);
     }
   }
+
+    //Get User
+    const { getCookie } = useAuth();
+    const[userEvent,setUserEvent]= useState({
+      name:'',
+      position:'',
+      role:'',
+      NIK:''
+    })
+    const onGetCookie = ()=>{
+    
+      let savedUserJsonString = getCookie("user")
+      let savedUser = JSON.parse(savedUserJsonString)
+      setUserEvent(prevObj=>({...prevObj,NIK:(savedUser.NIK),name:(savedUser.name),position:(savedUser.position), role:(savedUser.role)}))
+    
+      console.log(userEvent.name)
+    }
 
   return (
     <>
