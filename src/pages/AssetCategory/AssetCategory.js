@@ -463,7 +463,7 @@ export const AssetCategory = () => {
                     <tbody>
                         {data.length === 0 ? (
                         <tr>
-                          <th colspan='7'>Data is not found</th>
+                          <th colspan='8'>Data is not found</th>
                         </tr>
                         ) : (
                         currentItems.map((item, index) => (
@@ -646,6 +646,7 @@ export const AssetCategory = () => {
                     <div className="form-group mt-3">
                     <label className="form-label">PIC<span style={{color :"red"}} >*</span></label>
                     <input
+                    style={{maxWidth:"500px"}}
                         required
                         type="text"
                         className="form-control"
@@ -731,6 +732,7 @@ export const AssetCategory = () => {
                     <div className="form-group mt-3">
                     <label className="form-label">PIC<span style={{color :"red"}} >*</span></label>
                     <input
+                    style={{maxWidth:"500px"}}
                         required
                         type="text"
                         className="form-control"
@@ -739,7 +741,7 @@ export const AssetCategory = () => {
                         name="pic"
                         value={RowData.pic}
                     />
-                    </div> 
+                    </div>  
                     </div>
                 </div>
                   <Button
@@ -811,6 +813,7 @@ export const AssetCategory = () => {
                     />
                     <label>PIC</label>
                     <input
+                    style={{maxWidth:"500px"}}
                         type="text"
                         className="form-control"
                         value={RowData.pic}

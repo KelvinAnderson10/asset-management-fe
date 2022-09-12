@@ -561,6 +561,7 @@ const onGetCookie = ()=>{
                   <label className="form-label">Vendor Name <span style={{color :"red"}} >*</span> </label>
                   <input
                   required
+                  style={{maxWidth:"500px"}}
                     type="text"
                     className="form-control"
                     onChange={handleChange}
@@ -574,6 +575,7 @@ const onGetCookie = ()=>{
                   <label className="form-label">Address <span style={{color :"red"}} >*</span></label>
                   <input
                   required
+                  style={{maxWidth:"500px"}}
                     type="text"
                     className="form-control"
                     onChange={handleChange}
@@ -587,6 +589,7 @@ const onGetCookie = ()=>{
                   <label className="form-label">Phone Number <span style={{color :"red"}} >*</span></label>
                   <input
                   required
+                  style={{maxWidth:"500px"}}
                     type="text"
                     className="form-control"
                     onChange={handleChange}
@@ -599,6 +602,7 @@ const onGetCookie = ()=>{
                   <label className="form-label">Account Number <span style={{color :"red"}} >*</span></label>
                   <input
                   required
+                  style={{maxWidth:"500px"}}
                     type="text"
                     className="form-control"
                     onChange={handleChange}
@@ -644,6 +648,7 @@ const onGetCookie = ()=>{
                   <label>Address</label>
                   <input
                   required
+                  style={{maxWidth:"500px"}}
                     type="text"
                     className="form-control"
                     onChange={handleChange}
@@ -654,6 +659,7 @@ const onGetCookie = ()=>{
                   <label>Phone</label>
                   <input
                   required
+                  style={{maxWidth:"500px"}}
                     type="text"
                     className="form-control"
                     onChange={handleChange}
@@ -664,6 +670,7 @@ const onGetCookie = ()=>{
                   <label>Account Number</label>
                   <input
                   required
+                  style={{maxWidth:"500px"}}
                     type="text"
                     className="form-control"
                     onChange={handleChange}
@@ -708,6 +715,7 @@ const onGetCookie = ()=>{
                 <div className="form-group">
                   <label>Vendor Name </label>
                   <input
+                  style={{maxWidth:"500px"}}
                     type="text"
                     className="form-control"
                     value={RowData.name}
@@ -715,6 +723,7 @@ const onGetCookie = ()=>{
                   />
                   <label>Address </label>
                   <input
+                  style={{maxWidth:"500px"}}
                     type="text"
                     className="form-control"
                     value={RowData.address}
@@ -722,6 +731,7 @@ const onGetCookie = ()=>{
                   />
                   <label>Phone </label>
                   <input
+                  style={{maxWidth:"500px"}}
                     type="text"
                     className="form-control"
                     value={RowData.phone}
@@ -729,6 +739,7 @@ const onGetCookie = ()=>{
                   />
                   <label>Account Number </label>
                   <input
+                  style={{maxWidth:"500px"}}
                     type="text"
                     className="form-control"
                     value={RowData.account_number}
