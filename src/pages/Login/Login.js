@@ -23,7 +23,9 @@ export const Login = () => {
     name:'',
     position:'',
     role:'',
-    NIK:''
+    location_id:'',
+    tap:'',
+    cluster:''
   })
 
 
@@ -36,7 +38,7 @@ export const Login = () => {
       const response = await userService.getUserByEmail(email); 
       console.log(response)
       setEmail(response.data.email);
-      setUser(prevObj=>({...prevObj,NIK:(response.data.NIK),name:(response.data.name),position:(response.data.position), role:(response.data.role)}))
+      setUser(prevObj=>({...prevObj,name:(response.data.name),position:(response.data.position), role:(response.data.role), location_id:(response.data.location_id), tap:(response.data.TAP), cluster:(response.data.Cluster)}))
       // setUser(response.data)
       setOTP(response.otp);
       setShowOTPForm(true);

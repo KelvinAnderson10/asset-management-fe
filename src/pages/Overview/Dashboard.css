@@ -14,7 +14,7 @@
     height: 88vh;
     flex-direction: row;
     border-radius: 10px;
-    box-shadow: 1px 2px 2px 3px rgb(221, 219, 219)
+    /* box-shadow: 1px 2px 2px 3px rgb(221, 219, 219) */
 }
 
 .dashboard-card .content-dashboard {
