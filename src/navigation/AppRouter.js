@@ -16,6 +16,7 @@ import { ProtectedPage } from "../services/ProtectedPage";
 import { FormPO } from "../pages/PurchaseOrder/FormPO";
 import { UserManage } from "../pages/User/User";
 import { Main } from "../pages/Overview/Main";
+import { Approval } from "../pages/Approval/Approval";
 
 
 
@@ -35,6 +36,7 @@ export const AppRouter = () => {
         <Route path="/data-management/user" element={<UserManage />} />
         <Route path="/upload-data" element={<ImportData />} />
         <Route path="/purchase-request" element={<FormPO/>} />
+        <Route path="/approval-data" element={<Approval/>} />
         <Route path="*" element={<PageNotFound />} />
       </Route>
     </Routes>

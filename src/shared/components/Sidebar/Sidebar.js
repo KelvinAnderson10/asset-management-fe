@@ -386,6 +386,46 @@ const onGetCookie = ()=>{
             })}
           </section>
           )}
+          {user.role==="User Cabang" && user.position==="Supervisor" && (
+          <section className="routes">
+            {routesUserSpv.map((route, index) => {
+              if (route.subRoutes) {
+                return (
+                  <SidebarMenu
+                    setIsOpen={setIsOpen}
+                    route={route}
+                    showAnimation={showAnimation}
+                    isOpen={isOpen}
+                  />
+                );
+              }
+     
+              return (
+                <NavLink
+                  to={route.path}
+                  key={index}
+                  className="link"
+                  activeclassname="active"
+                >
+                  <div className="icon">{route.icon}</div>
+                  <AnimatePresence>
+                    {isOpen && (
+                      <motion.div
+                        variants={showAnimation}
+                        initial="hidden"
+                        animate="show"
+                        exit="hidden"
+                        className="link_text"
+                      >
+                        {route.name}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </NavLink>
+              );
+            })}
+          </section>
+          )}
           <AnimatePresence>
               {isOpen && (
                 <motion.h1
