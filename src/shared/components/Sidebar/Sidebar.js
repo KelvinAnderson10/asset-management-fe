@@ -65,6 +65,11 @@ const routesAdmin = [
     name: "Approval Data",
     icon: <BsIcons.BsFillFileEarmarkCheckFill/>,
   },
+  {
+    path: "/settings",
+    name: "Settings",
+    icon: <AiIcons.AiFillSetting/>,
+  },
 ];
 
 const routesIT = [
@@ -73,23 +78,18 @@ const routesIT = [
     name: "Overview",
     icon: <FaHome />,
   },
-  {
-    path: "/data-management",
-    name: "Data Management",
-    icon: <GoIcons.GoDatabase/>,
-    subRoutes: [
-        {
-          path: "/data-management/asset-item",
-          name: "Asset Item",
-          icon: <IoIcons.IoIosPaper/>,
-        },
-      ],
-  },
-  {
-    path: "/upload-data",
-    name: "Import Data",
-    icon: <FaIcons.FaFileUpload/>,
-  },
+  // {
+  //   path: "/data-management",
+  //   name: "Data Management",
+  //   icon: <GoIcons.GoDatabase/>,
+  //   subRoutes: [
+  //       {
+  //         path: "/data-management/asset-item",
+  //         name: "Asset Item",
+  //         icon: <IoIcons.IoIosPaper/>,
+  //       },
+  //     ],
+  // },
   {
     path: "/approval-data",
     name: "Approval Data",
@@ -104,24 +104,6 @@ const routesUserStaff = [
     name: "Overview",
     icon: <FaHome />,
   },
-  {
-    path: "/data-management",
-    name: "Data Management",
-    icon: <GoIcons.GoDatabase/>,
-    subRoutes: [
-        {
-          path: "/data-management/asset-item",
-          name: "Asset Item",
-          icon: <IoIcons.IoIosPaper/>,
-        },
-      ],
-  },
-  {
-    path: "/upload-data",
-    name: "Import Data",
-    icon: <FaIcons.FaFileUpload/>,
-  },
-  ,
   {
     path: "/purchase-request",
     name: "Purchase Request",
@@ -147,11 +129,6 @@ const routesUserSpv = [
           icon: <IoIcons.IoIosPaper/>,
         },
       ],
-  },
-  {
-    path: "/upload-data",
-    name: "Import Data",
-    icon: <FaIcons.FaFileUpload/>,
   },
   {
     path: "/approval-data",
@@ -363,6 +340,46 @@ const onGetCookie = ()=>{
           {user.role==="User Cabang" && user.position==="Staff" && (
           <section className="routes">
             {routesUserStaff.map((route, index) => {
+              if (route.subRoutes) {
+                return (
+                  <SidebarMenu
+                    setIsOpen={setIsOpen}
+                    route={route}
+                    showAnimation={showAnimation}
+                    isOpen={isOpen}
+                  />
+                );
+              }
+     
+              return (
+                <NavLink
+                  to={route.path}
+                  key={index}
+                  className="link"
+                  activeclassname="active"
+                >
+                  <div className="icon">{route.icon}</div>
+                  <AnimatePresence>
+                    {isOpen && (
+                      <motion.div
+                        variants={showAnimation}
+                        initial="hidden"
+                        animate="show"
+                        exit="hidden"
+                        className="link_text"
+                      >
+                        {route.name}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </NavLink>
+              );
+            })}
+          </section>
+          )}
+          {user.role==="User Cabang" && user.position==="Supervisor" && (
+          <section className="routes">
+            {routesUserSpv.map((route, index) => {
               if (route.subRoutes) {
                 return (
                   <SidebarMenu

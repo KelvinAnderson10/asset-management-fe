@@ -14,9 +14,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding:25px;
+  padding:20px;
   min-height: 90vh;
-  min-width: 97vw;
+  min-width: 90vw;
   background-color: whitesmoke;
 }
 
@@ -32,20 +32,20 @@
 .asset-container form .row{
   display: flex;
   flex-wrap: wrap;
-  gap:15px;
+  gap:10px;
 }
 
 .asset-container form .row .col{
   flex:1 1 34em;
   display: flex;
   flex-direction: column;
-  padding-left: 10px;
+  padding-left: 30px;
 
 }
 
 .asset-container form .row .col .title{
   font-size: 30px;
-  color: 	#8d0000;
+  color: 	#B70621;
   padding-bottom: 5px;
   text-transform: uppercase;
   text-align: left;
@@ -65,7 +65,7 @@
 .asset-container form .row .col .inputBox input{
   width: 80%;
   border:1px solid rgb(180, 178, 178);
-  padding:10px 15px;
+  padding: 8px 15px;
   font-size: 15px;
   text-transform: none;
   align-items: flex-start;

@@ -342,13 +342,12 @@ const[user,setUser]= useState({
   name:'',
   position:'',
   role:'',
-  NIK:''
 })
 const onGetCookie = ()=>{
 
   let savedUserJsonString = getCookie("user")
   let savedUser = JSON.parse(savedUserJsonString)
-  setUser(prevObj=>({...prevObj,NIK:(savedUser.NIK),name:(savedUser.name),position:(savedUser.position), role:(savedUser.role)}))
+  setUser(prevObj=>({...prevObj,name:(savedUser.name),position:(savedUser.position), role:(savedUser.role)}))
 
   console.log(user.name)
 }

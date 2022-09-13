@@ -1,0 +1,48 @@
+.setting-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding:25px 30px;
+    min-height: 90vh;
+    min-width: 97vw;
+    background-color: whitesmoke;
+    font-family: "Poppins";
+    text-align: left !important;
+    
+}
+
+.setting-container .setting-card{
+    background-color: white;
+    width: 35vw;
+    height: 50vh;
+}
+
+.setting-card h3{
+    padding: 25px 40px;
+    color: #B70621;
+}
+
+.setting-card .inputBox span{
+    padding: 25px 30px;
+}
+
+.setting-card .inputBox input{
+    width: 80%;
+    border:1px solid rgb(180, 178, 178);
+    padding: 10px 25px;
+    margin-left: 2%;
+    margin-bottom: 25px;
+    font-size: 15px;
+    text-transform: none;
+    align-items: flex-start;
+    display: flex;
+    border-radius:10px;
+}
+
+.setting-card .button-setting{
+    margin: 10px 20px;
+    
+}
+.setting-card .button-setting .btn-primary{
+    margin-left: 20px;
+}

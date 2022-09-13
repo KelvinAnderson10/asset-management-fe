@@ -291,7 +291,7 @@ export const AssetItem = () => {
                     style={{width:'95%'}}
                   />
                 </div>
-               
+             
               </div>
               <div className="col">
                 <div className="asset-image-container">
@@ -369,7 +369,7 @@ export const AssetItem = () => {
                     {user.map((item) => (
                       <option
                         key={item.name}
-                        value={item.NIK}
+                        value={item.name}
                       >
                         {item.name}
                       </option>

@@ -113,7 +113,6 @@ export const UserManage = () => {
     const onGetAllLocation = async () => {
       try {
         const response = await locationService.getAllLocation();
-       
         setLocations(response.data);
       } catch (e) {
         console.log(e);
@@ -137,7 +136,7 @@ export const UserManage = () => {
   };
 
 
-  //================ DELETE LOCATION ===========================
+  //================ DELETE User ===========================
   const onDeleteUser= async (name) => {
     setLoading(true);
 
@@ -153,6 +152,7 @@ export const UserManage = () => {
       if (result.isConfirmed) {
         try {
           const response = userService.deleteUser(name);
+
           onGetAllUser();
         } catch (e) {
           console.log(e);
@@ -179,7 +179,7 @@ export const UserManage = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await userService.getUserByName(searchLocation);
+      const response = await userService.getUserByNameLike(searchLocation);
       setData(response.data);
 
     } catch (e) {
@@ -193,6 +193,7 @@ export const UserManage = () => {
     e.preventDefault()
 
     try {
+      userData.location_id= Number(userData.location_id)
       const response = await userService.updateUser(id, userData);
 
       setUserData(response);
@@ -373,10 +374,6 @@ const onClearForm = (e) => {
                   <thead>
                     <tr>
                       <th>No</th>
-                      <th onClick={() => sorting("NIK")}>
-                        {" "}
-                        <FaSort /> NIK
-                      </th>
                       <th onClick={() => sorting("email")}>
                         {" "}
                         <FaSort /> Email
@@ -393,9 +390,17 @@ const onClearForm = (e) => {
                         {" "}
                         <FaSort /> Position
                       </th>
-                      <th onClick={() => sorting("location id")}>
+                      <th onClick={() => sorting("location_id")}>
                         {" "}
-                        <FaSort /> Location
+                        <FaSort /> Area Code
+                      </th>
+                      <th onClick={() => sorting("TAP")}>
+                        {" "}
+                        <FaSort /> TAP
+                      </th>
+                      <th onClick={() => sorting("Cluster")}>
+                        {" "}
+                        <FaSort /> Cluster
                       </th>
                       <th>Actions</th>
                     </tr>
@@ -403,18 +408,19 @@ const onClearForm = (e) => {
                   <tbody>
                     {data.length === 0 ? (
                       <tr>
-                        <th colspan='6'>Data is not found</th>
+                        <th colspan='9'>Data is not found</th>
                       </tr>
                     ) : (
                       currentItems.map((item, index) => (
-                        <tr key={item.ID}>
+                        <tr key={item.name}>
                           <th>{index + 1}</th>
-                          <th>{item.NIK}</th>
                           <th>{item.email}</th>
                           <th>{item.name}</th>
                           <th>{item.role}</th>
                           <th>{item.position}</th>
                           <th>{item.location_id}</th>
+                          <th>{item.TAP}</th>
+                          <th>{item.Cluster}</th>
                           <td>
                             <a
                               onClick={() => {
@@ -526,20 +532,6 @@ const onClearForm = (e) => {
             <p style={{color:"red"}}>Please complete all required fields</p>
                 
               <div className="form-user">
-                <div className="form-group">
-                  <label className="form-label">NIK <span style={{color :"red"}} >*</span> </label>
-                  <input
-                  
-                  required
-                    type="text"
-                    className="form-control"
-                    onChange={handleChange}
-                    name="NIK"
-                    value={userData.NIK}
-                    placeholder="Please enter NIK"
-                    autoFocus
-                  />
-                </div>
                 <div className="form-group mt-3">
                   <label className="form-label">Email <span style={{color :"red"}} >*</span></label>
                   <input
@@ -599,8 +591,8 @@ const onClearForm = (e) => {
                   <label className="form-label mt-3">Location <span style={{color :"red"}} >*</span></label>
                   <select
                     required
-                    name="location id"
-                    value={userData["location id"]}
+                    name="location_id"
+                    value={userData["location_id"]}
                     onChange={handleChange}
                     style={{width:'100%'}}
                   >
@@ -642,42 +634,69 @@ const onClearForm = (e) => {
             keyboard={false}
           >
             <Modal.Header closeButton>
-              <Modal.Title>Edit Vendor Data </Modal.Title>
+              <Modal.Title>Edit User Data </Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <form onSubmit={(e)=>handleEdit(e,RowData.name)}>
               <div className="form-user">
                 <div className="form-group">
-                  <label>Address</label>
+                  <label>Email</label>
                   <input
                   required
                     type="text"
                     className="form-control"
                     onChange={handleChange}
-                    placeholder="Please enter Address"
-                    name="address"
-                    defaultValue={RowData.address}
+                    placeholder="Please enter Email"
+                    name="email"
+                    defaultValue={RowData.email}
                   />
-                  <label>Phone</label>
-                  <input
-                  required
-                    type="text"
-                    className="form-control"
+                  <div className="inputBoxUser">
+                  <label className="form-label mt-3">Role <span style={{color :"red"}} >*</span></label>
+                  <select
+                    required
+                    name="role"
+                    defaultValue={RowData.role}
                     onChange={handleChange}
-                    placeholder="Please enter Phone"
-                    name="phone"
-                    defaultValue={RowData.phone}
-                  />
-                  <label>Account Number</label>
-                  <input
-                  required
-                    type="text"
-                    className="form-control"
+                    style={{width:'100%'}}
+                  >
+                    <option value="">Select</option>
+                    <option>GA</option>
+                    <option>IT</option>
+                    <option>User Cabang</option>
+                  </select>
+                  </div>
+                  <div className="inputBoxUser">
+                  <label className="form-label mt-3">Position <span style={{color :"red"}} >*</span></label>
+                  <select
+                    required
+                    name="position"
+                    defaultValue={userData.position}
                     onChange={handleChange}
-                    name="account_number"
-                    placeholder="Please enter Account Number"
-                    defaultValue={RowData.account_number}
-                  />
+                    style={{width:'100%'}}
+                  >
+                    <option value="">Select</option>
+                    <option>Manager</option>
+                    <option>Supervisor</option>
+                    <option>Staff</option>
+                  </select>
+                </div>
+                <div className="inputBoxUser">
+                  <label className="form-label mt-3">Location <span style={{color :"red"}} >*</span></label>
+                  <select
+                    required
+                    name="location_id"
+                    defaultValue={userData.location_id}
+                    onChange={handleChange}
+                    style={{width:'100%'}}
+                  >
+                   <option value="">Select Location</option>
+                    {locations.map((item, index) => (
+                      <option key={item["kode wilayah"]} value={item['kode wilayah']}>
+                       {item.location}
+                      </option>
+                    ))}
+                  </select>
+                </div>
                 </div>
                 </div>
                 <Button
@@ -713,13 +732,6 @@ const onClearForm = (e) => {
             <Modal.Body>
               <div className="form-user">
                 <div className="form-group">
-                <label>NIK </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={RowData.NIK}
-                    readOnly
-                  />
                   <label>Username </label>
                   <input
                     type="text"
@@ -749,11 +761,11 @@ const onClearForm = (e) => {
                     value={RowData.position}
                     readOnly
                   />
-                  <label>Location ID </label>
+                  <label>Area Code </label>
                   <input
                     type="text"
                     className="form-control"
-                    value={RowData["location id"]}
+                    value={RowData.location_id}
                     readOnly
                   />
                 </div>

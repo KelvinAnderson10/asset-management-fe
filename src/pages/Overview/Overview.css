@@ -100,7 +100,7 @@
 .form-control{
 	border-radius: 7px;
 	border: 1.5px solid #E3E6ED;
-  max-width: 280px;
+  max-width: 500px;
   
 }
 input.form-control:focus{

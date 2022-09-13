@@ -7,7 +7,7 @@
 .main-container {
   display: flex;
   width: 100%;
-  background-color: #f5f8fb;
+  background-color: whitesmoke;
 }
 main {
   /* padding: 20px; */
