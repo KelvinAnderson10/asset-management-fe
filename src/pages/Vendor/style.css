@@ -200,7 +200,7 @@ table.table .avatar {
 .form-control{
 	border-radius: 7px;
 	border: 1.5px solid #E3E6ED;
-  max-width: 280px;
+ 
 }
 input.form-control:focus{
 	box-shadow: none;

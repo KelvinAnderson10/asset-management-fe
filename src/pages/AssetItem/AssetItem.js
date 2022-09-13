@@ -8,6 +8,7 @@ import "./AssetItem.css";
 import Loading from "../../shared/components/Loading/Loading";
 import UploadLoading from "../../shared/components/Loading/UploadLoading";
 import AssetLoading from "../../shared/components/Loading/AssetItemLoad";
+import { EVENT } from "../../shared/constants";
 
 export const AssetItem = () => {
   const [data, setData] = useState({});
@@ -16,7 +17,7 @@ export const AssetItem = () => {
   const [imageBase64, setImageBase64] = useState("")
   let reader = new FileReader();
   const [subProductName, setSubProductName] = useState([]);
-  const { assetItemService, vendorService, locationService, userService } =
+  const { assetItemService, vendorService, locationService, userService, eventLogService } =
     useDeps();
   const ref = useRef(null)
 
@@ -94,6 +95,7 @@ export const AssetItem = () => {
     const newData = { ...data };
     newData[e.target.name] = e.target.value;
     setData(newData);
+    console.log(newData)
   
   };
 
@@ -114,9 +116,14 @@ export const AssetItem = () => {
 
       const response = await assetItemService.createAsset(data);
       setData(response.data);
-     
+      
       Success("added");
       clearForm();
+      let event = {
+        event: EVENT.CREATE_ASSET,
+        user: 'Yayah Zakiyah'
+      }
+      createEventLogAssetItem(event)
     } catch (error) {
       console.log(error.response);
       Failed(error.response.data.error.Detail);
@@ -135,7 +142,16 @@ export const AssetItem = () => {
     setSelectedImage();
   };
 
-  // UPLOAD IMAGE
+  // EVENT LOG
+  const [event, setEvent] = useState({})
+  const createEventLogAssetItem = async (eventLoc) => {
+    try {
+      const response = await eventLogService.createEventLogAssetItem(eventLoc)
+      setEvent(response.data)
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   return (
     <>
@@ -207,8 +223,8 @@ export const AssetItem = () => {
                   >
                     <option value="">Select Location</option>
                     {locations.map((item, index) => (
-                      <option key={item.ID} value={item.ID}>
-                        {item.location}
+                      <option key={item['kode wilayah']} value={item["kode wilayah"]}>
+                       {item["kode wilayah"]} {item.location}
                       </option>
                     ))}
                   </select>
@@ -240,7 +256,7 @@ export const AssetItem = () => {
                   />
                 </div>
                 <div className="inputBox">
-                  <span>Purchase Date (mm/dd/yyyy, hh:mm:ss) :</span>
+                  <span>Purchase Date (mm/dd/yyyy, hh:mm AM/PM) :</span>
                   <input
                     type="datetime-local"
                     required
@@ -251,7 +267,7 @@ export const AssetItem = () => {
                   />
                 </div>
                 <div className="inputBox">
-                  <span>BAST (mm/dd/yyyy, hh:mm:ss)  :</span>
+                  <span>BAST (mm/dd/yyyy, hh:mm AM/PM)  :</span>
                   <input
                     type="datetime-local"
                     required
@@ -272,17 +288,7 @@ export const AssetItem = () => {
                     style={{width:'95%'}}
                   />
                 </div>
-                <div className="inputBox">
-                  <span>Additional Cost :</span>
-                  <input
-                    type="number"
-                    required
-                    name="Biaya Lain-Lain"
-                    value={data["Biaya Lain-Lain"]}
-                    onChange={handleChange}
-                    style={{width:'95%'}}
-                  />
-                </div>
+               
               </div>
               <div className="col">
                 <div className="asset-image-container">
@@ -315,17 +321,6 @@ export const AssetItem = () => {
                   />
                 </div>
                 <div className="inputBox">
-                  <span>PPN :</span>
-                  <input
-                    type="number"
-                    required
-                    name="PPN"
-                    value={data["PPN"]}
-                    onChange={handleChange}
-                    style={{width:'95%'}}
-                  />
-                </div>
-                <div className="inputBox">
                   <span>Insurance</span>
                   <select
                     required
@@ -338,18 +333,6 @@ export const AssetItem = () => {
                     <option>Sudah</option>
                     <option>Belum</option>
                   </select>
-                </div>
-
-                <div className="inputBox">
-                  <span>Purchase Year :</span>
-                  <input
-                    type="number"
-                    required
-                    name="Tahun Pembelian"
-                    value={data["Tahun Pembelian"]}
-                    onChange={handleChange}
-                    style={{width:'95%'}}
-                  />
                 </div>
                 <div className="inputBox">
                   <span>User :</span>
@@ -364,14 +347,14 @@ export const AssetItem = () => {
                     {user.map((item) => (
                       <option
                         key={item.name}
-                        value={item.name}
+                        value={item.NIK}
                       >
                         {item.name}
                       </option>
                     ))}
                   </select>
                 </div>
-                <div className="inputBox">
+                {/* <div className="inputBox">
                   <span>Initisal :</span>
                   <input
                     type="text"
@@ -381,7 +364,7 @@ export const AssetItem = () => {
                     onChange={handleChange}
                     style={{width:'95%'}}
                   />
-                </div>
+                </div> */}
                   <div className="inputBox">
                     <span>Year :</span>
                     <input
@@ -394,17 +377,31 @@ export const AssetItem = () => {
                       
                     />
                   </div>
-
                   <div className="inputBox">
-                    <span>Item Order Code :</span>
+                    <span>NO Resi:</span>
                     <input
-                      type="number"
+                      type="string"
                       required
-                      name="Kode Urut barang"
-                      value={data["Kode Urut barang"]}
+                      name="Tahun"
+                      value={data.Tahun}
                       onChange={handleChange}
                       style={{width:'95%'}}
                     />
+                  </div>
+
+                  <div className="inputBox">
+                    <span>PPN :</span>
+                    <select
+                    required
+                    name="PPN"
+                    value={data.PPN}
+                    onChange={handleChange}
+                    style={{width:'95%'}}
+                  >
+                    <option value="">Select Condition</option>
+                    <option>Yes</option>
+                    <option>No</option>
+                  </select>
                   </div>
                 {/* </div> */}
                 <div className="button-asset">

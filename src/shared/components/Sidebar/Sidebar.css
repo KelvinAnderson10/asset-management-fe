@@ -7,6 +7,7 @@
 .main-container {
   display: flex;
   width: 100%;
+  background-color: #f5f8fb;
 }
 main {
   /* padding: 20px; */
@@ -22,7 +23,7 @@ main {
 
 /* Sidebar */
 .sidebar {
-  background: #580409;
+  background: #B70621;
   color: white;
   min-height: 100vh;
   /* overflow-y: auto; */
@@ -80,16 +81,17 @@ main {
 }
 .link:hover {
   border-right: 4px solid white;
-  background:#383838;
+  background:#888888;
   transition: 0.2s cubic-bezier(0.6, -0.28, 0.735, 0.045);
 }
 .active {
   border-right: 4px solid white;
-  background: #383838;
+  background: #999696;
 }
 .link_text {
   white-space: nowrap;
   font-size: 20px;
+  color:#fff;
 }
 
 .menu {
@@ -116,9 +118,9 @@ main {
 }
 
 .main-container .header-main {
-    background:#580409;
-    height: 6vh;
-    color: #fff;
+    background:rgb(255, 255, 255);
+    height: 7vh;
+    color: #B70621;
     /* align-items: flex-end; */
     justify-content: flex-end;
     padding-right: 2%;
@@ -134,4 +136,12 @@ main {
   letter-spacing: 0.5px;
   margin: 20px;
   margin-top: 250%;
+}
+
+.navbar .user-action {
+	padding: 9px 15px;
+	font-size: 18px;
+}
+.icon{
+  color: #fff
 }

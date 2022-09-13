@@ -13,6 +13,6 @@ export const ProtectedPage = () => {
         })
         return (res)
     }
-    return getCookie("OTP") ? <Outlet></Outlet> : <Navigate to='/'></Navigate>
+    return getCookie("user") ? <Outlet></Outlet> : <Navigate to='/'></Navigate>
 }
 

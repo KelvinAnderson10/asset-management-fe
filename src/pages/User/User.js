@@ -4,23 +4,21 @@ import Sidebar from "../../shared/components/Sidebar/Sidebar";
 import { useDeps } from "../../shared/context/DependencyContext";
 import { FiPlus } from "react-icons/fi";
 import { Link } from "react-router-dom";
-import "./style.css";
+import "./user.css";
 import Swal from 'sweetalert2'
 import {FaSort} from 'react-icons/fa'
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import swal from "sweetalert";
-import { Failed } from "../../shared/components/Notification/Failed";
-import { EVENT } from "../../shared/constants";
 
-export const VendorManage = () => {
+export const UserManage = () => {
   //Define here local state that store the form Data
-  const [vendorData, setVendorData] = useState({});
+  const [userData, setUserData] = useState({});
 
   const [isLoading, setLoading] = useState(false);
   const [doneAddForm, setDoneAddform] = useState(false);
-  const { vendorService, eventLogService } = useDeps();
-  const areAllFieldsFilled = vendorData !== "";
+  const { userService, locationService } = useDeps();
+
 
   const [data, setData] = useState([]);
   const [order, setOrder] = useState("ASC");
@@ -30,7 +28,7 @@ export const VendorManage = () => {
   //For Add New Data Model
   const [ViewPost, SetPostShow] = useState(false);
   const handlePostShow = () => {
-    setVendorData({})
+    setUserData({})
     SetPostShow(true);
   };
   const hanldePostClose = () => {
@@ -45,9 +43,10 @@ export const VendorManage = () => {
   };
 
   const handleChange = (e) => {
-    const newData = { ...vendorData };
+    const newData = { ...userData };
     newData[e.target.name] = e.target.value;
-    setVendorData(newData);
+    setUserData(newData);
+    console.log(newData)
   };
 
   //For Edit Model
@@ -55,7 +54,7 @@ export const VendorManage = () => {
   const [ViewEdit, SetEditShow] = useState(false);
 
   const handleEditShow = (index, item) => {
-    setVendorData(item);
+    setUserData(item);
     SetRowData(item)
 
     setId(index);
@@ -76,23 +75,22 @@ export const VendorManage = () => {
   const [maxPageNumberLimit, setmaxPageNumberLimit] = useState(5);
   const [minPageNumberLimit, setminPageNumberLimit] = useState(0);
 
-  const handleLocation = (e) => {
-    const location = e.target.value;
-  };
 
   useEffect(() => {
-    onGetAllVendor();
+    onGetAllUser();
+    onGetAllLocation();
   }, [doneAddForm]);
 
-  // ==================CRUD LOCATIONS=============================
+  // ==================CRUD User=============================
 
   //================== Add Data To Table ==========================
   const handleSubmit = async (e) => {
     setLoading(true);
     e.preventDefault();
     try {
-      const response = await vendorService.createVendor(vendorData);
-      setVendorData(response.data);
+        userData["location id"] = Number(userData["location id"]);
+      const response = await userService.createUser(userData);
+      setUserData(response.data);
       SetPostShow(false);
       setDoneAddform(true);
       if (response.status === "SUCCESS") {
@@ -102,27 +100,34 @@ export const VendorManage = () => {
           icon: 'success',
         })
       }
-      onGetAllVendor();
+      onGetAllUser();
       clearForm();
-      let event = {
-        event: EVENT.CREATE_VENDOR,
-        user: 'Yayah Zakiyah'
-      }
-      createEventLogVendor(event)
     } catch (error) {
       console.log(error.response);
-      Failed('Your data failed to save because '+ error.response.data.error.Detail)
     } finally {
       setLoading(false);
     }
   };
+    // GET ALL LOCATIONS
+    const [locations, setLocations] = useState([]);
+    const onGetAllLocation = async () => {
+      try {
+        const response = await locationService.getAllLocation();
+       
+        setLocations(response.data);
+      } catch (e) {
+        console.log(e);
+      } finally {
+      }
+    };
 
-  //=============== GET ALL LOCATIONS ===================
+  //=============== GET ALL User ===================
 
-  const onGetAllVendor = async () => {
+  const onGetAllUser = async () => {
     setLoading(true);
     try {
-      const response = await vendorService.getAllVendor();
+      const response = await userService.getAllUser();
+      console.log(response)
       setData(response.data);
     } catch (e) {
       console.log(e);
@@ -131,8 +136,9 @@ export const VendorManage = () => {
     }
   };
 
+
   //================ DELETE LOCATION ===========================
-  const onDeleteVendor = async (name) => {
+  const onDeleteUser= async (name) => {
     setLoading(true);
 
     Swal.fire({
@@ -146,13 +152,8 @@ export const VendorManage = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         try {
-          const response = vendorService.deleteVendor(name);
-          onGetAllVendor();
-          let event = {
-            event: EVENT.DELETE_VENDOR,
-            user: 'Yayah Zakiyah'
-          }
-          createEventLogVendor(event)
+          const response = userService.deleteUser(name);
+          onGetAllUser();
         } catch (e) {
           console.log(e);
         } finally {
@@ -178,7 +179,7 @@ export const VendorManage = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await vendorService.getVendorByNameLike(searchLocation);
+      const response = await userService.getUserByName(searchLocation);
       setData(response.data);
 
     } catch (e) {
@@ -192,9 +193,9 @@ export const VendorManage = () => {
     e.preventDefault()
 
     try {
-      const response = await vendorService.updateVendor(id, vendorData);
+      const response = await userService.updateUser(id, userData);
 
-      setVendorData(response);
+      setUserData(response);
       setDoneAddform(true);
       if (response.status === "SUCCESS") {
         swal({
@@ -205,15 +206,9 @@ export const VendorManage = () => {
         });
       }
       SetEditShow(false);
-      onGetAllVendor();
-      let event = {
-        event: EVENT.UPDATE_VENDOR,
-        user: 'Yayah Zakiyah'
-      }
-      createEventLogVendor(event)
+      onGetAllUser();
     } catch (error) {
       console.log(error.response);
-      Failed('Your data failed to save')
     } finally {
       setLoading(false);
     }
@@ -303,7 +298,7 @@ export const VendorManage = () => {
   };
   // CLEAR FORM
   const clearForm = () => {
-    setVendorData({
+    setUserData({
       name: '',
       address: '',
       phone: '',
@@ -316,19 +311,7 @@ const ref = useRef(null) ;
 const onClearForm = (e) => {
   e.preventDefault()
   ref.current.value = ''; 
-  onGetAllVendor();
-}
-
-//Event Log
-const [event, setEvent] = useState({})
-
-const createEventLogVendor = async (eventLoc) => {
-  try {
-    const response = await eventLogService.createEventLog(eventLoc)
-    setEvent(response.data)
-  } catch (e) {
-    console.log(e);
-  }
+  onGetAllUser();
 }
 
   return (
@@ -337,14 +320,11 @@ const createEventLogVendor = async (eventLoc) => {
       <div>
       <div className="body">
           <div className="container">
-          <div className="vendor-container-item" >
-            
-          
-          
+          <div className="user-container-item" >
           <form>
             <div className="input-group ">
               <input
-                placeholder="Search Vendor Name"
+                placeholder="Search User Name"
                 // value={searchLocation}
                 onChange={onChangeSearchLocation}
                 type="text"
@@ -368,7 +348,7 @@ const createEventLogVendor = async (eventLoc) => {
               }}
             >
                <FiPlus />
-              Add New Vendor
+              Add New User
             </Button>
           </div>
         
@@ -383,7 +363,7 @@ const createEventLogVendor = async (eventLoc) => {
                   <div className="row">
                     <div className="col-xs-6">
                       <h2>
-                        Manage <b>Vendors</b>
+                        Manage Users
                       </h2>
                     </div>
                   </div>
@@ -393,21 +373,29 @@ const createEventLogVendor = async (eventLoc) => {
                   <thead>
                     <tr>
                       <th>No</th>
+                      <th onClick={() => sorting("NIK")}>
+                        {" "}
+                        <FaSort /> NIK
+                      </th>
+                      <th onClick={() => sorting("email")}>
+                        {" "}
+                        <FaSort /> Email
+                      </th>
                       <th onClick={() => sorting("name")}>
                         {" "}
                         <FaSort /> Name
                       </th>
-                      <th onClick={() => sorting("address")}>
+                      <th onClick={() => sorting("role")}>
                         {" "}
-                        <FaSort /> Address
+                        <FaSort /> Role
                       </th>
-                      <th onClick={() => sorting("phone")}>
+                      <th onClick={() => sorting("position")}>
                         {" "}
-                        <FaSort /> Phone
+                        <FaSort /> Position
                       </th>
-                      <th onClick={() => sorting("accountNumber")}>
+                      <th onClick={() => sorting("location id")}>
                         {" "}
-                        <FaSort /> Acount Number
+                        <FaSort /> Location
                       </th>
                       <th>Actions</th>
                     </tr>
@@ -421,10 +409,12 @@ const createEventLogVendor = async (eventLoc) => {
                       currentItems.map((item, index) => (
                         <tr key={item.ID}>
                           <th>{index + 1}</th>
+                          <th>{item.NIK}</th>
+                          <th>{item.email}</th>
                           <th>{item.name}</th>
-                          <th>{item.address}</th>
-                          <th>{item.phone}</th>
-                          <th>{item.account_number}</th>
+                          <th>{item.role}</th>
+                          <th>{item.position}</th>
+                          <th>{item.location_id}</th>
                           <td>
                             <a
                               onClick={() => {
@@ -461,7 +451,7 @@ const createEventLogVendor = async (eventLoc) => {
                             </a>
 
                             <a
-                              onClick={() => onDeleteVendor(item.name)}
+                              onClick={() => onDeleteUser(item.name)}
                               className="delete"
                               data-toggle="modal"
                               style={{ cursor: "pointer" }}
@@ -519,7 +509,7 @@ const createEventLogVendor = async (eventLoc) => {
         </div>
 
         {/* ADD MODAL FOR SUBMIT DATABASE */}
-
+        <div className="userModal">
         <div className="model-box-view">
           <Modal
             show={ViewPost}
@@ -528,64 +518,103 @@ const createEventLogVendor = async (eventLoc) => {
             keyboard={false}
           >
             <Modal.Header closeButton>
-              <Modal.Title>Add New Vendor</Modal.Title>
+              <Modal.Title>Add New User</Modal.Title>
              
             </Modal.Header>
             <Modal.Body>
               <form onSubmit={handleSubmit}>
             <p style={{color:"red"}}>Please complete all required fields</p>
-              <div>
+                
+              <div className="form-user">
                 <div className="form-group">
-                  <label className="form-label">Vendor Name <span style={{color :"red"}} >*</span> </label>
+                  <label className="form-label">NIK <span style={{color :"red"}} >*</span> </label>
                   <input
+                  
                   required
                     type="text"
                     className="form-control"
                     onChange={handleChange}
-                    name="name"
-                    value={vendorData.name}
-                    placeholder="Please enter name"
+                    name="NIK"
+                    value={userData.NIK}
+                    placeholder="Please enter NIK"
                     autoFocus
                   />
                 </div>
                 <div className="form-group mt-3">
-                  <label className="form-label">Address <span style={{color :"red"}} >*</span></label>
+                  <label className="form-label">Email <span style={{color :"red"}} >*</span></label>
                   <input
                   required
-                    type="text"
+                    type="email"
                     className="form-control"
                     onChange={handleChange}
-                    placeholder="Please enter address"
-                    name="address"
-                    value={vendorData.address}
+                    placeholder="Please enter email"
+                    name="email"
+                    value={userData.email}
                     
                   />
                 </div>
                 <div className="form-group mt-3">
-                  <label className="form-label">Phone Number <span style={{color :"red"}} >*</span></label>
+                  <label className="form-label">Name<span style={{color :"red"}} >*</span></label>
                   <input
                   required
                     type="text"
                     className="form-control"
                     onChange={handleChange}
-                    placeholder="Please enter phone number"
-                    name="phone"
-                    value={vendorData.phone}
+                    placeholder="Please enter name"
+                    name="name"
+                    value={userData.name}
                   />
                 </div>
-                <div className="form-group mt-3">
-                  <label className="form-label">Account Number <span style={{color :"red"}} >*</span></label>
-                  <input
-                  required
-                    type="text"
-                    className="form-control"
+                <div className="inputBoxUser">
+                  <label className="form-label mt-3">Role <span style={{color :"red"}} >*</span></label>
+                  <select
+                    required
+                    name="role"
+                    value={userData.role}
                     onChange={handleChange}
-                    placeholder="Please enter account number"
-                    name="account_number"
-                    value={vendorData.account_number}
-                  />
+                    style={{width:'100%'}}
+                  >
+                    <option value="">Select</option>
+                    <option>GA</option>
+                    <option>IT</option>
+                    <option>User Cabang</option>
+                  </select>
+                  </div>
+                <div className="inputBoxUser">
+                  <label className="form-label mt-3">Position <span style={{color :"red"}} >*</span></label>
+                  <select
+                    required
+                    name="position"
+                    value={userData.position}
+                    onChange={handleChange}
+                    style={{width:'100%'}}
+                  >
+                    <option value="">Select</option>
+                    <option>Manager</option>
+                    <option>Supervisor</option>
+                    <option>Staff</option>
+                  </select>
+                </div>
+                <div className="inputBoxUser">
+                  <label className="form-label mt-3">Location <span style={{color :"red"}} >*</span></label>
+                  <select
+                    required
+                    name="location id"
+                    value={userData["location id"]}
+                    onChange={handleChange}
+                    style={{width:'100%'}}
+                  >
+                   <option value="">Select Location</option>
+                    {locations.map((item, index) => (
+                      <option key={item["kode wilayah"]} value={item['kode wilayah']}>
+                       {item.location}
+                      </option>
+                    ))}
+                  </select>
                 </div>
                 </div>
+                
+                
                 <Button
                   type="submit"
                   className="btn btn-success mt-4"
@@ -617,7 +646,7 @@ const createEventLogVendor = async (eventLoc) => {
             </Modal.Header>
             <Modal.Body>
               <form onSubmit={(e)=>handleEdit(e,RowData.name)}>
-              <div>
+              <div className="form-user">
                 <div className="form-group">
                   <label>Address</label>
                   <input
@@ -663,9 +692,9 @@ const createEventLogVendor = async (eventLoc) => {
               </form>
             </Modal.Body>
             <Modal.Footer>
-              {/* <Button variant="secondary" onClick={hanldeEditClose}>
+              <Button variant="secondary" onClick={hanldeEditClose}>
                 Close
-              </Button> */}
+              </Button>
             </Modal.Footer>
           </Modal>
         </div>
@@ -682,34 +711,49 @@ const createEventLogVendor = async (eventLoc) => {
               <Modal.Title>View Data</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <div>
+              <div className="form-user">
                 <div className="form-group">
-                  <label>Vendor Name </label>
+                <label>NIK </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={RowData.NIK}
+                    readOnly
+                  />
+                  <label>Username </label>
                   <input
                     type="text"
                     className="form-control"
                     value={RowData.name}
                     readOnly
                   />
-                  <label>Address </label>
+                  <label>Email </label>
                   <input
                     type="text"
                     className="form-control"
-                    value={RowData.address}
+                    value={RowData.email}
                     readOnly
                   />
-                  <label>Phone </label>
+                  <label>Role </label>
                   <input
+            
                     type="text"
                     className="form-control"
-                    value={RowData.phone}
+                    value={RowData.role}
                     readOnly
                   />
-                  <label>Account Number </label>
+                  <label>Position </label>
                   <input
                     type="text"
                     className="form-control"
-                    value={RowData.account_number}
+                    value={RowData.position}
+                    readOnly
+                  />
+                  <label>Location ID </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={RowData["location id"]}
                     readOnly
                   />
                 </div>
@@ -727,6 +771,7 @@ const createEventLogVendor = async (eventLoc) => {
               </Button>
             </Modal.Footer>
           </Modal>
+        </div>
         </div>
       </div>
       </Sidebar>
