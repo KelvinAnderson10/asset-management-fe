@@ -17,6 +17,7 @@ import { FormPO } from "../pages/PurchaseOrder/FormPO";
 import { UserManage } from "../pages/User/User";
 import { Main } from "../pages/Overview/Main";
 import { Approval } from "../pages/Approval/Approval";
+import { Settings } from "../pages/Settings/Settings";
 
 
 
@@ -37,6 +38,7 @@ export const AppRouter = () => {
         <Route path="/upload-data" element={<ImportData />} />
         <Route path="/purchase-request" element={<FormPO/>} />
         <Route path="/approval-data" element={<Approval/>} />
+        <Route path="/settings" element={<Settings/>} />
         <Route path="*" element={<PageNotFound />} />
       </Route>
     </Routes>

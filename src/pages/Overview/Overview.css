@@ -20,7 +20,7 @@
     flex-direction: column;
     align-content: flex-end;
     border-radius: 10px;
-    box-shadow: 1px 2px 2px 3px rgb(221, 219, 219)
+    /* box-shadow: 1px 2px 2px 3px rgb(221, 219, 219) */
 }
 
 .pageNumbers {
@@ -100,7 +100,7 @@
 .form-control{
 	border-radius: 7px;
 	border: 1.5px solid #E3E6ED;
-  max-width: 280px;
+  max-width: 500px;
   
 }
 input.form-control:focus{
