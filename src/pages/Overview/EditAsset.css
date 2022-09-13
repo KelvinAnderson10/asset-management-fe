@@ -118,9 +118,11 @@
 .asset-edit-container form .row .col .image-box {
   width: 200px;
   height: 140px;
-  background-color: #464646;
+  background-image: url('../../assets/images/No-image-available.png');
   margin-right: 10px;
   display: flex;
+  background-repeat: no-repeat; 
+  background-size: 100% 100%; 
 }
 
 .image .cancel {

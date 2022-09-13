@@ -391,7 +391,6 @@ export const AssetCategory = () => {
       <div className="body">
         <div className="container">
             <div className="feature" >
-            {/* <div className="search"> */}
             <div className="input-group mb-3 dropdown">
                 <button className="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Search by {dropdownName}</button>
                 <ul className="dropdown-menu" >
@@ -407,18 +406,18 @@ export const AssetCategory = () => {
                         <button value="submit" className="btn btn-danger form-button" onClick={onClearForm}>
                         <i className="fa fa-times"></i>
                         </button>
-                </div>
+                </div>   
             </div>
-            <Button
-                variant="primary"
-                onClick={() => {
-                    handlePostShow();
-                }}
-                >
-                <FiPlus />
-                Add New Asset Category
-                </Button>                
-            {/* </div> */}
+                <Button
+                  variant="primary"
+                  onClick={() => {
+                      handlePostShow();
+                  }}
+                  >
+                  <FiPlus />
+                  Add New Asset Category
+                </Button> 
+                               
             </div>
 
             <div className="body container table-wrapper table-responsive">
@@ -819,6 +818,8 @@ export const AssetCategory = () => {
                     </div>
                 </div>
                 </Modal.Body>
+                <Modal.Footer>
+                </Modal.Footer>
             </Modal>
             </div>
         </div>
