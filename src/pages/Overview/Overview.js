@@ -13,6 +13,7 @@ import ReactPaginate from "react-paginate";
 import { EVENT } from "../../shared/constants";
 import { useAuth } from "../../services/UseAuth";
 import defaultImg from "../../assets/images/No-image-available.png";
+import imageCompression from 'browser-image-compression';
 
 export const Overview = () => {
   const {
@@ -53,23 +54,7 @@ export const Overview = () => {
   const [minPageNumberLimit, setMinPageNumberLimit] = useState(0);
 
   //CRUD
-  //Get All
-  // const onGetAllAsset = async () => {
-  //   setLoading(true)
-  //   try {
-  //     const response = await overviewService.getAllAsset();
-  //     setDatas(response.data);
-  //   } catch (e) {
-  //     console.log(e);
-  //   } finally {
-  //     setLoading(false)
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   onGetAllAsset();
-  // }, []);
-
+  
   //Pagination
   const handleClick = (event) => {
     setCurrentPage(Number(event.target.id));
@@ -187,12 +172,11 @@ export const Overview = () => {
   // GET ID FOR EDIT SHOW
 
   const [date, setNewDate] = useState();
+  const [showEdit, setShowEdit] = useState(false);
 
   const handleEditAssetById = async (name) => {
-    // setLoading(true);
     try {
       const response = await overviewService.getAssetByAssetName(name);
-      // setRowData(response.data)
 
       setEditShow(true);
       response.data["Tanggal Output"] = moment(
@@ -201,32 +185,29 @@ export const Overview = () => {
       response.data["BAST Output"] = moment(
         response.data["BAST Output"]
       ).format("YYYY-MM-DDTHH:MM");
-      // let date = response.data['Tanggal Output'].toString()
-      // let datesplit = date.split("+")
-      // let res = datesplit[0]
-      // response.data['Tanggal Output'] = res
-      // setNewDate(res)
-
-      // date = response.data['BAST Output'].toString()
-      // datesplit = date.split("+")
-      // res = datesplit[0]
-      // response.data['BAST Output'] = res
-
+  
       setAssetEdit(response.data);
-      setImageBase64(response.data["Asset Image"]);
+      // setImageBase64(response.data["Asset Image"]);
+      setShowEdit(!showEdit)
+      
+      console.log(response.data["Asset Image"]);
     } catch (e) {
       console.log(e);
-    } finally {
-      // setLoading(false);
-    }
+    } 
   };
+
+  useEffect(() => {
+    console.log('asset edit', assetEdit['Asset Image']);
+    setImageBase64(assetEdit['Asset Image']);
+    console.log("cek image", imageBase64);
+  }, [showEdit])
 
   const [assetEdit, setAssetEdit] = useState({});
   const [editShow, setEditShow] = useState(false);
 
   useEffect(() => {
-    setImageBase64(assetEdit["Asset Image"]);
-  }, [assetEdit["Asset Image"]]);
+    // setImageBase64(assetEdit["Asset Image"]);
+  }, [assetEdit]);
 
   const handleEditClose = () => {
     setEditShow(false);
@@ -240,23 +221,38 @@ export const Overview = () => {
 
   // UPLOAD IMAGE
   const [selectedImage, setSelectedImage] = useState();
-  const [imageBase64, setImageBase64] = useState("");
+  const [imageBase64, setImageBase64] = useState();
   let reader = new FileReader();
 
-  const imageChange = (e) => {
+  const imageChange = async (e) => {
     if (e.target.files && e.target.files.length > 0) {
-      setSelectedImage(e.target.files[0]);
-      reader.readAsDataURL(e.target.files[0]);
-      reader.onload = () => {
-        setImageBase64(reader.result);
-      };
+      const imageFiles = e.target.files[0]
+      console.log('originalFile instanceof Blob', imageFiles instanceof Blob); // true
+      console.log('originalFile size', (imageFiles.size / 1024 / 1024) , 'MB');
+      const options = {
+        maxSizeMB: 0.5,
+        // maxWidthOrHeight: 200,
+        useWebWorker: true
+      }
+      try {
+        const compressedImage = await imageCompression(imageFiles, options)
+        console.log('compressedImage instanceof Blob', compressedImage instanceof Blob); // true
+        console.log('compressedImage size', (compressedImage.size / 1024 / 1024) , 'MB');
+        setSelectedImage(compressedImage);
+        reader.readAsDataURL(compressedImage);
+        reader.onload = () => {setImageBase64(reader.result)};
+      } catch (error) {
+        console.log(error);
+      }
+
+      
     }
   };
 
   const ref = useRef(null);
 
   const removeSelectedImage = () => {
-    setSelectedImage();
+    setImageBase64("")
     ref.current.value = "";
   };
 
@@ -299,7 +295,7 @@ export const Overview = () => {
       getAssetsPagination(1);
       let event = {
         event: EVENT.UPDATE_ASSET,
-        user: userEvent.name,
+        user: user.name,
       };
       createEventLogOverview(event);
     } catch (e) {
@@ -354,15 +350,15 @@ export const Overview = () => {
   };
 
   // GET ALL USER
-  const [user, setUser] = useState([]);
-  const onGetUser = async () => {
-    try {
-      const response = await userService.getUserByEmail();
-      setUser(response.data);
-    } catch (error) {
-    } finally {
-    }
-  };
+  // const [user, setUser] = useState([]);
+  // const onGetUser = async () => {
+  //   try {
+  //     const response = await userService.getUserByEmail();
+  //     setUser(response.data);
+  //   } catch (error) {
+  //   } finally {
+  //   }
+  // };
 
   const handleChange = (e) => {
     const newData = { ...assetEdit };
@@ -737,25 +733,20 @@ export const Overview = () => {
 
   //Get User
   const { getCookie } = useAuth();
-  const [userEvent, setUserEvent] = useState({
-    name: "",
-    position: "",
-    role: "",
-    NIK: "",
-  });
-  const onGetCookie = () => {
-    let savedUserJsonString = getCookie("user");
-    let savedUser = JSON.parse(savedUserJsonString);
-    setUserEvent((prevObj) => ({
-      ...prevObj,
-      NIK: savedUser.NIK,
-      name: savedUser.name,
-      position: savedUser.position,
-      role: savedUser.role,
-    }));
-
-    console.log(userEvent.name);
-  };
+  const[user,setUser]= useState({
+    name:'',
+    role:'',
+    level_approval:'',
+    location_id:'',
+    tap:'',
+    cluster:'',
+    department: ''
+  })
+  const onGetCookie = ()=>{
+    let savedUserJsonString = getCookie("user")
+    let savedUser = JSON.parse(savedUserJsonString)
+    setUser(prevObj=>({...prevObj,name:(savedUser.name), role:(savedUser.role), level_approval:(savedUser.level_approval), location_id:(savedUser.location_id), tap:(savedUser.TAP), cluster:(savedUser.Cluster), department:(savedUser.department)}))
+  }
 
   return (
     <>
@@ -1465,11 +1456,11 @@ export const Overview = () => {
                 <div className="col">
                   <div className="asset-image-container">
                     <div className="image-box">
-                      {selectedImage && (
+                      {imageBase64 && (
                         <div className="image">
                           {" "}
                           <img
-                            src={imageBase64 && imageBase64}
+                            src={imageBase64}
                             className="image"
                             style={{ width: "200px", height: "140px" }}
                           />
@@ -1480,7 +1471,7 @@ export const Overview = () => {
                             Remove the image
                           </button>
                         </div>
-                      )}
+                       )} 
                     </div>
                     <input
                       id="upload"

@@ -60,17 +60,63 @@ const routesAdmin = [
     name: "Import Data",
     icon: <FaIcons.FaFileUpload/>,
   },
-  {
-    path: "/approval-data",
-    name: "Approval Data",
-    icon: <BsIcons.BsFillFileEarmarkCheckFill/>,
-  },
+  // {
+  //   path: "/approval-data",
+  //   name: "Approval Data",
+  //   icon: <BsIcons.BsFillFileEarmarkCheckFill/>,
+  // },
   {
     path: "/settings",
     name: "Settings",
     icon: <AiIcons.AiFillSetting/>,
   },
 ];
+
+const routesGA = [
+  {
+    path: "/main",
+    name: "Overview",
+    icon: <FaHome />,
+  },
+  {
+    path: "/data-management",
+    name: "Data Management",
+    icon: <GoIcons.GoDatabase/>,
+    subRoutes: [
+        {
+          path: "/data-management/asset-item",
+          name: "Asset Item",
+          icon: <IoIcons.IoIosPaper/>,
+        },
+        {
+          path: "/data-management/asset-category",
+          name: "Asset Category",
+          icon: <BiIcons.BiCategoryAlt/>,
+        },
+        {
+          path: "/data-management/vendor",
+          name: "Vendor",
+          icon: <FaIcons.FaStore/>,
+        },
+        {
+            path: "/data-management/location",
+            name: "Location",
+            icon: <GoIcons.GoLocation/>,
+          },
+          {
+            path: "/data-management/user",
+            name: "User",
+            icon: <BsIcons.BsPeople/>,
+          },
+      ],
+  },
+  {
+    path: "/approval-data",
+    name: "Approval Data",
+    icon: <BsIcons.BsFillFileEarmarkCheckFill/>,
+  },
+  
+]
 
 const routesIT = [
   {
@@ -86,7 +132,7 @@ const routesIT = [
   
 ]
 
-const routesUserStaff = [
+const routesUserRegular = [
   {
     path: "/main",
     name: "Overview",
@@ -117,41 +163,29 @@ const routesUserStaff = [
   
 ]
 
-const routesUserSpv = [
+const routesUserGMSPVVP = [
   {
     path: "/main",
     name: "Overview",
     icon: <FaHome />,
   },
   {
-    path: "/data-management",
-    name: "Data Management",
-    icon: <GoIcons.GoDatabase/>,
-    subRoutes: [
-        {
-          path: "/data-management/asset-item",
-          name: "Asset Item",
-          icon: <IoIcons.IoIosPaper/>,
-        },
-      ],
-  },
-  {
     path: "/approval-data",
     name: "Approval Data",
     icon: <BsIcons.BsFillFileEarmarkCheckFill/>,
   },
-  
 ]
 
 const Sidebar = ({children}) => {
   const { getCookie } = useAuth();
   const[user,setUser]= useState({
     name:'',
-    position:'',
     role:'',
+    level_approval:'',
     location_id:'',
     tap:'',
-    cluster:''
+    cluster:'',
+    department: ''
   })
 
   useEffect(() => {
@@ -162,7 +196,7 @@ const onGetCookie = ()=>{
   
   let savedUserJsonString = getCookie("user")
   let savedUser = JSON.parse(savedUserJsonString)
-  setUser(prevObj=>({...prevObj,name:(savedUser.name),position:(savedUser.position), role:(savedUser.role)}))
+  setUser(prevObj=>({...prevObj,name:(savedUser.name), role:(savedUser.role), level_approval:(savedUser.level_approval), location_id:(savedUser.location_id), tap:(savedUser.TAP), cluster:(savedUser.Cluster), department:(savedUser.department)}))
 
   console.log(user.name)
 }
@@ -244,24 +278,7 @@ const onGetCookie = ()=>{
               <FaBars onClick={toggle} />
             </div>
           </div>
-          {/* <div className="search">
-            <div className="search_icon">
-              <BiSearch />
-            </div>
-            <AnimatePresence>
-              {isOpen && (
-                <motion.input
-                  initial="hidden"
-                  animate="show"
-                  exit="hidden"
-                  variants={inputAnimation}
-                  type="text"
-                  placeholder="Search"
-                />
-              )}
-            </AnimatePresence>
-          </div> */}
-          {user.role==="GA" && (
+          {user.role==="Admin" && (
           <section className="routes">
             {routesAdmin.map((route, index) => {
               if (route.subRoutes) {
@@ -301,8 +318,47 @@ const onGetCookie = ()=>{
             })}
           </section>
           )}
-
-{user.role==="IT" && (
+{user.role==="Manager GA" && (
+          <section className="routes">
+            {routesGA.map((route, index) => {
+              if (route.subRoutes) {
+                return (
+                  <SidebarMenu
+                    setIsOpen={setIsOpen}
+                    route={route}
+                    showAnimation={showAnimation}
+                    isOpen={isOpen}
+                  />
+                );
+              }
+     
+              return (
+                <NavLink
+                  to={route.path}
+                  key={index}
+                  className="link"
+                  activeclassname="active"
+                >
+                  <div className="icon">{route.icon}</div>
+                  <AnimatePresence>
+                    {isOpen && (
+                      <motion.div
+                        variants={showAnimation}
+                        initial="hidden"
+                        animate="show"
+                        exit="hidden"
+                        className="link_text"
+                      >
+                        {route.name}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </NavLink>
+              );
+            })}
+          </section>
+          )}
+{user.role==="Manager IT" && (
           <section className="routes">
             {routesIT.map((route, index) => {
               if (route.subRoutes) {
@@ -342,9 +398,9 @@ const onGetCookie = ()=>{
             })}
           </section>
           )}
-          {user.role==="User Cabang" && user.position==="Staff" && (
+          {user.role==="Regular" && user.level_approval==="Regular" && (
           <section className="routes">
-            {routesUserStaff.map((route, index) => {
+            {routesUserRegular.map((route, index) => {
               if (route.subRoutes) {
                 return (
                   <SidebarMenu
@@ -382,9 +438,9 @@ const onGetCookie = ()=>{
             })}
           </section>
           )}
-          {user.role==="User Cabang" && user.position==="Supervisor" && (
+          {user.role==="Regular" && (user.level_approval==="General Manager" || user.level_approval==="Supervisor" || user.level_approval==="VP Trade")&& (
           <section className="routes">
-            {routesUserSpv.map((route, index) => {
+            {routesUserGMSPVVP.map((route, index) => {
               if (route.subRoutes) {
                 return (
                   <SidebarMenu
