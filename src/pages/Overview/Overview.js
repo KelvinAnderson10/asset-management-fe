@@ -13,6 +13,7 @@ import ReactPaginate from "react-paginate";
 import { EVENT } from "../../shared/constants";
 import { useAuth } from "../../services/UseAuth";
 import defaultImg from "../../assets/images/No-image-available.png";
+import imageCompression from 'browser-image-compression';
 
 export const Overview = () => {
   const {
@@ -253,13 +254,28 @@ export const Overview = () => {
   const [imageBase64, setImageBase64] = useState();
   let reader = new FileReader();
 
-  const imageChange = (e) => {
+  const imageChange = async (e) => {
     if (e.target.files && e.target.files.length > 0) {
-      setSelectedImage(e.target.files[0]);
-      reader.readAsDataURL(e.target.files[0]);
-      reader.onload = () => {
-        setImageBase64(reader.result);
-      };
+      const imageFiles = e.target.files[0]
+      console.log('originalFile instanceof Blob', imageFiles instanceof Blob); // true
+      console.log('originalFile size', (imageFiles.size / 1024 / 1024) , 'MB');
+      const options = {
+        maxSizeMB: 0.5,
+        // maxWidthOrHeight: 200,
+        useWebWorker: true
+      }
+      try {
+        const compressedImage = await imageCompression(imageFiles, options)
+        console.log('compressedImage instanceof Blob', compressedImage instanceof Blob); // true
+        console.log('compressedImage size', (compressedImage.size / 1024 / 1024) , 'MB');
+        setSelectedImage(compressedImage);
+        reader.readAsDataURL(compressedImage);
+        reader.onload = () => {setImageBase64(reader.result)};
+      } catch (error) {
+        console.log(error);
+      }
+
+      
     }
   };
 
