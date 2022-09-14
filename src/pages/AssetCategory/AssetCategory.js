@@ -384,7 +384,7 @@ export const AssetCategory = () => {
     let savedUser = JSON.parse(savedUserJsonString)
     setUser(prevObj=>({...prevObj,NIK:(savedUser.NIK),name:(savedUser.name),position:(savedUser.position), role:(savedUser.role)}))
   }
-
+  document.querySelector("body").style.overflow = "auto";
   return (
     <>
       <Sidebar>

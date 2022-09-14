@@ -22,7 +22,7 @@ export const Main = () => {
     setClassNavbarAsset('main-navbar-asset')
     setClassNavbarDashboard('main-navbar-dashboard2')
   }
-
+  document.querySelector("body").style.overflow = "auto";
   return (
     <>
       <Sidebar>

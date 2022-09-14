@@ -78,6 +78,7 @@ export const Login = () => {
     setShowOTPForm(false);
   };
 
+  document.querySelector("body").style.overflow = "auto";
   return (
     
   

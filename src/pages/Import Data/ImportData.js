@@ -134,7 +134,7 @@ export const ImportData = () => {
     onGetCookie();
   }, []);
 
-
+  document.querySelector("body").style.overflow = "auto";
 
   return (
     <>

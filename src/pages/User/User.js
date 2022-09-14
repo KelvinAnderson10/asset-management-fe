@@ -314,7 +314,7 @@ const onClearForm = (e) => {
   ref.current.value = ''; 
   onGetAllUser();
 }
-
+document.querySelector("body").style.overflow = "auto";
   return (
     <>
       <Sidebar>

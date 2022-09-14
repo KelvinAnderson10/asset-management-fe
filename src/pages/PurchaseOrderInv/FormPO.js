@@ -136,7 +136,7 @@ export const FormPO = () => {
   const handleLoadMore = () => {
     setitemsPerPage(itemsPerPage + 5);
   };
-
+  document.querySelector("body").style.overflow = "auto";
   return (
     <div>
       <Sidebar>
