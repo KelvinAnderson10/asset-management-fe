@@ -187,6 +187,7 @@ export const Overview = () => {
   // GET ID FOR EDIT SHOW
 
   const [date, setNewDate] = useState();
+  const [showEdit, setShowEdit] = useState(false);
 
   const handleEditAssetById = async (name) => {
     // setLoading(true);
@@ -213,7 +214,10 @@ export const Overview = () => {
       // response.data['BAST Output'] = res
 
       setAssetEdit(response.data);
-      setImageBase64(response.data["Asset Image"]);
+      // setImageBase64(response.data["Asset Image"]);
+      setShowEdit(!showEdit)
+      
+      console.log(response.data["Asset Image"]);
     } catch (e) {
       console.log(e);
     } finally {
@@ -221,12 +225,18 @@ export const Overview = () => {
     }
   };
 
+  useEffect(() => {
+    console.log('asset edit', assetEdit['Asset Image']);
+    setImageBase64(assetEdit['Asset Image']);
+    console.log("cek image", imageBase64);
+  }, [showEdit])
+
   const [assetEdit, setAssetEdit] = useState({});
   const [editShow, setEditShow] = useState(false);
 
   useEffect(() => {
-    setImageBase64(assetEdit["Asset Image"]);
-  }, [assetEdit["Asset Image"]]);
+    // setImageBase64(assetEdit["Asset Image"]);
+  }, [assetEdit]);
 
   const handleEditClose = () => {
     setEditShow(false);
@@ -240,7 +250,7 @@ export const Overview = () => {
 
   // UPLOAD IMAGE
   const [selectedImage, setSelectedImage] = useState();
-  const [imageBase64, setImageBase64] = useState("");
+  const [imageBase64, setImageBase64] = useState();
   let reader = new FileReader();
 
   const imageChange = (e) => {
@@ -256,7 +266,7 @@ export const Overview = () => {
   const ref = useRef(null);
 
   const removeSelectedImage = () => {
-    setSelectedImage();
+    setImageBase64("")
     ref.current.value = "";
   };
 
@@ -1465,11 +1475,11 @@ export const Overview = () => {
                 <div className="col">
                   <div className="asset-image-container">
                     <div className="image-box">
-                      {selectedImage && (
+                      {imageBase64 && (
                         <div className="image">
                           {" "}
                           <img
-                            src={imageBase64 && imageBase64}
+                            src={imageBase64}
                             className="image"
                             style={{ width: "200px", height: "140px" }}
                           />
@@ -1480,7 +1490,7 @@ export const Overview = () => {
                             Remove the image
                           </button>
                         </div>
-                      )}
+                       )} 
                     </div>
                     <input
                       id="upload"
