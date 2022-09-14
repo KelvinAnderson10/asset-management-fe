@@ -6,7 +6,7 @@ import { FiPlus } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import "./style.css";
 import Swal from "sweetalert2";
-import {FaSort} from 'react-icons/fa'
+import { FaSort } from "react-icons/fa";
 
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
@@ -17,11 +17,11 @@ import { Failed } from "../../shared/components/Notification/Failed";
 import { useAuth } from "../../services/UseAuth";
 
 export const Location = () => {
-  const [location, setLocation] = useState("");
+  const [locData, setLocData] = useState({});
   const [isLoading, setLoading] = useState(false);
   const [doneAddForm, setDoneAddform] = useState(false);
   const { locationService, eventLogService } = useDeps();
-  const areAllFieldsFilled = location != "";
+  const areAllFieldsFilled = locData != "";
   const [data, setData] = useState([]);
   const [order, setOrder] = useState("ASC");
   const [RowData, SetRowData] = useState([]);
@@ -48,8 +48,8 @@ export const Location = () => {
   const [ViewEdit, SetEditShow] = useState(false);
 
   const handleEditShow = (index, item) => {
+    setLocData(item);
     SetRowData(item);
-    
     setId(index);
     setDelete(true);
     SetEditShow(true);
@@ -69,18 +69,17 @@ export const Location = () => {
   const [minPageNumberLimit, setminPageNumberLimit] = useState(0);
 
   const handleLocation = (e) => {
-    const location = e.target.value;
-    setLocation(location);
-   
+    const newData = { ...locData };
+    newData[e.target.name] = e.target.value;
+    setLocData(newData);
   };
 
   useEffect(() => {
     onGetAllLocation();
-    
   }, [doneAddForm]);
 
   useEffect(() => {
-    onGetCookie()
+    onGetCookie();
   }, []);
 
   // ==================CRUD LOCATIONS=============================
@@ -90,11 +89,9 @@ export const Location = () => {
     setLoading(true);
     e.preventDefault();
     try {
-      const response = await locationService.createLocation({
-        location,
-      });
-     
-      setLocation(response);
+      const response = await locationService.createLocation(locData);
+
+      setLocData(response);
       setDoneAddform(true);
 
       if (response.status === "SUCCESS") {
@@ -108,12 +105,14 @@ export const Location = () => {
       onGetAllLocation();
       let event = {
         event: EVENT.CREATE_LOCATION,
-        user: user.name
-      }
-      createEventLogLocation(event)
+        user: user.name,
+      };
+      createEventLogLocation(event);
     } catch (error) {
       console.log(error.response);
-      Failed('Your data failed to save because '+ error.response.data.error.Detail)
+      Failed(
+        "Your data failed to save because " + error.response.data.error.Detail
+      );
     } finally {
       setLoading(false);
     }
@@ -125,7 +124,7 @@ export const Location = () => {
     setLoading(true);
     try {
       const response = await locationService.getAllLocation();
-   
+
       setData(response.data);
       SetPostShow(false);
     } catch (e) {
@@ -149,23 +148,22 @@ export const Location = () => {
       if (result.isConfirmed) {
         try {
           const response = locationService.deleteLocation(id);
-          
+
           onGetAllLocation();
           let event = {
             event: EVENT.DELETE_LOCATION,
-            user: user.name
-          }
-          createEventLogLocation(event)
+            user: user.name,
+          };
+          createEventLogLocation(event);
           Swal.fire("Deleted!", "Your data has been deleted.", "success");
         } catch (e) {
           console.log(e);
-          Failed('Your data failed to delete')
+          Failed("Your data failed to delete");
         } finally {
           setLoading(false);
         }
       }
     });
-
   };
 
   //================== SEARCH BY NAME =========================
@@ -180,29 +178,35 @@ export const Location = () => {
     try {
       const response = await locationService.getLocationByName(searchLocation);
       setData(response.data);
-     
     } catch (e) {
       console.log(e);
     } finally {
     }
   };
 
-  const ref = useRef(null) ;
+  // CLEAR SEARCH
+  const ref = useRef(null);
   const onClearForm = (e) => {
-    e.preventDefault()
-    ref.current.value = ''; 
+    e.preventDefault();
+    ref.current.value = "";
     onGetAllLocation();
-  }
+  };
+
+  // CLEAR FORM
+  const clearForm = () => {
+    setLocData({
+      cluster: "",
+      location: "",
+    });
+  };
 
   //=============== EDIT ROW DATA  ===============================
-  const handleEdit = async (id) => {
+  const handleEdit = async (e, id) => {
+    e.preventDefault();
 
     try {
-      const response = await locationService.updateLocation(id, {
-        location,
-      });
-     
-      setLocation(response);
+      const response = await locationService.updateLocation(id, locData);
+      setLocData(response);
       setDoneAddform(true);
       if (response.status === "SUCCESS") {
         swal({
@@ -216,12 +220,12 @@ export const Location = () => {
       onGetAllLocation();
       let event = {
         event: EVENT.UPDATE_LOCATION,
-        user: user.name
-      }
-      createEventLogLocation(event)
+        user: user.name,
+      };
+      createEventLogLocation(event);
     } catch (error) {
       console.log(error.response);
-      Failed('Your data failed to save')
+      Failed("Your data failed to save");
     } finally {
       setLoading(false);
     }
@@ -311,87 +315,93 @@ export const Location = () => {
   };
   const sortingNum = (col) => {
     if (order === "ASC") {
-        const sorted = [...data].sort((a, b) =>
-          a[col] > b[col] ? 1 : -1
-        );
-        setData(sorted);
-        setOrder("DSC");
-      }
-      if (order === "DSC") {
-        const sorted = [...data].sort((a, b) =>
-          a[col] < b[col] ? 1 : -1
-        );
-        setData(sorted);
-        setOrder("ASC");
-      }
-  }
+      const sorted = [...data].sort((a, b) => (a[col] > b[col] ? 1 : -1));
+      setData(sorted);
+      setOrder("DSC");
+    }
+    if (order === "DSC") {
+      const sorted = [...data].sort((a, b) => (a[col] < b[col] ? 1 : -1));
+      setData(sorted);
+      setOrder("ASC");
+    }
+  };
 
   //================== EVENT LOG ===============================
-  const [event, setEvent] = useState({})
+  const [event, setEvent] = useState({});
 
   const createEventLogLocation = async (eventLoc) => {
     try {
-      const response = await eventLogService.createEventLog(eventLoc)
-      setEvent(response.data)
+      const response = await eventLogService.createEventLog(eventLoc);
+      setEvent(response.data);
     } catch (e) {
       console.log(e);
     }
-  }
+  };
 
   //================== GET USER ===============================
   const { getCookie } = useAuth();
-  const[user,setUser]= useState({
-    name:'',
-    position:'',
-    role:'',
-  })
-  const onGetCookie = ()=>{
-  
-    let savedUserJsonString = getCookie("user")
-    let savedUser = JSON.parse(savedUserJsonString)
-    setUser(prevObj=>({...prevObj,name:(savedUser.name),position:(savedUser.position), role:(savedUser.role)}))
-  
-    console.log(user.name)
-  }
+  const [user, setUser] = useState({
+    name: "",
+    position: "",
+    role: "",
+  });
+  const onGetCookie = () => {
+    let savedUserJsonString = getCookie("user");
+    let savedUser = JSON.parse(savedUserJsonString);
+    setUser((prevObj) => ({
+      ...prevObj,
+      name: savedUser.name,
+      position: savedUser.position,
+      role: savedUser.role,
+    }));
 
+    console.log(user.name);
+  };
 
   return (
     <>
       <Sidebar>
-      <div className="body">
-      <div className="container">
-        <div className="loc-container-item">
-          
-          <form>
-            <div className="input-group">
-              <input
-                ref={ref}
-                placeholder="Search"
-                // value={searchLocation}
-                onChange={onChangeSearchLocation}
-                type="text"
-                className="form-control"
-              />
-              <div className="input-group-append">
-                <button value="submit" className="btn btn-primary" onClick={onSearchLocation}>
-                  <i className="fas fa-search"></i>
-                </button>
-                <button value="submit" className="btn btn-danger form-button" onClick={onClearForm}>
-                        <i className="fa fa-times"></i>
-                </button>
-              </div>
+        <div className="body">
+          <div className="container">
+            <div className="loc-container-item">
+              <form>
+                <div className="input-group">
+                  <input
+                    ref={ref}
+                    placeholder="Search"
+                    // value={searchLocation}
+                    onChange={onChangeSearchLocation}
+                    type="text"
+                    className="form-control"
+                  />
+                  <div className="input-group-append">
+                    <button
+                      value="submit"
+                      className="btn btn-primary"
+                      onClick={onSearchLocation}
+                    >
+                      <i className="fas fa-search"></i>
+                    </button>
+                    <button
+                      value="submit"
+                      className="btn btn-danger form-button"
+                      onClick={onClearForm}
+                    >
+                      <i className="fa fa-times"></i>
+                    </button>
+                  </div>
+                </div>
+              </form>
+              <Button
+                variant="primary"
+                onClick={() => {
+                  handlePostShow();
+                }}
+              >
+                <FiPlus />
+                Add New Location
+              </Button>
             </div>
-          </form>
-          <Button
-            variant="primary"
-            onClick={() => {
-              handlePostShow();
-            }}
-          >
-            <FiPlus />
-            Add New Location
-          </Button>
-        </div>
 
             <div className="table-responsive">
               <div className="table-wrapper">
@@ -409,6 +419,10 @@ export const Location = () => {
                   <thead>
                     <tr>
                       <th>No</th>
+                      <th onClick={() => sorting("cluster")}>
+                        {" "}
+                        <FaSort /> Cluster
+                      </th>
                       <th onClick={() => sorting("location")}>
                         {" "}
                         <FaSort /> Location
@@ -423,14 +437,15 @@ export const Location = () => {
                   <tbody>
                     {data.length === 0 ? (
                       <tr>
-                        <th colspan='4'>Data is not found</th>
+                        <th colspan="4">Data is not found</th>
                       </tr>
                     ) : (
                       currentItems.map((item, index) => (
                         <tr key={item["kode wilayah"]}>
                           <th>{index + 1}</th>
+                          <th>{item.cluster}</th>
                           <th>{item.location}</th>
-                          <th>{item['kode wilayah']}</th>
+                          <th>{item["kode wilayah"]}</th>
                           <td>
                             <a
                               onClick={() => {
@@ -488,8 +503,8 @@ export const Location = () => {
                 </table>
                 <div className="clearfix">
                   <div className="hint-text">
-                    Showing <b>{currentItems.length}</b> out of <b>{data.length}</b>{" "}
-                    entries
+                    Showing <b>{currentItems.length}</b> out of{" "}
+                    <b>{data.length}</b> entries
                   </div>
                   <ul className="pageNumbers">
                     <li>
@@ -538,29 +553,43 @@ export const Location = () => {
             </Modal.Header>
             <Modal.Body>
               <form onSubmit={handleSubmit}>
-            <p style={{color:"red"}}>Please complete all required fields</p>
-              <div>
-                <div className="form-group">
-                  <label className="form-label">Location Name <span style={{color :"red"}} >*</span></label>
-                  <input
-                     style={{maxWidth:"500px"}}
-                    type="text"
-                    className="form-control"
-                    name="location"
-                    placeholder="Location Name"
-                    required
-                    onChange={handleLocation}
-                  />
-                </div>
+                <p style={{ color: "red" }}>
+                  Please complete all required fields
+                </p>
+                <div>
+                  <div className="form-group">
+                    <label className="form-label">
+                      Cluster <span style={{ color: "red" }}>*</span>
+                    </label>
+                    <input
+                      style={{ maxWidth: "500px" }}
+                      type="text"
+                      className="form-control"
+                      name="cluster"
+                      placeholder="Location Name"
+                      required
+                      onChange={handleLocation}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">
+                      Location Name <span style={{ color: "red" }}>*</span>
+                    </label>
+                    <input
+                      style={{ maxWidth: "500px" }}
+                      type="text"
+                      className="form-control"
+                      name="location"
+                      placeholder="Location Name"
+                      required
+                      onChange={handleLocation}
+                    />
+                  </div>
 
-                <Button
-                  type="submit"
-                  className="btn btn-success mt-4"
-                >
-                  Add{" "}
-                </Button>
-                
-              </div>
+                  <Button type="submit" className="btn btn-success mt-4">
+                    Add{" "}
+                  </Button>
+                </div>
               </form>
             </Modal.Body>
             <Modal.Footer>
@@ -584,27 +613,38 @@ export const Location = () => {
               <Modal.Title>Edit </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <div>
-                <div className="form-group">
-                  <label>Location Name</label>
-                  <input
-                     style={{maxWidth:"500px"}}
-                    type="text"
-                    className="form-control"
-                    onChange={(e) => setLocation(e.target.value)}
-                    placeholder="Please enter Location Name"
-                    defaultValue={RowData.location}
-                  />
+              <form onSubmit={(e) => handleEdit(e, RowData["kode wilayah"])}>
+                <div>
+                  <div className="form-group">
+                    <label>Cluster</label>
+                    <input
+                      style={{ maxWidth: "500px" }}
+                      name="cluster"
+                      type="text"
+                      className="form-control"
+                      onChange={handleLocation}
+                      placeholder="Please enter Location Name"
+                      defaultValue={RowData.cluster}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Location Name</label>
+                    <input
+                      style={{ maxWidth: "500px" }}
+                      name="location"
+                      type="text"
+                      className="form-control"
+                      onChange={handleLocation}
+                      placeholder="Please enter Location Name"
+                      defaultValue={RowData.location}
+                    />
+                  </div>
+
+                  <Button type="submit" className="btn btn-warning mt-4">
+                    Save Changes
+                  </Button>
                 </div>
-                <Button
-                  disabled={!areAllFieldsFilled}
-                  type="submit"
-                  className="btn btn-warning mt-4"
-                  onClick={() => handleEdit(RowData['kode wilayah'])}
-                >
-                  Save Changes
-                </Button>
-              </div>
+              </form>
             </Modal.Body>
             <Modal.Footer>
               {/* <Button variant="secondary" onClick={hanldeEditClose}>
@@ -630,16 +670,16 @@ export const Location = () => {
                 <div className="form-group mt-2">
                   <label>ID Location </label>
                   <input
-                   style={{maxWidth:"500px"}}
+                    style={{ maxWidth: "500px" }}
                     type="text"
                     className="form-control"
-                    value={RowData['kode wilayah']}
+                    value={RowData["kode wilayah"]}
                     readOnly
                   />
 
                   <label>Location Name</label>
                   <input
-                   style={{maxWidth:"500px"}}
+                    style={{ maxWidth: "500px" }}
                     type="text"
                     className="form-control"
                     value={RowData.location}
@@ -661,7 +701,7 @@ export const Location = () => {
             </Modal.Footer>
           </Modal>
         </div>
-      {/* </div> */}
+        {/* </div> */}
       </Sidebar>
     </>
   );

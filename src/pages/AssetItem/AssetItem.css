@@ -160,7 +160,7 @@
   justify-content: flex-end;
   margin-top: 6vh;
 }
-
+/* 
 input[type="file"]::-webkit-file-upload-button{
 padding: 11px 15px;
 border-radius: 50px;
@@ -172,10 +172,11 @@ font-size: 12px ;
 cursor: pointer;
 background-color: #0A2495;
 transition: 0.5s all;
+
 }
 
 input[type="file"]:hover::-webkit-file-upload-button{
   background-color: #1b3ed8;
-}
+} */
 
 

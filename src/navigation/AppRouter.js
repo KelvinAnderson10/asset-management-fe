@@ -13,7 +13,7 @@ import { AssetCategory } from "../pages/AssetCategory/AssetCategory";
 import { AssetItem } from "../pages/AssetItem/AssetItem";
 import { Login } from "../pages/Login/Login";
 import { ProtectedPage } from "../services/ProtectedPage";
-import { FormPO } from "../pages/PurchaseOrder/FormPO";
+import { FormPO } from "../pages/PurchaseOrderInv/FormPO";
 import { UserManage } from "../pages/User/User";
 import { Main } from "../pages/Overview/Main";
 import { Approval } from "../pages/Approval/Approval";

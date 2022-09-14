@@ -642,18 +642,17 @@ export const AssetCategory = () => {
                         value={assetCategory.subproduct_name}
                     />
                     </div>
-                    <div className="form-group mt-3">
+                    
+                    <div className="inputBoxAC">
                     <label className="form-label">PIC<span style={{color :"red"}} >*</span></label>
-                    <input
-                    style={{maxWidth:"500px"}}
-                        required
-                        type="text"
-                        className="form-control"
-                        onChange={handleChange}
-                        placeholder="Please enter PIC"
+                    <select required 
                         name="pic"
                         value={assetCategory.pic}
-                    />
+                        onChange={handleChange} >
+                          <option value="">Select</option>
+                    <option>GA</option>
+                    <option>IT</option>
+                    </select>
                     </div>      
                 </div>
                 <Button
