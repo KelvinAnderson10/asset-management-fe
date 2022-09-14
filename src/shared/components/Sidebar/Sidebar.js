@@ -78,18 +78,6 @@ const routesIT = [
     name: "Overview",
     icon: <FaHome />,
   },
-  // {
-  //   path: "/data-management",
-  //   name: "Data Management",
-  //   icon: <GoIcons.GoDatabase/>,
-  //   subRoutes: [
-  //       {
-  //         path: "/data-management/asset-item",
-  //         name: "Asset Item",
-  //         icon: <IoIcons.IoIosPaper/>,
-  //       },
-  //     ],
-  // },
   {
     path: "/approval-data",
     name: "Approval Data",
@@ -107,7 +95,24 @@ const routesUserStaff = [
   {
     path: "/purchase-request",
     name: "Purchase Request",
-    icon: <AiIcons.AiFillShopping/>, 
+    icon: <AiIcons.AiFillShopping/>,
+    subRoutes: [
+        {
+          path: "/purchase-request/inventory",
+          name: "Inventory",
+          icon: <IoIcons.IoIosPaper/>,
+        },
+        {
+          path: "/purchase-request/maintenance",
+          name: "Maintenance",
+          icon: <BiIcons.BiCategoryAlt/>,
+        },
+        {
+          path: "/purchase-request/inventory",
+          name: "Rent",
+          icon: <FaIcons.FaStore/>,
+        },
+      ],
   },
   
 ]
