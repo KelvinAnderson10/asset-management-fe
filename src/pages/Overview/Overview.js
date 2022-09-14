@@ -53,23 +53,7 @@ export const Overview = () => {
   const [minPageNumberLimit, setMinPageNumberLimit] = useState(0);
 
   //CRUD
-  //Get All
-  // const onGetAllAsset = async () => {
-  //   setLoading(true)
-  //   try {
-  //     const response = await overviewService.getAllAsset();
-  //     setDatas(response.data);
-  //   } catch (e) {
-  //     console.log(e);
-  //   } finally {
-  //     setLoading(false)
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   onGetAllAsset();
-  // }, []);
-
+  
   //Pagination
   const handleClick = (event) => {
     setCurrentPage(Number(event.target.id));
@@ -189,10 +173,8 @@ export const Overview = () => {
   const [date, setNewDate] = useState();
 
   const handleEditAssetById = async (name) => {
-    // setLoading(true);
     try {
       const response = await overviewService.getAssetByAssetName(name);
-      // setRowData(response.data)
 
       setEditShow(true);
       response.data["Tanggal Output"] = moment(
@@ -201,24 +183,12 @@ export const Overview = () => {
       response.data["BAST Output"] = moment(
         response.data["BAST Output"]
       ).format("YYYY-MM-DDTHH:MM");
-      // let date = response.data['Tanggal Output'].toString()
-      // let datesplit = date.split("+")
-      // let res = datesplit[0]
-      // response.data['Tanggal Output'] = res
-      // setNewDate(res)
-
-      // date = response.data['BAST Output'].toString()
-      // datesplit = date.split("+")
-      // res = datesplit[0]
-      // response.data['BAST Output'] = res
-
+  
       setAssetEdit(response.data);
       setImageBase64(response.data["Asset Image"]);
     } catch (e) {
       console.log(e);
-    } finally {
-      // setLoading(false);
-    }
+    } 
   };
 
   const [assetEdit, setAssetEdit] = useState({});
@@ -299,7 +269,7 @@ export const Overview = () => {
       getAssetsPagination(1);
       let event = {
         event: EVENT.UPDATE_ASSET,
-        user: userEvent.name,
+        user: user.name,
       };
       createEventLogOverview(event);
     } catch (e) {
@@ -354,15 +324,15 @@ export const Overview = () => {
   };
 
   // GET ALL USER
-  const [user, setUser] = useState([]);
-  const onGetUser = async () => {
-    try {
-      const response = await userService.getUserByEmail();
-      setUser(response.data);
-    } catch (error) {
-    } finally {
-    }
-  };
+  // const [user, setUser] = useState([]);
+  // const onGetUser = async () => {
+  //   try {
+  //     const response = await userService.getUserByEmail();
+  //     setUser(response.data);
+  //   } catch (error) {
+  //   } finally {
+  //   }
+  // };
 
   const handleChange = (e) => {
     const newData = { ...assetEdit };
@@ -737,25 +707,20 @@ export const Overview = () => {
 
   //Get User
   const { getCookie } = useAuth();
-  const [userEvent, setUserEvent] = useState({
-    name: "",
-    position: "",
-    role: "",
-    NIK: "",
-  });
-  const onGetCookie = () => {
-    let savedUserJsonString = getCookie("user");
-    let savedUser = JSON.parse(savedUserJsonString);
-    setUserEvent((prevObj) => ({
-      ...prevObj,
-      NIK: savedUser.NIK,
-      name: savedUser.name,
-      position: savedUser.position,
-      role: savedUser.role,
-    }));
-
-    console.log(userEvent.name);
-  };
+  const[user,setUser]= useState({
+    name:'',
+    role:'',
+    level_approval:'',
+    location_id:'',
+    tap:'',
+    cluster:'',
+    department: ''
+  })
+  const onGetCookie = ()=>{
+    let savedUserJsonString = getCookie("user")
+    let savedUser = JSON.parse(savedUserJsonString)
+    setUser(prevObj=>({...prevObj,name:(savedUser.name), role:(savedUser.role), level_approval:(savedUser.level_approval), location_id:(savedUser.location_id), tap:(savedUser.TAP), cluster:(savedUser.Cluster), department:(savedUser.department)}))
+  }
 
   return (
     <>

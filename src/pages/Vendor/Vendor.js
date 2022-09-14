@@ -340,16 +340,17 @@ const createEventLogVendor = async (eventLoc) => {
 const { getCookie } = useAuth();
 const[user,setUser]= useState({
   name:'',
-  position:'',
   role:'',
+  level_approval:'',
+  location_id:'',
+  tap:'',
+  cluster:'',
+  department: ''
 })
 const onGetCookie = ()=>{
-
   let savedUserJsonString = getCookie("user")
   let savedUser = JSON.parse(savedUserJsonString)
-  setUser(prevObj=>({...prevObj,name:(savedUser.name),position:(savedUser.position), role:(savedUser.role)}))
-
-  console.log(user.name)
+  setUser(prevObj=>({...prevObj,name:(savedUser.name), role:(savedUser.role), level_approval:(savedUser.level_approval), location_id:(savedUser.location_id), tap:(savedUser.TAP), cluster:(savedUser.Cluster), department:(savedUser.department)}))
 }
 
   return (

@@ -107,7 +107,7 @@ export const AssetItem = () => {
       Success("added");
       let event = {
         event: EVENT.CREATE_ASSET,
-        user: userEvent.name
+        user: user.name
       }
       createEventLogAssetItem(event)
       console.log('lala',event);
@@ -143,18 +143,19 @@ export const AssetItem = () => {
 
   //Get User
   const { getCookie } = useAuth();
-  const[userEvent,setUserEvent]= useState({
+  const[user,setUser]= useState({
     name:'',
-    position:'',
     role:'',
+    level_approval:'',
+    location_id:'',
+    tap:'',
+    cluster:'',
+    department: ''
   })
   const onGetCookie = ()=>{
-  
     let savedUserJsonString = getCookie("user")
     let savedUser = JSON.parse(savedUserJsonString)
-    setUserEvent(prevObj=>({...prevObj,name:(savedUser.name),position:(savedUser.position), role:(savedUser.role)}))
-  
-    console.log(userEvent.name)
+    setUser(prevObj=>({...prevObj,name:(savedUser.name), role:(savedUser.role), level_approval:(savedUser.level_approval), location_id:(savedUser.location_id), tap:(savedUser.TAP), cluster:(savedUser.Cluster), department:(savedUser.department)}))
   }
 
   return (
@@ -358,23 +359,6 @@ export const AssetItem = () => {
                       onChange={handleChange}
                       style={{width:'95%'}}
                     />
-                  {/* <select
-                    required
-                    name="User"
-                    value={data.user}
-                    onChange={handleChange}
-                    style={{width:'95%'}}
-                  >
-                    <option value="" >Select User</option>
-                    {user.map((item) => (
-                      <option
-                        key={item.name}
-                        value={item.name}
-                      >
-                        {item.name}
-                      </option>
-                    ))}
-                  </select> */}
                 </div>
                   <div className="inputBox">
                     <span>Position :</span>

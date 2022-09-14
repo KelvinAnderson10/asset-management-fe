@@ -110,31 +110,24 @@ export const ImportData = () => {
 
   //Get User
   const { getCookie } = useAuth();
-  const [user, setUser] = useState({
-    name: "",
-    position: "",
-    role: "",
-    NIK: "",
-  });
-  const onGetCookie = () => {
-    let savedUserJsonString = getCookie("user");
-    let savedUser = JSON.parse(savedUserJsonString);
-    setUser((prevObj) => ({
-      ...prevObj,
-      NIK: savedUser.NIK,
-      name: savedUser.name,
-      position: savedUser.position,
-      role: savedUser.role,
-    }));
-
-    console.log(user.name);
-  };
+  const[user,setUser]= useState({
+    name:'',
+    role:'',
+    level_approval:'',
+    location_id:'',
+    tap:'',
+    cluster:'',
+    department: ''
+  })
+  const onGetCookie = ()=>{
+    let savedUserJsonString = getCookie("user")
+    let savedUser = JSON.parse(savedUserJsonString)
+    setUser(prevObj=>({...prevObj,name:(savedUser.name), role:(savedUser.role), level_approval:(savedUser.level_approval), location_id:(savedUser.location_id), tap:(savedUser.TAP), cluster:(savedUser.Cluster), department:(savedUser.department)}))
+  }
 
   useEffect(() => {
     onGetCookie();
   }, []);
-
-
 
   return (
     <>
