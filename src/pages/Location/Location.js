@@ -357,7 +357,7 @@ export const Location = () => {
 
     console.log(user.name);
   };
-
+  document.querySelector("body").style.overflow = "auto";
   return (
     <>
       <Sidebar>

@@ -11,6 +11,7 @@ import AssetLoading from "../../shared/components/Loading/AssetItemLoad";
 import { EVENT } from "../../shared/constants";
 import { useAuth } from "../../services/UseAuth";
 import imageCompression from 'browser-image-compression';
+import LoadingScreen from 'react-loading-screen';
 
 export const AssetItem = () => {
   const [data, setData] = useState({});
@@ -107,6 +108,7 @@ export const AssetItem = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true)
+    document.querySelector("body").style.overflow = "hidden";
     try {
       data["Harga Perolehan"] = Number(data["Harga Perolehan"]);
       data["Kode Wilayah"] = Number(data["Kode Wilayah"]);
@@ -134,6 +136,7 @@ export const AssetItem = () => {
     } finally {
       e.target.reset();
       setIsLoading(false)
+      document.querySelector("body").style.overflow = "auto";
     }
   };
 
@@ -174,16 +177,19 @@ export const AssetItem = () => {
     setUser(prevObj=>({...prevObj,name:(savedUser.name), role:(savedUser.role), level_approval:(savedUser.level_approval), location_id:(savedUser.location_id), tap:(savedUser.TAP), cluster:(savedUser.Cluster), department:(savedUser.department)}))
   }
 
+  // document.querySelector("body").style.overflow = "hidden";
+
   return (
     <>
-      <Sidebar>
+      <Sidebar style={{overflow: 'hidden'}}>
+        <div className="import-box">
         <div className="asset-container">
-          <form onSubmit={(e)=>{handleSubmit(e)}}>
+        <form onSubmit={(e)=>{handleSubmit(e)}}>
             <div className="row">
               <div className="col">
                 <h3 className="title">Add Asset Item</h3>
 
-                <div className="inputBox">
+                <div id="input" className="inputBox">
                   <span>Asset Name :</span>
                   <input
                     type="text"
@@ -413,19 +419,35 @@ export const AssetItem = () => {
                   </select>
                   </div>
                 <div className="button-asset">
-                  <button
-                    type="submit"
-                    className="btn btn-primary button-submit"
-                  >
-                    Submit
-                  </button>
+                  <a href="#input">
+                    <button
+                      type="submit"
+                      className="btn btn-primary button-submit"
+                    >
+                      {/* <a href="#input">Submit</a> */}
+                      Submit
+                    </button>
+                  </a>
                 </div>
               </div>
             </div>
           </form>
         </div>
-      {isLoading && <AssetLoading/>}
+        </div>
+
       </Sidebar>
+      {isLoading && 
+      
+      /* <LoadingScreen
+          loading={true}
+          bgColor='#f1f1f1'
+          spinnerColor='#9ee5f8'
+          textColor='#676767'
+          text='Here an introduction sentence (Optional)'
+        > 
+        </LoadingScreen> */
+        <AssetLoading></AssetLoading>
+      }
     </>
   );
 };

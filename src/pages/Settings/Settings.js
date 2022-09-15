@@ -37,7 +37,7 @@ export const Settings = () => {
         }
     
     }
-
+  document.querySelector("body").style.overflow = "auto";
   return (
     <div>
         <Sidebar>
