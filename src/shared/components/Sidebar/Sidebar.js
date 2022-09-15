@@ -15,6 +15,7 @@ import * as AiIcons from 'react-icons/ai';
 import { useAuth } from "../../../services/UseAuth";
 import {CgProfile} from 'react-icons/cg'
 import { fontSize } from "@mui/system";
+import logo from '../../../assets/images/default.png'
 
 const routesAdmin = [
   {
@@ -166,7 +167,9 @@ const Sidebar = ({children}) => {
     name:'',
     position:'',
     role:'',
-    NIK:''
+    location_id:'',
+    tap:'',
+    cluster:''
   })
 
   useEffect(() => {
@@ -177,7 +180,7 @@ const onGetCookie = ()=>{
   
   let savedUserJsonString = getCookie("user")
   let savedUser = JSON.parse(savedUserJsonString)
-  setUser(prevObj=>({...prevObj,NIK:(savedUser.NIK),name:(savedUser.name),position:(savedUser.position), role:(savedUser.role)}))
+  setUser(prevObj=>({...prevObj,name:(savedUser.name),position:(savedUser.position), role:(savedUser.role)}))
 
   console.log(user.name)
 }
@@ -222,7 +225,7 @@ const onGetCookie = ()=>{
 
   const navigate = useNavigate();
   const onLogout = () => {
-  eraseCookie("OTP")
+  eraseCookie()
   navigate('/', {replace: true})
   } 
 
@@ -414,14 +417,15 @@ const onGetCookie = ()=>{
 
         <main>
           <nav className="navbar navbar-expand-lg header-main">
-  <div class="nav-item dropdown">
-				<a href="#" data-bs-toggle="dropdown" className="nav-item nav-link dropdown-toggle user-action"><CgProfile style={{fontSize:'28px', marginRight:"5%"}} />{user.name} <b class="caret"></b></a>
-				<div class="dropdown-menu">
-					{/* <a href="#" className="dropdown-item"><i class="fa fa-user-o"></i> Profile</a> */}
-					<div className="divider dropdown-divider"></div>
-					<a onClick={onLogout} className="dropdown-item"><i class="material-icons">&#xE8AC;</i> Logout</a>
-				</div>
-			</div>
+            <img src={logo} style={{width: '7.8vw', height: '4vh'}}></img>
+          <div class="nav-item dropdown">
+            <a href="#" data-bs-toggle="dropdown" className="nav-item nav-link dropdown-toggle user-action"><CgProfile style={{fontSize:'28px', marginRight:"5%"}} />{user.name} <b class="caret"></b></a>
+            <div class="dropdown-menu">
+            {/* <a href="#" className="dropdown-item"><i class="fa fa-user-o"></i> Profile</a> */}
+            <div className="divider dropdown-divider"></div>
+            <a onClick={onLogout} className="dropdown-item"><i class="material-icons">&#xE8AC;</i> Logout</a>
+				  </div>
+			    </div>
           {/* <AiIcons.AiOutlineLogout className='logout' onClick={onLogout}/> */}
           </nav>
           {children}

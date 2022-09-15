@@ -11,6 +11,7 @@ import {Failed} from '../../shared/components/Notification/Failed';
 import UploadLoading from '../../shared/components/Loading/UploadLoading';
 import Loading from '../../shared/components/Loading/Loading';
 import { EVENT } from '../../shared/constants';
+import { useAuth } from '../../services/UseAuth';
 
 export const ImportData = () => {
   const [excelData, setExcelData] = useState([])
@@ -41,7 +42,7 @@ export const ImportData = () => {
       console.log(error);
       let event = {
         event: EVENT.IMPORT_DATA,
-        user: 'Yayah Zakiyah'
+        user: user.name
       }
       createEventImportData(event)
 
@@ -99,6 +100,27 @@ export const ImportData = () => {
       console.log(e);
     }
   }
+
+  //Get User
+  const { getCookie } = useAuth();
+  const[user,setUser]= useState({
+    name:'',
+    position:'',
+    role:'',
+    NIK:''
+  })
+  const onGetCookie = ()=>{
+  
+    let savedUserJsonString = getCookie("user")
+    let savedUser = JSON.parse(savedUserJsonString)
+    setUser(prevObj=>({...prevObj,NIK:(savedUser.NIK),name:(savedUser.name),position:(savedUser.position), role:(savedUser.role)}))
+  
+    console.log(user.name)
+  }
+
+  useEffect(() => {
+    onGetCookie()
+  }, [])
 
   return (
     <>

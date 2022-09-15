@@ -11,6 +11,8 @@ import swal from "sweetalert";
 import Loading from "../../shared/components/Loading/Loading";
 import ReactPaginate from "react-paginate";
 import { EVENT } from "../../shared/constants";
+import { useAuth } from "../../services/UseAuth";
+import defaultImg from "../../assets/images/No-image-available.png"
 
 export const Overview = () => {
   const {
@@ -238,8 +240,8 @@ export const Overview = () => {
 
 
     // UPLOAD IMAGE
-    const [selectedImage, setSelectedImage] = useState(true);
-    const [imageBase64, setImageBase64] = useState("")
+    const [selectedImage, setSelectedImage] = useState();
+    const [imageBase64, setImageBase64] = useState('')
     let reader = new FileReader();
 
   const imageChange = (e) => {
@@ -251,8 +253,11 @@ export const Overview = () => {
     }
   };
 
+  const ref = useRef(null)
+
   const removeSelectedImage = () => {
     setSelectedImage();
+    ref.current.value = '';
   };
 
   const onSubmitEditAsset = async (e) => {
@@ -291,7 +296,7 @@ export const Overview = () => {
       getAssetsPagination(1)
       let event = {
         event: EVENT.UPDATE_ASSET,
-        user: 'Yayah Zakiyah'
+        user: userEvent.name
       }
       createEventLogOverview(event)
     } catch (e) {
@@ -306,6 +311,7 @@ export const Overview = () => {
     onGetAllSubProduct();
     onGetAllVendor();
     onGetAllLocation();
+    onGetCookie()
   }, []);
 
   const [subProductName, setSubProductName] = useState([]);
@@ -375,7 +381,6 @@ export const Overview = () => {
   const [filter, setFilter] = useState('');
   const [dropdownName, setDropdownName] = useState('');
   const [fill, setFill] = useState(true);
-  const ref = useRef(null) ;
 
   const onChangeFilter = (e) => {
     setFilter(e.target.value);
@@ -559,7 +564,6 @@ export const Overview = () => {
   }
 
   //Pagination From Backend
-  const [items, setItems] = useState([]);
   const [pageCount, setPageCount] = useState(0)
 
   useEffect(() => {
@@ -624,6 +628,23 @@ export const Overview = () => {
       console.log(e);
     }
   }
+
+    //Get User
+    const { getCookie } = useAuth();
+    const[userEvent,setUserEvent]= useState({
+      name:'',
+      position:'',
+      role:'',
+      NIK:''
+    })
+    const onGetCookie = ()=>{
+    
+      let savedUserJsonString = getCookie("user")
+      let savedUser = JSON.parse(savedUserJsonString)
+      setUserEvent(prevObj=>({...prevObj,NIK:(savedUser.NIK),name:(savedUser.name),position:(savedUser.position), role:(savedUser.role)}))
+    
+      console.log(userEvent.name)
+    }
 
   return (
     <>
@@ -1252,10 +1273,10 @@ export const Overview = () => {
                         <div className="image">
                           {" "}
                           <img
-                            src={imageBase64}
+                            src={imageBase64 && imageBase64}
                             className="image"
-                            alt="Thumb"
                             style={{width:'200px', height:'140px'}}
+                           
                             />
                             <button
                               onClick={removeSelectedImage}
@@ -1272,6 +1293,7 @@ export const Overview = () => {
                       type="file"
                       name="Asset Image"
                       onChange={imageChange}
+                      ref={ref}
                     />
                   </div>
                   <div className="inputBox" style={{marginTop:'30px'}}>

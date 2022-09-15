@@ -1,5 +1,7 @@
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
+import { useAuth } from '../../services/UseAuth'
+import Loading from '../../shared/components/Loading/Loading'
 import { useDeps } from '../../shared/context/DependencyContext'
 import './Dashboard.css'
 
@@ -7,18 +9,37 @@ export const Dashboard = () => {
     const {eventLogService, overviewService} = useDeps()
     const [event, setEvent] = useState([])
     const [countAsset, setCountAsset] = useState(0)
+    const [isLoading, setIsloading] = useState(false)
+    const { getCookie } = useAuth();
+    const[user,setUser]= useState({
+      name:'',
+      position:'',
+      role:'',
+      NIK:''
+    })
+
+    const onGetCookie = ()=>{
+    
+      let savedUserJsonString = getCookie("user")
+      let savedUser = JSON.parse(savedUserJsonString)
+      setUser(prevObj=>({...prevObj,NIK:(savedUser.NIK),name:(savedUser.name),position:(savedUser.position), role:(savedUser.role)}))
+    
+    }
 
     const getAllEventLog = async () => {
         try{
-            const response = await eventLogService.getEventLog()
-            for (let i in response.data) {
-                response.data[i]['CreatedAt'] = moment((response.data[i]['CreatedAt'])).format('YYYY-MM-DDTHH:MM')
-            }
-            setEvent(response.data)
-            console.log(response.data);
+            if (user.role === 'GA') {
+                const response = await eventLogService.getEventLog()
+                for (let i in response.data) {
+                    response.data[i]['CreatedAt'] = moment((response.data[i]['CreatedAt'])).format('YYYY-MM-DDTHH:MM')
+                }
+                setEvent(response.data)
+                console.log(response.data);
+            } 
+            
         } catch (e) {
             console.log(e);
-        }
+        } 
     }
 
     const onCountAsset = async () => {
@@ -31,9 +52,10 @@ export const Dashboard = () => {
       }
 
     useEffect(() => {
+        onGetCookie()
         getAllEventLog()
         onCountAsset()
-    }, [])
+    }, [user.role])
 
     return(
         <>
@@ -90,6 +112,7 @@ export const Dashboard = () => {
                     </div>
                 </div>
             </div>
+            {isLoading && <Loading/>}
         </>
     )
 }

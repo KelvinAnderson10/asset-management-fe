@@ -9,6 +9,7 @@ import Loading from "../../shared/components/Loading/Loading";
 import UploadLoading from "../../shared/components/Loading/UploadLoading";
 import AssetLoading from "../../shared/components/Loading/AssetItemLoad";
 import { EVENT } from "../../shared/constants";
+import { useAuth } from "../../services/UseAuth";
 
 export const AssetItem = () => {
   const [data, setData] = useState({});
@@ -17,7 +18,7 @@ export const AssetItem = () => {
   const [imageBase64, setImageBase64] = useState("")
   let reader = new FileReader();
   const [subProductName, setSubProductName] = useState([]);
-  const { assetItemService, vendorService, locationService, userService, eventLogService } =
+  const { assetItemService, vendorService, locationService, eventLogService } =
     useDeps();
   const ref = useRef(null)
 
@@ -25,7 +26,7 @@ export const AssetItem = () => {
     onGetAllSubProduct();
     onGetAllVendor();
     onGetAllLocation();
-    onGetUser();
+    onGetCookie()
   }, []);
   // GET ALL SUBPRODUCT NAME
   const onGetAllSubProduct = async () => {
@@ -66,18 +67,6 @@ export const AssetItem = () => {
     }
   };
 
-  // GET ALL USER
-  const [user, setUser] = useState([]);
-  const onGetUser = async () => {
-    try {
-      const response = await userService.getAllUser();
-     
-      setUser(response.data);
-    } catch (error) {
-    } finally {
-    }
-  };
-
   const imageChange = (e) => {
     if (e.target.files && e.target.files.length > 0) {
       setSelectedImage(e.target.files[0]);
@@ -103,10 +92,8 @@ export const AssetItem = () => {
     e.preventDefault();
     setIsLoading(true)
     try {
-      data["Tahun"] = Number(data["Tahun"]);
       data["Harga Perolehan"] = Number(data["Harga Perolehan"]);
       data["Kode Wilayah"] = Number(data["Kode Wilayah"]);
-      data["Tahun Pembelian"] = Number(data["Tahun Pembelian"]);
       data["Kode Urut barang"] = Number(data["Kode Urut barang"]);
       data["Biaya Lain-Lain"] = Number(data["Biaya Lain-Lain"]);
       data["BAST Output"] = moment(data["BAST Output"]).format();
@@ -118,12 +105,13 @@ export const AssetItem = () => {
       setData(response.data);
       
       Success("added");
-      clearForm();
       let event = {
         event: EVENT.CREATE_ASSET,
-        user: 'Yayah Zakiyah'
+        user: userEvent.name
       }
       createEventLogAssetItem(event)
+      console.log('lala',event);
+      clearForm();
     } catch (error) {
       console.log(error.response);
       Failed(error.response.data.error.Detail);
@@ -146,17 +134,32 @@ export const AssetItem = () => {
   const [event, setEvent] = useState({})
   const createEventLogAssetItem = async (eventLoc) => {
     try {
-      const response = await eventLogService.createEventLogAssetItem(eventLoc)
+      const response = await eventLogService.createEventLog(eventLoc)
       setEvent(response.data)
     } catch (e) {
       console.log(e);
     }
   }
 
+  //Get User
+  const { getCookie } = useAuth();
+  const[userEvent,setUserEvent]= useState({
+    name:'',
+    position:'',
+    role:'',
+  })
+  const onGetCookie = ()=>{
+  
+    let savedUserJsonString = getCookie("user")
+    let savedUser = JSON.parse(savedUserJsonString)
+    setUserEvent(prevObj=>({...prevObj,name:(savedUser.name),position:(savedUser.position), role:(savedUser.role)}))
+  
+    console.log(userEvent.name)
+  }
+
   return (
     <>
       <Sidebar>
-      {/* <div className="main-container"> */}
         <div className="asset-container">
           <form onSubmit={(e)=>{handleSubmit(e)}}>
             <div className="row">
@@ -224,7 +227,7 @@ export const AssetItem = () => {
                     <option value="">Select Location</option>
                     {locations.map((item, index) => (
                       <option key={item['kode wilayah']} value={item["kode wilayah"]}>
-                       {item["kode wilayah"]} {item.location}
+                        {item.location}
                       </option>
                     ))}
                   </select>
@@ -321,6 +324,17 @@ export const AssetItem = () => {
                   />
                 </div>
                 <div className="inputBox">
+                  <span>Additional Cost :</span>
+                  <input
+                    type="number"
+                    required
+                    name="Biaya Lain-Lain"
+                    value={data["Biaya Lain-Lain"]}
+                    onChange={handleChange}
+                    style={{width:'95%'}}
+                  />
+                </div>
+                <div className="inputBox">
                   <span>Insurance</span>
                   <select
                     required
@@ -336,7 +350,15 @@ export const AssetItem = () => {
                 </div>
                 <div className="inputBox">
                   <span>User :</span>
-                  <select
+                  <input
+                      type="text"
+                      required
+                      name="User"
+                      value={data.User}
+                      onChange={handleChange}
+                      style={{width:'95%'}}
+                    />
+                  {/* <select
                     required
                     name="User"
                     value={data.user}
@@ -352,43 +374,30 @@ export const AssetItem = () => {
                         {item.name}
                       </option>
                     ))}
-                  </select>
+                  </select> */}
                 </div>
-                {/* <div className="inputBox">
-                  <span>Initisal :</span>
-                  <input
-                    type="text"
-                    required
-                    name="Initisal"
-                    value={data["Initisal"]}
-                    onChange={handleChange}
-                    style={{width:'95%'}}
-                  />
-                </div> */}
                   <div className="inputBox">
-                    <span>Year :</span>
+                    <span>Position :</span>
                     <input
-                      type="number"
+                      type="text"
                       required
-                      name="Tahun"
-                      value={data.Tahun}
+                      name="Jabatan"
+                      value={data.Jabatan}
                       onChange={handleChange}
                       style={{width:'95%'}}
-                      
                     />
                   </div>
                   <div className="inputBox">
-                    <span>NO Resi:</span>
+                    <span>Tracking Number:</span>
                     <input
                       type="string"
                       required
-                      name="Tahun"
-                      value={data.Tahun}
+                      name="Nomor Resi"
+                      value={data['Nomor Resi']}
                       onChange={handleChange}
                       style={{width:'95%'}}
                     />
                   </div>
-
                   <div className="inputBox">
                     <span>PPN :</span>
                     <select
@@ -399,24 +408,16 @@ export const AssetItem = () => {
                     style={{width:'95%'}}
                   >
                     <option value="">Select Condition</option>
-                    <option>Yes</option>
-                    <option>No</option>
+                    <option value='1'>Yes</option>
+                    <option value='0'>No</option>
                   </select>
                   </div>
-                {/* </div> */}
                 <div className="button-asset">
-                  {/* <button
-                    type="submit"
-                    className="btn btn-danger button-cancel"
-                    onClick={handleCancel}
-                  >
-                    Cancel
-                  </button> */}
                   <button
                     type="submit"
                     className="btn btn-primary button-submit"
                   >
-                    SUBMIT
+                    Submit
                   </button>
                 </div>
               </div>
