@@ -375,14 +375,17 @@ export const AssetCategory = () => {
   const { getCookie } = useAuth();
   const[user,setUser]= useState({
     name:'',
-    position:'',
     role:'',
-    NIK:''
+    level_approval:'',
+    location_id:'',
+    tap:'',
+    cluster:'',
+    department: ''
   })
   const onGetCookie = ()=>{
     let savedUserJsonString = getCookie("user")
     let savedUser = JSON.parse(savedUserJsonString)
-    setUser(prevObj=>({...prevObj,NIK:(savedUser.NIK),name:(savedUser.name),position:(savedUser.position), role:(savedUser.role)}))
+    setUser(prevObj=>({...prevObj,name:(savedUser.name), role:(savedUser.role), level_approval:(savedUser.level_approval), location_id:(savedUser.location_id), tap:(savedUser.TAP), cluster:(savedUser.Cluster), department:(savedUser.department)}))
   }
 
   return (
@@ -642,18 +645,17 @@ export const AssetCategory = () => {
                         value={assetCategory.subproduct_name}
                     />
                     </div>
-                    <div className="form-group mt-3">
+                    
+                    <div className="inputBoxAC">
                     <label className="form-label">PIC<span style={{color :"red"}} >*</span></label>
-                    <input
-                    style={{maxWidth:"500px"}}
-                        required
-                        type="text"
-                        className="form-control"
-                        onChange={handleChange}
-                        placeholder="Please enter PIC"
+                    <select required 
                         name="pic"
                         value={assetCategory.pic}
-                    />
+                        onChange={handleChange} >
+                          <option value="">Select</option>
+                    <option>GA</option>
+                    <option>IT</option>
+                    </select>
                     </div>      
                 </div>
                 <Button

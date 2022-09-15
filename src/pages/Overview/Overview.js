@@ -3,8 +3,8 @@ import { Button, Modal, Table } from "react-bootstrap";
 import Sidebar from "../../shared/components/Sidebar/Sidebar";
 import { useDeps } from "../../shared/context/DependencyContext";
 import "./Overview.css";
-import {FaSort} from 'react-icons/fa'
-import {CgClose} from 'react-icons/cg'
+import { FaSort } from "react-icons/fa";
+import { CgClose } from "react-icons/cg";
 import moment from "moment";
 import "./EditAsset.css";
 import swal from "sweetalert";
@@ -12,7 +12,8 @@ import Loading from "../../shared/components/Loading/Loading";
 import ReactPaginate from "react-paginate";
 import { EVENT } from "../../shared/constants";
 import { useAuth } from "../../services/UseAuth";
-import defaultImg from "../../assets/images/No-image-available.png"
+import defaultImg from "../../assets/images/No-image-available.png";
+import imageCompression from 'browser-image-compression';
 
 export const Overview = () => {
   const {
@@ -22,7 +23,7 @@ export const Overview = () => {
     userService,
     assetItemService,
     assetCategoryService,
-    eventLogService
+    eventLogService,
   } = useDeps();
   const [datas, setDatas] = useState([]);
   const [order, setOrder] = useState("ASC");
@@ -35,7 +36,6 @@ export const Overview = () => {
     const newData = { ...asset };
     newData[e.target.name] = e.target.value;
     setAsset(newData);
-
   };
 
   const handleViewShow = () => {
@@ -54,30 +54,14 @@ export const Overview = () => {
   const [minPageNumberLimit, setMinPageNumberLimit] = useState(0);
 
   //CRUD
-  //Get All
-  // const onGetAllAsset = async () => {
-  //   setLoading(true)
-  //   try {
-  //     const response = await overviewService.getAllAsset();
-  //     setDatas(response.data);
-  //   } catch (e) {
-  //     console.log(e);
-  //   } finally {
-  //     setLoading(false)
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   onGetAllAsset();
-  // }, []);
-
+  
   //Pagination
   const handleClick = (event) => {
     setCurrentPage(Number(event.target.id));
   };
-  const totalPages = Math.ceil(datas.length / itemPerPage)
+  const totalPages = Math.ceil(datas.length / itemPerPage);
   const pages = [];
-  for (let i = 1; i <=totalPages ; i++) {
+  for (let i = 1; i <= totalPages; i++) {
     pages.push(i);
   }
 
@@ -119,14 +103,14 @@ export const Overview = () => {
       setMinPageNumberLimit(minPageNumberLimit - pageNumberLimit);
     }
   };
-  
-  const handleFirstBtn = () =>{
-    setCurrentPage(1)
-  }
-  const handleLastBtn = () =>{
+
+  const handleFirstBtn = () => {
+    setCurrentPage(1);
+  };
+  const handleLastBtn = () => {
     console.log(totalPages);
-    setCurrentPage(totalPages)
-  }
+    setCurrentPage(totalPages);
+  };
 
   let pageIncrementBtn = null;
   if (pages.length > maxPageNumberLimit) {
@@ -188,44 +172,42 @@ export const Overview = () => {
   // GET ID FOR EDIT SHOW
 
   const [date, setNewDate] = useState();
+  const [showEdit, setShowEdit] = useState(false);
 
   const handleEditAssetById = async (name) => {
-   
-    // setLoading(true);
     try {
       const response = await overviewService.getAssetByAssetName(name);
-      // setRowData(response.data)
-      
-      setEditShow(true);
-      response.data['Tanggal Output'] = moment((response.data['Tanggal Output'])).format('YYYY-MM-DDTHH:MM')
-      response.data['BAST Output'] = moment((response.data['BAST Output'])).format('YYYY-MM-DDTHH:MM')
-      // let date = response.data['Tanggal Output'].toString()
-      // let datesplit = date.split("+") 
-      // let res = datesplit[0]
-      // response.data['Tanggal Output'] = res
-      // setNewDate(res)
 
-      // date = response.data['BAST Output'].toString()
-      // datesplit = date.split("+") 
-      // res = datesplit[0]
-      // response.data['BAST Output'] = res
-      
+      setEditShow(true);
+      response.data["Tanggal Output"] = moment(
+        response.data["Tanggal Output"]
+      ).format("YYYY-MM-DDTHH:MM");
+      response.data["BAST Output"] = moment(
+        response.data["BAST Output"]
+      ).format("YYYY-MM-DDTHH:MM");
+  
       setAssetEdit(response.data);
-      setImageBase64(response.data["Asset Image"])
+      // setImageBase64(response.data["Asset Image"]);
+      setShowEdit(!showEdit)
+      
+      console.log(response.data["Asset Image"]);
     } catch (e) {
       console.log(e);
-    } finally {
-      // setLoading(false);
-    }
+    } 
   };
+
+  useEffect(() => {
+    console.log('asset edit', assetEdit['Asset Image']);
+    setImageBase64(assetEdit['Asset Image']);
+    console.log("cek image", imageBase64);
+  }, [showEdit])
 
   const [assetEdit, setAssetEdit] = useState({});
   const [editShow, setEditShow] = useState(false);
 
   useEffect(() => {
-    setImageBase64(assetEdit["Asset Image"])
-  
-  }, [assetEdit['Asset Image']])
+    // setImageBase64(assetEdit["Asset Image"]);
+  }, [assetEdit]);
 
   const handleEditClose = () => {
     setEditShow(false);
@@ -235,53 +217,70 @@ export const Overview = () => {
     setEditShow(true);
     // setAssetEdit(data)
     handleEditAssetById(id);
-
   };
 
+  // UPLOAD IMAGE
+  const [selectedImage, setSelectedImage] = useState();
+  const [imageBase64, setImageBase64] = useState();
+  let reader = new FileReader();
 
-    // UPLOAD IMAGE
-    const [selectedImage, setSelectedImage] = useState();
-    const [imageBase64, setImageBase64] = useState('')
-    let reader = new FileReader();
-
-  const imageChange = (e) => {
-    
+  const imageChange = async (e) => {
     if (e.target.files && e.target.files.length > 0) {
-      setSelectedImage(e.target.files[0]);
-      reader.readAsDataURL(e.target.files[0]);
-      reader.onload = () => {setImageBase64(reader.result)}
+      const imageFiles = e.target.files[0]
+      console.log('originalFile instanceof Blob', imageFiles instanceof Blob); // true
+      console.log('originalFile size', (imageFiles.size / 1024 / 1024) , 'MB');
+      const options = {
+        maxSizeMB: 0.5,
+        // maxWidthOrHeight: 200,
+        useWebWorker: true
+      }
+      try {
+        const compressedImage = await imageCompression(imageFiles, options)
+        console.log('compressedImage instanceof Blob', compressedImage instanceof Blob); // true
+        console.log('compressedImage size', (compressedImage.size / 1024 / 1024) , 'MB');
+        setSelectedImage(compressedImage);
+        reader.readAsDataURL(compressedImage);
+        reader.onload = () => {setImageBase64(reader.result)};
+      } catch (error) {
+        console.log(error);
+      }
+
+      
     }
   };
 
-  const ref = useRef(null)
+  const ref = useRef(null);
 
   const removeSelectedImage = () => {
-    setSelectedImage();
-    ref.current.value = '';
+    setImageBase64("")
+    ref.current.value = "";
   };
 
   const onSubmitEditAsset = async (e) => {
     e.preventDefault();
-    setLoading(true)
+    setLoading(true);
     try {
       assetEdit["Tahun"] = Number(assetEdit["Tahun"]);
       assetEdit["Harga Perolehan"] = Number(assetEdit["Harga Perolehan"]);
-      assetEdit["Total Harga Perolehan"] = Number(assetEdit["Total Harga Perolehan"]
+      assetEdit["Total Harga Perolehan"] = Number(
+        assetEdit["Total Harga Perolehan"]
       );
       assetEdit["Kode Wilayah"] = Number(assetEdit["Kode Wilayah"]);
       assetEdit["Tahun Pembelian"] = Number(assetEdit["Tahun Pembelian"]);
       assetEdit["Kode Urut barang"] = Number(assetEdit["Kode Urut barang"]);
       assetEdit["Biaya Lain-Lain"] = Number(assetEdit["Biaya Lain-Lain"]);
-      assetEdit['BAST Output'] = moment((assetEdit['BAST Output'])).format()
-      assetEdit['Tanggal Output'] = moment((assetEdit['Tanggal Output'])).format()
+      assetEdit["BAST Output"] = moment(assetEdit["BAST Output"]).format();
+      assetEdit["Tanggal Output"] = moment(
+        assetEdit["Tanggal Output"]
+      ).format();
 
-      assetEdit["Asset Image"] = imageBase64
+      assetEdit["Asset Image"] = imageBase64;
 
       const response = await overviewService.updateAsset(
         assetEdit["Nomor Asset"],
         assetEdit
       );
-   
+
       setAssetEdit(response);
       if (response.status === "SUCCESS") {
         swal({
@@ -292,26 +291,25 @@ export const Overview = () => {
         });
       }
       setEditShow(false);
-      
-      getAssetsPagination(1)
+
+      getAssetsPagination(1);
       let event = {
         event: EVENT.UPDATE_ASSET,
-        user: userEvent.name
-      }
-      createEventLogOverview(event)
+        user: user.name,
+      };
+      createEventLogOverview(event);
     } catch (e) {
       console.log(e);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   };
-
 
   useEffect(() => {
     onGetAllSubProduct();
     onGetAllVendor();
     onGetAllLocation();
-    onGetCookie()
+    onGetCookie();
   }, []);
 
   const [subProductName, setSubProductName] = useState([]);
@@ -352,639 +350,829 @@ export const Overview = () => {
   };
 
   // GET ALL USER
-  const [user, setUser] = useState([]);
-  const onGetUser = async () => {
-    try {
-      const response = await userService.getUserByEmail();
-      setUser(response.data);
-    } catch (error) {
-    } finally {
-    }
-  };
-
+  // const [user, setUser] = useState([]);
+  // const onGetUser = async () => {
+  //   try {
+  //     const response = await userService.getUserByEmail();
+  //     setUser(response.data);
+  //   } catch (error) {
+  //   } finally {
+  //   }
+  // };
 
   const handleChange = (e) => {
     const newData = { ...assetEdit };
     newData[e.target.name] = e.target.value;
-    console.log('ini data baru',newData)
+    console.log("ini data baru", newData);
     setAssetEdit(newData);
-    
   };
 
   const handleCancel = (e) => {
     e.target.reset();
   };
 
-
   //Search
 
-  const [filter, setFilter] = useState('');
-  const [dropdownName, setDropdownName] = useState('');
+  const [filter, setFilter] = useState("");
+  const [dropdownName, setDropdownName] = useState("");
   const [fill, setFill] = useState(true);
 
   const onChangeFilter = (e) => {
     setFilter(e.target.value);
   };
 
-  const onChangeDropdown= (dropdownName) => {
-    setDropdownName(dropdownName)
-    setFill(false)
-  }
+  const onChangeDropdown = (dropdownName) => {
+    setDropdownName(dropdownName);
+    setFill(false);
+  };
 
   const onFilter = async () => {
-    if (dropdownName === 'Vendor') {
-      if (filter !== ''){
+    if (dropdownName === "Vendor") {
+      if (filter !== "") {
         try {
           const response = await overviewService.getAssetByVendor(filter);
           for (let i in response.data) {
-            response.data[i]['Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Harga Perolehan'])
-            response.data[i]['Biaya Lain-Lain'] = 'Rp' + thousands_separators(response.data[i]['Biaya Lain-Lain'])
-            response.data[i]['PPN'] = 'Rp' + thousands_separators(response.data[i]['PPN'])
-            response.data[i]['Penyusutan Perbulan'] = 'Rp' + thousands_separators(response.data[i]['Penyusutan Perbulan'])
-            response.data[i]['Total Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Total Harga Perolehan'])
-            response.data[i]['Total Penyusutan'] = 'Rp' + thousands_separators(response.data[i]['Total Penyusutan'])
-            response.data[i]['Nilai Asset saat ini'] = 'Rp' + thousands_separators(response.data[i]['Nilai Asset saat ini'])
-            response.data[i]['Tanggal Output'] = moment((response.data[i]['Tanggal Output'])).format('YYYY-MM-DDTHH:MM')
-            response.data[i]['BAST Output'] = moment((response.data[i]['BAST Output'])).format('YYYY-MM-DDTHH:MM')
+            response.data[i]["Harga Perolehan"] =
+              "Rp" + thousands_separators(response.data[i]["Harga Perolehan"]);
+            response.data[i]["Biaya Lain-Lain"] =
+              "Rp" + thousands_separators(response.data[i]["Biaya Lain-Lain"]);
+            response.data[i]["PPN"] =
+              "Rp" + thousands_separators(response.data[i]["PPN"]);
+            response.data[i]["Penyusutan Perbulan"] =
+              "Rp" +
+              thousands_separators(response.data[i]["Penyusutan Perbulan"]);
+            response.data[i]["Total Harga Perolehan"] =
+              "Rp" +
+              thousands_separators(response.data[i]["Total Harga Perolehan"]);
+            response.data[i]["Total Penyusutan"] =
+              "Rp" + thousands_separators(response.data[i]["Total Penyusutan"]);
+            response.data[i]["Nilai Asset saat ini"] =
+              "Rp" +
+              thousands_separators(response.data[i]["Nilai Asset saat ini"]);
+            response.data[i]["Tanggal Output"] = moment(
+              response.data[i]["Tanggal Output"]
+            ).format("YYYY-MM-DDTHH:MM");
+            response.data[i]["BAST Output"] = moment(
+              response.data[i]["BAST Output"]
+            ).format("YYYY-MM-DDTHH:MM");
           }
           setDatas(response.data);
-          setPageCount(Math.ceil(datas/10))
+          setPageCount(Math.ceil(datas / 10));
         } catch (e) {
           console.log(e);
         }
       } else {
-        getAssetsPagination(1)
+        getAssetsPagination(1);
       }
-      
-    } else if (dropdownName === 'Location') {
-      if (filter !== '') {
+    } else if (dropdownName === "Location") {
+      if (filter !== "") {
         try {
           const response = await overviewService.getAssetByLocation(filter);
           for (let i in response.data) {
-            response.data[i]['Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Harga Perolehan'])
-            response.data[i]['Biaya Lain-Lain'] = 'Rp' + thousands_separators(response.data[i]['Biaya Lain-Lain'])
-            response.data[i]['PPN'] = 'Rp' + thousands_separators(response.data[i]['PPN'])
-            response.data[i]['Penyusutan Perbulan'] = 'Rp' + thousands_separators(response.data[i]['Penyusutan Perbulan'])
-            response.data[i]['Total Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Total Harga Perolehan'])
-            response.data[i]['Total Penyusutan'] = 'Rp' + thousands_separators(response.data[i]['Total Penyusutan'])
-            response.data[i]['Nilai Asset saat ini'] = 'Rp' + thousands_separators(response.data[i]['Nilai Asset saat ini'])
-            response.data[i]['Tanggal Output'] = moment((response.data[i]['Tanggal Output'])).format('YYYY-MM-DDTHH:MM')
-            response.data[i]['BAST Output'] = moment((response.data[i]['BAST Output'])).format('YYYY-MM-DDTHH:MM')
+            response.data[i]["Harga Perolehan"] =
+              "Rp" + thousands_separators(response.data[i]["Harga Perolehan"]);
+            response.data[i]["Biaya Lain-Lain"] =
+              "Rp" + thousands_separators(response.data[i]["Biaya Lain-Lain"]);
+            response.data[i]["PPN"] =
+              "Rp" + thousands_separators(response.data[i]["PPN"]);
+            response.data[i]["Penyusutan Perbulan"] =
+              "Rp" +
+              thousands_separators(response.data[i]["Penyusutan Perbulan"]);
+            response.data[i]["Total Harga Perolehan"] =
+              "Rp" +
+              thousands_separators(response.data[i]["Total Harga Perolehan"]);
+            response.data[i]["Total Penyusutan"] =
+              "Rp" + thousands_separators(response.data[i]["Total Penyusutan"]);
+            response.data[i]["Nilai Asset saat ini"] =
+              "Rp" +
+              thousands_separators(response.data[i]["Nilai Asset saat ini"]);
+            response.data[i]["Tanggal Output"] = moment(
+              response.data[i]["Tanggal Output"]
+            ).format("YYYY-MM-DDTHH:MM");
+            response.data[i]["BAST Output"] = moment(
+              response.data[i]["BAST Output"]
+            ).format("YYYY-MM-DDTHH:MM");
           }
           setDatas(response.data);
-          setPageCount(Math.ceil(datas/10))  
+          setPageCount(Math.ceil(datas / 10));
         } catch (e) {
           console.log(e);
         }
       } else {
-        getAssetsPagination(1)
+        getAssetsPagination(1);
       }
-    } else if (dropdownName === 'Condition'){
+    } else if (dropdownName === "Condition") {
       if (filter) {
         try {
           const response = await overviewService.getAssetByCondition(filter);
           for (let i in response.data) {
-            response.data[i]['Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Harga Perolehan'])
-            response.data[i]['Biaya Lain-Lain'] = 'Rp' + thousands_separators(response.data[i]['Biaya Lain-Lain'])
-            response.data[i]['PPN'] = 'Rp' + thousands_separators(response.data[i]['PPN'])
-            response.data[i]['Penyusutan Perbulan'] = 'Rp' + thousands_separators(response.data[i]['Penyusutan Perbulan'])
-            response.data[i]['Total Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Total Harga Perolehan'])
-            response.data[i]['Total Penyusutan'] = 'Rp' + thousands_separators(response.data[i]['Total Penyusutan'])
-            response.data[i]['Nilai Asset saat ini'] = 'Rp' + thousands_separators(response.data[i]['Nilai Asset saat ini'])
-            response.data[i]['Tanggal Output'] = moment((response.data[i]['Tanggal Output'])).format('YYYY-MM-DDTHH:MM')
-            response.data[i]['BAST Output'] = moment((response.data[i]['BAST Output'])).format('YYYY-MM-DDTHH:MM')
+            response.data[i]["Harga Perolehan"] =
+              "Rp" + thousands_separators(response.data[i]["Harga Perolehan"]);
+            response.data[i]["Biaya Lain-Lain"] =
+              "Rp" + thousands_separators(response.data[i]["Biaya Lain-Lain"]);
+            response.data[i]["PPN"] =
+              "Rp" + thousands_separators(response.data[i]["PPN"]);
+            response.data[i]["Penyusutan Perbulan"] =
+              "Rp" +
+              thousands_separators(response.data[i]["Penyusutan Perbulan"]);
+            response.data[i]["Total Harga Perolehan"] =
+              "Rp" +
+              thousands_separators(response.data[i]["Total Harga Perolehan"]);
+            response.data[i]["Total Penyusutan"] =
+              "Rp" + thousands_separators(response.data[i]["Total Penyusutan"]);
+            response.data[i]["Nilai Asset saat ini"] =
+              "Rp" +
+              thousands_separators(response.data[i]["Nilai Asset saat ini"]);
+            response.data[i]["Tanggal Output"] = moment(
+              response.data[i]["Tanggal Output"]
+            ).format("YYYY-MM-DDTHH:MM");
+            response.data[i]["BAST Output"] = moment(
+              response.data[i]["BAST Output"]
+            ).format("YYYY-MM-DDTHH:MM");
           }
           setDatas(response.data);
-          setPageCount(Math.ceil(datas/10)) 
+          setPageCount(Math.ceil(datas / 10));
         } catch (e) {
           console.log(e);
         }
       } else {
-        getAssetsPagination(1)
-      } 
-    } else if (dropdownName === 'Item Name') {
-      if (filter !== '') {
+        getAssetsPagination(1);
+      }
+    } else if (dropdownName === "Item Name") {
+      if (filter !== "") {
         try {
           const response = await overviewService.getAssetByItemName(filter);
           for (let i in response.data) {
-            response.data[i]['Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Harga Perolehan'])
-            response.data[i]['Biaya Lain-Lain'] = 'Rp' + thousands_separators(response.data[i]['Biaya Lain-Lain'])
-            response.data[i]['PPN'] = 'Rp' + thousands_separators(response.data[i]['PPN'])
-            response.data[i]['Penyusutan Perbulan'] = 'Rp' + thousands_separators(response.data[i]['Penyusutan Perbulan'])
-            response.data[i]['Total Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Total Harga Perolehan'])
-            response.data[i]['Total Penyusutan'] = 'Rp' + thousands_separators(response.data[i]['Total Penyusutan'])
-            response.data[i]['Nilai Asset saat ini'] = 'Rp' + thousands_separators(response.data[i]['Nilai Asset saat ini'])
-            response.data[i]['Tanggal Output'] = moment((response.data[i]['Tanggal Output'])).format('YYYY-MM-DDTHH:MM')
-            response.data[i]['BAST Output'] = moment((response.data[i]['BAST Output'])).format('YYYY-MM-DDTHH:MM')
+            response.data[i]["Harga Perolehan"] =
+              "Rp" + thousands_separators(response.data[i]["Harga Perolehan"]);
+            response.data[i]["Biaya Lain-Lain"] =
+              "Rp" + thousands_separators(response.data[i]["Biaya Lain-Lain"]);
+            response.data[i]["PPN"] =
+              "Rp" + thousands_separators(response.data[i]["PPN"]);
+            response.data[i]["Penyusutan Perbulan"] =
+              "Rp" +
+              thousands_separators(response.data[i]["Penyusutan Perbulan"]);
+            response.data[i]["Total Harga Perolehan"] =
+              "Rp" +
+              thousands_separators(response.data[i]["Total Harga Perolehan"]);
+            response.data[i]["Total Penyusutan"] =
+              "Rp" + thousands_separators(response.data[i]["Total Penyusutan"]);
+            response.data[i]["Nilai Asset saat ini"] =
+              "Rp" +
+              thousands_separators(response.data[i]["Nilai Asset saat ini"]);
+            response.data[i]["Tanggal Output"] = moment(
+              response.data[i]["Tanggal Output"]
+            ).format("YYYY-MM-DDTHH:MM");
+            response.data[i]["BAST Output"] = moment(
+              response.data[i]["BAST Output"]
+            ).format("YYYY-MM-DDTHH:MM");
           }
           setDatas(response.data);
-          setPageCount(Math.ceil(datas/10))
+          setPageCount(Math.ceil(datas / 10));
         } catch (e) {
           console.log(e);
         }
       } else {
-        getAssetsPagination(1)
-      } 
-    } else if (dropdownName === 'Subproduct') {
-      if (filter !== 'nil') {
+        getAssetsPagination(1);
+      }
+    } else if (dropdownName === "Subproduct") {
+      if (filter !== "nil") {
         try {
           const response = await overviewService.getAssetBySubproduct(filter);
           for (let i in response.data) {
-            response.data[i]['Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Harga Perolehan'])
-            response.data[i]['Biaya Lain-Lain'] = 'Rp' + thousands_separators(response.data[i]['Biaya Lain-Lain'])
-            response.data[i]['PPN'] = 'Rp' + thousands_separators(response.data[i]['PPN'])
-            response.data[i]['Penyusutan Perbulan'] = 'Rp' + thousands_separators(response.data[i]['Penyusutan Perbulan'])
-            response.data[i]['Total Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Total Harga Perolehan'])
-            response.data[i]['Total Penyusutan'] = 'Rp' + thousands_separators(response.data[i]['Total Penyusutan'])
-            response.data[i]['Nilai Asset saat ini'] = 'Rp' + thousands_separators(response.data[i]['Nilai Asset saat ini'])
-            response.data[i]['Tanggal Output'] = moment((response.data[i]['Tanggal Output'])).format('YYYY-MM-DDTHH:MM')
-            response.data[i]['BAST Output'] = moment((response.data[i]['BAST Output'])).format('YYYY-MM-DDTHH:MM')
+            response.data[i]["Harga Perolehan"] =
+              "Rp" + thousands_separators(response.data[i]["Harga Perolehan"]);
+            response.data[i]["Biaya Lain-Lain"] =
+              "Rp" + thousands_separators(response.data[i]["Biaya Lain-Lain"]);
+            response.data[i]["PPN"] =
+              "Rp" + thousands_separators(response.data[i]["PPN"]);
+            response.data[i]["Penyusutan Perbulan"] =
+              "Rp" +
+              thousands_separators(response.data[i]["Penyusutan Perbulan"]);
+            response.data[i]["Total Harga Perolehan"] =
+              "Rp" +
+              thousands_separators(response.data[i]["Total Harga Perolehan"]);
+            response.data[i]["Total Penyusutan"] =
+              "Rp" + thousands_separators(response.data[i]["Total Penyusutan"]);
+            response.data[i]["Nilai Asset saat ini"] =
+              "Rp" +
+              thousands_separators(response.data[i]["Nilai Asset saat ini"]);
+            response.data[i]["Tanggal Output"] = moment(
+              response.data[i]["Tanggal Output"]
+            ).format("YYYY-MM-DDTHH:MM");
+            response.data[i]["BAST Output"] = moment(
+              response.data[i]["BAST Output"]
+            ).format("YYYY-MM-DDTHH:MM");
           }
           setDatas(response.data);
-          setPageCount(Math.ceil(datas/10))  
+          setPageCount(Math.ceil(datas / 10));
         } catch (e) {
           console.log(e);
         }
       } else {
-        getAssetsPagination(1)
+        getAssetsPagination(1);
       }
-    } else if (dropdownName === 'Product') {
-      if (filter !== '') {
+    } else if (dropdownName === "Product") {
+      if (filter !== "") {
         try {
           const response = await overviewService.getAssetByProduct(filter);
           for (let i in response.data) {
-            response.data[i]['Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Harga Perolehan'])
-            response.data[i]['Biaya Lain-Lain'] = 'Rp' + thousands_separators(response.data[i]['Biaya Lain-Lain'])
-            response.data[i]['PPN'] = 'Rp' + thousands_separators(response.data[i]['PPN'])
-            response.data[i]['Penyusutan Perbulan'] = 'Rp' + thousands_separators(response.data[i]['Penyusutan Perbulan'])
-            response.data[i]['Total Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Total Harga Perolehan'])
-            response.data[i]['Total Penyusutan'] = 'Rp' + thousands_separators(response.data[i]['Total Penyusutan'])
-            response.data[i]['Nilai Asset saat ini'] = 'Rp' + thousands_separators(response.data[i]['Nilai Asset saat ini'])
-            response.data[i]['Tanggal Output'] = moment((response.data[i]['Tanggal Output'])).format('YYYY-MM-DDTHH:MM')
-            response.data[i]['BAST Output'] = moment((response.data[i]['BAST Output'])).format('YYYY-MM-DDTHH:MM')
+            response.data[i]["Harga Perolehan"] =
+              "Rp" + thousands_separators(response.data[i]["Harga Perolehan"]);
+            response.data[i]["Biaya Lain-Lain"] =
+              "Rp" + thousands_separators(response.data[i]["Biaya Lain-Lain"]);
+            response.data[i]["PPN"] =
+              "Rp" + thousands_separators(response.data[i]["PPN"]);
+            response.data[i]["Penyusutan Perbulan"] =
+              "Rp" +
+              thousands_separators(response.data[i]["Penyusutan Perbulan"]);
+            response.data[i]["Total Harga Perolehan"] =
+              "Rp" +
+              thousands_separators(response.data[i]["Total Harga Perolehan"]);
+            response.data[i]["Total Penyusutan"] =
+              "Rp" + thousands_separators(response.data[i]["Total Penyusutan"]);
+            response.data[i]["Nilai Asset saat ini"] =
+              "Rp" +
+              thousands_separators(response.data[i]["Nilai Asset saat ini"]);
+            response.data[i]["Tanggal Output"] = moment(
+              response.data[i]["Tanggal Output"]
+            ).format("YYYY-MM-DDTHH:MM");
+            response.data[i]["BAST Output"] = moment(
+              response.data[i]["BAST Output"]
+            ).format("YYYY-MM-DDTHH:MM");
           }
           setDatas(response.data);
-          setPageCount(Math.ceil(datas/10)) 
+          setPageCount(Math.ceil(datas / 10));
         } catch (e) {
           console.log(e);
         }
       } else {
-        getAssetsPagination(1)
+        getAssetsPagination(1);
       }
     } else {
-      if (filter !== '') {
+      if (filter !== "") {
         try {
           const response = await overviewService.getAssetByCategory(filter);
           for (let i in response.data) {
-            response.data[i]['Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Harga Perolehan'])
-            response.data[i]['Biaya Lain-Lain'] = 'Rp' + thousands_separators(response.data[i]['Biaya Lain-Lain'])
-            response.data[i]['PPN'] = 'Rp' + thousands_separators(response.data[i]['PPN'])
-            response.data[i]['Penyusutan Perbulan'] = 'Rp' + thousands_separators(response.data[i]['Penyusutan Perbulan'])
-            response.data[i]['Total Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Total Harga Perolehan'])
-            response.data[i]['Total Penyusutan'] = 'Rp' + thousands_separators(response.data[i]['Total Penyusutan'])
-            response.data[i]['Nilai Asset saat ini'] = 'Rp' + thousands_separators(response.data[i]['Nilai Asset saat ini'])
-            response.data[i]['Tanggal Output'] = moment((response.data[i]['Tanggal Output'])).format('YYYY-MM-DDTHH:MM')
-            response.data[i]['BAST Output'] = moment((response.data[i]['BAST Output'])).format('YYYY-MM-DDTHH:MM')
+            response.data[i]["Harga Perolehan"] =
+              "Rp" + thousands_separators(response.data[i]["Harga Perolehan"]);
+            response.data[i]["Biaya Lain-Lain"] =
+              "Rp" + thousands_separators(response.data[i]["Biaya Lain-Lain"]);
+            response.data[i]["PPN"] =
+              "Rp" + thousands_separators(response.data[i]["PPN"]);
+            response.data[i]["Penyusutan Perbulan"] =
+              "Rp" +
+              thousands_separators(response.data[i]["Penyusutan Perbulan"]);
+            response.data[i]["Total Harga Perolehan"] =
+              "Rp" +
+              thousands_separators(response.data[i]["Total Harga Perolehan"]);
+            response.data[i]["Total Penyusutan"] =
+              "Rp" + thousands_separators(response.data[i]["Total Penyusutan"]);
+            response.data[i]["Nilai Asset saat ini"] =
+              "Rp" +
+              thousands_separators(response.data[i]["Nilai Asset saat ini"]);
+            response.data[i]["Tanggal Output"] = moment(
+              response.data[i]["Tanggal Output"]
+            ).format("YYYY-MM-DDTHH:MM");
+            response.data[i]["BAST Output"] = moment(
+              response.data[i]["BAST Output"]
+            ).format("YYYY-MM-DDTHH:MM");
           }
           setDatas(response.data);
-          setPageCount(Math.ceil(datas/10))
+          setPageCount(Math.ceil(datas / 10));
         } catch (e) {
           console.log(e);
         }
       } else {
-        getAssetsPagination(1)
+        getAssetsPagination(1);
       }
     }
-  }
-
+  };
 
   const onClearForm = () => {
-    ref.current.value = ''; 
+    ref.current.value = "";
     getAssetsPagination(1);
-  }
+  };
 
   //Pagination From Backend
-  const [pageCount, setPageCount] = useState(0)
+  const [pageCount, setPageCount] = useState(0);
 
   useEffect(() => {
-    getAssetsPagination(1)
-  }, [])
+    getAssetsPagination(1);
+  }, []);
 
   const thousands_separators = (num) => {
     var num_parts = num.toString().split(".");
     num_parts[0] = num_parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     return num_parts.join(".");
-  }
+  };
 
   const onCountAsset = async () => {
     try {
-      const response = await overviewService.getCountAllAsset()
-      setPageCount(Math.ceil(response.data/10))
+      const response = await overviewService.getCountAllAsset();
+      setPageCount(Math.ceil(response.data / 10));
     } catch (e) {
       console.log(e);
     }
-  }
+  };
 
   const getAssetsPagination = async (currentPage) => {
-    setLoading(true)
-    try{
-
-      const response = await overviewService.getAssetByPagination(currentPage)
+    setLoading(true);
+    try {
+      const response = await overviewService.getAssetByPagination(currentPage);
       for (let i in response.data) {
-        response.data[i]['Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Harga Perolehan'])
-        response.data[i]['Biaya Lain-Lain'] = 'Rp' + thousands_separators(response.data[i]['Biaya Lain-Lain'])
-        response.data[i]['PPN'] = 'Rp' + thousands_separators(response.data[i]['PPN'])
-        response.data[i]['Penyusutan Perbulan'] = 'Rp' + thousands_separators(response.data[i]['Penyusutan Perbulan'])
-        response.data[i]['Total Harga Perolehan'] = 'Rp' + thousands_separators(response.data[i]['Total Harga Perolehan'])
-        response.data[i]['Total Penyusutan'] = 'Rp' + thousands_separators(response.data[i]['Total Penyusutan'])
-        response.data[i]['Nilai Asset saat ini'] = 'Rp' + thousands_separators(response.data[i]['Nilai Asset saat ini'])
-        response.data[i]['Tanggal Output'] = moment((response.data[i]['Tanggal Output'])).format('YYYY-MM-DDTHH:MM')
-        response.data[i]['BAST Output'] = moment((response.data[i]['BAST Output'])).format('YYYY-MM-DDTHH:MM')
+        response.data[i]["Harga Perolehan"] =
+          "Rp" + thousands_separators(response.data[i]["Harga Perolehan"]);
+        response.data[i]["Biaya Lain-Lain"] =
+          "Rp" + thousands_separators(response.data[i]["Biaya Lain-Lain"]);
+        response.data[i]["PPN"] =
+          "Rp" + thousands_separators(response.data[i]["PPN"]);
+        response.data[i]["Penyusutan Perbulan"] =
+          "Rp" + thousands_separators(response.data[i]["Penyusutan Perbulan"]);
+        response.data[i]["Total Harga Perolehan"] =
+          "Rp" +
+          thousands_separators(response.data[i]["Total Harga Perolehan"]);
+        response.data[i]["Total Penyusutan"] =
+          "Rp" + thousands_separators(response.data[i]["Total Penyusutan"]);
+        response.data[i]["Nilai Asset saat ini"] =
+          "Rp" + thousands_separators(response.data[i]["Nilai Asset saat ini"]);
+        response.data[i]["Tanggal Output"] = moment(
+          response.data[i]["Tanggal Output"]
+        ).format("YYYY-MM-DDTHH:MM");
+        response.data[i]["BAST Output"] = moment(
+          response.data[i]["BAST Output"]
+        ).format("YYYY-MM-DDTHH:MM");
       }
       onCountAsset();
-      setDatas(response.data)
+      setDatas(response.data);
       console.log(response);
     } catch (e) {
       console.log(e);
-    } finally{
-      setLoading(false)
+    } finally {
+      setLoading(false);
     }
-  }
+  };
 
   const handlePageClick = async (data) => {
     console.log(data.selected);
     let currentPage = data.selected + 1;
-    getAssetsPagination(currentPage)
-  }
-  
+    getAssetsPagination(currentPage);
+  };
+
   //Event Log
-  const [event, setEvent] = useState({})
+  const [event, setEvent] = useState({});
 
   const createEventLogOverview = async (eventLoc) => {
     try {
-      const response = await eventLogService.createEventLog(eventLoc)
-      setEvent(response.data)
+      const response = await eventLogService.createEventLog(eventLoc);
+      setEvent(response.data);
     } catch (e) {
       console.log(e);
     }
-  }
+  };
 
-    //Get User
-    const { getCookie } = useAuth();
-    const[userEvent,setUserEvent]= useState({
-      name:'',
-      position:'',
-      role:'',
-      NIK:''
-    })
-    const onGetCookie = ()=>{
-    
-      let savedUserJsonString = getCookie("user")
-      let savedUser = JSON.parse(savedUserJsonString)
-      setUserEvent(prevObj=>({...prevObj,NIK:(savedUser.NIK),name:(savedUser.name),position:(savedUser.position), role:(savedUser.role)}))
-    
-      console.log(userEvent.name)
-    }
+  //Get User
+  const { getCookie } = useAuth();
+  const[user,setUser]= useState({
+    name:'',
+    role:'',
+    level_approval:'',
+    location_id:'',
+    tap:'',
+    cluster:'',
+    department: ''
+  })
+  const onGetCookie = ()=>{
+    let savedUserJsonString = getCookie("user")
+    let savedUser = JSON.parse(savedUserJsonString)
+    setUser(prevObj=>({...prevObj,name:(savedUser.name), role:(savedUser.role), level_approval:(savedUser.level_approval), location_id:(savedUser.location_id), tap:(savedUser.TAP), cluster:(savedUser.Cluster), department:(savedUser.department)}))
+  }
 
   return (
     <>
       {/* <Sidebar> */}
-        {/* <div className="body"> */}
-          <div className="overview-container">
-            <div className="overview-card">
-              {/* <div className="title-overview">
+      {/* <div className="body"> */}
+      <div className="overview-container">
+        <div className="overview-card">
+          {/* <div className="title-overview">
                 <p>List of Assets</p>
               </div> */}
-              <div className="table-container">
-                <div className="search-overview">
-                <div className="input-group mb-3">
-                <button className="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Search by {dropdownName}</button>
-                <ul className="dropdown-menu" >
-                  <li><a className="dropdown-item" onClick={() => {onChangeDropdown('Vendor')}}>Vendor</a></li>
-                  <li><a className="dropdown-item" onClick={() => {onChangeDropdown('Location')}}>Location</a></li>
-                  <li><a className="dropdown-item" onClick={() => {onChangeDropdown('Condition')}}>Condition</a></li>
-                  <li><a className="dropdown-item" onClick={() => {onChangeDropdown('Item Name')}}>Item Name</a></li>
-                  <li><a className="dropdown-item" onClick={() => {onChangeDropdown('Subproduct')}}>Subproduct</a></li>
-                  <li><a className="dropdown-item" onClick={() => {onChangeDropdown('Product')}}>Product</a></li>
-                  <li><a className="dropdown-item" onClick={() => {onChangeDropdown('Category')}}>Category</a></li>
+          <div className="table-container">
+            <div className="search-overview">
+              <div className="input-group mb-3">
+                <button
+                  className="btn btn-outline-secondary dropdown-toggle"
+                  type="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  Search by {dropdownName}
+                </button>
+                <ul className="dropdown-menu">
+                  <li>
+                    <a
+                      className="dropdown-item"
+                      onClick={() => {
+                        onChangeDropdown("Vendor");
+                      }}
+                    >
+                      Vendor
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      className="dropdown-item"
+                      onClick={() => {
+                        onChangeDropdown("Location");
+                      }}
+                    >
+                      Location
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      className="dropdown-item"
+                      onClick={() => {
+                        onChangeDropdown("Condition");
+                      }}
+                    >
+                      Condition
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      className="dropdown-item"
+                      onClick={() => {
+                        onChangeDropdown("Item Name");
+                      }}
+                    >
+                      Item Name
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      className="dropdown-item"
+                      onClick={() => {
+                        onChangeDropdown("Subproduct");
+                      }}
+                    >
+                      Subproduct
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      className="dropdown-item"
+                      onClick={() => {
+                        onChangeDropdown("Product");
+                      }}
+                    >
+                      Product
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      className="dropdown-item"
+                      onClick={() => {
+                        onChangeDropdown("Category");
+                      }}
+                    >
+                      Category
+                    </a>
+                  </li>
                 </ul>
-                <input ref={ref} disabled={fill} type="text" className="form-control" aria-label="Text input with dropdown button" onChange={onChangeFilter}/>
+                <input
+                  ref={ref}
+                  disabled={fill}
+                  type="text"
+                  className="form-control"
+                  aria-label="Text input with dropdown button"
+                  onChange={onChangeFilter}
+                />
                 <div className="input-group-append">
-                        <button value="submit" className="btn btn-primary form-button" onClick={onFilter}>
-                        <i className="fa fa-search"></i>
-                        </button>
-                        <button value="submit" className="btn btn-danger form-button" onClick={onClearForm}>
-                        <i className="fa fa-times"></i>
-                        </button>
+                  <button
+                    value="submit"
+                    className="btn btn-primary form-button"
+                    onClick={onFilter}
+                  >
+                    <i className="fa fa-search"></i>
+                  </button>
+                  <button
+                    value="submit"
+                    className="btn btn-danger form-button"
+                    onClick={onClearForm}
+                  >
+                    <i className="fa fa-times"></i>
+                  </button>
                 </div>
               </div>
-              </div>
-              <div className="table-box">
-                  <table className="table table-bordered table-striped table-responsive table-hover">
-                  <thead className="table-header">
+            </div>
+            <div className="table-box">
+              <table className="table table-bordered table-striped table-responsive table-hover">
+                <thead className="table-header">
+                  <tr>
+                    <th>No</th>
+                    <th style={{ minWidth: "150px" }}>Action</th>
+                    <th
+                      // onClick={() => sorting("Tanggal Output")}
+                      style={{ minWidth: "200px" }}
+                    >
+                      Purchase Date
+                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
+                    </th>
+                    <th
+                      // onClick={() => sortingNum("Tahun")}
+                      style={{ minWidth: "200px" }}
+                    >
+                      Year
+                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
+                    </th>
+                    <th
+                      // onClick={() => sorting("No. PO / Dokumenen Pendukung")}
+                      style={{ minWidth: "200px" }}
+                    >
+                      PO Number
+                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
+                    </th>
+                    <th
+                      // onClick={() => sorting("Vendor")}
+                      style={{ minWidth: "200px" }}
+                    >
+                      Vendor Name
+                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
+                    </th>
+                    <th
+                      // onClick={() => sorting("Nama Barang")}
+                      style={{ minWidth: "300px" }}
+                    >
+                      Item Name
+                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
+                    </th>
+                    <th
+                      // onClick={() => sortingNum("Harga Perolehan")}
+                      style={{ minWidth: "230px" }}
+                    >
+                      Acquisition Cost{" "}
+                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
+                    </th>
+                    <th
+                      // onClick={() => sortingNum("PPN")}
+                      style={{ minWidth: "200px" }}
+                    >
+                      PPN
+                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
+                    </th>
+                    <th
+                      // onClick={() => sortingNum("Biaya Lain-Lain")}
+                      style={{ minWidth: "200px" }}
+                    >
+                      Additional Cost{" "}
+                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
+                    </th>
+                    <th
+                      // onClick={() => sortingNum("Total Harga Perolehan")}
+                      style={{ minWidth: "270px" }}
+                    >
+                      Total Acquisition Cost{" "}
+                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
+                    </th>
+                    <th
+                      // onClick={() => sorting("Jenis Produk")}
+                      style={{ minWidth: "220px" }}
+                    >
+                      Subproduct Name{" "}
+                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
+                    </th>
+                    <th
+                      // onClick={() => sorting("Kategori Jenis Produk")}
+                      style={{ minWidth: "200px" }}
+                    >
+                      Product Name
+                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
+                    </th>
+                    <th
+                      // onClick={() => sorting("Kategori Aset Tetap")}
+                      style={{ minWidth: "200px" }}
+                    >
+                      Asset Category{" "}
+                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
+                    </th>
+                    <th
+                      // onClick={() => sorting("BAST Output")}
+                      style={{ minWidth: "200px" }}
+                    >
+                      BAST
+                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
+                    </th>
+                    <th
+                      // onClick={() => sorting("Kondisi")}
+                      style={{ minWidth: "200px" }}
+                    >
+                      Condition
+                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
+                    </th>
+                    <th
+                      // onClick={() => sorting("Insurance")}
+                      style={{ minWidth: "200px" }}
+                    >
+                      Insurance
+                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
+                    </th>
+                    <th
+                      // onClick={() => sorting("Lokasi")}
+                      style={{ minWidth: "200px" }}
+                    >
+                      Location
+                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
+                    </th>
+                    <th
+                      // onClick={() => sorting("User")}
+                      style={{ minWidth: "200px" }}
+                    >
+                      User
+                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
+                    </th>
+                    <th
+                      // onClick={() => sorting("Jabatan")}
+                      style={{ minWidth: "200px" }}
+                    >
+                      Position
+                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
+                    </th>
+                    <th
+                      // onClick={() => sorting("Initisal")}
+                      style={{ minWidth: "200px" }}
+                    >
+                      Initial
+                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
+                    </th>
+                    <th
+                      // onClick={() => sortingNum("Kode Wilayah")}
+                      style={{ minWidth: "200px" }}
+                    >
+                      Location ID
+                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
+                    </th>
+                    <th
+                      // onClick={() => sorting("Kode Asset")}
+                      style={{ minWidth: "200px" }}
+                    >
+                      Product Code
+                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
+                    </th>
+                    <th
+                      // onClick={() => sortingNum("Tahun Pembelian")}
+                      style={{ minWidth: "200px" }}
+                    >
+                      Purchase Year{" "}
+                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
+                    </th>
+                    <th
+                      // onClick={() => sortingNum("Kode Urut barang")}
+                      style={{ minWidth: "220px" }}
+                    >
+                      Item Order Code{" "}
+                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
+                    </th>
+                    <th
+                      // onClick={() => sorting("Nomor Asset")}
+                      style={{ minWidth: "200px" }}
+                    >
+                      Asset Number
+                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
+                    </th>
+                    <th
+                      // onClick={() => sortingNum("Masa Manfaat (Bulan)")}
+                      style={{ minWidth: "200px" }}
+                    >
+                      Useful Life
+                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
+                    </th>
+                    <th
+                      // onClick={() => sortingNum("Penyusutan Perbulan")}
+                      style={{ minWidth: "250px" }}
+                    >
+                      Monthly Depreciation{" "}
+                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
+                    </th>
+                    <th
+                      // onClick={() => sortingNum("Total Bulan Penyusutan")}
+                      style={{ minWidth: "240px" }}
+                    >
+                      Depreciation Month{" "}
+                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
+                    </th>
+                    <th
+                      // onClick={() => sortingNum("Total Penyusutan")}
+                      style={{ minWidth: "230px" }}
+                    >
+                      Total Depreciation{" "}
+                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
+                    </th>
+                    <th
+                      // onClick={() => sortingNum("Nilai Asset saat ini")}
+                      style={{ minWidth: "240px" }}
+                    >
+                      Current Asset Value{" "}
+                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {datas.length === 0 ? (
                     <tr>
-                      <th>No</th>
-                      <th style={{ minWidth: "150px" }}>Action</th>
-                      <th 
-                        // onClick={() => sorting("Tanggal Output")} 
-                        style={{ minWidth: "200px" }}>
-                        Purchase Date
-                        {/* <FaSort style={{ marginLeft: "10%" }} /> */}
-                      </th>
-                      <th
-                        // onClick={() => sortingNum("Tahun")}
-                        style={{ minWidth: "200px" }}
-                      >
-                        Year 
-                        {/* <FaSort style={{ marginLeft: "10%" }} /> */}
-                      </th>
-                      <th
-                        // onClick={() => sorting("No. PO / Dokumenen Pendukung")}
-                        style={{ minWidth: "200px" }}
-                      >
-                        PO Number 
-                        {/* <FaSort style={{ marginLeft: "10%" }} /> */}
-                      </th>
-                      <th
-                        // onClick={() => sorting("Vendor")}
-                        style={{ minWidth: "200px" }}
-                      >
-                        Vendor Name 
-                        {/* <FaSort style={{ marginLeft: "10%" }} /> */}
-                      </th>
-                      <th
-                        // onClick={() => sorting("Nama Barang")}
-                        style={{ minWidth: "300px" }}
-                      >
-                        Item Name 
-                        {/* <FaSort style={{ marginLeft: "10%" }} /> */}
-                      </th>
-                      <th
-                        // onClick={() => sortingNum("Harga Perolehan")}
-                        style={{ minWidth: "230px" }}
-                      >
-                        Acquisition Cost{" "}
-                        {/* <FaSort style={{ marginLeft: "10%" }} /> */}
-                      </th>
-                      <th
-                        // onClick={() => sortingNum("PPN")}
-                        style={{ minWidth: "200px" }}
-                      >
-                        PPN 
-                        {/* <FaSort style={{ marginLeft: "10%" }} /> */}
-                      </th>
-                      <th
-                        // onClick={() => sortingNum("Biaya Lain-Lain")}
-                        style={{ minWidth: "200px" }}
-                      >
-                        Additional Cost{" "}
-                        {/* <FaSort style={{ marginLeft: "10%" }} /> */}
-                      </th>
-                      <th
-                        // onClick={() => sortingNum("Total Harga Perolehan")}
-                        style={{ minWidth: "270px" }}
-                      >
-                        Total Acquisition Cost{" "}
-                        {/* <FaSort style={{ marginLeft: "10%" }} /> */}
-                      </th>
-                      <th
-                        // onClick={() => sorting("Jenis Produk")}
-                        style={{ minWidth: "220px" }}
-                      >
-                        Subproduct Name{" "}
-                        {/* <FaSort style={{ marginLeft: "10%" }} /> */}
-                      </th>
-                      <th
-                        // onClick={() => sorting("Kategori Jenis Produk")}
-                        style={{ minWidth: "200px" }}
-                      >
-                        Product Name 
-                        {/* <FaSort style={{ marginLeft: "10%" }} /> */}
-                      </th>
-                      <th
-                        // onClick={() => sorting("Kategori Aset Tetap")}
-                        style={{ minWidth: "200px" }}
-                      >
-                        Asset Category{" "}
-                        {/* <FaSort style={{ marginLeft: "10%" }} /> */}
-                      </th>
-                      <th
-                        // onClick={() => sorting("BAST Output")}
-                        style={{ minWidth: "200px" }}
-                      >
-                        BAST
-                         {/* <FaSort style={{ marginLeft: "10%" }} /> */}
-                      </th>
-                      <th
-                        // onClick={() => sorting("Kondisi")}
-                        style={{ minWidth: "200px" }}
-                      >
-                        Condition 
-                        {/* <FaSort style={{ marginLeft: "10%" }} /> */}
-                      </th>
-                      <th
-                        // onClick={() => sorting("Insurance")}
-                        style={{ minWidth: "200px" }}
-                      >
-                        Insurance 
-                        {/* <FaSort style={{ marginLeft: "10%" }} /> */}
-                      </th>
-                      <th
-                        // onClick={() => sorting("Lokasi")}
-                        style={{ minWidth: "200px" }}
-                      >
-                        Location 
-                        {/* <FaSort style={{ marginLeft: "10%" }} /> */}
-                      </th>
-                      <th
-                        // onClick={() => sorting("User")}
-                        style={{ minWidth: "200px" }}
-                      >
-                        User 
-                        {/* <FaSort style={{ marginLeft: "10%" }} /> */}
-                      </th>
-                      <th
-                        // onClick={() => sorting("Jabatan")}
-                        style={{ minWidth: "200px" }}
-                      >
-                        Position 
-                        {/* <FaSort style={{ marginLeft: "10%" }} /> */}
-                      </th>
-                      <th
-                        // onClick={() => sorting("Initisal")}
-                        style={{ minWidth: "200px" }}
-                      >
-                        Initial 
-                        {/* <FaSort style={{ marginLeft: "10%" }} /> */}
-                      </th>
-                      <th
-                        // onClick={() => sortingNum("Kode Wilayah")}
-                        style={{ minWidth: "200px" }}
-                      >
-                        Location ID 
-                        {/* <FaSort style={{ marginLeft: "10%" }} /> */}
-                      </th>
-                      <th
-                        // onClick={() => sorting("Kode Asset")}
-                        style={{ minWidth: "200px" }}
-                      >
-                        Product Code 
-                        {/* <FaSort style={{ marginLeft: "10%" }} /> */}
-                      </th>
-                      <th
-                        // onClick={() => sortingNum("Tahun Pembelian")}
-                        style={{ minWidth: "200px" }}
-                      >
-                        Purchase Year{" "}
-                        {/* <FaSort style={{ marginLeft: "10%" }} /> */}
-                      </th>
-                      <th
-                        // onClick={() => sortingNum("Kode Urut barang")}
-                        style={{ minWidth: "220px" }}
-                      >
-                        Item Order Code{" "}
-                        {/* <FaSort style={{ marginLeft: "10%" }} /> */}
-                      </th>
-                      <th
-                        // onClick={() => sorting("Nomor Asset")}
-                        style={{ minWidth: "200px" }}
-                      >
-                        Asset Number 
-                        {/* <FaSort style={{ marginLeft: "10%" }} /> */}
-                      </th>
-                      <th
-                        // onClick={() => sortingNum("Masa Manfaat (Bulan)")}
-                        style={{ minWidth: "200px" }}
-                      >
-                        Useful Life 
-                        {/* <FaSort style={{ marginLeft: "10%" }} /> */}
-                      </th>
-                      <th
-                        // onClick={() => sortingNum("Penyusutan Perbulan")}
-                        style={{ minWidth: "250px" }}
-                      >
-                        Monthly Depreciation{" "}
-                        {/* <FaSort style={{ marginLeft: "10%" }} /> */}
-                      </th>
-                      <th
-                        // onClick={() => sortingNum("Total Bulan Penyusutan")}
-                        style={{ minWidth: "240px" }}
-                      >
-                        Depreciation Month{" "}
-                        {/* <FaSort style={{ marginLeft: "10%" }} /> */}
-                      </th>
-                      <th
-                        // onClick={() => sortingNum("Total Penyusutan")}
-                        style={{ minWidth: "230px" }}
-                      >
-                        Total Depreciation{" "}
-                        {/* <FaSort style={{ marginLeft: "10%" }} /> */}
-                      </th>
-                      <th
-                        // onClick={() => sortingNum("Nilai Asset saat ini")}
-                        style={{ minWidth: "240px" }}
-                      >
-                        Current Asset Value{" "}
-                        {/* <FaSort style={{ marginLeft: "10%" }} /> */}
-                      </th>
+                      <th colSpan="31">Data is not found</th>
                     </tr>
-                  </thead>
-                  <tbody>
-                    {datas.length === 0 ? (
-                      <tr> 
-                        <th colSpan='31'>Data is not found</th>
+                  ) : (
+                    datas.map((data, index) => (
+                      <tr key={data["Nomor Asset"]}>
+                        <th>{index + 1}</th>
+                        <th style={{ fontSize: "30px" }}>
+                          <a
+                            onClick={() => {
+                              handleViewShow(setRowData(data));
+                            }}
+                            className="view"
+                            data-toggle="modal"
+                            style={{ cursor: "pointer", width: "50%" }}
+                          >
+                            <i
+                              className="material-icons"
+                              data-toggle="tooltip"
+                              title="View"
+                              style={{ fontSize: "25px", color: "darkblue" }}
+                            >
+                              &#xe8f4;
+                            </i>
+                          </a>
+                          <a
+                            target="_blank"
+                            href={`http://api.qrserver.com/v1/create-qr-code/?data= Asset Number: ${data["Nomor Asset"]}%0A Purchase Date: ${data["Tanggal Output"]}%0A Asset Name: ${data["Nama Barang"]}%0A Asset Category: ${data["Kategori Jenis Produk"]}%0A Product Name: ${data["Jenis Produk"]}%0A Location: ${data["Lokasi"]}%0A PO Number: ${data["No. PO / Dokumenen Pendukung"]}%0A Lifetime: ${data["Masa Manfaat (Bulan)"]}%0A Value: ${data["Nilai Asset saat ini"]}%0A Vendor: ${data["Vendor"]}&size=${size}x${size}&bgcolor=${bgColor}`}
+                            download="QRCode"
+                          >
+                            <i
+                              className="material-icons"
+                              data-toggle="tooltip"
+                              title="View"
+                              style={{ fontSize: "25px", color: "black" }}
+                            >
+                              &#xe00a;
+                            </i>
+                          </a>
+                          <a
+                            onClick={() => {
+                              handleEditShow(data["Nomor Asset"]);
+                            }}
+                            className="edit"
+                            data-toggle="modal"
+                            style={{ cursor: "pointer" }}
+                          >
+                            <i
+                              className="material-icons"
+                              data-toggle="tooltip"
+                              title="Edit"
+                              style={{ fontSize: "25px" }}
+                            >
+                              &#xe3c9;
+                            </i>
+                          </a>
+                        </th>
+                        <td>{data["Tanggal Output"]}</td>
+                        <td>{data["Tahun"]}</td>
+                        <td>{data["No. PO / Dokumenen Pendukung"]}</td>
+                        <td>{data["Vendor"]}</td>
+                        <td>{data["Nama Barang"]}</td>
+                        <td>{data["Harga Perolehan"]}</td>
+                        <td>{data["PPN"]}</td>
+                        <td>{data["Biaya Lain-Lain"]}</td>
+                        <td>{data["Total Harga Perolehan"]}</td>
+                        <td>{data["Jenis Produk"]}</td>
+                        <td>{data["Kategori Jenis Produk"]}</td>
+                        <td>{data["Kategori Aset Tetap"]}</td>
+                        <td>{data["BAST Output"]}</td>
+                        <td>{data["Kondisi"]}</td>
+                        <td>{data["Insurance"]}</td>
+                        <td>{data["Lokasi"]}</td>
+                        <td>{data["User"]}</td>
+                        <td>{data["Jabatan"]}</td>
+                        <td>{data["Initisal"]}</td>
+                        <td>{data["Kode Wilayah"]}</td>
+                        <td>{data["Kode Asset"]}</td>
+                        <td>{data["Tahun Pembelian"]}</td>
+                        <td>{data["Kode Urut barang"]}</td>
+                        <td>{data["Nomor Asset"]}</td>
+                        <td>{data["Masa Manfaat (Bulan)"]}</td>
+                        <td>{data["Penyusutan Perbulan"]}</td>
+                        <td>{data["Total Bulan Penyusutan"]}</td>
+                        <td>{data["Total Penyusutan"]}</td>
+                        <td>{data["Nilai Asset saat ini"]}</td>
                       </tr>
-                    ) : (
-                      datas.map((data, index) => (
-                        <tr key={data["Nomor Asset"]}>
-                          <th>{index + 1}</th>
-                          <th style={{fontSize:'30px'}}>
-                            <a
-                              onClick={() => {
-                                handleViewShow(setRowData(data));
-                              }}
-                              className="view"
-                              data-toggle="modal"
-                              style={{ cursor: "pointer", width: '50%'}}
-                            >
-                              <i
-                                className="material-icons"
-                                data-toggle="tooltip"
-                                title="View"
-                                style={{fontSize: '25px', color:'darkblue'}} 
-                              >
-                                &#xe8f4;
-                              </i>
-                            </a>
-                            <a
-                              target="_blank"
-                              href={`http://api.qrserver.com/v1/create-qr-code/?data= Asset Number: ${data["Nomor Asset"]}%0A Purchase Date: ${data['Tanggal Output']}%0A Asset Name: ${data["Nama Barang"]}%0A Asset Category: ${data["Kategori Jenis Produk"]}%0A Product Name: ${data["Jenis Produk"]}%0A Location: ${data["Lokasi"]}%0A PO Number: ${data["No. PO / Dokumenen Pendukung"]}%0A Lifetime: ${data['Masa Manfaat (Bulan)']}%0A Value: ${data['Nilai Asset saat ini']}%0A Vendor: ${data['Vendor']}&size=${size}x${size}&bgcolor=${bgColor}`}
-                              download="QRCode"
-                            >
-                              <i
-                                className="material-icons"
-                                data-toggle="tooltip"
-                                title="View"
-                                style={{fontSize: '25px', color:'black'}} 
-                              >
-                                &#xe00a;
-                              </i>
-                            </a>
-                            <a
-                              onClick={() => {
-                                handleEditShow(data["Nomor Asset"]);
-                              }}
-                              className="edit"
-                              data-toggle="modal"
-                              style={{ cursor: "pointer" }}
-                            >
-                              <i
-                                className="material-icons"
-                                data-toggle="tooltip"
-                                title="Edit"
-                                style={{fontSize: '25px'}} 
-                              >
-                                &#xe3c9;
-                              </i>
-                            </a>
-                          </th>
-                          <td>{data["Tanggal Output"]}</td>
-                          <td>{data["Tahun"]}</td>
-                          <td>{data["No. PO / Dokumenen Pendukung"]}</td>
-                          <td>{data["Vendor"]}</td>
-                          <td>{data["Nama Barang"]}</td>
-                          <td>{data["Harga Perolehan"]}</td>
-                          <td>{data["PPN"]}</td>
-                          <td>{data["Biaya Lain-Lain"]}</td>
-                          <td>{data["Total Harga Perolehan"]}</td>
-                          <td>{data["Jenis Produk"]}</td>
-                          <td>{data["Kategori Jenis Produk"]}</td>
-                          <td>{data["Kategori Aset Tetap"]}</td>
-                          <td>{data["BAST Output"]}</td>
-                          <td>{data["Kondisi"]}</td>
-                          <td>{data["Insurance"]}</td>
-                          <td>{data["Lokasi"]}</td>
-                          <td>{data["User"]}</td>
-                          <td>{data["Jabatan"]}</td>
-                          <td>{data["Initisal"]}</td>
-                          <td>{data["Kode Wilayah"]}</td>
-                          <td>{data["Kode Asset"]}</td>
-                          <td>{data["Tahun Pembelian"]}</td>
-                          <td>{data["Kode Urut barang"]}</td>
-                          <td>{data["Nomor Asset"]}</td>
-                          <td>{data["Masa Manfaat (Bulan)"]}</td>
-                          <td>{data["Penyusutan Perbulan"]}</td>
-                          <td>{data["Total Bulan Penyusutan"]}</td>
-                          <td>{data["Total Penyusutan"]}</td>
-                          <td>{data["Nilai Asset saat ini"]}</td>
-                        </tr>
-                      ))
-                    )}
-                  </tbody>
-                </table>
-                </div>
-              </div>
-              {/* <div className="clearfix" style={{marginRight:'2vw'}}>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          {/* <div className="clearfix" style={{marginRight:'2vw'}}>
             <div className="hint-text">
               Showing <b> {currentItems.length} </b> out of <b>{datas.length}</b>{" "}
               enteries
@@ -1024,13 +1212,16 @@ export const Overview = () => {
               </a>
             </li>
           </ul> */}
-          <div className="clearfix" style={{marginRight:'2vw', marginTop:'2vh'}}>
-              <ReactPaginate
-              previousLabel={'prev'}
-              nextLabel={'next'}
-              breakLabel={'...'}
+          <div
+            className="clearfix"
+            style={{ marginRight: "2vw", marginTop: "2vh" }}
+          >
+            <ReactPaginate
+              previousLabel={"prev"}
+              nextLabel={"next"}
+              breakLabel={"..."}
               // pageCount = {Math.ceil(datas.length/10)}
-              pageCount = {pageCount}
+              pageCount={pageCount}
               marginPagesDisplayed={2}
               pageRangeDisplayed={3}
               onPageChange={handlePageClick}
@@ -1046,11 +1237,12 @@ export const Overview = () => {
               activeClassName={"active"}
             />
           </div>
-            </div>
-          </div>
-        {/* </div> */}
-        <div className="model-box-view">
-        <Modal dialogClassName="view-modal"
+        </div>
+      </div>
+      {/* </div> */}
+      <div className="model-box-view">
+        <Modal
+          dialogClassName="view-modal"
           show={viewShow}
           onHide={handleViewClose}
           backdrop="static"
@@ -1063,7 +1255,7 @@ export const Overview = () => {
             <div>
               <div className="form-group">
                 <div className="image-view">
-                 <img src={rowData["Asset Image"]} ></img>
+                  <img src={rowData["Asset Image"]}></img>
                 </div>
                 <label>No Asset</label>
                 <input
@@ -1138,8 +1330,7 @@ export const Overview = () => {
               </div>
             </div>
           </Modal.Body>
-          <Modal.Footer>
-          </Modal.Footer>
+          <Modal.Footer></Modal.Footer>
         </Modal>
       </div>
 
@@ -1191,7 +1382,7 @@ export const Overview = () => {
                       <option value="">Select Vendor</option>
 
                       {vendor.map((item) => (
-                        <option key={item.name} value={assetEdit.name}>
+                        <option key={item.name} value={item.name}>
                           {item.name}
                         </option>
                       ))}
@@ -1207,7 +1398,10 @@ export const Overview = () => {
                     >
                       <option value="">Select Location</option>
                       {locations.map((item, index) => (
-                        <option key={item.ID} value={item.ID}>
+                        <option
+                          key={item["kode wilayah"]}
+                          value={item["kode wilayah"]}
+                        >
                           {item.location}
                         </option>
                       ))}
@@ -1238,14 +1432,71 @@ export const Overview = () => {
                     />
                   </div>
                   <div className="inputBox">
-                          <span>Purchase Date :</span>
-                          <input type='datetime-local' required name='Tanggal Output' value={assetEdit['Tanggal Output']} onChange={handleChange}/>
-                      </div>
-                      <div className="inputBox">
-                          <span>BAST :</span>
-                          <input type='datetime-local'  required name='BAST Output' value={assetEdit['BAST Output']} onChange={handleChange}/>
-                      </div>
+                    <span>Purchase Date :</span>
+                    <input
+                      type="datetime-local"
+                      required
+                      name="Tanggal Output"
+                      value={assetEdit["Tanggal Output"]}
+                      onChange={handleChange}
+                    />
+                  </div>
                   <div className="inputBox">
+                    <span>BAST :</span>
+                    <input
+                      type="datetime-local"
+                      required
+                      name="BAST Output"
+                      value={assetEdit["BAST Output"]}
+                      onChange={handleChange}
+                    />
+                  </div>
+                 
+                </div>
+                <div className="col">
+                  <div className="asset-image-container">
+                    <div className="image-box">
+                      {imageBase64 && (
+                        <div className="image">
+                          {" "}
+                          <img
+                            src={imageBase64}
+                            className="image"
+                            style={{ width: "200px", height: "140px" }}
+                          />
+                          <button
+                            onClick={removeSelectedImage}
+                            className="cancel"
+                          >
+                            Remove the image
+                          </button>
+                        </div>
+                       )} 
+                    </div>
+                    <input
+                      id="upload"
+                      accept="image/*"
+                      type="file"
+                      name="Asset Image"
+                      onChange={imageChange}
+                      ref={ref}
+                    />
+                  </div>
+                  {/* <div className="inputBox" style={{ marginTop: "30px" }}>
+                  <span>PPN :</span>
+                    <select
+                    required
+                    name="PPN"
+                    value={assetEdit.PPN}
+                    onChange={handleChange}
+                    style={{width:'100%'}}
+                  >
+                    <option value="">Select Condition</option>
+                    <option value='1'>Yes</option>
+                    <option value='0'>No</option>
+                  </select>
+                  </div> */}
+                   <div className="inputBox">
                     <span>Purchase Price :</span>
                     <input
                       type="number"
@@ -1265,47 +1516,6 @@ export const Overview = () => {
                       onChange={handleChange}
                     />
                   </div>
-                </div>
-                <div className="col">
-                  <div className="asset-image-container">
-                    <div className="image-box">
-                      {selectedImage && (
-                        <div className="image">
-                          {" "}
-                          <img
-                            src={imageBase64 && imageBase64}
-                            className="image"
-                            style={{width:'200px', height:'140px'}}
-                           
-                            />
-                            <button
-                              onClick={removeSelectedImage}
-                              className="cancel"
-                            >
-                              Remove the image
-                            </button>
-                        </div>
-                      )}
-                    </div>
-                    <input
-                      id="upload"
-                      accept="image/*"
-                      type="file"
-                      name="Asset Image"
-                      onChange={imageChange}
-                      ref={ref}
-                    />
-                  </div>
-                  <div className="inputBox" style={{marginTop:'30px'}}>
-                  <span>PPN :</span>
-                  <input
-                    type="text"
-                    required
-                    name="PPN"
-                    value={assetEdit["PPN"]}
-                    onChange={handleChange}
-                  />
-                </div>
                   <div className="inputBox">
                     <span>Insurance</span>
                     <select
@@ -1319,17 +1529,6 @@ export const Overview = () => {
                       <option>Belum</option>
                     </select>
                   </div>
-
-                  <div className="inputBox">
-                    <span>Purchase Year :</span>
-                    <input
-                      type="number"
-                      required
-                      name="Tahun Pembelian"
-                      value={assetEdit["Tahun Pembelian"]}
-                      onChange={handleChange}
-                    />
-                  </div>
                   <div className="inputBox">
                     <span>User :</span>
                     <input
@@ -1338,41 +1537,27 @@ export const Overview = () => {
                       name="User"
                       value={assetEdit.User}
                       onChange={handleChange}
-                      readOnly
                     />
                   </div>
                   <div className="inputBox">
-                    <span>Initial :</span>
+                    <span>Position :</span>
                     <input
                       type="text"
                       required
-                      name="Initisal"
-                      value={assetEdit["Initisal"]}
+                      name="Jabatan"
+                      value={assetEdit.Jabatan}
                       onChange={handleChange}
                     />
                   </div>
                   <div className="inputBox">
-                    <div className="inputBox">
-                      <span>Year :</span>
-                      <input
-                        type="number"
-                        required
-                        name="Tahun"
-                        value={assetEdit.Tahun}
-                        onChange={handleChange}
-                      />
-                    </div>
-
-                    <div className="inputBox">
-                      <span>Item Order Code :</span>
-                      <input
-                        type="number"
-                        required
-                        name="Kode Urut barang"
-                        value={assetEdit["Kode Urut barang"]}
-                        onChange={handleChange}
-                      />
-                    </div>
+                    <span>Tracking Number :</span>
+                    <input
+                      type="text"
+                      required
+                      name="Nomor Resi"
+                      value={assetEdit['Nomor Resi']}
+                      onChange={handleChange}
+                    />
                   </div>
                   <div className="button-asset">
                     <button
@@ -1395,7 +1580,7 @@ export const Overview = () => {
           </div>
         </div>
       )}
-      {isLoading && <Loading/>}
+      {isLoading && <Loading />}
       {/* </Sidebar> */}
     </>
   );

@@ -12,23 +12,23 @@ export const Dashboard = () => {
     const [isLoading, setIsloading] = useState(false)
     const { getCookie } = useAuth();
     const[user,setUser]= useState({
-      name:'',
-      position:'',
-      role:'',
-      NIK:''
+        name:'',
+        role:'',
+        level_approval:'',
+        location_id:'',
+        tap:'',
+        cluster:'',
+        department: ''
     })
-
     const onGetCookie = ()=>{
-    
-      let savedUserJsonString = getCookie("user")
-      let savedUser = JSON.parse(savedUserJsonString)
-      setUser(prevObj=>({...prevObj,NIK:(savedUser.NIK),name:(savedUser.name),position:(savedUser.position), role:(savedUser.role)}))
-    
+        let savedUserJsonString = getCookie("user")
+        let savedUser = JSON.parse(savedUserJsonString)
+        setUser(prevObj=>({...prevObj,name:(savedUser.name), role:(savedUser.role), level_approval:(savedUser.level_approval), location_id:(savedUser.location_id), tap:(savedUser.TAP), cluster:(savedUser.Cluster), department:(savedUser.department)}))
     }
 
     const getAllEventLog = async () => {
         try{
-            if (user.role === 'GA') {
+            if (user.role === 'Manager GA' || user.role === 'Admin') {
                 const response = await eventLogService.getEventLog()
                 for (let i in response.data) {
                     response.data[i]['CreatedAt'] = moment((response.data[i]['CreatedAt'])).format('YYYY-MM-DDTHH:MM')

@@ -17,5 +17,7 @@ export const EVENT = {
     UPDATE_ASSET: 'updated asset data',
     DELETE_ASSET: 'deleted asset data',
     IMPORT_DATA: 'imported excel data',
-    
+    CREATE_USER: 'inserted new user data',
+    UPDATE_USER: 'updated user data',
+    DELETE_USER: 'deleted asset data'
 }

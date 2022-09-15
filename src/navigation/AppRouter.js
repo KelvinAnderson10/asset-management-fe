@@ -13,9 +13,11 @@ import { AssetCategory } from "../pages/AssetCategory/AssetCategory";
 import { AssetItem } from "../pages/AssetItem/AssetItem";
 import { Login } from "../pages/Login/Login";
 import { ProtectedPage } from "../services/ProtectedPage";
-import { FormPO } from "../pages/PurchaseOrder/FormPO";
+import { FormPO } from "../pages/PurchaseOrderInv/FormPO";
 import { UserManage } from "../pages/User/User";
 import { Main } from "../pages/Overview/Main";
+import { Approval } from "../pages/Approval/Approval";
+import { Settings } from "../pages/Settings/Settings";
 
 
 
@@ -35,6 +37,8 @@ export const AppRouter = () => {
         <Route path="/data-management/user" element={<UserManage />} />
         <Route path="/upload-data" element={<ImportData />} />
         <Route path="/purchase-request" element={<FormPO/>} />
+        <Route path="/approval-data" element={<Approval/>} />
+        <Route path="/settings" element={<Settings/>} />
         <Route path="*" element={<PageNotFound />} />
       </Route>
     </Routes>

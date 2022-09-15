@@ -21,15 +21,13 @@ export const Login = () => {
   const [isLoading, setLoading] = useState(false)
   const [user, setUser] = useState({
     name:'',
-    position:'',
     role:'',
+    level_approval:'',
     location_id:'',
     tap:'',
-    cluster:''
+    cluster:'',
+    department: ''
   })
-
-
-
 
   const validateEmail = async (e) => {
     setLoading(true)
@@ -38,8 +36,7 @@ export const Login = () => {
       const response = await userService.getUserByEmail(email); 
       console.log(response)
       setEmail(response.data.email);
-      setUser(prevObj=>({...prevObj,name:(response.data.name),position:(response.data.position), role:(response.data.role), location_id:(response.data.location_id), tap:(response.data.TAP), cluster:(response.data.Cluster)}))
-      // setUser(response.data)
+      setUser(prevObj=>({...prevObj,name:(response.data.name), role:(response.data.role), level_approval:(response.data.level_approval), location_id:(response.data.location_id), tap:(response.data.TAP), cluster:(response.data.Cluster), department:(response.data.department)}))
       setOTP(response.otp);
       setShowOTPForm(true);
     } catch (error) {
@@ -66,7 +63,6 @@ export const Login = () => {
 
   const validateOTP = () => {
     if (OTPInput == OTP) {
-      // setCookie("OTP", OTP, 90);
       setCookie("user",user,200)
     } else {
       Failed("Wrong OTP");
@@ -153,6 +149,7 @@ export const Login = () => {
                   }}
                   containerClassName="otpContainer"
                   inputClassName="otpInputContainer"
+                  allowedCharacters="numeric"
                 ></AuthCode>
                 <h6 className="message">If you cant'find the OTP in your inbox, please check your spam folder</h6>
                 <button type="submit" onClick={validateOTP} className="btn">

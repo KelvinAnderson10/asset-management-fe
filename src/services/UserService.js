@@ -1,6 +1,6 @@
 import React from "react";
 
-export const userService = ({ doGet,doPost }) => {
+export const userService = ({ doGet,doPost,doDelete,doPut }) => {
   const getUserByEmail = async (email) => {
     try {
       return await doGet({ url: `/login/${email}` });
@@ -26,7 +26,13 @@ const getUserByName = async (name) => {
     throw e;
   }
 };
-
+const getUserByNameLike = async (name) => {
+  try {
+    return await doGet({ url: `/api/user/name?name=${name}` });
+  } catch (e) {
+    throw e;
+  }
+};
 const getAllUser = async () => {
   try {
     return await doGet({ url: `/api/user` });
@@ -35,5 +41,25 @@ const getAllUser = async () => {
   }
 };
 
-  return { getUserByEmail, createUser,getUserByName, getAllUser };
+const updateUser = async (name,newUser) => {
+  try {
+      return await doPut({
+          url: `/api/user/${name}`, data: newUser
+          
+      })
+  } catch (e) {
+      throw e;
+  }
+}
+
+const deleteUser = async (name) => {
+  try {
+      return await doDelete({url: `/api/user/${name}`
+   })
+  } catch (e) {
+      throw e;
+  }
+}
+
+  return {getUserByNameLike, updateUser, deleteUser,getUserByEmail, createUser,getUserByName, getAllUser };
 };
