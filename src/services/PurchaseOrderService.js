@@ -5,7 +5,7 @@ export const purchaseOrderService = ({doGet,doPost,doPut,doDelete}) => {
     const createPO = async (newAsset) => {
         try {
             return await doPost({
-                url: '/api/purchaseOrder', data: newAsset
+                url: '/api/po', data: newAsset
                 
             })
         } catch (e) {
