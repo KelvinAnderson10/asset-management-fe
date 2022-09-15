@@ -15,6 +15,7 @@ export const Settings = () => {
         try {
             const response = await generalSettingService.getGeneralSetting();
             setData(response.data)
+            console.log(response.data);
         } catch (e) {
             console.log(e)
         }
@@ -50,8 +51,8 @@ export const Settings = () => {
                   <input
                     type="text"
                     required
-                    name="PPN"
-                    // defaultValue={data.PPN}
+                    name="ppn"
+                    defaultValue={data.ppn}
                     style={{width:'95%'}}
                   />
                 </div>
@@ -60,8 +61,8 @@ export const Settings = () => {
                   <input
                     type="text"
                     required
-                    name="Initisal"
-                    // defaultValue={data.PPN}
+                    name="initisal"
+                    defaultValue={data.initisal}
                     style={{width:'95%'}}
                   />
                 </div>
@@ -70,8 +71,8 @@ export const Settings = () => {
                   <input
                     type="text"
                     required
-                    name="Minimum Asset"
-                    // defaultValue={data.PPN}
+                    name="minimum_asset"
+                    defaultValue={data['minimum_asset']}
                     style={{width:'95%'}}
                   />
                 </div>
@@ -79,14 +80,9 @@ export const Settings = () => {
                 <button className="btn btn-primary float-end">
                             Submit
                           </button>
-                          {/* <button className="btn btn-warning float-end">
-                            Cancel
-                          </button> */}
-                </div>
-                
+                </div>            
                     </form>
                 </div>
-
             </div>
         </Sidebar>
     </div>

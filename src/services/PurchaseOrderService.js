@@ -5,18 +5,7 @@ export const purchaseOrderService = ({doGet,doPost,doPut,doDelete}) => {
     const createPO = async (newAsset) => {
         try {
             return await doPost({
-                url: '/api/purchaseOrder', data: newAsset
-                
-            })
-        } catch (e) {
-            throw e;
-        }
-    }
-
-    const updatePO = async (id,newLocation) => {
-        try {
-            return await doPut({
-                url: `/api/purchaseOrder/${id}`, data: newLocation
+                url: '/api/po', data: newAsset
                 
             })
         } catch (e) {
@@ -26,7 +15,7 @@ export const purchaseOrderService = ({doGet,doPost,doPut,doDelete}) => {
 
     const deletePO = async (id) => {
         try {
-            return await doDelete({url: `/api/purchaseOrder/${id}`
+            return await doDelete({url: `/api/po/${id}`
          })
         } catch (e) {
             throw e;
@@ -35,7 +24,7 @@ export const purchaseOrderService = ({doGet,doPost,doPut,doDelete}) => {
 
     const getPOByUserName = async (name) => {
         try {
-            return await doGet({url: `/api/purchaseOrder/name/${name}`})
+            return await doGet({url: `/api/po/name/${name}`})
         } catch (e) {
             throw e;
         }
@@ -43,14 +32,27 @@ export const purchaseOrderService = ({doGet,doPost,doPut,doDelete}) => {
 
     const getPOById = async (id) => {
         try {
-            return await doGet({url: `/api/purchaseOrder/id/${id}`})
+            return await doGet({url: `/api/po/id/${id}`})
         } catch (e) {
             throw e;
         }
     }
 
-    
+    const getPOByRequester = async (name) => {
+        try {
+            return await doGet({url: `/api/po/requester/${name}`})
+        } catch (e) {
+            throw e
+        }
+    }
 
+    const getPODetailById = async (id) => {
+        try {
+            return await doGet({url: `api/po/detail/${id}`})
+        } catch (e) {
+            throw e
+        }
+    }
 
-  return {getPOById,getPOByUserName,deletePO,updatePO,createPO}
+  return {getPOById,getPOByUserName,deletePO,createPO, getPOByRequester, getPODetailById}
 }
