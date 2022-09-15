@@ -154,7 +154,7 @@ const routesUserRegular = [
           icon: <BiIcons.BiCategoryAlt/>,
         },
         {
-          path: "/purchase-request/inventory",
+          path: "/purchase-request/rent",
           name: "Rent",
           icon: <FaIcons.FaStore/>,
         },

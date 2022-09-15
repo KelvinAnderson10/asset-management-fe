@@ -18,10 +18,8 @@ import { UserManage } from "../pages/User/User";
 import { Main } from "../pages/Overview/Main";
 import { Approval } from "../pages/Approval/Approval";
 import { Settings } from "../pages/Settings/Settings";
-import { FormCoba } from "../pages/PurchaseOrderInv/FormCoba";
-import { FormPO } from "../pages/PurchaseOrderInv/FormPO copy";
-
-
+import { POMaintenance } from "../pages/PurchaseOrderMtnc/POMaintenance";
+import { POInventory } from "../pages/PurchaseOrderInv/POInventory";
 
 
 
@@ -29,7 +27,6 @@ export const AppRouter = () => {
   return (
     <Routes>
       <Route index element={<Login/>}></Route>
-      {/* <Route path="/po" element={<FormCoba/>} ></Route> */}
       <Route element={<ProtectedPage></ProtectedPage>}>
         <Route path="/home" element={<HomeView />} />
         <Route path="/main" element={<Main/>} />
@@ -40,7 +37,9 @@ export const AppRouter = () => {
         <Route path="/data-management/location" element={<Location />} />
         <Route path="/data-management/user" element={<UserManage />} />
         <Route path="/upload-data" element={<ImportData />} />
-        <Route path="/purchase-request/inventory" element={<FormPO/>} />
+        {/* <Route path="/purchase-request/inventory/inventory" element={<FormPO/>} /> */}
+        <Route path="/purchase-request/inventory" element={<POInventory/>} />
+        <Route path="/purchase-request/maintenance" element={<POMaintenance/>}/>
         <Route path="/approval-data" element={<Approval/>} />
         <Route path="/settings" element={<Settings/>} />
         <Route path="*" element={<PageNotFound />} />
