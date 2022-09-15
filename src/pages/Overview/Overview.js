@@ -13,6 +13,7 @@ import ReactPaginate from "react-paginate";
 import { EVENT } from "../../shared/constants";
 import { useAuth } from "../../services/UseAuth";
 import defaultImg from "../../assets/images/No-image-available.png";
+import imageCompression from 'browser-image-compression';
 
 export const Overview = () => {
   const {
@@ -171,6 +172,7 @@ export const Overview = () => {
   // GET ID FOR EDIT SHOW
 
   const [date, setNewDate] = useState();
+  const [showEdit, setShowEdit] = useState(false);
 
   const handleEditAssetById = async (name) => {
     try {
@@ -185,18 +187,27 @@ export const Overview = () => {
       ).format("YYYY-MM-DDTHH:MM");
   
       setAssetEdit(response.data);
-      setImageBase64(response.data["Asset Image"]);
+      // setImageBase64(response.data["Asset Image"]);
+      setShowEdit(!showEdit)
+      
+      console.log(response.data["Asset Image"]);
     } catch (e) {
       console.log(e);
     } 
   };
 
+  useEffect(() => {
+    console.log('asset edit', assetEdit['Asset Image']);
+    setImageBase64(assetEdit['Asset Image']);
+    console.log("cek image", imageBase64);
+  }, [showEdit])
+
   const [assetEdit, setAssetEdit] = useState({});
   const [editShow, setEditShow] = useState(false);
 
   useEffect(() => {
-    setImageBase64(assetEdit["Asset Image"]);
-  }, [assetEdit["Asset Image"]]);
+    // setImageBase64(assetEdit["Asset Image"]);
+  }, [assetEdit]);
 
   const handleEditClose = () => {
     setEditShow(false);
@@ -210,23 +221,38 @@ export const Overview = () => {
 
   // UPLOAD IMAGE
   const [selectedImage, setSelectedImage] = useState();
-  const [imageBase64, setImageBase64] = useState("");
+  const [imageBase64, setImageBase64] = useState();
   let reader = new FileReader();
 
-  const imageChange = (e) => {
+  const imageChange = async (e) => {
     if (e.target.files && e.target.files.length > 0) {
-      setSelectedImage(e.target.files[0]);
-      reader.readAsDataURL(e.target.files[0]);
-      reader.onload = () => {
-        setImageBase64(reader.result);
-      };
+      const imageFiles = e.target.files[0]
+      console.log('originalFile instanceof Blob', imageFiles instanceof Blob); // true
+      console.log('originalFile size', (imageFiles.size / 1024 / 1024) , 'MB');
+      const options = {
+        maxSizeMB: 0.5,
+        // maxWidthOrHeight: 200,
+        useWebWorker: true
+      }
+      try {
+        const compressedImage = await imageCompression(imageFiles, options)
+        console.log('compressedImage instanceof Blob', compressedImage instanceof Blob); // true
+        console.log('compressedImage size', (compressedImage.size / 1024 / 1024) , 'MB');
+        setSelectedImage(compressedImage);
+        reader.readAsDataURL(compressedImage);
+        reader.onload = () => {setImageBase64(reader.result)};
+      } catch (error) {
+        console.log(error);
+      }
+
+      
     }
   };
 
   const ref = useRef(null);
 
   const removeSelectedImage = () => {
-    setSelectedImage();
+    setImageBase64("")
     ref.current.value = "";
   };
 
@@ -1430,11 +1456,11 @@ export const Overview = () => {
                 <div className="col">
                   <div className="asset-image-container">
                     <div className="image-box">
-                      {selectedImage && (
+                      {imageBase64 && (
                         <div className="image">
                           {" "}
                           <img
-                            src={imageBase64 && imageBase64}
+                            src={imageBase64}
                             className="image"
                             style={{ width: "200px", height: "140px" }}
                           />
@@ -1445,7 +1471,7 @@ export const Overview = () => {
                             Remove the image
                           </button>
                         </div>
-                      )}
+                       )} 
                     </div>
                     <input
                       id="upload"

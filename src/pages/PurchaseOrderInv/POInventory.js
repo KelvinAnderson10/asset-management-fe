@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Sidebar from '../../shared/components/Sidebar/Sidebar'
+import { FormPOInventory } from './components/FormPOInventory'
 import { ListPOInventory } from './components/ListPOInventory'
 import './POInventory.css'
 
@@ -38,6 +39,7 @@ export const POInventory = () => {
                     </div>
                </div>
                {requestList && <ListPOInventory/>}
+               {requestForm && <FormPOInventory/>}
             </Sidebar>
         </>
     )

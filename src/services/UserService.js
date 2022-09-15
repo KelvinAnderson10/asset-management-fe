@@ -52,6 +52,47 @@ const updateUser = async (name,newUser) => {
   }
 }
 
+const findGMByCluster = async (cluster) => {
+  try {
+    return await doGet({ url: `/api/user/gm/${cluster}` });
+  } catch (e) {
+    throw e;
+  }
+};
+
+const findSpvByDepartment = async (department) => {
+  try {
+    return await doGet({ url: `/api/user/spv/${department}` });
+  } catch (e) {
+    throw e;
+  }
+};
+
+const findVPTrad = async () => {
+  try {
+    return await doGet({ url: `/api/user/VPTrad` });
+  } catch (e) {
+    throw e;
+  }
+};
+
+
+const findITApprover = async () => {
+  try {
+    return await doGet({ url: `/api/user/IT` });
+  } catch (e) {
+    throw e;
+  }
+};
+
+const findGAApprover = async () => {
+  try {
+    return await doGet({ url: `/api/user/GA` });
+  } catch (e) {
+    throw e;
+  }
+};
+
 const deleteUser = async (name) => {
   try {
       return await doDelete({url: `/api/user/${name}`
@@ -61,5 +102,5 @@ const deleteUser = async (name) => {
   }
 }
 
-  return {getUserByNameLike, updateUser, deleteUser,getUserByEmail, createUser,getUserByName, getAllUser };
+  return {getUserByNameLike, updateUser, deleteUser,getUserByEmail, createUser,getUserByName, getAllUser, findGAApprover,findGMByCluster,findITApprover,findSpvByDepartment,findVPTrad };
 };
