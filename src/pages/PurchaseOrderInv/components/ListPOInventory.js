@@ -5,7 +5,7 @@ import './ListPOInventory.css'
 
 export const ListPOInventory = () => {
     const [poData, setPOData] = useState([])
-    const [poDetailData, setPODetailData] = useState([])
+    const [poDetailData, setPODetailData] = useState({})
     const {purchaseOrderService} = useDeps()
     
     //Get All PO Inventory
