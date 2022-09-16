@@ -60,11 +60,6 @@ const routesAdmin = [
     name: "Import Data",
     icon: <FaIcons.FaFileUpload/>,
   },
-  // {
-  //   path: "/approval-data",
-  //   name: "Approval Data",
-  //   icon: <BsIcons.BsFillFileEarmarkCheckFill/>,
-  // },
   {
     path: "/settings",
     name: "Settings",
@@ -114,6 +109,23 @@ const routesGA = [
     path: "/approval-data",
     name: "Approval Data",
     icon: <BsIcons.BsFillFileEarmarkCheckFill/>,
+    subRoutes: [
+      {
+        path: "/approval-data/inventory",
+        name: "Inventory",
+        icon: <IoIcons.IoIosPaper/>,
+      },
+      {
+        path: "/approval-data/maintenance",
+        name: "Maintenance",
+        icon: <BiIcons.BiCategoryAlt/>,
+      },
+      {
+        path: "/approval-data/rent",
+        name: "Rent",
+        icon: <FaIcons.FaStore/>,
+      },
+    ],
   },
   
 ]
@@ -128,6 +140,18 @@ const routesIT = [
     path: "/approval-data",
     name: "Approval Data",
     icon: <BsIcons.BsFillFileEarmarkCheckFill/>,
+    subRoutes: [
+      {
+        path: "/approval-data/inventory",
+        name: "Inventory",
+        icon: <IoIcons.IoIosPaper/>,
+      },
+      {
+        path: "/approval-data/maintenance",
+        name: "Maintenance",
+        icon: <BiIcons.BiCategoryAlt/>,
+      },
+    ],
   },
   
 ]
@@ -318,7 +342,7 @@ const onGetCookie = ()=>{
             })}
           </section>
           )}
-{user.role==="Manager GA" && (
+{user.role==="GA" && (
           <section className="routes">
             {routesGA.map((route, index) => {
               if (route.subRoutes) {
@@ -358,7 +382,7 @@ const onGetCookie = ()=>{
             })}
           </section>
           )}
-{user.role==="Manager IT" && (
+{user.role==="IT" && (
           <section className="routes">
             {routesIT.map((route, index) => {
               if (route.subRoutes) {
@@ -438,7 +462,7 @@ const onGetCookie = ()=>{
             })}
           </section>
           )}
-          {user.role==="Regular" && (user.level_approval==="General Manager" || user.level_approval==="Supervisor" || user.level_approval==="VP Trade")&& (
+          {user.role==="Regular" && (user.level_approval==="GM" || user.level_approval==="SPV" || user.level_approval==="VP_TRAD")&& (
           <section className="routes">
             {routesUserGMSPVVP.map((route, index) => {
               if (route.subRoutes) {

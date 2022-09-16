@@ -660,8 +660,8 @@ useEffect(() => {
                   >
                     <option disable value="">Select</option>
                     <option>Admin</option>
-                    <option>Manager GA</option>
-                    <option>Manager IT</option>
+                    <option value='GA'>Manager GA</option>
+                    <option value='IT'>Manager IT</option>
                     <option>Regular</option>
                   </select>
                   </div>
@@ -675,9 +675,9 @@ useEffect(() => {
                     style={{width:'100%'}}
                   >
                     <option disable value="">Select</option>
-                    <option>General Manager</option>
-                    <option>Supervisor</option>
-                    <option>VP Trade</option>
+                    <option value='GM'>General Manager</option>
+                    <option value='SPV'>Supervisor</option>
+                    <option value='VP_TRAD'>VP Trade</option>
                     <option>Regular</option>
                     <option>GA</option>
                     <option>IT</option>
@@ -789,8 +789,8 @@ useEffect(() => {
                   >
                     <option disable value="">Select</option>
                     <option>Admin</option>
-                    <option>Manager GA</option>
-                    <option>Manager IT</option>
+                    <option value='GA'>Manager GA</option>
+                    <option value='IT'>Manager IT</option>
                     <option>Regular</option>
                   </select>
                   </div>
@@ -804,9 +804,9 @@ useEffect(() => {
                     style={{width:'100%'}}
                   >
                     <option disabled value="">Select</option>
-                    <option>General Manager</option>
-                    <option>Supervisor</option>
-                    <option>VP Trade</option>
+                    <option value='GM'>General Manager</option>
+                    <option value='SPV'>Supervisor</option>
+                    <option value='VP_TRAD'>VP Trade</option>
                     <option>Regular</option>
                     <option>GA</option>
                     <option>IT</option>
