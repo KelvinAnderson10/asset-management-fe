@@ -20,6 +20,8 @@ import { Settings } from "../pages/Settings/Settings";
 import { POMaintenance } from "../pages/PurchaseOrderMtnc/POMaintenance";
 import { POInventory } from "../pages/PurchaseOrderInv/POInventory";
 import { FormApprovalInventory } from "../pages/ApprovalInventory/components/FormApprovalInventory";
+import { UseApprovalInventory } from "../pages/ApprovalInventory/UseApprovalInventory";
+import { AppInv } from "../pages/ApprovalInventory/AppInv";
 
 
 
@@ -38,7 +40,7 @@ export const AppRouter = () => {
         <Route path="/upload-data" element={<ImportData />} />
         <Route path="/purchase-request/inventory" element={<POInventory/>} />
         <Route path="/purchase-request/maintenance" element={<POMaintenance/>}/>
-        <Route path="/approval-data/inventory" element={<ApprovalInventory/>} />
+        <Route path="/approval-data/inventory" element={<AppInv/>} />
         <Route path="/approval-data/inventory/form" element={<FormApprovalInventory/>} />
         <Route path="/settings" element={<Settings/>} />
         <Route path="*" element={<PageNotFound />} />

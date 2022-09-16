@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
+import { useRoutes } from "react-router-dom";
 import Sidebar from "../../../shared/components/Sidebar/Sidebar";
 import { useDeps } from "../../../shared/context/DependencyContext";
+import { UseApprovalInventory } from "../UseApprovalInventory";
 import "./FormApprovalInventory.css";
 
+
 export const FormApprovalInventory = () => {
+  const {handleClickApproval, onGetPOListByApproval,poDetail,appData} = UseApprovalInventory()
   const [POdata, setPOData] = useState([
     {
       ["Nama Barang"]: "",
@@ -45,32 +49,10 @@ export const FormApprovalInventory = () => {
     }
   };
 
-    //Get PO Detail 
-    const onGetPODetailById = async (id) => {
-      try {
-        const response = await purchaseOrderService.getPODetailById(id)
-          console.log(id);
-          setPOData(response.data)
-          console.log('ini response',response);
-        
-      } catch (e) {
-        console.log(e.response);
-      } finally{
-        try {
-          const response = await purchaseOrderService.getPODetailById(id)
-          console.log(id);
-          setPOData(response.data)
-          console.log('ini response',response);
-      } catch (e) {
-          console.log(e.response);
-      }
-      }
-      
-  }
+ console.log('detail po form page',poDetail)
 
   useEffect(() => {
     onGetAllVendor();
-    onGetPODetailById();
   }, []);
   return (
     <>
@@ -132,8 +114,7 @@ export const FormApprovalInventory = () => {
                       className="form-control"
                     />
                   </div>
-
-                  {POdata.map((form, index) => {
+                  {poDetail.map((form, index) => {
                     return (
                       <div key={index}>
                         <div className="header-item-add">
