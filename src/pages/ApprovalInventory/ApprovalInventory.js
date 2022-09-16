@@ -1,7 +1,7 @@
 import React from 'react'
 import Sidebar from '../../shared/components/Sidebar/Sidebar'
 
-export const Approval = () => {
+export const ApprovalInventory = () => {
   return (
     <div>
         <Sidebar>
