@@ -352,7 +352,7 @@ const onGetCookie = ()=>{
   let savedUser = JSON.parse(savedUserJsonString)
   setUser(prevObj=>({...prevObj,name:(savedUser.name), role:(savedUser.role), level_approval:(savedUser.level_approval), location_id:(savedUser.location_id), tap:(savedUser.TAP), cluster:(savedUser.Cluster), department:(savedUser.department)}))
 }
-
+document.querySelector("body").style.overflow = "auto";
   return (
     <>
       <Sidebar>
