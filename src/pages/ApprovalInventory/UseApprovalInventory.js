@@ -62,18 +62,35 @@ export const UseApprovalInventory = () => {
   const navigate = useNavigate(); 
 
   const [poDetail, setpoDetail] = useState([])
-  const handleClickApproval = async (id) => {
+  const [poHeader, setPOHeader] = useState({})
+  const handleClickApproval = async (id, toUser, jabatan, kodeWilayah, jenisProduk) => {
     try{
-        const response = await purchaseOrderService.getPODetailById(id);
-        console.log('ini id',id);
-        console.log('response',response)
-        setpoDetail(response.data)
-        console.log('po detail data',poDetail)
-        navigate('/approval-data/inventory/form', {replace: true}) 
+          let poHeaderInFunc = {}
+          poHeaderInFunc.toUser = toUser
+          poHeaderInFunc.jabatan =  jabatan
+          poHeaderInFunc.kodeWilayah = kodeWilayah
+          poHeaderInFunc.jenisProduk = jenisProduk
+          setPOHeader(poHeaderInFunc)
+          const response = await purchaseOrderService.getPODetailById(id);
+          console.log('ini id',id);
+          console.log('response',response)
+          console.log('response 0', response.data[0]);
+          setpoDetail(response.data)
+          console.log('po detail data',poDetail)
     } catch(e){
         console.log(e)
-    }
+    } 
   }
+
+  useEffect(()=> {
+    if (poDetail.length != 0){
+      navigate('/approval-data/inventory/form', {state: {header: poHeader,detail:poDetail}}) 
+    }
+  }, [poDetail])
+
+  // setInterval(() => {
+  //   console.log(poDetail);
+  // }, 1000);
 
  return {handleClickApproval, onGetPOListByApproval,poDetail,appData}
   

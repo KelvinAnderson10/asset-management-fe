@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useRoutes } from "react-router-dom";
+import { useLocation, useRoutes } from "react-router-dom";
 import Sidebar from "../../../shared/components/Sidebar/Sidebar";
 import { useDeps } from "../../../shared/context/DependencyContext";
 import { UseApprovalInventory } from "../UseApprovalInventory";
@@ -7,7 +7,6 @@ import "./FormApprovalInventory.css";
 
 
 export const FormApprovalInventory = () => {
-  const {handleClickApproval, onGetPOListByApproval,poDetail,appData} = UseApprovalInventory()
   const [POdata, setPOData] = useState([
     {
       ["Nama Barang"]: "",
@@ -48,12 +47,16 @@ export const FormApprovalInventory = () => {
     } finally {
     }
   };
+  
+  const location = useLocation()
 
- console.log('detail po form page',poDetail)
 
   useEffect(() => {
     onGetAllVendor();
   }, []);
+
+
+
   return (
     <>
       <Sidebar>
@@ -78,7 +81,7 @@ export const FormApprovalInventory = () => {
                     <label>
                       To User<span className="text-danger">*</span>
                     </label>
-                    <input type="text" name="ToUser" className="form-control" />
+                    <input type="text" name="ToUser" className="form-control" value={location.state.header.toUser}/>
                   </div>
                   <div className="mb-3 col-md-4">
                     <label>
@@ -114,7 +117,7 @@ export const FormApprovalInventory = () => {
                       className="form-control"
                     />
                   </div>
-                  {poDetail.map((form, index) => {
+                  {location.state.detail.map((form, index) => {
                     return (
                       <div key={index}>
                         <div className="header-item-add">
