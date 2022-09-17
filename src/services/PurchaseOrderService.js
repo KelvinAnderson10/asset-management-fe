@@ -54,5 +54,13 @@ export const purchaseOrderService = ({doGet,doPost,doPut,doDelete}) => {
         }
     }
 
-  return {getPOById,getPOByUserName,deletePO,createPO, getPOByRequester, getPODetailById}
+    const getPOListByApproval = async (name) => {
+        try {
+            return await doGet({url: `api/po/approval/${name}`})
+        } catch (e) {
+            throw e
+        }
+    }
+
+  return {getPOById,getPOByUserName,deletePO,createPO, getPOByRequester, getPODetailById, getPOListByApproval}
 }
