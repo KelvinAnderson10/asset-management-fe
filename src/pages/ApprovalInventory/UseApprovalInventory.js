@@ -1,16 +1,15 @@
-
 import { useNavigate } from "react-router-dom";
-import React, { useEffect, useState } from 'react'
-import { useAuth } from '../../services/UseAuth'
-import Sidebar from '../../shared/components/Sidebar/Sidebar'
-import { useDeps } from '../../shared/context/DependencyContext'
-import './ApprovalInventory.css'
+import React, { useEffect, useState } from "react";
+import { useAuth } from "../../services/UseAuth";
+import Sidebar from "../../shared/components/Sidebar/Sidebar";
+import { useDeps } from "../../shared/context/DependencyContext";
+import "./ApprovalInventory.css";
 
 export const UseApprovalInventory = () => {
   const [appData, setAppData] = useState([]);
 
   const { purchaseOrderService } = useDeps();
-  let poDetailData
+  let poDetailData;
 
   //Get PO List By Approval
   const onGetPOListByApproval = async (name) => {
@@ -58,25 +57,41 @@ export const UseApprovalInventory = () => {
     onGetPOListByApproval(user.name);
   }, [user.name]);
 
+  const navigate = useNavigate();
 
-  const navigate = useNavigate(); 
+  const [poDetail, setpoDetail] = useState([]);
+  const [poHeader, setPOHeader] = useState({});
 
-  const [poDetail, setpoDetail] = useState([])
-  const handleClickApproval = async (id) => {
-    try{
-        const response = await purchaseOrderService.getPODetailById(id);
-        console.log('ini id',id);
-        console.log('response',response)
-        setpoDetail(response.data)
-        console.log('po detail data',poDetail)
-        navigate('/approval-data/inventory/form', {replace: true}) 
-    } catch(e){
-        console.log(e)
+  const handleClickApproval = async (
+    id,
+    toUser,
+    jabatan,
+    kodeWilayah,
+    jenisProduk
+  ) => {
+    try {
+      let poHeaderInFunc = {};
+      poHeaderInFunc.toUser = toUser;
+      poHeaderInFunc.jabatan = jabatan;
+      poHeaderInFunc.kodeWilayah = kodeWilayah;
+      poHeaderInFunc.jenisProduk = jenisProduk;
+      setPOHeader(poHeaderInFunc);
+      const response = await purchaseOrderService.getPODetailById(id);
+      console.log("ini id", id);
+      console.log("response", response);
+      setpoDetail(response.data);
+      console.log("po detail data", poDetail);
+    } catch (e) {
+      console.log(e);
     }
-  }
+  };
 
- return {handleClickApproval, onGetPOListByApproval,poDetail,appData}
-  
+  useEffect(() => {
+    console.log("detail po", poDetail);
+    if (poDetail.length != 0) {
+        navigate('/approval-data/inventory/form', {state: {header: poHeader,detail:poDetail}}) 
+    }
+  }, [poDetail]);
 
-  
+  return { handleClickApproval, onGetPOListByApproval, poDetail, appData };
 };

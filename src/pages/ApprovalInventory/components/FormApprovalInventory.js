@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useRoutes } from "react-router-dom";
+import { useLocation, useRoutes } from "react-router-dom";
 import Sidebar from "../../../shared/components/Sidebar/Sidebar";
 import { useDeps } from "../../../shared/context/DependencyContext";
 import { UseApprovalInventory } from "../UseApprovalInventory";
@@ -48,12 +48,14 @@ export const FormApprovalInventory = () => {
     } finally {
     }
   };
-
- console.log('detail po form page',poDetail)
+  const location = useLocation()
+//  console.log('detail po form page',poDetail)
 
   useEffect(() => {
     onGetAllVendor();
   }, []);
+
+
   return (
     <>
       <Sidebar>
@@ -68,6 +70,7 @@ export const FormApprovalInventory = () => {
                       Area Code<span className="text-danger">*</span>
                     </label>
                     <input
+                      value={location.state.header.kodeWilayah}
                       readOnly
                       type="text"
                       name="Kode Wilayah"
@@ -78,7 +81,7 @@ export const FormApprovalInventory = () => {
                     <label>
                       To User<span className="text-danger">*</span>
                     </label>
-                    <input type="text" name="ToUser" className="form-control" />
+                    <input type="text" name="ToUser" className="form-control" value={location.state.header.toUser} />
                   </div>
                   <div className="mb-3 col-md-4">
                     <label>
@@ -88,6 +91,7 @@ export const FormApprovalInventory = () => {
                       type="text"
                       name="Jabatan"
                       className="form-control"
+                      value={location.state.header.jabatan}
                     />
                   </div>
                   <div className="inputBoxPO mb-3 col-md-6 ">
@@ -96,6 +100,7 @@ export const FormApprovalInventory = () => {
                       <span className="text-danger">*</span>{" "}
                     </label>
                     <input
+                    value={location.state.header.jenisProduk}
                       type="text"
                       name="Jenis Produk"
                       className="form-control"
@@ -114,7 +119,7 @@ export const FormApprovalInventory = () => {
                       className="form-control"
                     />
                   </div>
-                  {poDetail.map((form, index) => {
+                  {location.state.detail.map((form, index) => {
                     return (
                       <div key={index}>
                         <div className="header-item-add">
@@ -128,7 +133,7 @@ export const FormApprovalInventory = () => {
                               Item Name
                               <span className="text-danger">*</span>{" "}
                             </label>
-                            <input name="Nama Barang" placeholder="Item Name" />
+                            <input name="Nama Barang" placeholder="Item Name" value={form['Nama Barang']} />
                           </div>
 
                           <div className="inputBoxPO mb-3 col-md-6 ">
@@ -138,6 +143,7 @@ export const FormApprovalInventory = () => {
                             </label>
                             <input
                               readOnly
+                              defaultValue={form.vendor_1}
                               type="text"
                               name="vendor_1"
                               className="form-control"
