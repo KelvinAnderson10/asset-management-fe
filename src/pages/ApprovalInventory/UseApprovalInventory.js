@@ -4,6 +4,7 @@ import { useAuth } from "../../services/UseAuth";
 import Sidebar from "../../shared/components/Sidebar/Sidebar";
 import { useDeps } from "../../shared/context/DependencyContext";
 import "./ApprovalInventory.css";
+import moment from "moment";
 
 export const UseApprovalInventory = () => {
   const [appData, setAppData] = useState([]);
@@ -16,6 +17,9 @@ export const UseApprovalInventory = () => {
     try {
       const response = await purchaseOrderService.getPOListByApproval(name);
       console.log(name);
+      for (let i in response.data) {
+        response.data[i].CreatedAt = moment(response.data[i].CreatedAt).format("LL");  
+      }
       setAppData(response.data);
       console.log(appData);
     } catch (e) {
@@ -71,6 +75,7 @@ export const UseApprovalInventory = () => {
   ) => {
     try {
       let poHeaderInFunc = {};
+      poHeaderInFunc.id = id;
       poHeaderInFunc.toUser = toUser;
       poHeaderInFunc.jabatan = jabatan;
       poHeaderInFunc.kodeWilayah = kodeWilayah;
@@ -79,6 +84,13 @@ export const UseApprovalInventory = () => {
       const response = await purchaseOrderService.getPODetailById(id);
       console.log("ini id", id);
       console.log("response", response);
+      for (let i in response.data) {
+        if (response.data[i].ppn === true){
+            response.data[i].ppn = '1'
+        } else {
+            response.data[i].ppn = '0'
+        }
+      }
       setpoDetail(response.data);
       console.log("po detail data", poDetail);
     } catch (e) {

@@ -520,12 +520,12 @@ const onGetCookie = ()=>{
         <main>
           <nav className="navbar navbar-expand-lg header-main">
             <img src={logo} style={{width: '7.8vw', height: '4vh'}}></img>
-          <div class="nav-item dropdown">
-            <a href="#" data-bs-toggle="dropdown" className="nav-item nav-link dropdown-toggle user-action"><CgProfile style={{fontSize:'28px', marginRight:"5%"}} />{user.name} <b class="caret"></b></a>
-            <div class="dropdown-menu">
+          <div className="nav-item dropdown">
+            <a href="#" data-bs-toggle="dropdown" className="nav-item nav-link dropdown-toggle user-action"><CgProfile style={{fontSize:'28px', marginRight:"5%"}} />{user.name} <b className="caret"></b></a>
+            <div className="dropdown-menu">
             {/* <a href="#" className="dropdown-item"><i class="fa fa-user-o"></i> Profile</a> */}
             <div className="divider dropdown-divider"></div>
-            <a onClick={onLogout} className="dropdown-item"><i class="material-icons">&#xE8AC;</i> Logout</a>
+            <a onClick={onLogout} className="dropdown-item"><i className="material-icons">&#xE8AC;</i> Logout</a>
 				  </div>
 			    </div>
           {/* <AiIcons.AiOutlineLogout className='logout' onClick={onLogout}/> */}

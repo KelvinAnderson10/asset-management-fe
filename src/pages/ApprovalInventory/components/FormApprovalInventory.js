@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useRoutes } from "react-router-dom";
+import { useLocation, useNavigate, useRoutes } from "react-router-dom";
 import Sidebar from "../../../shared/components/Sidebar/Sidebar";
 import { useDeps } from "../../../shared/context/DependencyContext";
 import { UseApprovalInventory } from "../UseApprovalInventory";
 import "./FormApprovalInventory.css";
-
+import * as MdIcons from 'react-icons/md'
+import Swal from "sweetalert2";
+import { Failed } from "../../../shared/components/Notification/Failed";
 
 export const FormApprovalInventory = () => {
   const {handleClickApproval, onGetPOListByApproval,poDetail,appData} = UseApprovalInventory()
@@ -43,18 +45,49 @@ export const FormApprovalInventory = () => {
     try {
       const response = await vendorService.getAllVendor();
       setVendor(response.data);
+      console.log(response.data);
     } catch (e) {
       console.log(e);
     } finally {
     }
   };
   const location = useLocation()
-//  console.log('detail po form page',poDetail)
 
   useEffect(() => {
     onGetAllVendor();
   }, []);
 
+  const navigate = useNavigate()
+  const onClickBack = () => {
+    navigate('/approval-data/inventory', {replace: true})
+  } 
+
+  console.log('ini state', location.state.header);
+
+  //Reject
+  const onRejectPO = async (e, id) =>{
+    e.preventDefault(e)
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "Do you really want to reject this request",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, decline it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        try {
+          const response = purchaseOrderService.deletePO(id);
+          Swal.fire("Reject!", "This request has been rejected.", "success");
+          navigate('/approval-data/inventory', {replace: true})
+        } catch (e) {
+          console.log(e.response)
+          Failed('Failed to reject')
+        } 
+      }
+    })
+  }
 
   return (
     <>
@@ -62,7 +95,7 @@ export const FormApprovalInventory = () => {
         <div className="po-app-form-container">
           <div className="po-app-form-card">
             <form>
-              <h4 className="mb-5 text-danger">Purchase Order Detail</h4>
+              <h4 className="mb-5 text-danger"> <MdIcons.MdOutlineArrowBackIosNew color='black' onClick={onClickBack} style={{cursor:'pointer'}}/> Purchase Order Detail</h4>
               <div className="formPOInput">
                 <div className="row">
                   <div className="mb-3 col-md-4">
@@ -245,7 +278,7 @@ export const FormApprovalInventory = () => {
                             <select
                               required
                               name="ppn"
-                              value={form.ppn}
+                              defaultValue={form.ppn}
                               onChange={(event) =>
                                 handleFormChange(event, index)
                               }
@@ -283,7 +316,7 @@ export const FormApprovalInventory = () => {
                     >
                       Accept
                     </button>
-                    <button className="btn btn-warning float-end">
+                    <button className="btn btn-warning float-end" onClick={(e)=> onRejectPO(e, location.state.header.id)}>
                       Decline
                     </button>
                   </div>

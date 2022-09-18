@@ -15,12 +15,10 @@ import { ProtectedPage } from "../services/ProtectedPage";
 
 import { UserManage } from "../pages/User/User";
 import { Main } from "../pages/Overview/Main";
-import { ApprovalInventory } from "../pages/ApprovalInventory/ApprovalInventory";
 import { Settings } from "../pages/Settings/Settings";
 import { POMaintenance } from "../pages/PurchaseOrderMtnc/POMaintenance";
 import { POInventory } from "../pages/PurchaseOrderInv/POInventory";
 import { FormApprovalInventory } from "../pages/ApprovalInventory/components/FormApprovalInventory";
-import { UseApprovalInventory } from "../pages/ApprovalInventory/UseApprovalInventory";
 import { AppInv } from "../pages/ApprovalInventory/AppInv";
 
 

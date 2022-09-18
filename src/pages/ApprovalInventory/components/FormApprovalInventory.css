@@ -3,7 +3,9 @@
     justify-content: center;
     align-items: center;
     align-content: center;
-    min-height: 79vh;
+    min-height: 90vh;
+    margin-top: 2vh;
+    margin-bottom: 2vh;
 }
 
 .po-app-form-container .po-app-form-card {
