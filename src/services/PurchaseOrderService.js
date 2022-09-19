@@ -61,6 +61,30 @@ export const purchaseOrderService = ({doGet,doPost,doPut,doDelete}) => {
             throw e
         }
     }
+
+    const approvedByLevel1 = async (id) => {
+        try {
+            return await doPut({url: `api/po/level1/${id}`})
+        } catch (e) {
+            throw e
+        }
+    }
+
+    const approvedByLevel2 = async (id) => {
+        try {
+            return await doPut({url: `api/po/level2/${id}`})
+        } catch (e) {
+            throw e
+        }
+    }
+
+    const approvedByLevel3 = async (id) => {
+        try {
+            return await doPut({url: `api/po/level3/${id}`})
+        } catch (e) {
+            throw e
+        }
+    }
     const  updatePODetail = async (id,newData) => {
         try {
             return await doPut({
@@ -73,5 +97,5 @@ export const purchaseOrderService = ({doGet,doPost,doPut,doDelete}) => {
     }
    
 
-  return {updatePODetail,getPOById,getPOByUserName,deletePO,createPO, getPOByRequester, getPODetailById, getPOListByApproval}
+  return {updatePODetail,getPOById,getPOByUserName,deletePO,createPO, getPOByRequester, getPODetailById, getPOListByApproval, approvedByLevel1, approvedByLevel2, approvedByLevel3}
 }

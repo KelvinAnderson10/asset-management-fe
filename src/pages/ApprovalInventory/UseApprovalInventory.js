@@ -4,6 +4,7 @@ import { useAuth } from "../../services/UseAuth";
 import Sidebar from "../../shared/components/Sidebar/Sidebar";
 import { useDeps } from "../../shared/context/DependencyContext";
 import "./ApprovalInventory.css";
+import moment from "moment";
 
 export const UseApprovalInventory = () => {
   const [appData, setAppData] = useState([]);
@@ -16,6 +17,9 @@ export const UseApprovalInventory = () => {
     try {
       const response = await purchaseOrderService.getPOListByApproval(name);
       console.log(name);
+      for (let i in response.data) {
+        response.data[i].CreatedAt = moment(response.data[i].CreatedAt).format("LL");  
+      }
       setAppData(response.data);
       console.log(appData);
     } catch (e) {
@@ -67,7 +71,8 @@ export const UseApprovalInventory = () => {
     toUser,
     jabatan,
     kodeWilayah,
-    jenisProduk
+    jenisProduk,
+    approverLevel3
   ) => {
     try {
       let poHeaderInFunc = {};
@@ -76,13 +81,18 @@ export const UseApprovalInventory = () => {
       poHeaderInFunc.jabatan = jabatan;
       poHeaderInFunc.kodeWilayah = kodeWilayah;
       poHeaderInFunc.jenisProduk = jenisProduk;
+      poHeaderInFunc.approverLevel3 = approverLevel3
       setPOHeader(poHeaderInFunc);
       
       const response = await purchaseOrderService.getPODetailById(id);
       console.log("ini id", id);
       console.log("response", response);
-      for (let i in response.data){
-        response.data[i].ppn = Number(response.data[i].ppn)
+      for (let i in response.data) {
+        if (response.data[i].ppn === true){
+            response.data[i].ppn = '1'
+        } else {
+            response.data[i].ppn = '0'
+        }
       }
       setpoDetail(response.data);
       console.log("po detail data", poDetail);
@@ -98,5 +108,5 @@ export const UseApprovalInventory = () => {
     }
   }, [poDetail]);
 
-  return { handleClickApproval, onGetPOListByApproval, poDetail, appData, setpoDetail };
+  return { handleClickApproval, onGetPOListByApproval, poDetail, appData, user, setpoDetail };
 };

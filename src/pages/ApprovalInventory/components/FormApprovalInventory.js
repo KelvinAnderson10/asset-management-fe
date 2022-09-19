@@ -1,50 +1,33 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useRoutes } from "react-router-dom";
+import { useLocation, useNavigate, useRoutes } from "react-router-dom";
 import Sidebar from "../../../shared/components/Sidebar/Sidebar";
 import { useDeps } from "../../../shared/context/DependencyContext";
 import { UseApprovalInventory } from "../UseApprovalInventory";
 import "./FormApprovalInventory.css";
+import * as MdIcons from "react-icons/md";
+import Swal from "sweetalert2";
+import { Failed } from "../../../shared/components/Notification/Failed";
 
 export const FormApprovalInventory = () => {
-  const {poDetail,setpoDetail} = UseApprovalInventory();
-  // const [POdata, setPOData] = useState([
-  //   {
-  //     ["Nama Barang"]: "",
-  //     vendor_1: "",
-  //     vendor_2: "",
-  //     vendor_3: "",
-  //     item_price_1: "",
-  //     item_price_2: "",
-  //     item_price_3: "",
-  //     vendor_selected: "",
-  //     item_price_selected: "",
-  //     quantity: "",
-  //     ppn: "",
-  //     is_asset: "",
-
-  //     ["Biaya Lain-Lain"]: "",
-  //   },
-  // ]);
-  // const [POHeader, setPOHeader] = useState({
-  //   PurchaseOrderDetail: [],
-  //   tipe: "Inventory",
-  // });
-
+  const {
+    handleClickApproval,
+    onGetPOListByApproval,
+    poDetail,
+    appData,
+    user,
+    setpoDetail,
+  } = UseApprovalInventory();
   const { vendorService, userService, purchaseOrderService } = useDeps();
 
-  const handleFormChange = (event,index) => {
-    const newArray = location.state.detail.map((item,i)=>{
-      if (index === i){
-        return {...item, [event.target.name]:event.target.value}
-      }else{
-        return item
+  const handleFormChange = (event, index) => {
+    const newArray = location.state.detail.map((item, i) => {
+      if (index === i) {
+        return { ...item, [event.target.name]: event.target.value };
+      } else {
+        return item;
       }
-    })
-    setpoDetail(newArray)
-    // let data = [...poDetail];
-    // data[idx][event.target.name] = event.target.value;
-    // setpoDetail(data);
-    // console.log(poDetail);
+    });
+    setpoDetail(newArray);
   };
 
   const [vendor, setVendor] = useState([]);
@@ -52,44 +35,44 @@ export const FormApprovalInventory = () => {
     try {
       const response = await vendorService.getAllVendor();
       setVendor(response.data);
+      console.log(response.data);
     } catch (e) {
       console.log(e);
     } finally {
     }
   };
   const location = useLocation();
-  //  console.log('detail po form page',poDetail)
 
   useEffect(() => {
     onGetAllVendor();
   }, []);
 
-  const handleSubmitPO = async (e) => {
-    e.preventDefault();
-    try {
-      const updateDetail = location.state.detail.map((obj) => {
-        for (let i in location.state.detail) {
-          location.state.detail[i].ppn = Number(location.state.detail[i].ppn);
-          location.state.detail[i].ppn = Boolean(location.state.detail[i].ppn);
-          location.state.detail[i].item_price_selected = Number(
-            location.state.detail[i].item_price_selected
-          );
-        }
+  // const handleSubmitPO = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const updateDetail = location.state.detail.map((obj) => {
+  //       for (let i in location.state.detail) {
+  //         location.state.detail[i].ppn = Number(location.state.detail[i].ppn);
+  //         location.state.detail[i].ppn = Boolean(location.state.detail[i].ppn);
+  //         location.state.detail[i].item_price_selected = Number(
+  //           location.state.detail[i].item_price_selected
+  //         );
+  //       }
 
-        console.log("ini yg di submit", location.state.detail);
+  //       console.log("ini yg di submit", location.state.detail);
 
-        const response = purchaseOrderService.updatePODetail(
-          obj.po_id_detail,
-          poDetail
-        );
+  //       const response = purchaseOrderService.updatePODetail(
+  //         obj.po_id_detail,
+  //         poDetail
+  //       );
 
-        console.log("ini response submit", response);
-      });
-      console.log("ini detail update", updateDetail);
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  //       console.log("ini response submit", response);
+  //     });
+  //     console.log("ini detail update", updateDetail);
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
 
   // const handleChangeVendorSelected = (event,index)=>{
   //   let data = [...POdata];
@@ -97,14 +80,99 @@ export const FormApprovalInventory = () => {
   //   setPOData(data);
   //   console.log(POdata);
   // }
+  const navigate = useNavigate();
+  const onClickBack = () => {
+    navigate("/approval-data/inventory", { replace: true });
+  };
+
+  console.log("ini state", location.state.header);
+
+  //Reject
+  const onRejectPO = async (e, id) => {
+    e.preventDefault(e);
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Do you really want to reject this request",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, decline it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        try {
+          const response = purchaseOrderService.deletePO(id);
+          Swal.fire("Reject!", "This request has been rejected.", "success");
+          navigate("/approval-data/inventory", { replace: true });
+        } catch (e) {
+          console.log(e.response);
+          Failed("Failed to reject");
+        }
+      }
+    });
+  };
+
+  //Approval
+  const onApproved = async (e, id) => {
+    e.preventDefault(e);
+    try {
+      const updateDetail = location.state.detail.map((obj) => {
+        for (let i in location.state.detail) {
+          location.state.detail[i].ppn = Number(location.state.detail[i].ppn);
+          location.state.detail[i].ppn = Boolean(location.state.detail[i].ppn);
+          location.state.detail[i].item_price_selected = Number(
+          location.state.detail[i].item_price_selected
+          );
+        }
+        console.log("ini yg akan di submit", location.state.detail);
+        const response =  purchaseOrderService.updatePODetail(
+          obj.po_id_detail,
+          location.state.detail
+        );
+        console.log("ini response submit", response);
+      });
+    } catch (e) {
+      console.log(e);
+    } finally {
+      if (user.level_approval === "IT" || user.level_approval === "GA") {
+        if (location.state.header.approverLevel3 == "-") {
+          try {
+            const response = await purchaseOrderService.approvedByLevel2(id);
+            Swal.fire("Success!", "This request has been approved.", "success");
+            navigate("/approval-data/inventory", { replace: true });
+          } catch (e) {
+            console.log(e.response);
+            Failed("Failed to approved");
+          }
+        } else {
+          try {
+            const response = await purchaseOrderService.approvedByLevel3(id);
+            Swal.fire("Success!", "This request has been approved.", "success");
+            navigate("/approval-data/inventory", { replace: true });
+          } catch (e) {
+            console.log(e.response);
+            Failed("Failed to approved");
+          }
+        }
+      }
+    }
+  };
 
   return (
     <>
       <Sidebar>
         <div className="po-app-form-container">
           <div className="po-app-form-card">
-            <form onSubmit={handleSubmitPO}>
-              <h4 className="mb-5 text-danger">Purchase Order Detail</h4>
+            <form onSubmit={onApproved}>
+              <h4 className="mb-5 text-danger">
+                {" "}
+                <MdIcons.MdOutlineArrowBackIosNew
+                  color="black"
+                  onClick={onClickBack}
+                  style={{ cursor: "pointer" }}
+                />{" "}
+                Purchase Order Detail
+              </h4>
               <div className="formPOInput">
                 <div className="row">
                   <div className="mb-3 col-md-4">
@@ -225,7 +293,9 @@ export const FormApprovalInventory = () => {
                               <input
                                 type="checkbox"
                                 name="vendor_selected"
-                                onChange={(event) => handleFormChange(event,index)}
+                                onChange={(event) =>
+                                  handleFormChange(event, index)
+                                }
                                 value={form.vendor_1}
                               />
                             </div>
@@ -252,7 +322,9 @@ export const FormApprovalInventory = () => {
                               <input
                                 type="checkbox"
                                 name="item_price_selected"
-                                onChange={(event) => handleFormChange(event,index)}
+                                onChange={(event) =>
+                                  handleFormChange(event, index)
+                                }
                                 value={form.item_price_1}
                               />
                             </div>
@@ -276,7 +348,9 @@ export const FormApprovalInventory = () => {
                               <input
                                 type="checkbox"
                                 name="vendor_selected"
-                                onChange={(event) => handleFormChange(event,index)}
+                                onChange={(event) =>
+                                  handleFormChange(event, index)
+                                }
                                 value={form.vendor_2}
                               />
                             </div>
@@ -299,7 +373,9 @@ export const FormApprovalInventory = () => {
                               <input
                                 type="checkbox"
                                 name="item_price_selected"
-                                onChange={(event) => handleFormChange(event,index)}
+                                onChange={(event) =>
+                                  handleFormChange(event, index)
+                                }
                                 value={form.item_price_2}
                               />
                             </div>
@@ -322,7 +398,9 @@ export const FormApprovalInventory = () => {
                               <input
                                 type="checkbox"
                                 name="vendor_selected"
-                                onChange={(event) => handleFormChange(event,index)}
+                                onChange={(event) =>
+                                  handleFormChange(event, index)
+                                }
                                 value={form.vendor_3}
                               />
                             </div>
@@ -351,7 +429,9 @@ export const FormApprovalInventory = () => {
                               <input
                                 type="checkbox"
                                 name="item_price_selected"
-                                onChange={(event) => handleFormChange(event,index)}
+                                onChange={(event) =>
+                                  handleFormChange(event, index)
+                                }
                                 value={form.item_price_3}
                               />
                             </div>
@@ -384,8 +464,10 @@ export const FormApprovalInventory = () => {
                             <select
                               required
                               name="ppn"
-                              value={form.ppn}
-                              onChange={(event) => handleFormChange(event)}
+                              defaultValue={form.ppn}
+                              onChange={(event) =>
+                                handleFormChange(event, index)
+                              }
                               style={{ width: "95%" }}
                             >
                               <option value="">Select Condition</option>
@@ -415,10 +497,14 @@ export const FormApprovalInventory = () => {
                     <button
                       className="btn btn-primary float-end"
                       style={{ marginLeft: "20px", marginRight: "20px" }}
+                      onClick={(e) => onApproved(e, location.state.header.id)}
                     >
                       Accept
                     </button>
-                    <button className="btn btn-warning float-end">
+                    <button
+                      className="btn btn-warning float-end"
+                      onClick={(e) => onRejectPO(e, location.state.header.id)}
+                    >
                       Decline
                     </button>
                   </div>

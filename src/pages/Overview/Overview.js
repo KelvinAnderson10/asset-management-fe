@@ -46,82 +46,6 @@ export const Overview = () => {
     setViewShow(false);
   };
 
-  //Pagination
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemPerPage, setItemPerPage] = useState(10);
-  const [pageNumberLimit, setPageNumberLimit] = useState(5);
-  const [maxPageNumberLimit, setMaxPageNumberLimit] = useState(5);
-  const [minPageNumberLimit, setMinPageNumberLimit] = useState(0);
-
-  //CRUD
-  
-  //Pagination
-  const handleClick = (event) => {
-    setCurrentPage(Number(event.target.id));
-  };
-  const totalPages = Math.ceil(datas.length / itemPerPage);
-  const pages = [];
-  for (let i = 1; i <= totalPages; i++) {
-    pages.push(i);
-  }
-
-  const indexOfLastItem = currentPage * itemPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemPerPage;
-  const currentItems = datas.slice(indexOfFirstItem, indexOfLastItem);
-
-  const renderPageNumbers = pages.map((number) => {
-    if (number < maxPageNumberLimit + 1 && number > minPageNumberLimit) {
-      return (
-        <li
-          key={number}
-          id={number}
-          onClick={handleClick}
-          className={currentPage == number ? "active" : null}
-        >
-          {number}
-        </li>
-      );
-    } else {
-      return null;
-    }
-  });
-
-  const handleNextbtn = () => {
-    setCurrentPage(currentPage + 1);
-
-    if (currentPage + 1 > maxPageNumberLimit) {
-      setMaxPageNumberLimit(maxPageNumberLimit + pageNumberLimit);
-      setMinPageNumberLimit(minPageNumberLimit + pageNumberLimit);
-    }
-  };
-
-  const handlePrevbtn = () => {
-    setCurrentPage(currentPage - 1);
-
-    if ((currentPage - 1) % pageNumberLimit == 0) {
-      setMaxPageNumberLimit(maxPageNumberLimit - pageNumberLimit);
-      setMinPageNumberLimit(minPageNumberLimit - pageNumberLimit);
-    }
-  };
-
-  const handleFirstBtn = () => {
-    setCurrentPage(1);
-  };
-  const handleLastBtn = () => {
-    console.log(totalPages);
-    setCurrentPage(totalPages);
-  };
-
-  let pageIncrementBtn = null;
-  if (pages.length > maxPageNumberLimit) {
-    pageIncrementBtn = <li onClick={handleNextbtn}> &hellip; </li>;
-  }
-
-  let pageDecrementBtn = null;
-  if (minPageNumberLimit >= 1) {
-    pageDecrementBtn = <li onClick={handlePrevbtn}> &hellip; </li>;
-  }
-
   //Sorting
   const sorting = (col) => {
     if (order === "ASC") {
@@ -348,17 +272,6 @@ export const Overview = () => {
     } finally {
     }
   };
-
-  // GET ALL USER
-  // const [user, setUser] = useState([]);
-  // const onGetUser = async () => {
-  //   try {
-  //     const response = await userService.getUserByEmail();
-  //     setUser(response.data);
-  //   } catch (error) {
-  //   } finally {
-  //   }
-  // };
 
   const handleChange = (e) => {
     const newData = { ...assetEdit };
@@ -656,6 +569,7 @@ export const Overview = () => {
 
   //Pagination From Backend
   const [pageCount, setPageCount] = useState(0);
+  const [totalAsset, setTotalAsset] = useState(0);
 
   useEffect(() => {
     getAssetsPagination(1);
@@ -671,6 +585,7 @@ export const Overview = () => {
     try {
       const response = await overviewService.getCountAllAsset();
       setPageCount(Math.ceil(response.data / 10));
+      setTotalAsset(response.data)
     } catch (e) {
       console.log(e);
     }
@@ -716,6 +631,7 @@ export const Overview = () => {
   const handlePageClick = async (data) => {
     console.log(data.selected);
     let currentPage = data.selected + 1;
+    console.log(data.selected);
     getAssetsPagination(currentPage);
   };
 
@@ -1172,51 +1088,12 @@ export const Overview = () => {
               </table>
             </div>
           </div>
-          {/* <div className="clearfix" style={{marginRight:'2vw'}}>
-            <div className="hint-text">
-              Showing <b> {currentItems.length} </b> out of <b>{datas.length}</b>{" "}
-              enteries
-            </div>
-          </div>
-          <ul className="pageNumbers">
-            <li>
-            <a style={{marginRight:'10px'}}
-                onClick={handleFirstBtn}
-                disabled={currentPage == pages[0] ? true : false}
-              >
-                &laquo;
-              </a>
-              <a
-                onClick={handlePrevbtn}
-                disabled={currentPage == pages[0] ? true : false}
-              >
-                Prev
-              </a>
-            </li>
-            {pageDecrementBtn}
-            {renderPageNumbers}
-            {pageIncrementBtn}
-            <li>
-              <a
-                onClick={handleNextbtn}
-                disabled={currentPage == pages[pages.length - 1] ? true : false}
-              >
-                Next
-              </a>
-              <a
-              style={{marginLeft:'10px'}}
-                onClick={handleLastBtn}
-                // disabled={currentPage == pages[0] ? true : false}
-              >
-                &raquo;
-              </a>
-            </li>
-          </ul> */}
           <div
-            className="clearfix"
-            style={{ marginRight: "2vw", marginTop: "2vh" }}
-          >
-            <ReactPaginate
+            className="clearfix">
+              Showing {datas.length} out of {totalAsset}
+          </div>
+          <div style={{marginRight: '2vw', marginTop: '1vh'}}>
+          <ReactPaginate
               previousLabel={"prev"}
               nextLabel={"next"}
               breakLabel={"..."}
@@ -1236,7 +1113,7 @@ export const Overview = () => {
               breakLinkClassName={"page-link"}
               activeClassName={"active"}
             />
-          </div>
+            </div>
         </div>
       </div>
       {/* </div> */}
