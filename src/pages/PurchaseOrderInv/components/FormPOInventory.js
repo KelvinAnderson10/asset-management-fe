@@ -314,7 +314,7 @@ export const FormPOInventory = () => {
                                     }
                                   >
                                     <option value="">Select Vendor</option>
-
+                    
                                     {vendor.map((item) => (
                                       <option key={item.name} value={item.name}>
                                         {item.name}

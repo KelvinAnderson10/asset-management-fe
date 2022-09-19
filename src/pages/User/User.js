@@ -92,7 +92,14 @@ export const UserManage = () => {
     setLoading(true);
     e.preventDefault();
     try {
-        userData["location_id"] = Number(userData["location_id"]);
+      userData["location_id"] = Number(userData["location_id"]);
+      if (userData.role == 'GA') {
+        userData.level_approval = 'GA';
+        userData.department = 'GA'
+      } else if (userData.role == 'IT') {
+        userData.level_approval = 'IT'
+        userData.department = 'IT'
+      }
       const response = await userService.createUser(userData);
       setUserData(response.data);
       SetPostShow(false);
@@ -665,7 +672,7 @@ useEffect(() => {
                     <option>Regular</option>
                   </select>
                   </div>
-                  {userData.role!== 'Admin' &&  <div className="inputBoxUser">
+                  {userData.role === 'Regular' &&  <div className="inputBoxUser">
                   <label className="form-label mt-3">Level Approval<span style={{color :"red"}} >*</span></label>
                   <select
                     required
@@ -700,7 +707,7 @@ useEffect(() => {
                     ))}
                   </select>
                 </div>
-                {userData.role !== 'Admin' && <div className="inputBoxUser">
+                {userData.role === 'Regular' && <div className="inputBoxUser">
                   <label className="form-label mt-3">Department<span style={{color :"red"}} >*</span></label>
                   <select
                     required
@@ -794,7 +801,7 @@ useEffect(() => {
                     <option>Regular</option>
                   </select>
                   </div>
-                  {RowData.role!== 'Admin' &&  <div className="inputBoxUser">
+                  {RowData.role=== 'Regular' &&  <div className="inputBoxUser">
                   <label className="form-label mt-3">Level Approval<span style={{color :"red"}} >*</span></label>
                   <select
                     required
@@ -829,7 +836,7 @@ useEffect(() => {
                     ))}
                   </select>
                 </div>
-                {RowData.role !== 'Admin' && <div className="inputBoxUser">
+                {RowData.role === 'Regular' && <div className="inputBoxUser">
                   <label className="form-label mt-3">Department<span style={{color :"red"}} >*</span></label>
                   <select
                     required

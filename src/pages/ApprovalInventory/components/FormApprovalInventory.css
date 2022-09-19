@@ -6,11 +6,12 @@
     min-height: 90vh;
     margin-top: 2vh;
     margin-bottom: 2vh;
+    font-family: 'Poppins';
 }
 
 .po-app-form-container .po-app-form-card {
     background-color:white;
-    width: 90vw;
+    width: 80vw;
     display: flex;
     justify-content: flex-start;
     height: 95%;
@@ -19,6 +20,15 @@
     border-radius: 10px;
     /* box-shadow: 0px 0px 5px 5px rgb(221, 219, 219); */
     position: relative;
-    padding: 20px;
+    padding: 50px;
     text-align: start;
+}
+
+.checkBox input{
+    margin-top: 35px;
+    margin-left: 40px;
+}
+
+input[type=radio] {
+    transform: scale(1.5);
 }
