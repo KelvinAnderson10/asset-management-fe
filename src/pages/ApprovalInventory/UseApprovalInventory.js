@@ -3,11 +3,12 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "../../services/UseAuth";
 import Sidebar from "../../shared/components/Sidebar/Sidebar";
 import { useDeps } from "../../shared/context/DependencyContext";
-import "./ApprovalInventory.css";
+
 import moment from "moment";
 
 export const UseApprovalInventory = () => {
   const [appData, setAppData] = useState([]);
+  const [appData1, setAppData1]= useState([])
 
   const { purchaseOrderService } = useDeps();
   let poDetailData;
@@ -16,16 +17,32 @@ export const UseApprovalInventory = () => {
   const onGetPOListByApproval = async (name) => {
     try {
       const response = await purchaseOrderService.getPOListByApproval(name);
-      console.log(name);
+      console.log(response);
       for (let i in response.data) {
-        response.data[i].CreatedAt = moment(response.data[i].CreatedAt).format("LL");  
+        response.data[i].CreatedAt = moment(response.data[i].CreatedAt).format(
+          "LL"
+        );
+        if (response.data[i].is_approved_level1 == true && response.data[i].is_approved_level2 == true && response.data[i].is_approved_level3 == true
+          
+        ) {
+          setAppData1((appData1) => [...appData1, response.data[i]]);
+          console.log('ini response data',response.data[i]);
+
+         
+        } else if((response.data[i].approver_level3 == "-" && response.data[i].is_approved_level1 == true) ||(response.data[i].is_approved_level1 == true &&response.data[i].is_approved_level2 == true)){
+          setAppData((appData) => [...appData, response.data[i]]);
+          console.log('ini response data',response.data[i]);
+          
+        }
       }
-      setAppData(response.data);
-      console.log(appData);
     } catch (e) {
       console.log(e.response);
     }
   };
+
+
+  console.log('ini app data',appData)
+  console.log('ini app data1',appData1)
 
   //Get User
   const { getCookie } = useAuth();
@@ -81,17 +98,17 @@ export const UseApprovalInventory = () => {
       poHeaderInFunc.jabatan = jabatan;
       poHeaderInFunc.kodeWilayah = kodeWilayah;
       poHeaderInFunc.jenisProduk = jenisProduk;
-      poHeaderInFunc.approverLevel3 = approverLevel3
+      poHeaderInFunc.approverLevel3 = approverLevel3;
       setPOHeader(poHeaderInFunc);
-      
+
       const response = await purchaseOrderService.getPODetailById(id);
       console.log("ini id", id);
       console.log("response", response);
       for (let i in response.data) {
-        if (response.data[i].ppn === true){
-            response.data[i].ppn = '1'
+        if (response.data[i].ppn === true) {
+          response.data[i].ppn = "1";
         } else {
-            response.data[i].ppn = '0'
+          response.data[i].ppn = "0";
         }
       }
       setpoDetail(response.data);
@@ -104,9 +121,21 @@ export const UseApprovalInventory = () => {
   useEffect(() => {
     console.log("detail po use effect", poDetail);
     if (poDetail.length != 0) {
-        navigate('/approval-data/inventory/form', {state: {header: poHeader,detail:poDetail}}) 
+      navigate("/approval-data/inventory/form", {
+        state: { header: poHeader, detail: poDetail },
+      });
     }
   }, [poDetail]);
 
-  return { handleClickApproval, onGetPOListByApproval, poDetail, appData, user, setpoDetail };
+  return {
+    handleClickApproval,
+    onGetPOListByApproval,
+    poDetail,
+    appData,
+    user,
+    setpoDetail,
+    poHeader,
+    setPOHeader,
+    appData1
+  };
 };

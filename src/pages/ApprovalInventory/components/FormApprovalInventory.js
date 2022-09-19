@@ -9,27 +9,56 @@ import Swal from "sweetalert2";
 import { Failed } from "../../../shared/components/Notification/Failed";
 
 export const FormApprovalInventory = () => {
-  const {
-    handleClickApproval,
-    onGetPOListByApproval,
-    poDetail,
-    appData,
-    user,
-    setpoDetail,
-  } = UseApprovalInventory();
+  const { user, setpoDetail, setPOHeader } = UseApprovalInventory();
   const { vendorService, userService, purchaseOrderService } = useDeps();
 
   const handleFormChange = (event, index) => {
     const newArray = location.state.detail.map((item, i) => {
+      if (index === i) {
+        if (event.target.value == 1) {
+          item.vendor_selected = item.vendor_1;
+          item.item_price_selected = item.item_price_1;
+        } else if (event.target.value == 2) {
+          item.vendor_selected = item.vendor_2;
+          item.item_price_selected = item.item_price_2;
+        } else{
+          item.vendor_selected = item.vendor_3;
+          item.item_price_selected = item.item_price_3;
+        }
+        console.log("ini item", item);
+        return { ...item, [event.target.name]:event.target.value };
+      } else {
+        return item;
+      }
+    });
+    setpoDetail(newArray);
+    setPOHeader(location.state.header);
+  };
+
+  const handleFormChange2 = (event, index) => {
+    const newArray2 = location.state.detail.map((item, i) => {
       if (index === i) {
         return { ...item, [event.target.name]: event.target.value };
       } else {
         return item;
       }
     });
-    setpoDetail(newArray);
+    setpoDetail(newArray2);
   };
-
+  // const handleFormChange3 = (event, index) => {
+  //   const newArray2 = location.state.detail.map((item, i) => {
+  //     if (index === i) {
+  //       if(event.target.value ==3){
+  //         item.vendor_selected = item.vendor_3;
+  //         item.item_price_selected = item.item_price_3;
+  //       }
+  //       return { ...item, [event.target.name]: event.target.value };
+  //     } else {
+  //       return item;
+  //     }
+  //   });
+  //   setpoDetail(newArray2);
+  // };
   const [vendor, setVendor] = useState([]);
   const onGetAllVendor = async () => {
     try {
@@ -47,45 +76,12 @@ export const FormApprovalInventory = () => {
     onGetAllVendor();
   }, []);
 
-  // const handleSubmitPO = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     const updateDetail = location.state.detail.map((obj) => {
-  //       for (let i in location.state.detail) {
-  //         location.state.detail[i].ppn = Number(location.state.detail[i].ppn);
-  //         location.state.detail[i].ppn = Boolean(location.state.detail[i].ppn);
-  //         location.state.detail[i].item_price_selected = Number(
-  //           location.state.detail[i].item_price_selected
-  //         );
-  //       }
-
-  //       console.log("ini yg di submit", location.state.detail);
-
-  //       const response = purchaseOrderService.updatePODetail(
-  //         obj.po_id_detail,
-  //         poDetail
-  //       );
-
-  //       console.log("ini response submit", response);
-  //     });
-  //     console.log("ini detail update", updateDetail);
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // };
-
-  // const handleChangeVendorSelected = (event,index)=>{
-  //   let data = [...POdata];
-  //   data[index][event.target.name] = event.target.value;
-  //   setPOData(data);
-  //   console.log(POdata);
-  // }
   const navigate = useNavigate();
   const onClickBack = () => {
     navigate("/approval-data/inventory", { replace: true });
   };
 
-  console.log("ini state", location.state.header);
+  // console.log("ini state", location.state.header);
 
   //Reject
   const onRejectPO = async (e, id) => {
@@ -112,47 +108,48 @@ export const FormApprovalInventory = () => {
     });
   };
 
+  useEffect(() => {
+    onApproved();
+  }, []);
+
   //Approval
   const onApproved = async (e, id) => {
     e.preventDefault(e);
     try {
-      const updateDetail = location.state.detail.map((obj) => {
-        for (let i in location.state.detail) {
-          location.state.detail[i].ppn = Number(location.state.detail[i].ppn);
-          location.state.detail[i].ppn = Boolean(location.state.detail[i].ppn);
-          location.state.detail[i].item_price_selected = Number(
-          location.state.detail[i].item_price_selected
-          );
-        }
+      for (let i in location.state.detail) {
+        location.state.detail[i].ppn = Number(location.state.detail[i].ppn);
+        location.state.detail[i].ppn = Boolean(location.state.detail[i].ppn);
+        location.state.detail[i].is_asset = Number(location.state.detail[i].is_asset);
+        location.state.detail[i].is_asset = Boolean(location.state.detail[i].is_asset);
+        location.state.detail[i].item_price_selected = Number(location.state.detail[i].item_price_selected);
+        location.state.detail[i].item_price_3 = Number(location.state.detail[i].item_price_3)
         console.log("ini yg akan di submit", location.state.detail);
-        const response =  purchaseOrderService.updatePODetail(
-          obj.po_id_detail,
-          location.state.detail
+        const response = await purchaseOrderService.updatePODetail(
+          location.state.detail[i].po_id_detail,
+          location.state.detail[i]
         );
-        console.log("ini response submit", response);
-      });
+        console.log(response);
+      }
     } catch (e) {
       console.log(e);
     } finally {
-      if (user.level_approval === "IT" || user.level_approval === "GA") {
-        if (location.state.header.approverLevel3 == "-") {
-          try {
-            const response = await purchaseOrderService.approvedByLevel2(id);
-            Swal.fire("Success!", "This request has been approved.", "success");
-            navigate("/approval-data/inventory", { replace: true });
-          } catch (e) {
-            console.log(e.response);
-            Failed("Failed to approved");
-          }
-        } else {
-          try {
-            const response = await purchaseOrderService.approvedByLevel3(id);
-            Swal.fire("Success!", "This request has been approved.", "success");
-            navigate("/approval-data/inventory", { replace: true });
-          } catch (e) {
-            console.log(e.response);
-            Failed("Failed to approved");
-          }
+      if (location.state.header.approverLevel3 == "-") {
+        try {
+          const response = await purchaseOrderService.approvedByLevel2(id);
+          Swal.fire("Success!", "This request has been approved.", "success");
+          navigate("/approval-data/inventory", { replace: true });
+        } catch (e) {
+          console.log(e.response);
+          Failed("Failed to approved");
+        }
+      } else {
+        try {
+          const response = await purchaseOrderService.approvedByLevel3(id);
+          Swal.fire("Success!", "This request has been approved.", "success");
+          navigate("/approval-data/inventory", { replace: true });
+        } catch (e) {
+          console.log(e.response);
+          Failed("Failed to approved");
         }
       }
     }
@@ -163,7 +160,7 @@ export const FormApprovalInventory = () => {
       <Sidebar>
         <div className="po-app-form-container">
           <div className="po-app-form-card">
-            <form onSubmit={onApproved}>
+            <form onSubmit={(e) => onApproved(e, location.state.header.id)}>
               <h4 className="mb-5 text-danger">
                 {" "}
                 <MdIcons.MdOutlineArrowBackIosNew
@@ -187,18 +184,7 @@ export const FormApprovalInventory = () => {
                       className="form-control"
                     />
                   </div>
-                  {/* <div className="mb-3 col-md-4">
-                    <label>
-                     PO ID<span className="text-danger">*</span>
-                    </label>
-                    <input
-                      value={location.state.header.id}
-                      readOnly
-                      type="text"
-                      name="po_id"
-                      className="form-control"
-                    />
-                  </div> */}
+
                   <div className="mb-3 col-md-4">
                     <label>
                       To User<span className="text-danger">*</span>
@@ -277,28 +263,27 @@ export const FormApprovalInventory = () => {
                               value={form.po_id_detail}
                             />
                           </div>
-
-                          <div
-                            className="inputBoxPO mb-3 col-md-5 "
-                            style={{ width: "45%" }}
+                          <label
+                            style={{ marginBottom: "10px", color: "gray" }}
                           >
+                            Select your option
+                          </label>
+                          <div className="checkBox col-md-1">
+                            <input
+                              type="radio"
+                              name={`vendor_selected${index}`}
+                              onChange={(event) =>
+                                handleFormChange(event, index)
+                              }
+                              value={1}
+                            />
+                          </div>
+                          <div className="inputBoxPO mb-3 col-md-6 ">
                             <label>
                               1<span className="subscript">st</span> Vendor
                               <span className="text-danger">*</span>
                             </label>
-                            <div
-                              className="checkBox col-sm-1"
-                              style={{ width: "2%" }}
-                            >
-                              <input
-                                type="checkbox"
-                                name="vendor_selected"
-                                onChange={(event) =>
-                                  handleFormChange(event, index)
-                                }
-                                value={form.vendor_1}
-                              />
-                            </div>
+
                             <input
                               defaultValue={form.vendor_1}
                               type="text"
@@ -307,27 +292,12 @@ export const FormApprovalInventory = () => {
                             />
                           </div>
 
-                          <div
-                            className="inputBoxPO  mb-3 col-md-5"
-                            style={{ width: "45%" }}
-                          >
+                          <div className="inputBoxPO  mb-3 col-md-5">
                             <label>
                               1<span className="subscript">st</span> Item Price
                               <span className="text-danger">*</span>
                             </label>
-                            <div
-                              className="checkBox col-sm-1 "
-                              style={{ width: "2%" }}
-                            >
-                              <input
-                                type="checkbox"
-                                name="item_price_selected"
-                                onChange={(event) =>
-                                  handleFormChange(event, index)
-                                }
-                                value={form.item_price_1}
-                              />
-                            </div>
+
                             <input
                               type="number"
                               name="item_price_1"
@@ -335,25 +305,22 @@ export const FormApprovalInventory = () => {
                               value={form.item_price_1}
                             />
                           </div>
-
+                          <div className="checkBox col-md-1">
+                            <input
+                              type="radio"
+                              name={`vendor_selected${index}`}
+                              onChange={(event) =>
+                                handleFormChange(event, index)
+                              }
+                              value={2}
+                            />
+                          </div>
                           <div className="inputBoxPO mb-3 col-md-6 ">
                             <label>
                               2<span className="subscript">nd</span> Vendor
                               <span className="text-danger">*</span>
                             </label>
-                            <div
-                              className="checkBox col-sm-1"
-                              style={{ width: "2%" }}
-                            >
-                              <input
-                                type="checkbox"
-                                name="vendor_selected"
-                                onChange={(event) =>
-                                  handleFormChange(event, index)
-                                }
-                                value={form.vendor_2}
-                              />
-                            </div>
+
                             <input
                               defaultValue={form.vendor_2}
                               type="text"
@@ -361,24 +328,12 @@ export const FormApprovalInventory = () => {
                               className="form-control"
                             />
                           </div>
-                          <div className="inputBoxPO mb-3 col-md-6">
+                          <div className="inputBoxPO mb-3 col-md-5">
                             <label>
                               2<span className="subscript">nd</span> Item Price
                               <span className="text-danger">*</span>
                             </label>
-                            <div
-                              className="checkBox col-sm-1 "
-                              style={{ width: "2%" }}
-                            >
-                              <input
-                                type="checkbox"
-                                name="item_price_selected"
-                                onChange={(event) =>
-                                  handleFormChange(event, index)
-                                }
-                                value={form.item_price_2}
-                              />
-                            </div>
+
                             <input
                               type="number"
                               name="item_price_2"
@@ -386,28 +341,27 @@ export const FormApprovalInventory = () => {
                               value={form.item_price_2}
                             />
                           </div>
-
+                          <div className="checkBox col-md-1">
+                            <input
+                              type="radio"
+                              name={`vendor_selected${index}`}
+                              onChange={(event) =>
+                                handleFormChange(event, index)
+                              }
+                              value={3}
+                            />
+                          </div>
                           <div className="inputBoxPO mb-3 col-md-6 ">
                             <label>
                               3<span className="subscript">st</span> Vendor
                             </label>
-                            <div
-                              className="checkBox col-sm-1"
-                              style={{ width: "2%" }}
-                            >
-                              <input
-                                type="checkbox"
-                                name="vendor_selected"
-                                onChange={(event) =>
-                                  handleFormChange(event, index)
-                                }
-                                value={form.vendor_3}
-                              />
-                            </div>
+
                             <select
                               name="vendor_3"
                               value={form.vendor_3}
-                              onChange={(event) => handleFormChange(event)}
+                              onChange={(event) =>
+                                handleFormChange(event, index)
+                              }
                             >
                               <option value="">Select Vendor</option>
 
@@ -418,32 +372,22 @@ export const FormApprovalInventory = () => {
                               ))}
                             </select>
                           </div>
-                          <div className="inputBoxPO mb-3 col-md-6">
+                          <div className="inputBoxPO mb-3 col-md-5">
                             <label>
                               3<span className="subscript">rd</span> Item Price
                             </label>
-                            <div
-                              className="checkBox col-sm-1 "
-                              style={{ width: "2%" }}
-                            >
-                              <input
-                                type="checkbox"
-                                name="item_price_selected"
-                                onChange={(event) =>
-                                  handleFormChange(event, index)
-                                }
-                                value={form.item_price_3}
-                              />
-                            </div>
+
                             <input
                               type="number"
                               name="item_price_3"
                               placeholder="item_price_3"
-                              onChange={(event) => handleFormChange(event)}
+                              onChange={(event) =>
+                                handleFormChange(event, index)
+                              }
                               value={form.item_price_3}
                             />
                           </div>
-                          <div className="inputBoxPO mb-3 col-md-4">
+                          <div className="inputBoxPO mb-3 col-md-3">
                             <label>
                               Quantity
                               <span className="text-danger">*</span>
@@ -453,10 +397,12 @@ export const FormApprovalInventory = () => {
                               name="quantity"
                               placeholder="Quantity"
                               value={form.quantity}
-                              onChange={(event) => handleFormChange(event)}
+                              onChange={(event) =>
+                                handleFormChange(event, index)
+                              }
                             />
                           </div>
-                          <div className="inputBoxPO mb-3 col-md-4">
+                          <div className="inputBoxPO mb-3 col-md-3">
                             <label>
                               PPN
                               <span className="text-danger">*</span>
@@ -475,18 +421,36 @@ export const FormApprovalInventory = () => {
                               <option value="0">No</option>
                             </select>
                           </div>
-                          <div className="inputBoxPO mb-3 col-md-4">
-                            <label>
-                              Additional Cost
-                              <span className="text-danger">*</span>
-                            </label>
+                          <div className="inputBoxPO mb-3 col-md-3">
+                            <label>Additional Cost</label>
                             <input
                               type="number"
                               name="Biaya Lain-Lain"
                               placeholder="Additional Cost"
-                              onChange={(event) => handleFormChange(event)}
+                              onChange={(event) =>
+                                handleFormChange(event, index)
+                              }
                               value={form["Biaya Lain-Lain"]}
                             />
+                          </div>
+                          <div className="inputBoxPO mb-3 col-md-3">
+                            <label>
+                              Is Asset
+                              <span className="text-danger">*</span>
+                            </label>
+                            <select
+                              required
+                              name="is_asset"
+                              value={form.is_asset}
+                              onChange={(event) =>
+                                handleFormChange2(event, index)
+                              }
+                              style={{ width: "95%" }}
+                            >
+                              <option value="">Select</option>
+                              <option value="1">Yes</option>
+                              <option value="0">No</option>
+                            </select>
                           </div>
                         </div>
                       </div>
@@ -497,7 +461,6 @@ export const FormApprovalInventory = () => {
                     <button
                       className="btn btn-primary float-end"
                       style={{ marginLeft: "20px", marginRight: "20px" }}
-                      onClick={(e) => onApproved(e, location.state.header.id)}
                     >
                       Accept
                     </button>
