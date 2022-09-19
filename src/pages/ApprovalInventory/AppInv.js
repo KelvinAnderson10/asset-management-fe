@@ -90,7 +90,7 @@ export const AppInv = () => {
                   <p>Not request</p>
                 ) : (
                     appData.map((data) => (
-                        <div className='approval-inv-box-item' key={data.po_id} onClick={()=>handleClickApproval(data.po_id, data.ToUser, data.Jabatan, data['Kode Wilayah'], data['Jenis Produk'])}>
+                        <div className='approval-inv-box-item' key={data.po_id} onClick={()=>handleClickApproval(data.po_id, data.ToUser, data.Jabatan, data['Kode Wilayah'], data['Jenis Produk'], data.approver_level3)}>
                             <div className='header-list-approval'>
                                 <a className='approval-num'>{data.po_id}</a>
                                 <a className='status-approval'>{data.status}</a>

@@ -71,7 +71,8 @@ export const UseApprovalInventory = () => {
     toUser,
     jabatan,
     kodeWilayah,
-    jenisProduk
+    jenisProduk,
+    approverLevel3
   ) => {
     try {
       let poHeaderInFunc = {};
@@ -80,6 +81,7 @@ export const UseApprovalInventory = () => {
       poHeaderInFunc.jabatan = jabatan;
       poHeaderInFunc.kodeWilayah = kodeWilayah;
       poHeaderInFunc.jenisProduk = jenisProduk;
+      poHeaderInFunc.approverLevel3 = approverLevel3
       setPOHeader(poHeaderInFunc);
       const response = await purchaseOrderService.getPODetailById(id);
       console.log("ini id", id);
@@ -105,5 +107,5 @@ export const UseApprovalInventory = () => {
     }
   }, [poDetail]);
 
-  return { handleClickApproval, onGetPOListByApproval, poDetail, appData };
+  return { handleClickApproval, onGetPOListByApproval, poDetail, appData, user };
 };

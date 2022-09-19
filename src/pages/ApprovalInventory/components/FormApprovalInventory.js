@@ -9,7 +9,7 @@ import Swal from "sweetalert2";
 import { Failed } from "../../../shared/components/Notification/Failed";
 
 export const FormApprovalInventory = () => {
-  const {handleClickApproval, onGetPOListByApproval,poDetail,appData} = UseApprovalInventory()
+  const {handleClickApproval, onGetPOListByApproval,poDetail,appData, user} = UseApprovalInventory()
   const [POdata, setPOData] = useState([
     {
       ["Nama Barang"]: "",
@@ -87,6 +87,50 @@ export const FormApprovalInventory = () => {
         } 
       }
     })
+  }
+
+  //Approval
+  const onApproved = async(e, id) => {
+    e.preventDefault(e)
+    if (user.level_approval==='GA' || user.level_approval==='GA'){
+      if (location.state.header.approverLevel3 == '-'){
+        try {
+          const response = await purchaseOrderService.approvedByLevel2(id)
+          Swal.fire("Success!", "This request has been approved.", "success");
+          navigate('/approval-data/inventory', {replace: true})
+        } catch (e) {
+          console.log(e.response)
+            Failed('Failed to approved')
+        }
+      } else {
+        try {
+          const response = await purchaseOrderService.approvedByLevel3(id)
+          Swal.fire("Success!", "This request has been approved.", "success");
+          navigate('/approval-data/inventory', {replace: true})
+        } catch (e) {
+          console.log(e.response)
+            Failed('Failed to approved')
+        }
+      }
+    } else if (user.level_approval==='GM' || user.level_approval==='SPV'){
+      try {
+        const response = await purchaseOrderService.approvedByLevel1(id)
+        Swal.fire("Success!", "This request has been approved.", "success");
+        navigate('/approval-data/inventory', {replace: true})
+      } catch (e) {
+        console.log(e.response)
+          Failed('Failed to approved')
+      }
+    } else {
+      try {
+        const response = await purchaseOrderService.approvedByLevel2(id)
+        Swal.fire("Success!", "This request has been approved.", "success");
+        navigate('/approval-data/inventory', {replace: true})
+      } catch (e) {
+        console.log(e.response)
+          Failed('Failed to approved')
+      }
+    }
   }
 
   return (
@@ -313,6 +357,7 @@ export const FormApprovalInventory = () => {
                     <button
                       className="btn btn-primary float-end"
                       style={{ marginLeft: "20px", marginRight: "20px" }}
+                      onClick={(e) => onApproved(e, location.state.header.id)}
                     >
                       Accept
                     </button>
