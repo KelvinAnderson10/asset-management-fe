@@ -1,7 +1,7 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 
-import { HomeView } from "../pages/HomePage/HomeView";
+
 import { Location } from "../pages/Location/Location";
 import { VendorManage } from "../pages/Vendor/Vendor";
 import { ImportData } from "../pages/Import Data/ImportData";
@@ -29,7 +29,7 @@ export const AppRouter = () => {
     <Routes>
       <Route index element={<Login/>}></Route>
       <Route element={<ProtectedPage></ProtectedPage>}>
-        <Route path="/home" element={<HomeView />} />
+       
         <Route path="/main" element={<Main/>} />
         <Route path="/data-management/asset-item" element={<AssetItem />} />
         <Route path="/data-management/asset-category" element={<AssetCategory />}/>

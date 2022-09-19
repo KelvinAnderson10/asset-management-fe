@@ -3,6 +3,7 @@ import { useAuth } from '../../../services/UseAuth';
 import { useDeps } from '../../../shared/context/DependencyContext';
 import './FormPOInventory.css'
 import * as BsIcons from 'react-icons/bs'
+import swal from "sweetalert";
 
 export const FormPOInventory = () => {
     const [POdata, setPOData] = useState(
@@ -88,15 +89,25 @@ export const FormPOInventory = () => {
           POdata[i].ppn= Number(POdata[i].ppn)
           POdata[i].ppn= Boolean(POdata[i].ppn)
           POdata[i]["Biaya Lain-Lain"]= Number(POdata[i]["Biaya Lain-Lain"])
-          }
-    
-    
+          }    
           POHeader.PurchaseOrderDetail= [...POdata]
           console.log('ini merge',POHeader)
           const response = await purchaseOrderService.createPO(POHeader)
           console.log('ini response',response)
+          handleClearForm()
+          if (response.status === "SUCCESS") {
+            swal({
+              title: "Success!",
+              text: "Your data has been saved!",
+              icon: "success",
+              button: "OK!",
+            });
+          }
+
         } catch (error) {
           console.log(error)
+        } finally{
+          e.target.reset()
         }
     };
 
@@ -152,7 +163,7 @@ export const FormPOInventory = () => {
 
     const handleClearForm = () => {
         setPOHeader({})
-        setPOData([])
+        setPOData([0])
     }
 
     return (
