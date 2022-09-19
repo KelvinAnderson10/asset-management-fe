@@ -20,3 +20,11 @@
     padding: 20px;
     text-align: start;
 }
+
+
+.checkBox .col-sm-1{
+    width: 2.333%;
+}
+input[type=checkbox] {
+    transform: scale(1.5);
+}

@@ -4,8 +4,7 @@ import { UseApprovalInventory } from './UseApprovalInventory'
 
 export const AppInv = () => {
     const {handleClickApproval, onGetPOListByApproval,poDetail,appData} = UseApprovalInventory()
-    console.log('ini appdata',appData)
-    console.log('detail po list page',poDetail)
+
   
     return (
     <div>

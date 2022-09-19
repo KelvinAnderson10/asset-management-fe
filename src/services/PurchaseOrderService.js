@@ -61,6 +61,17 @@ export const purchaseOrderService = ({doGet,doPost,doPut,doDelete}) => {
             throw e
         }
     }
+    const  updatePODetail = async (id,newData) => {
+        try {
+            return await doPut({
+                url: `/api/po/detail/${id}`, data: newData
+                
+            })
+        } catch (e) {
+            throw e;
+        }
+    }
+   
 
-  return {getPOById,getPOByUserName,deletePO,createPO, getPOByRequester, getPODetailById, getPOListByApproval}
+  return {updatePODetail,getPOById,getPOByUserName,deletePO,createPO, getPOByRequester, getPODetailById, getPOListByApproval}
 }

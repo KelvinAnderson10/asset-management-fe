@@ -71,14 +71,19 @@ export const UseApprovalInventory = () => {
   ) => {
     try {
       let poHeaderInFunc = {};
+      poHeaderInFunc.id = id;
       poHeaderInFunc.toUser = toUser;
       poHeaderInFunc.jabatan = jabatan;
       poHeaderInFunc.kodeWilayah = kodeWilayah;
       poHeaderInFunc.jenisProduk = jenisProduk;
       setPOHeader(poHeaderInFunc);
+      
       const response = await purchaseOrderService.getPODetailById(id);
       console.log("ini id", id);
       console.log("response", response);
+      for (let i in response.data){
+        response.data[i].ppn = Number(response.data[i].ppn)
+      }
       setpoDetail(response.data);
       console.log("po detail data", poDetail);
     } catch (e) {
@@ -87,11 +92,11 @@ export const UseApprovalInventory = () => {
   };
 
   useEffect(() => {
-    console.log("detail po", poDetail);
+    console.log("detail po use effect", poDetail);
     if (poDetail.length != 0) {
         navigate('/approval-data/inventory/form', {state: {header: poHeader,detail:poDetail}}) 
     }
   }, [poDetail]);
 
-  return { handleClickApproval, onGetPOListByApproval, poDetail, appData };
+  return { handleClickApproval, onGetPOListByApproval, poDetail, appData, setpoDetail };
 };

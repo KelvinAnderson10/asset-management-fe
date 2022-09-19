@@ -5,40 +5,49 @@ import { useDeps } from "../../../shared/context/DependencyContext";
 import { UseApprovalInventory } from "../UseApprovalInventory";
 import "./FormApprovalInventory.css";
 
-
 export const FormApprovalInventory = () => {
-  const {handleClickApproval, onGetPOListByApproval,poDetail,appData} = UseApprovalInventory()
-  const [POdata, setPOData] = useState([
-    {
-      ["Nama Barang"]: "",
-      vendor_1: "",
-      vendor_2: "",
-      vendor_3: "",
-      item_price_1: "",
-      item_price_2: "",
-      item_price_3: "",
-      quantity: "",
-      ppn: "",
+  const {poDetail,setpoDetail} = UseApprovalInventory();
+  // const [POdata, setPOData] = useState([
+  //   {
+  //     ["Nama Barang"]: "",
+  //     vendor_1: "",
+  //     vendor_2: "",
+  //     vendor_3: "",
+  //     item_price_1: "",
+  //     item_price_2: "",
+  //     item_price_3: "",
+  //     vendor_selected: "",
+  //     item_price_selected: "",
+  //     quantity: "",
+  //     ppn: "",
+  //     is_asset: "",
 
-      ["Biaya Lain-Lain"]: "",
-    },
-  ]);
-  const [POHeader, setPOHeader] = useState({
-    PurchaseOrderDetail: [],
-    tipe: "Inventory",
-  });
+  //     ["Biaya Lain-Lain"]: "",
+  //   },
+  // ]);
+  // const [POHeader, setPOHeader] = useState({
+  //   PurchaseOrderDetail: [],
+  //   tipe: "Inventory",
+  // });
 
-  const { vendorService, userService, purchaseOrderService } =
-    useDeps();
-  const handleFormChange = (event, index) => {
-    let data = [...POdata];
-    data[index][event.target.name] = event.target.value;
-    setPOData(data);
-    console.log(POdata);
+  const { vendorService, userService, purchaseOrderService } = useDeps();
+
+  const handleFormChange = (event,index) => {
+    const newArray = location.state.detail.map((item,i)=>{
+      if (index === i){
+        return {...item, [event.target.name]:event.target.value}
+      }else{
+        return item
+      }
+    })
+    setpoDetail(newArray)
+    // let data = [...poDetail];
+    // data[idx][event.target.name] = event.target.value;
+    // setpoDetail(data);
+    // console.log(poDetail);
   };
 
   const [vendor, setVendor] = useState([]);
-
   const onGetAllVendor = async () => {
     try {
       const response = await vendorService.getAllVendor();
@@ -48,20 +57,53 @@ export const FormApprovalInventory = () => {
     } finally {
     }
   };
-  const location = useLocation()
-//  console.log('detail po form page',poDetail)
+  const location = useLocation();
+  //  console.log('detail po form page',poDetail)
 
   useEffect(() => {
     onGetAllVendor();
   }, []);
 
+  const handleSubmitPO = async (e) => {
+    e.preventDefault();
+    try {
+      const updateDetail = location.state.detail.map((obj) => {
+        for (let i in location.state.detail) {
+          location.state.detail[i].ppn = Number(location.state.detail[i].ppn);
+          location.state.detail[i].ppn = Boolean(location.state.detail[i].ppn);
+          location.state.detail[i].item_price_selected = Number(
+            location.state.detail[i].item_price_selected
+          );
+        }
+
+        console.log("ini yg di submit", location.state.detail);
+
+        const response = purchaseOrderService.updatePODetail(
+          obj.po_id_detail,
+          poDetail
+        );
+
+        console.log("ini response submit", response);
+      });
+      console.log("ini detail update", updateDetail);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  // const handleChangeVendorSelected = (event,index)=>{
+  //   let data = [...POdata];
+  //   data[index][event.target.name] = event.target.value;
+  //   setPOData(data);
+  //   console.log(POdata);
+  // }
 
   return (
     <>
       <Sidebar>
         <div className="po-app-form-container">
           <div className="po-app-form-card">
-            <form>
+            <form onSubmit={handleSubmitPO}>
               <h4 className="mb-5 text-danger">Purchase Order Detail</h4>
               <div className="formPOInput">
                 <div className="row">
@@ -77,11 +119,28 @@ export const FormApprovalInventory = () => {
                       className="form-control"
                     />
                   </div>
+                  {/* <div className="mb-3 col-md-4">
+                    <label>
+                     PO ID<span className="text-danger">*</span>
+                    </label>
+                    <input
+                      value={location.state.header.id}
+                      readOnly
+                      type="text"
+                      name="po_id"
+                      className="form-control"
+                    />
+                  </div> */}
                   <div className="mb-3 col-md-4">
                     <label>
                       To User<span className="text-danger">*</span>
                     </label>
-                    <input type="text" name="ToUser" className="form-control" value={location.state.header.toUser} />
+                    <input
+                      type="text"
+                      name="ToUser"
+                      className="form-control"
+                      value={location.state.header.toUser}
+                    />
                   </div>
                   <div className="mb-3 col-md-4">
                     <label>
@@ -100,7 +159,7 @@ export const FormApprovalInventory = () => {
                       <span className="text-danger">*</span>{" "}
                     </label>
                     <input
-                    value={location.state.header.jenisProduk}
+                      value={location.state.header.jenisProduk}
                       type="text"
                       name="Jenis Produk"
                       className="form-control"
@@ -121,7 +180,7 @@ export const FormApprovalInventory = () => {
                   </div>
                   {location.state.detail.map((form, index) => {
                     return (
-                      <div key={index}>
+                      <div key={form.po_id_detail}>
                         <div className="header-item-add">
                           <h3 style={{ textAlign: "center" }}>
                             Item {index + 1}{" "}
@@ -133,27 +192,70 @@ export const FormApprovalInventory = () => {
                               Item Name
                               <span className="text-danger">*</span>{" "}
                             </label>
-                            <input name="Nama Barang" placeholder="Item Name" value={form['Nama Barang']} />
+                            <input
+                              name="Nama Barang"
+                              placeholder="Item Name"
+                              value={form["Nama Barang"]}
+                            />
+                          </div>
+                          <div className="inputBoxPO mb-3">
+                            <label>
+                              PO ID Detail
+                              <span className="text-danger">*</span>{" "}
+                            </label>
+                            <input
+                              name="po_id_detail"
+                              placeholder="PO ID Detail"
+                              value={form.po_id_detail}
+                            />
                           </div>
 
-                          <div className="inputBoxPO mb-3 col-md-6 ">
+                          <div
+                            className="inputBoxPO mb-3 col-md-5 "
+                            style={{ width: "45%" }}
+                          >
                             <label>
                               1<span className="subscript">st</span> Vendor
                               <span className="text-danger">*</span>
                             </label>
+                            <div
+                              className="checkBox col-sm-1"
+                              style={{ width: "2%" }}
+                            >
+                              <input
+                                type="checkbox"
+                                name="vendor_selected"
+                                onChange={(event) => handleFormChange(event,index)}
+                                value={form.vendor_1}
+                              />
+                            </div>
                             <input
-                              readOnly
                               defaultValue={form.vendor_1}
                               type="text"
                               name="vendor_1"
                               className="form-control"
                             />
                           </div>
-                          <div className="inputBoxPO mb-3 col-md-6">
+
+                          <div
+                            className="inputBoxPO  mb-3 col-md-5"
+                            style={{ width: "45%" }}
+                          >
                             <label>
                               1<span className="subscript">st</span> Item Price
                               <span className="text-danger">*</span>
                             </label>
+                            <div
+                              className="checkBox col-sm-1 "
+                              style={{ width: "2%" }}
+                            >
+                              <input
+                                type="checkbox"
+                                name="item_price_selected"
+                                onChange={(event) => handleFormChange(event,index)}
+                                value={form.item_price_1}
+                              />
+                            </div>
                             <input
                               type="number"
                               name="item_price_1"
@@ -167,8 +269,18 @@ export const FormApprovalInventory = () => {
                               2<span className="subscript">nd</span> Vendor
                               <span className="text-danger">*</span>
                             </label>
+                            <div
+                              className="checkBox col-sm-1"
+                              style={{ width: "2%" }}
+                            >
+                              <input
+                                type="checkbox"
+                                name="vendor_selected"
+                                onChange={(event) => handleFormChange(event,index)}
+                                value={form.vendor_2}
+                              />
+                            </div>
                             <input
-                              readOnly
                               defaultValue={form.vendor_2}
                               type="text"
                               name="vendor_2"
@@ -180,6 +292,17 @@ export const FormApprovalInventory = () => {
                               2<span className="subscript">nd</span> Item Price
                               <span className="text-danger">*</span>
                             </label>
+                            <div
+                              className="checkBox col-sm-1 "
+                              style={{ width: "2%" }}
+                            >
+                              <input
+                                type="checkbox"
+                                name="item_price_selected"
+                                onChange={(event) => handleFormChange(event,index)}
+                                value={form.item_price_2}
+                              />
+                            </div>
                             <input
                               type="number"
                               name="item_price_2"
@@ -192,12 +315,21 @@ export const FormApprovalInventory = () => {
                             <label>
                               3<span className="subscript">st</span> Vendor
                             </label>
+                            <div
+                              className="checkBox col-sm-1"
+                              style={{ width: "2%" }}
+                            >
+                              <input
+                                type="checkbox"
+                                name="vendor_selected"
+                                onChange={(event) => handleFormChange(event,index)}
+                                value={form.vendor_3}
+                              />
+                            </div>
                             <select
                               name="vendor_3"
                               value={form.vendor_3}
-                              onChange={(event) =>
-                                handleFormChange(event, index)
-                              }
+                              onChange={(event) => handleFormChange(event)}
                             >
                               <option value="">Select Vendor</option>
 
@@ -212,13 +344,22 @@ export const FormApprovalInventory = () => {
                             <label>
                               3<span className="subscript">rd</span> Item Price
                             </label>
+                            <div
+                              className="checkBox col-sm-1 "
+                              style={{ width: "2%" }}
+                            >
+                              <input
+                                type="checkbox"
+                                name="item_price_selected"
+                                onChange={(event) => handleFormChange(event,index)}
+                                value={form.item_price_3}
+                              />
+                            </div>
                             <input
                               type="number"
                               name="item_price_3"
                               placeholder="item_price_3"
-                              onChange={(event) =>
-                                handleFormChange(event, index)
-                              }
+                              onChange={(event) => handleFormChange(event)}
                               value={form.item_price_3}
                             />
                           </div>
@@ -232,9 +373,7 @@ export const FormApprovalInventory = () => {
                               name="quantity"
                               placeholder="Quantity"
                               value={form.quantity}
-                              onChange={(event) =>
-                                handleFormChange(event, index)
-                              }
+                              onChange={(event) => handleFormChange(event)}
                             />
                           </div>
                           <div className="inputBoxPO mb-3 col-md-4">
@@ -246,9 +385,7 @@ export const FormApprovalInventory = () => {
                               required
                               name="ppn"
                               value={form.ppn}
-                              onChange={(event) =>
-                                handleFormChange(event, index)
-                              }
+                              onChange={(event) => handleFormChange(event)}
                               style={{ width: "95%" }}
                             >
                               <option value="">Select Condition</option>
@@ -265,9 +402,7 @@ export const FormApprovalInventory = () => {
                               type="number"
                               name="Biaya Lain-Lain"
                               placeholder="Additional Cost"
-                              onChange={(event) =>
-                                handleFormChange(event, index)
-                              }
+                              onChange={(event) => handleFormChange(event)}
                               value={form["Biaya Lain-Lain"]}
                             />
                           </div>
