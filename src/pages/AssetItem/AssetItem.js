@@ -22,6 +22,7 @@ export const AssetItem = () => {
   const { assetItemService, vendorService, locationService, eventLogService } =
     useDeps();
   const ref = useRef(null)
+  const [fileName, setFileName]= useState('No file chosen')
 
   useEffect(() => {
     onGetAllSubProduct();
@@ -69,6 +70,7 @@ export const AssetItem = () => {
   };
 
   const imageChange = async (e) => {
+    setFileName(e.target.files[0].name)
     if (e.target.files && e.target.files.length > 0) {
       const imageFiles = e.target.files[0]
       console.log('originalFile instanceof Blob', imageFiles instanceof Blob); // true
@@ -331,14 +333,19 @@ export const AssetItem = () => {
                       </div>
                     )}
                   </div>
-                  <input 
+                  <div className="choose-file">
+                <input ref={ref} accept="image/*" onChange={imageChange} type="file" id="actual-btn" hidden/>
+                <label for="actual-btn">Choose File</label>
+                <span  id="file-chosen">{fileName}</span>
+                </div>
+                  {/* <input 
                     ref={ref}
                     id="upload"
                     accept="image/*"
                     type="file"
                     name="Asset Image"
                     onChange={imageChange}
-                  />
+                  /> */}
                 </div>
                 <div className="inputBox">
                   <span>Additional Cost :</span>
