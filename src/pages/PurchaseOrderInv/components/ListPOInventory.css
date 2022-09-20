@@ -40,13 +40,13 @@
     padding: 15px;
     flex-direction: column;
     align-items: flex-start;
-    font-size: 1.8vh;
+    font-size: 1vh;
     margin-bottom: 20px;
     /* background-color:  rgba(7, 124, 234, 0.714); */
 }
 
 .po-inv-list-box-item:hover{
-    background-color: #15a6ee;
+    background-color: #f7b1ae;
     cursor: pointer;
     color: white;
 }
@@ -204,7 +204,7 @@
 }
   
 .listNumbers li.active {
-    background-color: #15a6ee;
+    background-color: rgb(183, 6, 33);
     color: rgb(255, 255, 255);
 }
   

@@ -198,7 +198,13 @@ export const Overview = () => {
     }
   };
 
-  const ref = useRef(null);
+  const ref = useRef(null)
+  const ref1 = useRef(null);
+  const ref2 = useRef(null);
+  const ref3 = useRef(null);
+  const ref4 = useRef(null);
+  const ref5 = useRef(null);
+  const ref6 = useRef(null);
 
   const removeSelectedImage = () => {
     setImageBase64("")
@@ -581,8 +587,21 @@ export const Overview = () => {
   };
 
   const onClearForm = () => {
-    ref.current.value = "";
-    getAssetsPagination(1);
+    setSearchCondition('')
+    setSearchVendor('')
+    setSearchLocation('')
+    setSearchProduct('')
+    setSearchSubproduct('')
+    setSearchCategory('')
+    if (user.role=='Admin') {
+      getAssetsPagination(1);
+    } else if (user.role=='IT'){
+      getAssetsByIT(1);
+    } else if (user.role=='Regular') {
+      getAssetsByLocation(user.location_id)
+    } else if (user.role=='GA'){
+      getAssetsByGA(1)
+    }
   };
 
   //Pagination From Backend
@@ -808,10 +827,10 @@ export const Overview = () => {
   };
 
   //Filter Multiple Condition
-  const onFilterMultiple = async (condition, vendor) => {
+  const onFilterMultiple = async (condition, vendor, location, product, subproduct, category) => {
     if (user.role == 'Admin' || user.role == 'GA') {
       try {
-        const response = await overviewService.filterAssetMultipleConditionByGA(condition, vendor)
+        const response = await overviewService.filterAssetMultipleConditionByGA(condition, vendor, location, product, subproduct, category)
       for (let i in response.data) {
         response.data[i]["Harga Perolehan"] =
           "Rp" + thousands_separators(response.data[i]["Harga Perolehan"]);
@@ -844,7 +863,7 @@ export const Overview = () => {
       }
     } else if (user.role == 'IT') {
       try {
-      const response = await overviewService.filterAssetMultipleConditionByIT()
+      const response = await overviewService.filterAssetMultipleConditionByIT(condition, vendor, location, product, subproduct, category)
       for (let i in response.data) {
         response.data[i]["Harga Perolehan"] =
           "Rp" + thousands_separators(response.data[i]["Harga Perolehan"]);
@@ -878,13 +897,12 @@ export const Overview = () => {
     }
   }
   
-  const [filterMulti, setFilterMulti] = useState({})
-  const onChangeFilterMulti = (e) => {
-    const newFilter = { ...filterMulti };
-    newFilter[e.target.name] = e.target.value;
-    setFilterMulti(newFilter);
-    console.log(newFilter);
-  }
+  const [searchCondition, setSearchCondition] = useState('')
+  const [searchVendor, setSearchVendor] = useState('')
+  const [searchLocation, setSearchLocation] = useState('')
+  const [searchProduct, setSearchProduct] = useState('')
+  const [searchSubproduct, setSearchSubproduct] = useState('')
+  const [searchCategory, setSearchCategory] = useState('')
 
   return (
     <>
@@ -899,19 +917,19 @@ export const Overview = () => {
                 <div className='title-search'>
                 <a>Condition:</a>
                 </div>
-                <input type="text" className="input-search" placeholder="Condition" onChange={onChangeFilterMulti} value={filterMulti.category} name='category'/>
+                <input value={searchCondition}  type="text" className="input-search" placeholder="Condition" onChange={(e)=>setSearchCondition(e.target.value)}/>
               </div>
               <div className='search-box-item'>
               <div className='title-search'>
                 <a>Vendor:</a>
                 </div>
-                <input type="text" className="input-search" placeholder="Vendor" onChange={onChangeFilterMulti} value={filterMulti.vendor} name='vendor'/>
+                <input value={searchVendor} type="text" className="input-search" placeholder="Vendor" onChange={(e)=>setSearchVendor(e.target.value)}/>
               </div>
               <div className='search-box-item'>
               <div className='title-search'>
                 <a>Location:</a>
                 </div>
-                <input type="text" className="input-search" placeholder="Location"/>
+                <input value={searchLocation} type="text" className="input-search" placeholder="Location" onChange={(e)=>setSearchLocation(e.target.value)}/>
               </div>
             </div>
             <div className='box-search-container'>
@@ -919,131 +937,63 @@ export const Overview = () => {
               <div className='title-search'>
                 <a>Subproduct:</a>
                 </div>
-                <input type="text" className="input-search" placeholder="Subproduct"/>
+                <input value={searchSubproduct} type="text" className="input-search" placeholder="Subproduct" onChange={(e)=>setSearchSubproduct(e.target.value)}/>
               </div>
               <div className='search-box-item'>
               <div className='title-search'>
                 <a>Product:</a>
                 </div>
-                <input type="text" className="input-search" placeholder="Product"/>
+                <input value={searchProduct} type="text" className="input-search" placeholder="Product" onChange={(e)=>setSearchProduct(e.target.value)}/>
               </div>
               <div className='search-box-item'>
               <div className='title-search'>
                 <a>Category:</a>
                 </div>
-                <input type="text" className="input-search" placeholder="Category"/>
+                <input value={searchCategory} type="text" className="input-search" placeholder="Category" onChange={(e)=>setSearchCategory(e.target.value)}/>
               </div>
             </div>
           </div>
+          <div className='button-search-container'>
+            <button
+                    value="submit"
+                    className="button-box"
+                    onClick={()=>onFilterMultiple(searchCondition, searchVendor, searchLocation, searchProduct, searchSubproduct, searchCategory)}>
+                      Search
+            </button>
+            <button
+                    value="submit"
+                    className="button-box"
+                    style={{backgroundColor:'rgb(255, 178, 0)'}}
+                    onClick={onClearForm}>
+                      Clear
+            </button>
+            <div
+            className="clearfix">
+              Showing {datas.length} out of {totalAsset}
+          </div>
+          <div style={{marginRight: '2vw', marginTop: '1vh'}}>
+          <ReactPaginate
+              previousLabel={"prev"}
+              nextLabel={"next"}
+              breakLabel={"..."}
+              pageCount={pageCount}
+              marginPagesDisplayed={2}
+              pageRangeDisplayed={3}
+              onPageChange={handlePageClick}
+              containerClassName={"pagination justify-content-center"}
+              pageClassName={"page-item"}
+              pageLinkClassName={"page-link"}
+              previousClassName={"page-item"}
+              previousLinkClassName={"page-link"}
+              nextClassName={"page-item"}
+              nextLinkClassName={"page-link"}
+              breakClassName={"page-item"}
+              breakLinkClassName={"page-link"}
+              activeClassName={"active"}
+            />
+            </div>
+            </div>
           <div className="table-container">
-            {/* <div className="search-overview">
-              <div className="input-group mb-3">
-                <button
-                  className="btn btn-outline-secondary dropdown-toggle"
-                  type="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  Search by {dropdownName}
-                </button>
-                <ul className="dropdown-menu">
-                  <li>
-                    <a
-                      className="dropdown-item"
-                      onClick={() => {
-                        onChangeDropdown("Vendor");
-                      }}
-                    >
-                      Vendor
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      className="dropdown-item"
-                      onClick={() => {
-                        onChangeDropdown("Location");
-                      }}
-                    >
-                      Location
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      className="dropdown-item"
-                      onClick={() => {
-                        onChangeDropdown("Condition");
-                      }}
-                    >
-                      Condition
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      className="dropdown-item"
-                      onClick={() => {
-                        onChangeDropdown("Item Name");
-                      }}
-                    >
-                      Item Name
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      className="dropdown-item"
-                      onClick={() => {
-                        onChangeDropdown("Subproduct");
-                      }}
-                    >
-                      Subproduct
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      className="dropdown-item"
-                      onClick={() => {
-                        onChangeDropdown("Product");
-                      }}
-                    >
-                      Product
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      className="dropdown-item"
-                      onClick={() => {
-                        onChangeDropdown("Category");
-                      }}
-                    >
-                      Category
-                    </a>
-                  </li>
-                </ul>
-                <input
-                  ref={ref}
-                  disabled={fill}
-                  type="text"
-                  className="form-control"
-                  aria-label="Text input with dropdown button"
-                  onChange={onChangeFilter}
-                />
-                <div className="input-group-append">
-                  <button
-                    value="submit"
-                    className="btn btn-primary form-button"
-                    onClick={onFilter}
-                  >
-                    <i className="fa fa-search"></i>
-                  </button>
-                  <button
-                    value="submit"
-                    className="btn btn-danger form-button"
-                    onClick={onClearForm}
-                  >
-                    <i className="fa fa-times"></i>
-                  </button>
-                </div>
-              </div>
-            </div> */}
             <div className="table-box">
               <table className="table table-bordered table-striped table-responsive table-hover">
                 <thead className="table-header">
@@ -1352,32 +1302,6 @@ export const Overview = () => {
               </table>
             </div>
           </div>
-          <div
-            className="clearfix">
-              Showing {datas.length} out of {totalAsset}
-          </div>
-          <div style={{marginRight: '2vw', marginTop: '1vh'}}>
-          <ReactPaginate
-              previousLabel={"prev"}
-              nextLabel={"next"}
-              breakLabel={"..."}
-              // pageCount = {Math.ceil(datas.length/10)}
-              pageCount={pageCount}
-              marginPagesDisplayed={2}
-              pageRangeDisplayed={3}
-              onPageChange={handlePageClick}
-              containerClassName={"pagination justify-content-center"}
-              pageClassName={"page-item"}
-              pageLinkClassName={"page-link"}
-              previousClassName={"page-item"}
-              previousLinkClassName={"page-link"}
-              nextClassName={"page-item"}
-              nextLinkClassName={"page-link"}
-              breakClassName={"page-item"}
-              breakLinkClassName={"page-link"}
-              activeClassName={"active"}
-            />
-            </div>
         </div>
       </div>
       {/* </div> */}

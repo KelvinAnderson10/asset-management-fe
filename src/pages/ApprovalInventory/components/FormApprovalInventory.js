@@ -7,6 +7,7 @@ import "./FormApprovalInventory.css";
 import * as MdIcons from "react-icons/md";
 import Swal from "sweetalert2";
 import { Failed } from "../../../shared/components/Notification/Failed";
+import { STATUS } from "../../../shared/constants";
 
 export const FormApprovalInventory = () => {
   const { user, setpoDetail, setPOHeader } = UseApprovalInventory();
@@ -136,6 +137,9 @@ export const FormApprovalInventory = () => {
       if (location.state.header.approverLevel3 == "-") {
         try {
           const response = await purchaseOrderService.approvedByLevel2(id);
+          location.state.header.status= STATUS.APPROVE_GA_IT
+          console.log(location.state.header);
+          setPOHeader(location.state.header)
           Swal.fire("Success!", "This request has been approved.", "success");
           navigate("/approval-data/inventory", { replace: true });
         } catch (e) {

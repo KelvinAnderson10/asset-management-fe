@@ -62,12 +62,12 @@
     padding: 15px;
     flex-direction: column;
     align-items: flex-start;
-    font-size: 1.8vh;
+    font-size: 1vw;
     margin-bottom: 20px;
 }
 
 .approval-inv-list-card :hover{
-    background-color: #15a6ee;
+    background-color: #f7b1ae;
     cursor: pointer;
     color: white;
 }
