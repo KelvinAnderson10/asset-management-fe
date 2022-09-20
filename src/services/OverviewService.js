@@ -149,10 +149,10 @@ export const overviewService = ({doGet, doPut}) => {
         }
     }
 
-    const filterAssetMultipleConditionByGA = async (condition, vendor) => {
+    const filterAssetMultipleConditionByGA = async (condition, vendor, location, product, subproduct, category) => {
         try {
             return await doGet({
-                url: `/api/asset/ga/search?condition=${condition}&vendor=${vendor}`
+                url: `/api/asset/ga/search?condition=${condition}&vendor=${vendor}&location=${location}&product=${product}&subproduct=${subproduct}&category=${category}`
             })
         } catch (e) {
             throw e

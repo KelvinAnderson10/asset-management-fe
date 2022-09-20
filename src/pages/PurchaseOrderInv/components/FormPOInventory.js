@@ -4,6 +4,7 @@ import { useDeps } from '../../../shared/context/DependencyContext';
 import './FormPOInventory.css'
 import * as BsIcons from 'react-icons/bs'
 import swal from "sweetalert";
+import { STATUS } from '../../../shared/constants';
 
 export const FormPOInventory = () => {
     const [POdata, setPOData] = useState(
@@ -81,7 +82,7 @@ export const FormPOInventory = () => {
         try {
           POHeader['Kode Wilayah'] = user.location_id
           POHeader['requester']= user.name
-          POHeader.status = 'Pending'
+          POHeader.status = STATUS.CREATE_PO
           for (let i in POdata) {
           POdata[i].item_price_1= Number(POdata[i].item_price_1)
           POdata[i].item_price_2= Number(POdata[i].item_price_2)

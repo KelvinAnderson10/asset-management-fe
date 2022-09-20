@@ -28,7 +28,7 @@ export const Dashboard = () => {
 
     const getAllEventLog = async () => {
         try{
-            if (user.role === 'Manager GA' || user.role === 'Admin') {
+            if (user.role === 'GA' || user.role === 'Admin') {
                 const response = await eventLogService.getEventLog()
                 for (let i in response.data) {
                     response.data[i]['CreatedAt'] = moment((response.data[i]['CreatedAt'])).format('YYYY-MM-DDTHH:MM')
@@ -110,7 +110,7 @@ export const Dashboard = () => {
                         
                     </div>
                     <div className='eventlog-container'>
-                        <h5>Recent Alert</h5>
+                        <h5>Recent Activity</h5>
                         <div className='eventlog-box'>
                             {event.length === 0 ? (
                                 <p></p>
