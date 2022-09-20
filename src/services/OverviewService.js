@@ -119,6 +119,75 @@ export const overviewService = ({doGet, doPut}) => {
         }
     }
 
+    const getAssetByIT = async (page) => {
+        try {
+            return await doGet({
+                url: `/api/asset/it/${page}`
+            })
+        } catch (e) {
+            throw e
+        }
+    }
 
-    return {getAllAsset, getAssetByAssetName, updateAsset,getAssetByVendor,getAssetByCondition,getAssetByLocation, getAssetByPagination, getAssetBySubproduct, getAssetByItemName, getAssetByProduct, getAssetByCategory, getCountAllAsset}
+    const getCountAssetByIT = async () => {
+        try {
+            return await doGet({
+                url: '/api/asset/it/count'
+            })
+        } catch (e) {
+            throw e
+        }
+    }
+
+    const getAssetByIdLocation = async (id) => {
+        try {
+            return await doGet({
+                url: `/api/asset/location/${id}`
+            })
+        } catch (e) {
+            throw e
+        }
+    }
+
+    const filterAssetMultipleConditionByGA = async (condition, vendor) => {
+        try {
+            return await doGet({
+                url: `/api/asset/ga/search?condition=${condition}&vendor=${vendor}`
+            })
+        } catch (e) {
+            throw e
+        }
+    }
+
+    const filterAssetMultipleConditionByIT = async () => {
+        try {
+            return await doGet({
+                url: '/api/asset/it/search'
+            })
+        } catch (e) {
+            throw e
+        }
+    }
+
+    const getAssetByGA = async (page) => {
+        try {
+            return await doGet({
+                url: `/api/asset/ga/${page}`
+            })
+        } catch (e) {
+            throw e
+        }
+    }
+
+    const getCountAssetByGA = async () => {
+        try {
+            return await doGet({
+                url: '/api/asset/ga/count'
+            })
+        } catch (e) {
+            throw e
+        }
+    }
+
+    return {getAllAsset, getAssetByAssetName, updateAsset,getAssetByVendor,getAssetByCondition,getAssetByLocation, getAssetByPagination, getAssetBySubproduct, getAssetByItemName, getAssetByProduct, getAssetByCategory, getCountAllAsset, getAssetByIT, getCountAssetByIT, getAssetByIdLocation, filterAssetMultipleConditionByGA, filterAssetMultipleConditionByIT, getAssetByGA, getCountAssetByGA}
 }

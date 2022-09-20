@@ -3,7 +3,7 @@
     justify-content: flex-start;
     align-items: center;
     align-content: center;
-    height: 93vh;
+    height: 79vh;
     flex-direction: column;
 }
 
@@ -32,7 +32,7 @@
     background-color:white;
     width: 90vw;
     display: flex;
-    height: 85%;
+    height: 98%;
     flex-direction: column;
     border-radius: 10px;
 }
@@ -91,10 +91,10 @@
 }
 
 .header-list-approval .status-approval{
-    width: 10vw;
+    width: 8vw;
     height: 3vh;
-    background-color: #FFDE00;
-    border-radius: 5px;
+    color: white;
+    border-radius: 8px;
     text-decoration: none;
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
