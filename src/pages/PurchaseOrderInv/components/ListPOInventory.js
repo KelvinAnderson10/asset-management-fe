@@ -3,6 +3,9 @@ import { useAuth } from '../../../services/UseAuth'
 import { useDeps } from '../../../shared/context/DependencyContext'
 import './ListPOInventory.css'
 import * as CgIcons from 'react-icons/cg'
+import * as BsIcons from 'react-icons/bs'
+import * as AiIcons from 'react-icons/ai'
+import Loading from '../../../shared/components/Loading/Loading'
 
 export const ListPOInventory = () => {
     const [poData, setPOData] = useState([])
@@ -39,7 +42,7 @@ export const ListPOInventory = () => {
     const onGetCookie = ()=>{
         let savedUserJsonString = getCookie("user")
         let savedUser = JSON.parse(savedUserJsonString)
-        setUser(prevObj=>({...prevObj,name:(savedUser.name), role:(savedUser.role), level_po:(savedUser.level_po), location_id:(savedUser.location_id), tap:(savedUser.TAP), cluster:(savedUser.Cluster), department:(savedUser.department)}))
+        setUser(prevObj=>({...prevObj,name:(savedUser.name), role:(savedUser.role), level_po:(savedUser.level_po), location_id:(savedUser.location_id), tap:(savedUser.tap), cluster:(savedUser.cluster), department:(savedUser.department)}))
     }
 
     useEffect(() => {
@@ -73,6 +76,8 @@ export const ListPOInventory = () => {
 
     const onClickClocePODetail = () => {
         setViewDetail(false)
+        setcurrentModal(1)
+        setIndexModal(1)
     }
 
     //Pagination Detail PO
@@ -113,10 +118,12 @@ export const ListPOInventory = () => {
           return null;
         }
       });
-    
+      const [isLoading, setIsLoading] = useState(false)
+
       const handleNextbtnModal = () => {
         setcurrentModal(currentModal + 1);
         setIndexModal(indexModal + 1)
+
         if (currentModal + 1 > maxModalNumberLimit) {
           setmaxModalNumberLimit(maxModalNumberLimit + modalNumberLimit);
           setminModalNumberLimit(minModalNumberLimit + modalNumberLimit);
@@ -216,10 +223,11 @@ export const ListPOInventory = () => {
                             <p>Not request</p>
                         ): (
                             currentItems.map((data) => (
-                                <div className='po-inv-list-box-item' key={data.po_id} onClick={()=>onClickPODetail(data.po_id)}>
+                                <div className='po-inv-list-box-item' 
+                                 key={data.po_id} onClick={()=>onClickPODetail(data.po_id)}>
                                     <div className='header-list-po'>
                                         <a className='po-num'>{data.po_id}</a>
-                                        <a className='status-po'>{data.status}</a>
+                                        <a className='status-po' style={{backgroundColor: data.status == 'Rejected' ? 'rgb(183, 6, 33)': 'rgb(255, 178, 0)' && data.status== 'Approved' ? 'rgb(92, 184, 92, 0.75)': 'rgb(255, 178, 0)' && data.status== 'Delivered' ? 'rgba(7, 124, 234, 0.714)': 'rgb(255, 178, 0)'}}>{data.status}</a>
                                     </div>
                                     <div className='po-content-container'>
                                         <div className='box-content-po'>
@@ -251,26 +259,53 @@ export const ListPOInventory = () => {
                                     <div className='box-content-po'>
                                             <div className='row-content-po'>
                                                 <div className='sub-title-content'>
-                                                    <a>Approver 1</a>
+                                                  {user.cluster != 'HO' &&
+                                                    <a>Approved By GM </a>
+                                                  }
+                                                  {user.cluster == 'HO' &&
+                                                    <a>Approved By SPV</a>
+                                                  }    
                                                 </div>
                                                 <div className='sub-title-content'>
-                                                    <a>: {data.approver_level1}</a>
+                                                  {data.is_approved_level1 == true &&
+                                                    <a><BsIcons.BsCheckCircleFill color='rgb(92, 184, 92)' size='1.2em'/> </a> 
+                                                  }
+                                                  {data.is_approved_level1 == false &&
+                                                    <a><AiIcons.AiFillCloseCircle color='red' size='1.2em'/> </a> 
+                                                  }
                                                 </div>
                                             </div>
                                             <div className='row-content-po'>
                                                 <div className='sub-title-content'>
-                                                <a>Approver 2</a>
+                                                  {user.cluster != 'HO' &&
+                                                    <a>Approved By VP Trade</a>
+                                                  }
+                                                  {user.cluster == 'HO' &&
+                                                    <a>Approved By GA/IT</a>
+                                                  }    
                                                 </div>
                                                 <div className='sub-title-content'>
-                                                <a>: {data.approver_level2}</a>
+                                                  {data.is_approved_level2 == true &&
+                                                    <a><BsIcons.BsCheckCircleFill color='rgb(92, 184, 92)' size='1.2em'/> </a> 
+                                                  }
+                                                  {data.is_approved_level2 == false &&
+                                                    <a><AiIcons.AiFillCloseCircle color='red' size='1.2em'/> </a> 
+                                                  }
                                                 </div>                             
                                             </div>
                                             <div className='row-content-po'>
                                                 <div className='sub-title-content'>
-                                                <a>Approver 3</a>
+                                                  {user.cluster != 'HO' &&
+                                                    <a>Approved By GA/IT</a>
+                                                  }
                                                 </div>
                                                 <div className='sub-title-content'>
-                                                <a>: {data.approver_level3}</a>
+                                                  {data.is_approved_level3 == true && data.approver_level3 != '-' &&
+                                                    <a><BsIcons.BsCheckCircleFill color='rgb(92, 184, 92)' size='1.2em'/> </a> 
+                                                  }
+                                                  {data.is_approved_level3 == false && data.approver_level3 != '-' &&
+                                                    <a><AiIcons.AiFillCloseCircle color='red' size='1.2em'/> </a> 
+                                                  }
                                                 </div>                             
                                             </div>
                                     </div>
@@ -320,7 +355,7 @@ export const ListPOInventory = () => {
                         ): (
                     currentItemsDetail.map((data, index) => {
                       return (
-                        <div className='list-detail-po-container' key={index}>
+                        <div className='list-detail-po-container' key={data.po_id_detail}>
                             <div className='header-item-add'>
                             <h3 style={{textAlign:'center'}}>Item {indexModal} </h3>
                             </div>
@@ -473,6 +508,7 @@ export const ListPOInventory = () => {
                   </div>
                 </div>
             </div>}
+            {isLoading && <Loading/>}
         </>
     )
 }

@@ -46,6 +46,31 @@ export const Overview = () => {
     setViewShow(false);
   };
 
+  //Get User
+  const { getCookie } = useAuth();
+  const[user,setUser]= useState({
+    name:'',
+    role:'',
+    level_approval:'',
+    location_id:'',
+    tap:'',
+    cluster:'',
+    department: ''
+  })
+  const onGetCookie = ()=>{
+    let savedUserJsonString = getCookie("user")
+    let savedUser = JSON.parse(savedUserJsonString)
+    setUser(prevObj=>({...prevObj,name:(savedUser.name), role:(savedUser.role), level_approval:(savedUser.level_approval), location_id:(savedUser.location_id), tap:(savedUser.tap), cluster:(savedUser.cluster), department:(savedUser.department)}))
+  }
+
+  useEffect(() => {
+    onGetAllSubProduct();
+    onGetAllVendor();
+    onGetAllLocation();
+    onGetCookie();
+  }, []);
+
+
   //Sorting
   const sorting = (col) => {
     if (order === "ASC") {
@@ -228,13 +253,6 @@ export const Overview = () => {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    onGetAllSubProduct();
-    onGetAllVendor();
-    onGetAllLocation();
-    onGetCookie();
-  }, []);
 
   const [subProductName, setSubProductName] = useState([]);
   // GET ALL SUBPRODUCT NAME
@@ -571,9 +589,21 @@ export const Overview = () => {
   const [pageCount, setPageCount] = useState(0);
   const [totalAsset, setTotalAsset] = useState(0);
 
+
   useEffect(() => {
-    getAssetsPagination(1);
-  }, []);
+  
+    console.log('ini user', user);
+    if (user.role=='Admin') {
+      getAssetsPagination(1);
+    } else if (user.role=='IT'){
+      getAssetsByIT(1);
+    } else if (user.role=='Regular') {
+      getAssetsByLocation(user.location_id)
+    } else if (user.role=='GA'){
+      getAssetsByGA(1)
+    }
+  }, [user.role]);
+  
 
   const thousands_separators = (num) => {
     var num_parts = num.toString().split(".");
@@ -582,51 +612,181 @@ export const Overview = () => {
   };
 
   const onCountAsset = async () => {
-    try {
-      const response = await overviewService.getCountAllAsset();
-      setPageCount(Math.ceil(response.data / 10));
-      setTotalAsset(response.data)
-    } catch (e) {
-      console.log(e);
+    if (user.role=='Admin'){
+      try {
+        const response = await overviewService.getCountAllAsset();
+        setPageCount(Math.ceil(response.data / 10));
+        setTotalAsset(response.data)
+      } catch (e) {
+        console.log(e);
+      }
+    } else if (user.role=='IT'){
+      try {
+        const response = await overviewService.getCountAssetByIT();
+        setPageCount(Math.ceil(response.data / 10));
+        setTotalAsset(response.data)
+      } catch (e) {
+        console.log(e);
+      }
+    } else if (user.role=='GA'){
+      try {
+        const response = await overviewService.getCountAssetByGA();
+        setPageCount(Math.ceil(response.data / 10));
+        setTotalAsset(response.data)
+      } catch (e) {
+        console.log(e);
+      }
     }
+    
   };
 
   const getAssetsPagination = async (currentPage) => {
     setLoading(true);
-    try {
-      const response = await overviewService.getAssetByPagination(currentPage);
-      for (let i in response.data) {
-        response.data[i]["Harga Perolehan"] =
-          "Rp" + thousands_separators(response.data[i]["Harga Perolehan"]);
-        response.data[i]["Biaya Lain-Lain"] =
-          "Rp" + thousands_separators(response.data[i]["Biaya Lain-Lain"]);
-        response.data[i]["PPN"] =
-          "Rp" + thousands_separators(response.data[i]["PPN"]);
-        response.data[i]["Penyusutan Perbulan"] =
-          "Rp" + thousands_separators(response.data[i]["Penyusutan Perbulan"]);
-        response.data[i]["Total Harga Perolehan"] =
-          "Rp" +
-          thousands_separators(response.data[i]["Total Harga Perolehan"]);
-        response.data[i]["Total Penyusutan"] =
-          "Rp" + thousands_separators(response.data[i]["Total Penyusutan"]);
-        response.data[i]["Nilai Asset saat ini"] =
-          "Rp" + thousands_separators(response.data[i]["Nilai Asset saat ini"]);
-        response.data[i]["Tanggal Output"] = moment(
-          response.data[i]["Tanggal Output"]
-        ).format("YYYY-MM-DDTHH:MM");
-        response.data[i]["BAST Output"] = moment(
-          response.data[i]["BAST Output"]
-        ).format("YYYY-MM-DDTHH:MM");
+      try {
+        const response = await overviewService.getAssetByPagination(currentPage);
+        for (let i in response.data) {
+          response.data[i]["Harga Perolehan"] =
+            "Rp" + thousands_separators(response.data[i]["Harga Perolehan"]);
+          response.data[i]["Biaya Lain-Lain"] =
+            "Rp" + thousands_separators(response.data[i]["Biaya Lain-Lain"]);
+          response.data[i]["PPN"] =
+            "Rp" + thousands_separators(response.data[i]["PPN"]);
+          response.data[i]["Penyusutan Perbulan"] =
+            "Rp" + thousands_separators(response.data[i]["Penyusutan Perbulan"]);
+          response.data[i]["Total Harga Perolehan"] =
+            "Rp" +
+            thousands_separators(response.data[i]["Total Harga Perolehan"]);
+          response.data[i]["Total Penyusutan"] =
+            "Rp" + thousands_separators(response.data[i]["Total Penyusutan"]);
+          response.data[i]["Nilai Asset saat ini"] =
+            "Rp" + thousands_separators(response.data[i]["Nilai Asset saat ini"]);
+          response.data[i]["Tanggal Output"] = moment(
+            response.data[i]["Tanggal Output"]
+          ).format("YYYY-MM-DDTHH:MM");
+          response.data[i]["BAST Output"] = moment(
+            response.data[i]["BAST Output"]
+          ).format("YYYY-MM-DDTHH:MM");
+        }
+        onCountAsset();
+        setDatas(response.data);
+        console.log(response);
+      } catch (e) {
+        console.log(e);
+      } finally {
+        setLoading(false);
       }
-      onCountAsset();
-      setDatas(response.data);
-      console.log(response);
-    } catch (e) {
-      console.log(e);
-    } finally {
-      setLoading(false);
     }
-  };
+
+    const getAssetsByGA= async (currentPage) => {
+      setLoading(true);
+        try {
+          const response = await overviewService.getAssetByGA(currentPage);
+          for (let i in response.data) {
+            response.data[i]["Harga Perolehan"] =
+              "Rp" + thousands_separators(response.data[i]["Harga Perolehan"]);
+            response.data[i]["Biaya Lain-Lain"] =
+              "Rp" + thousands_separators(response.data[i]["Biaya Lain-Lain"]);
+            response.data[i]["PPN"] =
+              "Rp" + thousands_separators(response.data[i]["PPN"]);
+            response.data[i]["Penyusutan Perbulan"] =
+              "Rp" + thousands_separators(response.data[i]["Penyusutan Perbulan"]);
+            response.data[i]["Total Harga Perolehan"] =
+              "Rp" +
+              thousands_separators(response.data[i]["Total Harga Perolehan"]);
+            response.data[i]["Total Penyusutan"] =
+              "Rp" + thousands_separators(response.data[i]["Total Penyusutan"]);
+            response.data[i]["Nilai Asset saat ini"] =
+              "Rp" + thousands_separators(response.data[i]["Nilai Asset saat ini"]);
+            response.data[i]["Tanggal Output"] = moment(
+              response.data[i]["Tanggal Output"]
+            ).format("YYYY-MM-DDTHH:MM");
+            response.data[i]["BAST Output"] = moment(
+              response.data[i]["BAST Output"]
+            ).format("YYYY-MM-DDTHH:MM");
+          }
+          onCountAsset();
+          setDatas(response.data);
+          console.log(response);
+        } catch (e) {
+          console.log(e);
+        } finally {
+          setLoading(false);
+        }
+      }
+  
+    const getAssetsByIT = async (currentPage) => {
+      setLoading(true)
+      try {
+        const response = await overviewService.getAssetByIT(currentPage);
+        for (let i in response.data) {
+          response.data[i]["Harga Perolehan"] =
+            "Rp" + thousands_separators(response.data[i]["Harga Perolehan"]);
+          response.data[i]["Biaya Lain-Lain"] =
+            "Rp" + thousands_separators(response.data[i]["Biaya Lain-Lain"]);
+          response.data[i]["PPN"] =
+            "Rp" + thousands_separators(response.data[i]["PPN"]);
+          response.data[i]["Penyusutan Perbulan"] =
+            "Rp" + thousands_separators(response.data[i]["Penyusutan Perbulan"]);
+          response.data[i]["Total Harga Perolehan"] =
+            "Rp" +
+            thousands_separators(response.data[i]["Total Harga Perolehan"]);
+          response.data[i]["Total Penyusutan"] =
+            "Rp" + thousands_separators(response.data[i]["Total Penyusutan"]);
+          response.data[i]["Nilai Asset saat ini"] =
+            "Rp" + thousands_separators(response.data[i]["Nilai Asset saat ini"]);
+          response.data[i]["Tanggal Output"] = moment(
+            response.data[i]["Tanggal Output"]
+          ).format("YYYY-MM-DDTHH:MM");
+          response.data[i]["BAST Output"] = moment(
+            response.data[i]["BAST Output"]
+          ).format("YYYY-MM-DDTHH:MM");
+        }
+        onCountAsset();
+        setDatas(response.data);
+        console.log(response);
+      } catch (e) {
+        console.log(e);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    const getAssetsByLocation = async (id) => {
+      setLoading(true)
+      try {
+        const response = await overviewService.getAssetByIdLocation(id);
+        for (let i in response.data) {
+          response.data[i]["Harga Perolehan"] =
+            "Rp" + thousands_separators(response.data[i]["Harga Perolehan"]);
+          response.data[i]["Biaya Lain-Lain"] =
+            "Rp" + thousands_separators(response.data[i]["Biaya Lain-Lain"]);
+          response.data[i]["PPN"] =
+            "Rp" + thousands_separators(response.data[i]["PPN"]);
+          response.data[i]["Penyusutan Perbulan"] =
+            "Rp" + thousands_separators(response.data[i]["Penyusutan Perbulan"]);
+          response.data[i]["Total Harga Perolehan"] =
+            "Rp" +
+            thousands_separators(response.data[i]["Total Harga Perolehan"]);
+          response.data[i]["Total Penyusutan"] =
+            "Rp" + thousands_separators(response.data[i]["Total Penyusutan"]);
+          response.data[i]["Nilai Asset saat ini"] =
+            "Rp" + thousands_separators(response.data[i]["Nilai Asset saat ini"]);
+          response.data[i]["Tanggal Output"] = moment(
+            response.data[i]["Tanggal Output"]
+          ).format("YYYY-MM-DDTHH:MM");
+          response.data[i]["BAST Output"] = moment(
+            response.data[i]["BAST Output"]
+          ).format("YYYY-MM-DDTHH:MM");
+        }
+        onCountAsset();
+        setDatas(response.data);
+        console.log(response);
+      } catch (e) {
+        console.log(e);
+      } finally {
+        setLoading(false);
+      }
+    }
 
   const handlePageClick = async (data) => {
     console.log(data.selected);
@@ -647,34 +807,136 @@ export const Overview = () => {
     }
   };
 
-  //Get User
-  const { getCookie } = useAuth();
-  const[user,setUser]= useState({
-    name:'',
-    role:'',
-    level_approval:'',
-    location_id:'',
-    tap:'',
-    cluster:'',
-    department: ''
-  })
-  const onGetCookie = ()=>{
-    let savedUserJsonString = getCookie("user")
-    let savedUser = JSON.parse(savedUserJsonString)
-    setUser(prevObj=>({...prevObj,name:(savedUser.name), role:(savedUser.role), level_approval:(savedUser.level_approval), location_id:(savedUser.location_id), tap:(savedUser.TAP), cluster:(savedUser.Cluster), department:(savedUser.department)}))
+  //Filter Multiple Condition
+  const onFilterMultiple = async (condition, vendor) => {
+    if (user.role == 'Admin' || user.role == 'GA') {
+      try {
+        const response = await overviewService.filterAssetMultipleConditionByGA(condition, vendor)
+      for (let i in response.data) {
+        response.data[i]["Harga Perolehan"] =
+          "Rp" + thousands_separators(response.data[i]["Harga Perolehan"]);
+        response.data[i]["Biaya Lain-Lain"] =
+          "Rp" + thousands_separators(response.data[i]["Biaya Lain-Lain"]);
+        response.data[i]["PPN"] =
+          "Rp" + thousands_separators(response.data[i]["PPN"]);
+        response.data[i]["Penyusutan Perbulan"] =
+          "Rp" +
+          thousands_separators(response.data[i]["Penyusutan Perbulan"]);
+        response.data[i]["Total Harga Perolehan"] =
+          "Rp" +
+          thousands_separators(response.data[i]["Total Harga Perolehan"]);
+        response.data[i]["Total Penyusutan"] =
+          "Rp" + thousands_separators(response.data[i]["Total Penyusutan"]);
+        response.data[i]["Nilai Asset saat ini"] =
+          "Rp" +
+          thousands_separators(response.data[i]["Nilai Asset saat ini"]);
+        response.data[i]["Tanggal Output"] = moment(
+          response.data[i]["Tanggal Output"]
+        ).format("YYYY-MM-DDTHH:MM");
+        response.data[i]["BAST Output"] = moment(
+          response.data[i]["BAST Output"]
+        ).format("YYYY-MM-DDTHH:MM");
+        }
+        setDatas(response.data);
+        setPageCount(Math.ceil(datas / 10));
+      } catch (e) {
+        console.log(e.response);
+      }
+    } else if (user.role == 'IT') {
+      try {
+      const response = await overviewService.filterAssetMultipleConditionByIT()
+      for (let i in response.data) {
+        response.data[i]["Harga Perolehan"] =
+          "Rp" + thousands_separators(response.data[i]["Harga Perolehan"]);
+        response.data[i]["Biaya Lain-Lain"] =
+          "Rp" + thousands_separators(response.data[i]["Biaya Lain-Lain"]);
+        response.data[i]["PPN"] =
+          "Rp" + thousands_separators(response.data[i]["PPN"]);
+        response.data[i]["Penyusutan Perbulan"] =
+          "Rp" +
+          thousands_separators(response.data[i]["Penyusutan Perbulan"]);
+        response.data[i]["Total Harga Perolehan"] =
+          "Rp" +
+          thousands_separators(response.data[i]["Total Harga Perolehan"]);
+        response.data[i]["Total Penyusutan"] =
+          "Rp" + thousands_separators(response.data[i]["Total Penyusutan"]);
+        response.data[i]["Nilai Asset saat ini"] =
+          "Rp" +
+          thousands_separators(response.data[i]["Nilai Asset saat ini"]);
+        response.data[i]["Tanggal Output"] = moment(
+          response.data[i]["Tanggal Output"]
+        ).format("YYYY-MM-DDTHH:MM");
+        response.data[i]["BAST Output"] = moment(
+          response.data[i]["BAST Output"]
+        ).format("YYYY-MM-DDTHH:MM");
+        }
+        setDatas(response.data);
+        setPageCount(Math.ceil(datas / 10));
+      } catch (e) {
+        console.log(e.response);
+      }
+    }
+  }
+  
+  const [filterMulti, setFilterMulti] = useState({})
+  const onChangeFilterMulti = (e) => {
+    const newFilter = { ...filterMulti };
+    newFilter[e.target.name] = e.target.value;
+    setFilterMulti(newFilter);
+    console.log(newFilter);
   }
 
   return (
     <>
-      {/* <Sidebar> */}
-      {/* <div className="body"> */}
       <div className="overview-container">
         <div className="overview-card">
           {/* <div className="title-overview">
                 <p>List of Assets</p>
               </div> */}
+          <div className='search-container'>
+            <div className='box-search-container'>
+              <div className='search-box-item'>
+                <div className='title-search'>
+                <a>Condition:</a>
+                </div>
+                <input type="text" className="input-search" placeholder="Condition" onChange={onChangeFilterMulti} value={filterMulti.category} name='category'/>
+              </div>
+              <div className='search-box-item'>
+              <div className='title-search'>
+                <a>Vendor:</a>
+                </div>
+                <input type="text" className="input-search" placeholder="Vendor" onChange={onChangeFilterMulti} value={filterMulti.vendor} name='vendor'/>
+              </div>
+              <div className='search-box-item'>
+              <div className='title-search'>
+                <a>Location:</a>
+                </div>
+                <input type="text" className="input-search" placeholder="Location"/>
+              </div>
+            </div>
+            <div className='box-search-container'>
+              <div className='search-box-item'>
+              <div className='title-search'>
+                <a>Subproduct:</a>
+                </div>
+                <input type="text" className="input-search" placeholder="Subproduct"/>
+              </div>
+              <div className='search-box-item'>
+              <div className='title-search'>
+                <a>Product:</a>
+                </div>
+                <input type="text" className="input-search" placeholder="Product"/>
+              </div>
+              <div className='search-box-item'>
+              <div className='title-search'>
+                <a>Category:</a>
+                </div>
+                <input type="text" className="input-search" placeholder="Category"/>
+              </div>
+            </div>
+          </div>
           <div className="table-container">
-            <div className="search-overview">
+            {/* <div className="search-overview">
               <div className="input-group mb-3">
                 <button
                   className="btn btn-outline-secondary dropdown-toggle"
@@ -781,7 +1043,7 @@ export const Overview = () => {
                   </button>
                 </div>
               </div>
-            </div>
+            </div> */}
             <div className="table-box">
               <table className="table table-bordered table-striped table-responsive table-hover">
                 <thead className="table-header">
@@ -1034,7 +1296,8 @@ export const Overview = () => {
                               &#xe00a;
                             </i>
                           </a>
-                          <a
+                          {(user.role=='GA' ||user.role=='Admin') && (
+                            <a
                             onClick={() => {
                               handleEditShow(data["Nomor Asset"]);
                             }}
@@ -1051,6 +1314,7 @@ export const Overview = () => {
                               &#xe3c9;
                             </i>
                           </a>
+                          )}
                         </th>
                         <td>{data["Tanggal Output"]}</td>
                         <td>{data["Tahun"]}</td>

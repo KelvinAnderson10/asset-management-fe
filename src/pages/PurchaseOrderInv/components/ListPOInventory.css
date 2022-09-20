@@ -1,7 +1,7 @@
 .po-inv-list-container{
     display: flex;
     justify-content: center;
-    align-items: flex-end;
+    align-items: flex-start;
     align-content: center;
     height: 79vh;
 }
@@ -42,9 +42,10 @@
     align-items: flex-start;
     font-size: 1.8vh;
     margin-bottom: 20px;
+    /* background-color:  rgba(7, 124, 234, 0.714); */
 }
 
-.po-inv-list-card :hover{
+.po-inv-list-box-item:hover{
     background-color: #15a6ee;
     cursor: pointer;
     color: white;
@@ -69,12 +70,12 @@
 }
 
 .header-list-po .status-po{
-    width: 10vw;
+    width: 8vw;
     height: 3vh;
-    background-color: #FFDE00;
-    border-radius: 5px;
+    border-radius: 8px;
     text-decoration: none;
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    color: white;
 }
 
 .po-inv-list-box-item .po-content-container{

@@ -43,13 +43,30 @@ export const Dashboard = () => {
     }
 
     const onCountAsset = async () => {
-        try {
-          const response = await overviewService.getCountAllAsset()
-          setCountAsset(response.data)
-        } catch (e) {
-          console.log(e);
+        if (user.role=='Admin'){
+            try {
+                const response = await overviewService.getCountAllAsset()
+                setCountAsset(response.data)
+              } catch (e) {
+                console.log(e);
+              }
+        } else if (user.role=='IT') {
+            try {
+                const response = await overviewService.getCountAssetByIT();
+                setCountAsset(response.data)
+              } catch (e) {
+                console.log(e);
+              }
+        } else if (user.role=='GA'){
+            try {
+                const response = await overviewService.getCountAssetByGA()
+                setCountAsset(response.data)
+              } catch (e) {
+                console.log(e);
+              }
         }
       }
+
 
     useEffect(() => {
         onGetCookie()

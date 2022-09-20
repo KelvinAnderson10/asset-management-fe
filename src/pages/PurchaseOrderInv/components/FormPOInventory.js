@@ -81,6 +81,7 @@ export const FormPOInventory = () => {
         try {
           POHeader['Kode Wilayah'] = user.location_id
           POHeader['requester']= user.name
+          POHeader.status = 'Pending'
           for (let i in POdata) {
           POdata[i].item_price_1= Number(POdata[i].item_price_1)
           POdata[i].item_price_2= Number(POdata[i].item_price_2)
