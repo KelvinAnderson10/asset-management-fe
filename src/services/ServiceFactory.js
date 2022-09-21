@@ -1,6 +1,7 @@
 import React from 'react'
 import { assetCategoryService } from './AssetCategoryService'
 import { assetItemService } from './AssetItemService'
+import { dashboardService } from './DashboardService'
 import { eventLogService } from './EventLogService'
 import { generalSettingService } from './GeneralSettingService'
 import { locationService } from './LocationService'
@@ -19,6 +20,7 @@ export const ServiceFactory = (apiClient) => {
     overviewService: overviewService(apiClient),
     eventLogService: eventLogService(apiClient),
     purchaseOrderService: purchaseOrderService(apiClient),
-    generalSettingService: generalSettingService(apiClient)
+    generalSettingService: generalSettingService(apiClient),
+    dashboardService: dashboardService(apiClient),
   }
 }
