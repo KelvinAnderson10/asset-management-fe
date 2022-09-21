@@ -1,25 +1,81 @@
-
-
-export const dashboardService = ({doGet}) => {
-    const getAllCountAsset = async () => {
-        try {
-            return await doGet({
-                url: '/api/asset/total/count'
-            })
-        } catch (e) {
-            throw e
-        }
+export const dashboardService = ({ doGet }) => {
+  const getAllCountAsset = async () => {
+    try {
+      return await doGet({
+        url: "/api/asset/total/count",
+      });
+    } catch (e) {
+      throw e;
     }
+  };
 
-    const getTotalSpendingCluster = async () => {
-        try {
-            return await doGet({
-                url: '/api/asset/dashboard/spending/cluster'
-            })
-        } catch (e) {
-            throw e
-        }
+  const getTotalSpendingCluster = async () => {
+    try {
+      return await doGet({
+        url: "/api/asset/dashboard/spending/cluster",
+      });
+    } catch (e) {
+      throw e;
     }
+  };
 
-    return{getAllCountAsset,getTotalSpendingCluster}
-}
+  const getTotalUnitAssetCluster = async () => {
+    try {
+      return await doGet({
+        url: "/api/asset/dashboard/unit/cluster",
+      });
+    } catch (e) {
+      throw e;
+    }
+  };
+  const getTotalAssetBySubProduct = async () => {
+    try {
+      return await doGet({
+        url: "/api/asset/dashboard/subproduct",
+      });
+    } catch (e) {
+      throw e;
+    }
+  };
+ 
+
+  const getTotalPO = async () => {
+    try {
+      return await doGet({
+        url: "api/po/dashboard/totalpo",
+      });
+    } catch (e) {
+      throw e;
+    }
+  };
+  const getTotalPOByStatus = async () => {
+    try {
+      return await doGet({
+        url: "api/po/dashboard/total/statuspo",
+      });
+    } catch (e) {
+      throw e;
+    }
+  };
+  const getAssetAlmostDeprecated = async () => {
+    try {
+      return await doGet({
+        url: "api/asset/dashboard/almostdeprecated",
+      });
+    } catch (e) {
+      throw e;
+    }
+  };
+
+  const getSumAssetValue = async () => {
+    try {
+      return await doGet({
+        url: "api/asset/dashboard/assetvalue",
+      });
+    } catch (e) {
+      throw e;
+    }
+  };
+
+  return {getTotalUnitAssetCluster, getTotalPOByStatus, getTotalAssetBySubProduct, getAllCountAsset, getTotalSpendingCluster, getTotalPO,getAssetAlmostDeprecated,getSumAssetValue };
+};
