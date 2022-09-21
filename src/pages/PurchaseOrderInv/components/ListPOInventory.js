@@ -227,7 +227,7 @@ export const ListPOInventory = () => {
                                  key={data.po_id} onClick={()=>onClickPODetail(data.po_id)}>
                                     <div className='header-list-po'>
                                         <a className='po-num'>{data.po_id}</a>
-                                        <a className='status-po' style={{backgroundColor: data.status == 'Rejected' ? 'rgb(183, 6, 33)': 'rgb(255, 178, 0)' && data.status== 'Approved' ? 'rgb(92, 184, 92, 0.75)': 'rgb(255, 178, 0)' && data.status== 'Delivered' ? 'rgba(7, 124, 234, 0.714)': 'rgb(255, 178, 0)'}}>{data.status}</a>
+                                        <a className='status-po' style={{backgroundColor: data.status == 'Denied' ? 'rgb(183, 6, 33)': 'rgb(255, 178, 0)' && data.status== 'Approved' ? 'rgb(92, 184, 92, 0.75)': 'rgb(255, 178, 0)' && data.status== 'Delivered' ? 'rgba(7, 124, 234, 0.714)': 'rgb(255, 178, 0)'}}>{data.status}</a>
                                     </div>
                                     <div className='po-content-container'>
                                         <div className='box-content-po'>

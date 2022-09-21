@@ -6,6 +6,8 @@ import { useDeps } from "../../shared/context/DependencyContext";
 import BarChart from "./components/BarChart";
 import PieChart from "./components/PieChart";
 import "./Dashboard.css";
+import * as FaIcons from "react-icons/fa";
+import * as CgIcons from "react-icons/cg";
 
 export const Dashboard = () => {
   const { eventLogService, dashboardService } = useDeps();
@@ -17,7 +19,12 @@ export const Dashboard = () => {
   const [totalPO, setTotalPO] = useState(0);
   const [sumAssetValue, setsumAssetValue] = useState(0);
   const [chartData, setChartData] = useState({ labels: [], datasets: [{}] });
+  const [chartData2, setChartData2] = useState({ labels: [], datasets: [{}] });
   const [unitClusterData, setUnitClusterData] = useState({
+    labels: [],
+    datasets: [{}],
+  });
+  const [unitClusterData2, setUnitClusterData2] = useState({
     labels: [],
     datasets: [{}],
   });
@@ -26,6 +33,8 @@ export const Dashboard = () => {
     datasets: [{}],
   });
   const [subproduct, setSubproduct] = useState([]);
+  const [viewDetailSpending, setViewDetailSpending] = useState(false);
+  const [viewDetailUnit, setViewDetailUnit] = useState(false);
 
   const [user, setUser] = useState({
     name: "",
@@ -78,6 +87,8 @@ export const Dashboard = () => {
     onGetTotalUniCluster();
     onGetTotalSubproduct();
     onGetPODataByStatus();
+    onGetTotalSpenCluster2();
+    onGetTotalUniCluster2();
   }, [user.role]);
 
   const onGetTotalSpenCluster = async () => {
@@ -87,13 +98,12 @@ export const Dashboard = () => {
 
       if (response.status === "SUCCESS") {
         const chartData = {
-          labels: response.data.map((data) => data.Cluster),
+          labels: response.data.slice(0, 5).map((data) => data.Cluster),
           datasets: [
             {
-              label: "Total Spending Cluster",
+              label: "Total Asset Spending By Cluster",
               data: response.data.map((data) => data.Total),
-              backgroundColor: ["#B70621"],
-              
+              backgroundColor: ["#B70621", "#ff7b7b"],
             },
           ],
         };
@@ -103,6 +113,30 @@ export const Dashboard = () => {
       console.log(e);
     }
   };
+
+  const onGetTotalSpenCluster2 = async () => {
+    try {
+      const response = await dashboardService.getTotalSpendingCluster();
+      console.log("ini response spending cluster", response);
+
+      if (response.status === "SUCCESS") {
+        const chartData = {
+          labels: response.data.map((data) => data.Cluster),
+          datasets: [
+            {
+              label: "Total Asset Spending By Cluster",
+              data: response.data.map((data) => data.Total),
+              backgroundColor: ["#B70621", "#ff7b7b"],
+            },
+          ],
+        };
+        setChartData2(chartData);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   const onGetPODataByStatus = async () => {
     try {
       const response = await dashboardService.getTotalPOByStatus();
@@ -110,12 +144,16 @@ export const Dashboard = () => {
 
       if (response.status === "SUCCESS") {
         const chartData = {
-          labels:response.data.map((data) => data.Status),
+          labels: response.data.map((data) => data.Status),
           datasets: [
             {
-              label: "Total Spending Cluster",
               data: response.data.map((data) => data.Total),
-              backgroundColor: ['rgb(255, 178, 0)',"rgb(183, 6, 33)",'rgb(92, 184, 92, 0.75)','rgba(7, 124, 234, 0.714)',],
+              backgroundColor: [
+                "rgb(255, 178, 0)",
+                "rgb(183, 6, 33)",
+                "rgb(92, 184, 92, 0.75)",
+                "rgba(7, 124, 234, 0.714)",
+              ],
             },
           ],
         };
@@ -146,9 +184,9 @@ export const Dashboard = () => {
           labels: response.data.map((data) => data.Cluster),
           datasets: [
             {
-              label: "Total Unit By Cluster",
+              label: "Total Asset Units By Cluster",
               data: response.data.map((data) => data.Total),
-              backgroundColor: ["#B70621"],
+              backgroundColor: ["#2d85c5", "#a5d3eb "],
             },
           ],
         };
@@ -158,10 +196,33 @@ export const Dashboard = () => {
       console.log(e);
     }
   };
+  const onGetTotalUniCluster2 = async () => {
+    try {
+      const response = await dashboardService.getTotalUnitAssetCluster();
+      console.log("ini response unit", response);
+
+      if (response.status === "SUCCESS") {
+        const chartData = {
+          labels: response.data.slice(0, 5).map((data) => data.Cluster),
+          datasets: [
+            {
+              label: "Total Asset Units By Cluster",
+              data: response.data.map((data) => data.Total),
+              backgroundColor: ["#2d85c5", "#a5d3eb "],
+            },
+          ],
+        };
+        setUnitClusterData2(chartData);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   const onGetTotalAsset = async () => {
     try {
       const response = await dashboardService.getAllCountAsset();
+      response.data = formatCash(response.data);
       setCountAsset(response.data);
     } catch (e) {
       console.log(e);
@@ -171,6 +232,7 @@ export const Dashboard = () => {
   const onGetAssetAlmostDeprecated = async () => {
     try {
       const response = await dashboardService.getAssetAlmostDeprecated();
+      response.data = formatCash(response.data);
       setCountAssetDeprecated(response.data);
     } catch (e) {
       console.log(e);
@@ -180,6 +242,7 @@ export const Dashboard = () => {
   const onGetTotalPO = async () => {
     try {
       const response = await dashboardService.getTotalPO();
+      response.data = formatCash(response.data);
       setTotalPO(response.data);
     } catch (e) {
       console.log(e);
@@ -189,12 +252,36 @@ export const Dashboard = () => {
   const onGetSumAssetValue = async () => {
     try {
       const response = await dashboardService.getSumAssetValue();
+      console.log("ini sum", response);
+      response.data = formatCash(response.data);
       setsumAssetValue(response.data);
     } catch (e) {
       console.log(e);
     }
   };
 
+  const formatCash = (n) => {
+    if (n < 1e3) return n;
+    if (n >= 1e3 && n < 1e6) return +(n / 1e3).toFixed(1) + "K";
+    if (n >= 1e6 && n < 1e9) return +(n / 1e6).toFixed(1) + "M";
+    if (n >= 1e9 && n < 1e12) return +(n / 1e9).toFixed(1) + "B";
+    if (n >= 1e12) return +(n / 1e12).toFixed(1) + "T";
+  };
+
+  const onClickViewSpending = () => {
+    setViewDetailSpending(true);
+  };
+
+  const onClickCloseViewSpending = () => {
+    setViewDetailSpending(false);
+  };
+  const onClickViewUnit = () => {
+    setViewDetailUnit(true);
+  };
+
+  const onClickCloseViewUnit = () => {
+    setViewDetailUnit(false);
+  };
   return (
     <>
       <div className="dashboard-container">
@@ -213,7 +300,7 @@ export const Dashboard = () => {
               </div>
               <div className="content-non-icon">
                 <a className="count-number">{countAsset} </a>
-                <a style={{ color: "white" }}>Total Asset</a>
+                <a style={{ color: "white", fontSize: "20px" }}>Total Asset</a>
               </div>
             </div>
             <div
@@ -224,11 +311,13 @@ export const Dashboard = () => {
               }}
             >
               <div className="content-icon">
-                <i className="fa fa-building-o" style={{ color: "white" }} />
+                <i class="fa fa-archive" style={{ color: "white" }}></i>
               </div>
               <div className="content-non-icon">
                 <a className="count-number">{countAssetDeprecated}</a>
-                <a style={{ color: "white" }}>Total Asset</a>
+                <a style={{ color: "white", fontSize: "20px" }}>
+                  Total Asset Deprecated
+                </a>
               </div>
             </div>
             <div
@@ -239,11 +328,13 @@ export const Dashboard = () => {
               }}
             >
               <div className="content-icon">
-                <i className="fa fa-building-o" style={{ color: "white" }} />
+                <i class="fa fa-shopping-bag" style={{ color: "white" }}></i>
               </div>
               <div className="content-non-icon">
                 <a className="count-number">{totalPO} </a>
-                <a style={{ color: "white" }}>Total Asset</a>
+                <a style={{ color: "white", fontSize: "20px" }}>
+                  Total Purchase Order
+                </a>
               </div>
             </div>
             <div
@@ -254,24 +345,25 @@ export const Dashboard = () => {
               }}
             >
               <div className="content-icon">
-                <i className="fa fa-building-o" style={{ color: "white" }} />
+                <FaIcons.FaCoins color="white" />
               </div>
               <div className="content-non-icon">
                 <a className="count-number">{sumAssetValue} </a>
-                <a style={{ color: "white" }}>Total Asset</a>
+                <a style={{ color: "white", fontSize: "20px" }}>
+                  Sum Asset Value
+                </a>
               </div>
             </div>
             {/* </div> */}
           </div>
           <div className="content-dashboard-center">
             <div className="piechart">
-              <div className="title-piechart" >
-              <p>Status Purchase Order</p>
+              <div className="title-piechart">
+                <p>Status Purchase Order</p>
               </div>
               <div>
-              <PieChart chartData={POData} />
+                <PieChart chartData={POData} />
               </div>
-              
             </div>
             <div className="linechart">
               <div className="table-subproduct ">
@@ -317,16 +409,44 @@ export const Dashboard = () => {
             </div>
           </div>
           <div className="content-dashboard-bottom">
-            <div className="grafik-box">
-              <BarChart chartData={chartData} />
+            <div className="grafik-box" onClick={onClickViewSpending}>
+              <BarChart index={"x"} chartData={chartData} />
             </div>
-            <div className="grafik-box">
-              <BarChart chartData={unitClusterData} />
+            <div className="grafik-box" onClick={onClickViewUnit}>
+              <BarChart index={"x"} chartData={unitClusterData2} />
             </div>
           </div>
         </div>
       </div>
       {isLoading && <Loading />}
+
+      {viewDetailSpending && (
+        <div className="view-spending-container">
+          <div className="box-spending-cluster-detail">
+            <div className="close-spending">
+              <CgIcons.CgClose
+                size={"2em"}
+                onClick={onClickCloseViewSpending}
+              />
+            </div>
+            <div>
+              <BarChart index={"y"} chartData={chartData2} />
+            </div>
+          </div>
+        </div>
+      )}
+      {viewDetailUnit && (
+        <div className="view-spending-container">
+          <div className="box-spending-cluster-detail">
+            <div className="close-spending">
+              <CgIcons.CgClose size={"2em"} onClick={onClickCloseViewUnit} />
+            </div>
+            <div>
+              <BarChart index={"y"} chartData={unitClusterData} />
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };

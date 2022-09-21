@@ -42,6 +42,7 @@
   /* border-style: solid; */
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   display: flex;
+  font-family: 'Roboto';
 }
 
 .content-dashboard-top .content-icon {
@@ -52,6 +53,7 @@
   justify-content: flex-start;
   margin-left: 2vw;
   font-size: 5.8vh;
+  
 }
 
 .content-dashboard-top .content-non-icon {
@@ -159,6 +161,7 @@
   border-width: 0.3vh;
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  cursor: pointer;
 }
 
 .content-dashboard-center .eventlog-container {
@@ -172,6 +175,7 @@
   background-color: white;
   border-radius: 3vh;
   margin-left: 2.5vw;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   /* padding-bottom: 1.6vh; */
 }
 .eventlog-container .title-recent h5 {
@@ -188,6 +192,7 @@
   width: 95%;
   height: 90%;
   overflow-y: scroll;
+  
 }
 
 .eventlog-box .eventlog-box-content {
@@ -203,4 +208,32 @@
   border-style: solid;
   border-color: rgb(255, 80, 80);
   border-width: 0px 0px 0px 10px;
+}
+ .view-spending-container{
+  width: 100%;
+  min-height: 125.5vh;
+   z-index: 100;
+   background-color: rgba(126, 126, 126, 0.75);
+   transition: all .2s linear;
+   position: absolute;
+   top: 0;
+   bottom: 0;
+   left: 0;
+   right: 0;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+  
+}
+.box-spending-cluster-detail{
+  width: 70%;
+  height: 65%;
+  background-color: white;
+  border-radius: 10px;
+}
+.close-spending{
+  display: flex;
+  color: #B70621;
+  justify-content: flex-end;
+  margin: 4px 10px;
 }
