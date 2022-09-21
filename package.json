@@ -16,6 +16,7 @@
     "bootstrap": "^5.2.0",
     "browser-image-compression": "^2.0.0",
     "chart.js": "^3.9.1",
+    "chartjs-plugin-zoom": "^1.2.1",
     "framer-motion": "^7.2.1",
     "mdb-react-ui-kit": "^4.1.0",
     "moment": "^2.29.4",

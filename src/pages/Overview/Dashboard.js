@@ -4,6 +4,7 @@ import { useAuth } from "../../services/UseAuth";
 import Loading from "../../shared/components/Loading/Loading";
 import { useDeps } from "../../shared/context/DependencyContext";
 import BarChart from "./components/BarChart";
+import PieChart from "./components/PieChart";
 import "./Dashboard.css";
 
 export const Dashboard = () => {
@@ -12,7 +13,20 @@ export const Dashboard = () => {
   const [countAsset, setCountAsset] = useState(0);
   const [isLoading, setIsloading] = useState(false);
   const { getCookie } = useAuth();
-  const [spendCluster, setSpendCluster] = useState([])
+  const [countAssetDeprecated, setCountAssetDeprecated] = useState(0);
+  const [totalPO, setTotalPO] = useState(0);
+  const [sumAssetValue, setsumAssetValue] = useState(0);
+  const [chartData, setChartData] = useState({ labels: [], datasets: [{}] });
+  const [unitClusterData, setUnitClusterData] = useState({
+    labels: [],
+    datasets: [{}],
+  });
+  const [POData, setPOData] = useState({
+    labels: [],
+    datasets: [{}],
+  });
+  const [subproduct, setSubproduct] = useState([]);
+
   const [user, setUser] = useState({
     name: "",
     role: "",
@@ -57,48 +71,129 @@ export const Dashboard = () => {
     onGetCookie();
     getAllEventLog();
     onGetTotalAsset();
+    onGetAssetAlmostDeprecated();
+    onGetTotalPO();
+    onGetSumAssetValue();
     onGetTotalSpenCluster();
+    onGetTotalUniCluster();
+    onGetTotalSubproduct();
+    onGetPODataByStatus();
   }, [user.role]);
 
-  // const [clusterData, setClusterData] = useState({
-  //   labels: spendCluster.map((data) => data.Cluster),
-  //   datasets: [
-  //     {
-  //       label: "Total Spending Cluster",
-  //       data: spendCluster.map((data) => data.Total),
-  //       backgroundColor: [
-  //         "rgba(75,192,192,1)",
-  //         "#ecf0f1",
-  //         "#50AF95",
-  //         "#f3ba2f",
-  //         "#2a71d0",
-  //       ],
-  //       borderColor: "black",
-  //       borderWidth: 2,
-  //     },
-  //   ],
-  // });
+  const onGetTotalSpenCluster = async () => {
+    try {
+      const response = await dashboardService.getTotalSpendingCluster();
+      console.log("ini response spending cluster", response);
 
-  // console.log('ini spend',spendCluster)
-  // console.log('ini cluster',clusterData)
- 
+      if (response.status === "SUCCESS") {
+        const chartData = {
+          labels: response.data.map((data) => data.Cluster),
+          datasets: [
+            {
+              label: "Total Spending Cluster",
+              data: response.data.map((data) => data.Total),
+              backgroundColor: ["#B70621"],
+              
+            },
+          ],
+        };
+        setChartData(chartData);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  const onGetPODataByStatus = async () => {
+    try {
+      const response = await dashboardService.getTotalPOByStatus();
+      console.log("ini response spending cluster", response);
+
+      if (response.status === "SUCCESS") {
+        const chartData = {
+          labels:response.data.map((data) => data.Status),
+          datasets: [
+            {
+              label: "Total Spending Cluster",
+              data: response.data.map((data) => data.Total),
+              backgroundColor: ['rgb(255, 178, 0)',"rgb(183, 6, 33)",'rgb(92, 184, 92, 0.75)','rgba(7, 124, 234, 0.714)',],
+            },
+          ],
+        };
+        setPOData(chartData);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const onGetTotalSubproduct = async () => {
+    try {
+      const response = await dashboardService.getTotalAssetBySubProduct();
+      console.log("ini response subproduct ", response);
+      setSubproduct(response.data);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const onGetTotalUniCluster = async () => {
+    try {
+      const response = await dashboardService.getTotalUnitAssetCluster();
+      console.log("ini response unit", response);
+
+      if (response.status === "SUCCESS") {
+        const chartData = {
+          labels: response.data.map((data) => data.Cluster),
+          datasets: [
+            {
+              label: "Total Unit By Cluster",
+              data: response.data.map((data) => data.Total),
+              backgroundColor: ["#B70621"],
+            },
+          ],
+        };
+        setUnitClusterData(chartData);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   const onGetTotalAsset = async () => {
     try {
       const response = await dashboardService.getAllCountAsset();
       setCountAsset(response.data);
     } catch (e) {
-      console.log(e)
+      console.log(e);
     }
   };
 
-  const onGetTotalSpenCluster = async ()=>{
+  const onGetAssetAlmostDeprecated = async () => {
     try {
-      const response = await dashboardService.getTotalSpendingCluster();
-      setSpendCluster(response.data)
+      const response = await dashboardService.getAssetAlmostDeprecated();
+      setCountAssetDeprecated(response.data);
     } catch (e) {
-      console.log(e)
+      console.log(e);
     }
-  }
+  };
+
+  const onGetTotalPO = async () => {
+    try {
+      const response = await dashboardService.getTotalPO();
+      setTotalPO(response.data);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const onGetSumAssetValue = async () => {
+    try {
+      const response = await dashboardService.getSumAssetValue();
+      setsumAssetValue(response.data);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   return (
     <>
@@ -132,7 +227,7 @@ export const Dashboard = () => {
                 <i className="fa fa-building-o" style={{ color: "white" }} />
               </div>
               <div className="content-non-icon">
-                <a className="count-number">{countAsset}</a>
+                <a className="count-number">{countAssetDeprecated}</a>
                 <a style={{ color: "white" }}>Total Asset</a>
               </div>
             </div>
@@ -147,7 +242,7 @@ export const Dashboard = () => {
                 <i className="fa fa-building-o" style={{ color: "white" }} />
               </div>
               <div className="content-non-icon">
-                <a className="count-number">{countAsset} </a>
+                <a className="count-number">{totalPO} </a>
                 <a style={{ color: "white" }}>Total Asset</a>
               </div>
             </div>
@@ -162,16 +257,43 @@ export const Dashboard = () => {
                 <i className="fa fa-building-o" style={{ color: "white" }} />
               </div>
               <div className="content-non-icon">
-                <a className="count-number">{countAsset} </a>
+                <a className="count-number">{sumAssetValue} </a>
                 <a style={{ color: "white" }}>Total Asset</a>
               </div>
             </div>
             {/* </div> */}
           </div>
           <div className="content-dashboard-center">
-            <div className="linechart">
-              {/* <BarChart chartData={userData} /> */}
+            <div className="piechart">
+              <div className="title-piechart" >
+              <p>Status Purchase Order</p>
+              </div>
+              <div>
+              <PieChart chartData={POData} />
+              </div>
+              
             </div>
+            <div className="linechart">
+              <div className="table-subproduct ">
+                <table className="styled-table">
+                  <thead>
+                    <tr>
+                      <th>Subproduct Name</th>
+                      <th>Total</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {subproduct.map((item) => (
+                      <tr>
+                        <td>{item.Subproduct_Name}</td>
+                        <td>{item.Total}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
             <div className="eventlog-container">
               <div className="title-recent">
                 <h5>Recent Activity</h5>
@@ -196,11 +318,10 @@ export const Dashboard = () => {
           </div>
           <div className="content-dashboard-bottom">
             <div className="grafik-box">
-              {/* <BarChart chartData={clusterData} /> */}
+              <BarChart chartData={chartData} />
             </div>
-
             <div className="grafik-box">
-              {/* <BarChart chartData={userData} /> */}
+              <BarChart chartData={unitClusterData} />
             </div>
           </div>
         </div>

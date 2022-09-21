@@ -45,21 +45,21 @@
 }
 
 .content-dashboard-top .content-icon {
-  width: 40%;
+  width: 20%;
   height: 100%;
   align-items: center;
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
+  margin-left: 2vw;
   font-size: 5.8vh;
 }
 
 .content-dashboard-top .content-non-icon {
-  width: 60%;
+  width: 80%;
   height: 100%;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding-left: 0.7vw;
   justify-content: center;
 }
 
@@ -80,17 +80,72 @@
   align-items: center;
   margin-top: 3vh;
 }
-.content-dashboard-center .linechart {
-  width: 70%;
+.content-dashboard-center .piechart {
+  width: 30%;
   height: 90%;
   border-radius: 3vh;
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  padding-top: 1vh;
+  padding-bottom: 2vh;
+}
+.piechart .title-piechart {
+  font-family: "Roboto";
+  font-weight: 800;
+  font-size: 20px;
+  color: #B70621;
+}
+.content-dashboard-center .linechart {
+  width: 40%;
+  height: 90%;
+  border-radius: 3vh;
+  display: flex;
+  justify-content: center;
+  background-color: white;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  margin-left: 2.5vw;
+}
+.linechart .table-subproduct {
+  width: 100%;
+  height: 100%;
+}
+.styled-table {
+  border-spacing: 1;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 3vh;
+  overflow: hidden;
+  max-width: 800px;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  font-family: "Poppins";
+}
+
+.styled-table thead tr {
+  background-color: #B70621;
+  color: #ffffff;
+  text-align: center;
+  
+}
+
+.styled-table th,
+.styled-table td {
+  padding: 12px 15px;
+  
+}
+
+.styled-table tbody tr {
+  border-bottom: 1px solid #dddddd;
+}
+
+.styled-table tbody tr:nth-of-type(even) {
+  background-color: #f3f3f3;
 }
 
 .dashboard-card .content-dashboard-bottom {
   width: 100%;
-  height: 36vh;
+  height: 45vh;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -119,17 +174,20 @@
   margin-left: 2.5vw;
   /* padding-bottom: 1.6vh; */
 }
-.eventlog-container .title-recent {
+.eventlog-container .title-recent h5 {
   display: flex;
   justify-content: flex-start;
   width: 100%;
   margin-top: 1vh;
+  font-family: 'Roboto';
+  font-weight: 800;
+  color: #B70621;
+  
 }
 .eventlog-container .eventlog-box {
   width: 95%;
   height: 90%;
   overflow-y: scroll;
-
 }
 
 .eventlog-box .eventlog-box-content {
@@ -141,7 +199,7 @@
   margin-top: 0.5vh;
   padding-left: 1vw;
   padding-top: 0.5vh;
-  font-size: 1.6vh;
+  font-size: 0.8vw;
   border-style: solid;
   border-color: rgb(255, 80, 80);
   border-width: 0px 0px 0px 10px;
