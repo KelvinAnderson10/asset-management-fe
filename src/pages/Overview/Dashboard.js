@@ -359,7 +359,7 @@ export const Dashboard = () => {
           <div className="content-dashboard-center">
             <div className="piechart">
               <div className="title-piechart">
-                <p>Status Purchase Order</p>
+                <p>Status Purchase Request</p>
               </div>
               <div>
                 <PieChart chartData={POData} />
