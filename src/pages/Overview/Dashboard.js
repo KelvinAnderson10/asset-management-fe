@@ -375,7 +375,7 @@ export const Dashboard = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {subproduct.map((item) => (
+                    {subproduct && subproduct.map((item) => (
                       <tr>
                         <td>{item.Subproduct_Name}</td>
                         <td>{item.Total}</td>
