@@ -30,12 +30,19 @@ export const POInventory = () => {
             <Sidebar>
                <div className='po-inventory-container'>
                     <div className='navbar-po-container'>
-                    <div className={classNavbarForm} onClick={() => handleClickForm()}>
+                        <div className='navbar-po-left'>
+                        <div className={classNavbarForm} onClick={() => handleClickForm()}>
                         <a>Form Request</a>
-                    </div>
-                    <div className={classNavbarList} onClick={() => handleClickList()}>
-                        <a>List Request</a>
-                    </div> 
+                        </div>
+                        <div className={classNavbarList} onClick={() => handleClickList()}>
+                            <a>List Request</a>
+                        </div> 
+                        </div>
+                        <div className='title-right'>
+                        <div className='title-box'>
+                        <a>Inventory</a>
+                        </div>
+                        </div>
                     </div>
                </div>
                {requestList && <ListPOInventory/>}
