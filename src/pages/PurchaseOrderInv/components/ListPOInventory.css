@@ -1,0 +1,223 @@
+.po-inv-list-container{
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    align-content: center;
+    height: 79vh;
+}
+
+.po-inv-list-container .po-inv-box-container{
+    background-color:white;
+    width: 90vw;
+    display: flex;
+    height: 98%;
+    flex-direction: column;
+    border-radius: 10px;
+}
+
+.po-inv-box-container .po-inv-list-card {
+    background-color:white;
+    width: 90vw;
+    display: flex;
+    justify-content: flex-start;
+    height: 98%;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 10px;
+    /* box-shadow: 0px 0px 5px 5px rgb(221, 219, 219); */
+    position: relative;
+    padding: 10px;
+    overflow-y: scroll;
+}
+
+.po-inv-list-card .po-inv-list-box-item{
+    width: 95%;
+    height: 15vh;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    margin-bottom: 1vh;
+    display: flex;
+    padding: 15px;
+    flex-direction: column;
+    align-items: flex-start;
+    font-size: 1vw;
+    margin-bottom: 20px;
+    /* background-color:  rgba(7, 124, 234, 0.714); */
+}
+
+.po-inv-list-box-item:hover{
+    background-color: #f7b1ae;
+    cursor: pointer;
+    color: white;
+}
+
+.po-inv-list-box-item .header-list-po{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding-top: 5px;
+    height: 35%;
+}
+.header-list-po .po-num{
+    width: 2.5vw;
+    height: 2.5vh;
+    background-color: #B70621;
+    color:white;
+    font-weight: 600;
+    border-radius: 5px;
+    text-decoration: none;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+.header-list-po .status-po{
+    width: 8vw;
+    height: 3vh;
+    border-radius: 8px;
+    text-decoration: none;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    color: white;
+}
+
+.po-inv-list-box-item .po-content-container{
+    width: 100%;
+    height: 65%;
+    display: flex;
+    flex-direction: row;
+}
+
+.po-content-container .box-content-po{
+    width: 50%;
+    height: 65%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.box-content-po .row-content-po{
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: row;
+}
+
+.row-content-po .sub-title-content{
+    width: 40%;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.view-po-inv-container{
+   width: 100%;
+   height: 100%;
+   z-index: 100;
+   background-color: rgba(126, 126, 126, 0.75);
+   transition: all .2s linear;
+   position: absolute;
+   top: 0;
+   bottom: 0;
+   left: 0;
+   right: 0;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+}
+
+.view-po-inv-container .box-po-inv-detail{
+    width: 40vw;
+    min-height: max-content;
+    background-color: white;
+    border-radius: 2vh;
+    padding: 2vh;
+}
+
+.box-po-inv-detail .close{
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.close :hover{
+    cursor: pointer;
+}
+
+.box-po-inv-detail .pagination-modal{
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.pagination-modal .modalNumbers{
+    list-style: none;
+    display: flex;
+    float: left;
+}
+
+.modalNumbers li {
+    padding: 5px;
+    background-color: #cccdce;
+    cursor: pointer;
+  }
+  
+  .modalNumbers li.active {
+    background-color: #3e4041;
+    color: rgb(255, 255, 255);
+  }
+  
+  .modalNumbers li button {
+    background-color: transparent;
+    border: none;
+    color: rgb(0, 0, 0);
+    font-size: 13px;
+    cursor: pointer;
+  }
+  .modalNumbers li button:hover {
+    background-color: #999;
+    color: black;
+  }
+  .modalNumbers li button:focus {
+    outline: none;
+  }
+
+/* Pagination-list */
+.po-inv-box-container .pagination-list{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+
+}
+
+.pagination-list .listNumbers{
+    list-style: none;
+    display: flex;
+    justify-content: center;
+}
+
+.listNumbers li {
+    padding: 5px;
+    background-color: #fdfeff;
+    cursor: pointer;
+    width: 2em;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #b6b6b6;
+}
+  
+.listNumbers li.active {
+    background-color: rgb(183, 6, 33);
+    color: rgb(255, 255, 255);
+}
+  
+.listNumbers li button {
+    background-color: transparent;
+    border: none;
+    color: rgb(0, 0, 0);
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.listNumbers li button:focus {
+    outline: none;
+}
+
+  

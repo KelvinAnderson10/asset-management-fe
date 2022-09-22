@@ -21,3 +21,10 @@ export const EVENT = {
     UPDATE_USER: 'updated user data',
     DELETE_USER: 'deleted asset data'
 }
+
+export const STATUS = {
+    CREATE_PO : 'Pending',
+    APPROVE_GA_IT: 'Approved',
+    ACCEPT: 'Delivered',
+    REJECT: 'Denied'
+}

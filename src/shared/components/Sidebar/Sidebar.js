@@ -16,6 +16,7 @@ import { useAuth } from "../../../services/UseAuth";
 import {CgProfile} from 'react-icons/cg'
 import { fontSize } from "@mui/system";
 import logo from '../../../assets/images/default.png'
+import { Noty } from "../Noty/Noty";
 
 const routesAdmin = [
   {
@@ -60,11 +61,6 @@ const routesAdmin = [
     name: "Import Data",
     icon: <FaIcons.FaFileUpload/>,
   },
-  // {
-  //   path: "/approval-data",
-  //   name: "Approval Data",
-  //   icon: <BsIcons.BsFillFileEarmarkCheckFill/>,
-  // },
   {
     path: "/settings",
     name: "Settings",
@@ -114,6 +110,23 @@ const routesGA = [
     path: "/approval-data",
     name: "Approval Data",
     icon: <BsIcons.BsFillFileEarmarkCheckFill/>,
+    subRoutes: [
+      {
+        path: "/approval-data/inventory",
+        name: "Inventory",
+        icon: <IoIcons.IoIosPaper/>,
+      },
+      {
+        path: "/approval-data/maintenance",
+        name: "Maintenance",
+        icon: <BiIcons.BiCategoryAlt/>,
+      },
+      {
+        path: "/approval-data/rent",
+        name: "Rent",
+        icon: <FaIcons.FaStore/>,
+      },
+    ],
   },
   
 ]
@@ -128,6 +141,18 @@ const routesIT = [
     path: "/approval-data",
     name: "Approval Data",
     icon: <BsIcons.BsFillFileEarmarkCheckFill/>,
+    subRoutes: [
+      {
+        path: "/approval-data/inventory",
+        name: "Inventory",
+        icon: <IoIcons.IoIosPaper/>,
+      },
+      {
+        path: "/approval-data/maintenance",
+        name: "Maintenance",
+        icon: <BiIcons.BiCategoryAlt/>,
+      },
+    ],
   },
   
 ]
@@ -154,7 +179,7 @@ const routesUserRegular = [
           icon: <BiIcons.BiCategoryAlt/>,
         },
         {
-          path: "/purchase-request/inventory",
+          path: "/purchase-request/rent",
           name: "Rent",
           icon: <FaIcons.FaStore/>,
         },
@@ -318,7 +343,7 @@ const onGetCookie = ()=>{
             })}
           </section>
           )}
-{user.role==="Manager GA" && (
+{user.role==="GA" && (
           <section className="routes">
             {routesGA.map((route, index) => {
               if (route.subRoutes) {
@@ -358,7 +383,7 @@ const onGetCookie = ()=>{
             })}
           </section>
           )}
-{user.role==="Manager IT" && (
+{user.role==="IT" && (
           <section className="routes">
             {routesIT.map((route, index) => {
               if (route.subRoutes) {
@@ -438,7 +463,7 @@ const onGetCookie = ()=>{
             })}
           </section>
           )}
-          {user.role==="Regular" && (user.level_approval==="General Manager" || user.level_approval==="Supervisor" || user.level_approval==="VP Trade")&& (
+          {user.role==="Regular" && (user.level_approval==="GM" || user.level_approval==="SPV" || user.level_approval==="VP_TRAD")&& (
           <section className="routes">
             {routesUserGMSPVVP.map((route, index) => {
               if (route.subRoutes) {
@@ -496,15 +521,16 @@ const onGetCookie = ()=>{
         <main>
           <nav className="navbar navbar-expand-lg header-main">
             <img src={logo} style={{width: '7.8vw', height: '4vh'}}></img>
-          <div class="nav-item dropdown">
-            <a href="#" data-bs-toggle="dropdown" className="nav-item nav-link dropdown-toggle user-action"><CgProfile style={{fontSize:'28px', marginRight:"5%"}} />{user.name} <b class="caret"></b></a>
-            <div class="dropdown-menu">
-            {/* <a href="#" className="dropdown-item"><i class="fa fa-user-o"></i> Profile</a> */}
+            <div className="nav-right">
+            <Noty width={'30px'} color={"#122C34"} count={10}/>
+            <div className="nav-item dropdown">
+            <a href="#" data-bs-toggle="dropdown" className="nav-item nav-link dropdown-toggle user-action"><CgProfile style={{fontSize:'28px', marginRight:"5%"}} />{user.name} <b className="caret"></b></a>
+            <div className="dropdown-menu">
             <div className="divider dropdown-divider"></div>
-            <a onClick={onLogout} className="dropdown-item"><i class="material-icons">&#xE8AC;</i> Logout</a>
+            <a onClick={onLogout} className="dropdown-item"><i className="material-icons">&#xE8AC;</i> Logout</a>
 				  </div>
 			    </div>
-          {/* <AiIcons.AiOutlineLogout className='logout' onClick={onLogout}/> */}
+            </div>
           </nav>
           {children}
           </main>

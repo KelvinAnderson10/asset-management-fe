@@ -14,7 +14,7 @@ export const Login = () => {
   const [email, setEmail] = useState("");
   const [showOTPForm, setShowOTPForm] = useState();
   const [OTP, setOTP] = useState();
-  const [OTPInput, setOTPInput] = useState();
+  const [OTPInput, setOTPInput] = useState('');
   const { userService } = useDeps();
   const navigate = useNavigate();
   const { setCookie } = useAuth();
@@ -60,14 +60,20 @@ export const Login = () => {
 
     return (res)
 }
+  useEffect(()=>{
+    validateOTP();
+  },[OTPInput])
 
   const validateOTP = () => {
-    if (OTPInput == OTP) {
-      setCookie("user",user,200)
-    } else {
-      Failed("Wrong OTP");
+    if(OTPInput.length === 6){
+      if (OTPInput == OTP) {
+        setCookie("user",user,200)
+      } else {
+        Failed("Wrong OTP");
+      }
+      setShowOTPForm(false);
     }
-    setShowOTPForm(false);
+    
   };
 
   const handleExit = () => {
@@ -153,10 +159,10 @@ export const Login = () => {
                   allowedCharacters="numeric"
                 ></AuthCode>
                 <h6 className="message">If you cant'find the OTP in your inbox, please check your spam folder</h6>
-                <button type="submit" onClick={validateOTP} className="btn">
+                {/* <button type="submit" onClick={validateOTP} className="btn">
                 
                   SUBMIT
-                </button>
+                </button> */}
               </Card.Body>
             </Card>
           </div>

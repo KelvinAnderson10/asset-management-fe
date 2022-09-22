@@ -31,14 +31,9 @@ export const Overview = () => {
   const [viewShow, setViewShow] = useState();
   const [asset, setAsset] = useState({});
   const [isLoading, setLoading] = useState(false);
+  const [fileName, setFileName]= useState('No file chosen')
 
-  const handleChangeAsset = (e) => {
-    const newData = { ...asset };
-    newData[e.target.name] = e.target.value;
-    setAsset(newData);
-  };
-
-  const handleViewShow = () => {
+    const handleViewShow = () => {
     setViewShow(true);
   };
 
@@ -46,81 +41,30 @@ export const Overview = () => {
     setViewShow(false);
   };
 
-  //Pagination
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemPerPage, setItemPerPage] = useState(10);
-  const [pageNumberLimit, setPageNumberLimit] = useState(5);
-  const [maxPageNumberLimit, setMaxPageNumberLimit] = useState(5);
-  const [minPageNumberLimit, setMinPageNumberLimit] = useState(0);
-
-  //CRUD
-  
-  //Pagination
-  const handleClick = (event) => {
-    setCurrentPage(Number(event.target.id));
-  };
-  const totalPages = Math.ceil(datas.length / itemPerPage);
-  const pages = [];
-  for (let i = 1; i <= totalPages; i++) {
-    pages.push(i);
+  //Get User
+  const { getCookie } = useAuth();
+  const[user,setUser]= useState({
+    name:'',
+    role:'',
+    level_approval:'',
+    location_id:'',
+    tap:'',
+    cluster:'',
+    department: ''
+  })
+  const onGetCookie = ()=>{
+    let savedUserJsonString = getCookie("user")
+    let savedUser = JSON.parse(savedUserJsonString)
+    setUser(prevObj=>({...prevObj,name:(savedUser.name), role:(savedUser.role), level_approval:(savedUser.level_approval), location_id:(savedUser.location_id), tap:(savedUser.tap), cluster:(savedUser.cluster), department:(savedUser.department)}))
   }
 
-  const indexOfLastItem = currentPage * itemPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemPerPage;
-  const currentItems = datas.slice(indexOfFirstItem, indexOfLastItem);
+  useEffect(() => {
+    onGetAllSubProduct();
+    onGetAllVendor();
+    onGetAllLocation();
+    onGetCookie();
+  }, []);
 
-  const renderPageNumbers = pages.map((number) => {
-    if (number < maxPageNumberLimit + 1 && number > minPageNumberLimit) {
-      return (
-        <li
-          key={number}
-          id={number}
-          onClick={handleClick}
-          className={currentPage == number ? "active" : null}
-        >
-          {number}
-        </li>
-      );
-    } else {
-      return null;
-    }
-  });
-
-  const handleNextbtn = () => {
-    setCurrentPage(currentPage + 1);
-
-    if (currentPage + 1 > maxPageNumberLimit) {
-      setMaxPageNumberLimit(maxPageNumberLimit + pageNumberLimit);
-      setMinPageNumberLimit(minPageNumberLimit + pageNumberLimit);
-    }
-  };
-
-  const handlePrevbtn = () => {
-    setCurrentPage(currentPage - 1);
-
-    if ((currentPage - 1) % pageNumberLimit == 0) {
-      setMaxPageNumberLimit(maxPageNumberLimit - pageNumberLimit);
-      setMinPageNumberLimit(minPageNumberLimit - pageNumberLimit);
-    }
-  };
-
-  const handleFirstBtn = () => {
-    setCurrentPage(1);
-  };
-  const handleLastBtn = () => {
-    console.log(totalPages);
-    setCurrentPage(totalPages);
-  };
-
-  let pageIncrementBtn = null;
-  if (pages.length > maxPageNumberLimit) {
-    pageIncrementBtn = <li onClick={handleNextbtn}> &hellip; </li>;
-  }
-
-  let pageDecrementBtn = null;
-  if (minPageNumberLimit >= 1) {
-    pageDecrementBtn = <li onClick={handlePrevbtn}> &hellip; </li>;
-  }
 
   //Sorting
   const sorting = (col) => {
@@ -225,6 +169,7 @@ export const Overview = () => {
   let reader = new FileReader();
 
   const imageChange = async (e) => {
+    setFileName(e.target.files[0].name)
     if (e.target.files && e.target.files.length > 0) {
       const imageFiles = e.target.files[0]
       console.log('originalFile instanceof Blob', imageFiles instanceof Blob); // true
@@ -249,7 +194,7 @@ export const Overview = () => {
     }
   };
 
-  const ref = useRef(null);
+  const ref = useRef(null)
 
   const removeSelectedImage = () => {
     setImageBase64("")
@@ -305,13 +250,6 @@ export const Overview = () => {
     }
   };
 
-  useEffect(() => {
-    onGetAllSubProduct();
-    onGetAllVendor();
-    onGetAllLocation();
-    onGetCookie();
-  }, []);
-
   const [subProductName, setSubProductName] = useState([]);
   // GET ALL SUBPRODUCT NAME
   const onGetAllSubProduct = async () => {
@@ -349,17 +287,6 @@ export const Overview = () => {
     }
   };
 
-  // GET ALL USER
-  // const [user, setUser] = useState([]);
-  // const onGetUser = async () => {
-  //   try {
-  //     const response = await userService.getUserByEmail();
-  //     setUser(response.data);
-  //   } catch (error) {
-  //   } finally {
-  //   }
-  // };
-
   const handleChange = (e) => {
     const newData = { ...assetEdit };
     newData[e.target.name] = e.target.value;
@@ -367,299 +294,43 @@ export const Overview = () => {
     setAssetEdit(newData);
   };
 
-  const handleCancel = (e) => {
-    e.target.reset();
-  };
-
-  //Search
-
-  const [filter, setFilter] = useState("");
-  const [dropdownName, setDropdownName] = useState("");
-  const [fill, setFill] = useState(true);
-
-  const onChangeFilter = (e) => {
-    setFilter(e.target.value);
-  };
-
-  const onChangeDropdown = (dropdownName) => {
-    setDropdownName(dropdownName);
-    setFill(false);
-  };
-
-  const onFilter = async () => {
-    if (dropdownName === "Vendor") {
-      if (filter !== "") {
-        try {
-          const response = await overviewService.getAssetByVendor(filter);
-          for (let i in response.data) {
-            response.data[i]["Harga Perolehan"] =
-              "Rp" + thousands_separators(response.data[i]["Harga Perolehan"]);
-            response.data[i]["Biaya Lain-Lain"] =
-              "Rp" + thousands_separators(response.data[i]["Biaya Lain-Lain"]);
-            response.data[i]["PPN"] =
-              "Rp" + thousands_separators(response.data[i]["PPN"]);
-            response.data[i]["Penyusutan Perbulan"] =
-              "Rp" +
-              thousands_separators(response.data[i]["Penyusutan Perbulan"]);
-            response.data[i]["Total Harga Perolehan"] =
-              "Rp" +
-              thousands_separators(response.data[i]["Total Harga Perolehan"]);
-            response.data[i]["Total Penyusutan"] =
-              "Rp" + thousands_separators(response.data[i]["Total Penyusutan"]);
-            response.data[i]["Nilai Asset saat ini"] =
-              "Rp" +
-              thousands_separators(response.data[i]["Nilai Asset saat ini"]);
-            response.data[i]["Tanggal Output"] = moment(
-              response.data[i]["Tanggal Output"]
-            ).format("YYYY-MM-DDTHH:MM");
-            response.data[i]["BAST Output"] = moment(
-              response.data[i]["BAST Output"]
-            ).format("YYYY-MM-DDTHH:MM");
-          }
-          setDatas(response.data);
-          setPageCount(Math.ceil(datas / 10));
-        } catch (e) {
-          console.log(e);
-        }
-      } else {
-        getAssetsPagination(1);
-      }
-    } else if (dropdownName === "Location") {
-      if (filter !== "") {
-        try {
-          const response = await overviewService.getAssetByLocation(filter);
-          for (let i in response.data) {
-            response.data[i]["Harga Perolehan"] =
-              "Rp" + thousands_separators(response.data[i]["Harga Perolehan"]);
-            response.data[i]["Biaya Lain-Lain"] =
-              "Rp" + thousands_separators(response.data[i]["Biaya Lain-Lain"]);
-            response.data[i]["PPN"] =
-              "Rp" + thousands_separators(response.data[i]["PPN"]);
-            response.data[i]["Penyusutan Perbulan"] =
-              "Rp" +
-              thousands_separators(response.data[i]["Penyusutan Perbulan"]);
-            response.data[i]["Total Harga Perolehan"] =
-              "Rp" +
-              thousands_separators(response.data[i]["Total Harga Perolehan"]);
-            response.data[i]["Total Penyusutan"] =
-              "Rp" + thousands_separators(response.data[i]["Total Penyusutan"]);
-            response.data[i]["Nilai Asset saat ini"] =
-              "Rp" +
-              thousands_separators(response.data[i]["Nilai Asset saat ini"]);
-            response.data[i]["Tanggal Output"] = moment(
-              response.data[i]["Tanggal Output"]
-            ).format("YYYY-MM-DDTHH:MM");
-            response.data[i]["BAST Output"] = moment(
-              response.data[i]["BAST Output"]
-            ).format("YYYY-MM-DDTHH:MM");
-          }
-          setDatas(response.data);
-          setPageCount(Math.ceil(datas / 10));
-        } catch (e) {
-          console.log(e);
-        }
-      } else {
-        getAssetsPagination(1);
-      }
-    } else if (dropdownName === "Condition") {
-      if (filter) {
-        try {
-          const response = await overviewService.getAssetByCondition(filter);
-          for (let i in response.data) {
-            response.data[i]["Harga Perolehan"] =
-              "Rp" + thousands_separators(response.data[i]["Harga Perolehan"]);
-            response.data[i]["Biaya Lain-Lain"] =
-              "Rp" + thousands_separators(response.data[i]["Biaya Lain-Lain"]);
-            response.data[i]["PPN"] =
-              "Rp" + thousands_separators(response.data[i]["PPN"]);
-            response.data[i]["Penyusutan Perbulan"] =
-              "Rp" +
-              thousands_separators(response.data[i]["Penyusutan Perbulan"]);
-            response.data[i]["Total Harga Perolehan"] =
-              "Rp" +
-              thousands_separators(response.data[i]["Total Harga Perolehan"]);
-            response.data[i]["Total Penyusutan"] =
-              "Rp" + thousands_separators(response.data[i]["Total Penyusutan"]);
-            response.data[i]["Nilai Asset saat ini"] =
-              "Rp" +
-              thousands_separators(response.data[i]["Nilai Asset saat ini"]);
-            response.data[i]["Tanggal Output"] = moment(
-              response.data[i]["Tanggal Output"]
-            ).format("YYYY-MM-DDTHH:MM");
-            response.data[i]["BAST Output"] = moment(
-              response.data[i]["BAST Output"]
-            ).format("YYYY-MM-DDTHH:MM");
-          }
-          setDatas(response.data);
-          setPageCount(Math.ceil(datas / 10));
-        } catch (e) {
-          console.log(e);
-        }
-      } else {
-        getAssetsPagination(1);
-      }
-    } else if (dropdownName === "Item Name") {
-      if (filter !== "") {
-        try {
-          const response = await overviewService.getAssetByItemName(filter);
-          for (let i in response.data) {
-            response.data[i]["Harga Perolehan"] =
-              "Rp" + thousands_separators(response.data[i]["Harga Perolehan"]);
-            response.data[i]["Biaya Lain-Lain"] =
-              "Rp" + thousands_separators(response.data[i]["Biaya Lain-Lain"]);
-            response.data[i]["PPN"] =
-              "Rp" + thousands_separators(response.data[i]["PPN"]);
-            response.data[i]["Penyusutan Perbulan"] =
-              "Rp" +
-              thousands_separators(response.data[i]["Penyusutan Perbulan"]);
-            response.data[i]["Total Harga Perolehan"] =
-              "Rp" +
-              thousands_separators(response.data[i]["Total Harga Perolehan"]);
-            response.data[i]["Total Penyusutan"] =
-              "Rp" + thousands_separators(response.data[i]["Total Penyusutan"]);
-            response.data[i]["Nilai Asset saat ini"] =
-              "Rp" +
-              thousands_separators(response.data[i]["Nilai Asset saat ini"]);
-            response.data[i]["Tanggal Output"] = moment(
-              response.data[i]["Tanggal Output"]
-            ).format("YYYY-MM-DDTHH:MM");
-            response.data[i]["BAST Output"] = moment(
-              response.data[i]["BAST Output"]
-            ).format("YYYY-MM-DDTHH:MM");
-          }
-          setDatas(response.data);
-          setPageCount(Math.ceil(datas / 10));
-        } catch (e) {
-          console.log(e);
-        }
-      } else {
-        getAssetsPagination(1);
-      }
-    } else if (dropdownName === "Subproduct") {
-      if (filter !== "nil") {
-        try {
-          const response = await overviewService.getAssetBySubproduct(filter);
-          for (let i in response.data) {
-            response.data[i]["Harga Perolehan"] =
-              "Rp" + thousands_separators(response.data[i]["Harga Perolehan"]);
-            response.data[i]["Biaya Lain-Lain"] =
-              "Rp" + thousands_separators(response.data[i]["Biaya Lain-Lain"]);
-            response.data[i]["PPN"] =
-              "Rp" + thousands_separators(response.data[i]["PPN"]);
-            response.data[i]["Penyusutan Perbulan"] =
-              "Rp" +
-              thousands_separators(response.data[i]["Penyusutan Perbulan"]);
-            response.data[i]["Total Harga Perolehan"] =
-              "Rp" +
-              thousands_separators(response.data[i]["Total Harga Perolehan"]);
-            response.data[i]["Total Penyusutan"] =
-              "Rp" + thousands_separators(response.data[i]["Total Penyusutan"]);
-            response.data[i]["Nilai Asset saat ini"] =
-              "Rp" +
-              thousands_separators(response.data[i]["Nilai Asset saat ini"]);
-            response.data[i]["Tanggal Output"] = moment(
-              response.data[i]["Tanggal Output"]
-            ).format("YYYY-MM-DDTHH:MM");
-            response.data[i]["BAST Output"] = moment(
-              response.data[i]["BAST Output"]
-            ).format("YYYY-MM-DDTHH:MM");
-          }
-          setDatas(response.data);
-          setPageCount(Math.ceil(datas / 10));
-        } catch (e) {
-          console.log(e);
-        }
-      } else {
-        getAssetsPagination(1);
-      }
-    } else if (dropdownName === "Product") {
-      if (filter !== "") {
-        try {
-          const response = await overviewService.getAssetByProduct(filter);
-          for (let i in response.data) {
-            response.data[i]["Harga Perolehan"] =
-              "Rp" + thousands_separators(response.data[i]["Harga Perolehan"]);
-            response.data[i]["Biaya Lain-Lain"] =
-              "Rp" + thousands_separators(response.data[i]["Biaya Lain-Lain"]);
-            response.data[i]["PPN"] =
-              "Rp" + thousands_separators(response.data[i]["PPN"]);
-            response.data[i]["Penyusutan Perbulan"] =
-              "Rp" +
-              thousands_separators(response.data[i]["Penyusutan Perbulan"]);
-            response.data[i]["Total Harga Perolehan"] =
-              "Rp" +
-              thousands_separators(response.data[i]["Total Harga Perolehan"]);
-            response.data[i]["Total Penyusutan"] =
-              "Rp" + thousands_separators(response.data[i]["Total Penyusutan"]);
-            response.data[i]["Nilai Asset saat ini"] =
-              "Rp" +
-              thousands_separators(response.data[i]["Nilai Asset saat ini"]);
-            response.data[i]["Tanggal Output"] = moment(
-              response.data[i]["Tanggal Output"]
-            ).format("YYYY-MM-DDTHH:MM");
-            response.data[i]["BAST Output"] = moment(
-              response.data[i]["BAST Output"]
-            ).format("YYYY-MM-DDTHH:MM");
-          }
-          setDatas(response.data);
-          setPageCount(Math.ceil(datas / 10));
-        } catch (e) {
-          console.log(e);
-        }
-      } else {
-        getAssetsPagination(1);
-      }
-    } else {
-      if (filter !== "") {
-        try {
-          const response = await overviewService.getAssetByCategory(filter);
-          for (let i in response.data) {
-            response.data[i]["Harga Perolehan"] =
-              "Rp" + thousands_separators(response.data[i]["Harga Perolehan"]);
-            response.data[i]["Biaya Lain-Lain"] =
-              "Rp" + thousands_separators(response.data[i]["Biaya Lain-Lain"]);
-            response.data[i]["PPN"] =
-              "Rp" + thousands_separators(response.data[i]["PPN"]);
-            response.data[i]["Penyusutan Perbulan"] =
-              "Rp" +
-              thousands_separators(response.data[i]["Penyusutan Perbulan"]);
-            response.data[i]["Total Harga Perolehan"] =
-              "Rp" +
-              thousands_separators(response.data[i]["Total Harga Perolehan"]);
-            response.data[i]["Total Penyusutan"] =
-              "Rp" + thousands_separators(response.data[i]["Total Penyusutan"]);
-            response.data[i]["Nilai Asset saat ini"] =
-              "Rp" +
-              thousands_separators(response.data[i]["Nilai Asset saat ini"]);
-            response.data[i]["Tanggal Output"] = moment(
-              response.data[i]["Tanggal Output"]
-            ).format("YYYY-MM-DDTHH:MM");
-            response.data[i]["BAST Output"] = moment(
-              response.data[i]["BAST Output"]
-            ).format("YYYY-MM-DDTHH:MM");
-          }
-          setDatas(response.data);
-          setPageCount(Math.ceil(datas / 10));
-        } catch (e) {
-          console.log(e);
-        }
-      } else {
-        getAssetsPagination(1);
-      }
+   const onClearForm = () => {
+    setSearchCondition('')
+    setSearchVendor('')
+    setSearchLocation('')
+    setSearchProduct('')
+    setSearchSubproduct('')
+    setSearchCategory('')
+    if (user.role=='Admin') {
+      getAssetsPagination(1);
+    } else if (user.role=='IT'){
+      getAssetsByIT(1);
+    } else if (user.role=='Regular') {
+      getAssetsByLocation(user.location_id)
+    } else if (user.role=='GA'){
+      getAssetsByGA(1)
     }
-  };
-
-  const onClearForm = () => {
-    ref.current.value = "";
-    getAssetsPagination(1);
   };
 
   //Pagination From Backend
   const [pageCount, setPageCount] = useState(0);
+  const [totalAsset, setTotalAsset] = useState(0);
+
 
   useEffect(() => {
-    getAssetsPagination(1);
-  }, []);
+  
+    console.log('ini user', user);
+    if (user.role=='Admin') {
+      getAssetsPagination(1);
+    } else if (user.role=='IT'){
+      getAssetsByIT(1);
+    } else if (user.role=='Regular') {
+      getAssetsByLocation(user.location_id,1)
+    } else if (user.role=='GA'){
+      getAssetsByGA(1)
+    }
+  }, [user.role]);
+  
 
   const thousands_separators = (num) => {
     var num_parts = num.toString().split(".");
@@ -668,55 +339,188 @@ export const Overview = () => {
   };
 
   const onCountAsset = async () => {
-    try {
-      const response = await overviewService.getCountAllAsset();
-      setPageCount(Math.ceil(response.data / 10));
-    } catch (e) {
-      console.log(e);
+    if (user.role=='Admin'){
+      try {
+        const response = await overviewService.getCountAllAsset();
+        setPageCount(Math.ceil(response.data / 10));
+        setTotalAsset(response.data)
+      } catch (e) {
+        console.log(e);
+      }
+    } else if (user.role=='IT'){
+      try {
+        const response = await overviewService.getCountAssetByIT();
+        setPageCount(Math.ceil(response.data / 10));
+        setTotalAsset(response.data)
+      } catch (e) {
+        console.log(e);
+      }
+    } else if (user.role=='GA'){
+      try {
+        const response = await overviewService.getCountAssetByGA();
+        setPageCount(Math.ceil(response.data / 10));
+        setTotalAsset(response.data)
+      } catch (e) {
+        console.log(e);
+      }
     }
+    
   };
 
   const getAssetsPagination = async (currentPage) => {
     setLoading(true);
-    try {
-      const response = await overviewService.getAssetByPagination(currentPage);
-      for (let i in response.data) {
-        response.data[i]["Harga Perolehan"] =
-          "Rp" + thousands_separators(response.data[i]["Harga Perolehan"]);
-        response.data[i]["Biaya Lain-Lain"] =
-          "Rp" + thousands_separators(response.data[i]["Biaya Lain-Lain"]);
-        response.data[i]["PPN"] =
-          "Rp" + thousands_separators(response.data[i]["PPN"]);
-        response.data[i]["Penyusutan Perbulan"] =
-          "Rp" + thousands_separators(response.data[i]["Penyusutan Perbulan"]);
-        response.data[i]["Total Harga Perolehan"] =
-          "Rp" +
-          thousands_separators(response.data[i]["Total Harga Perolehan"]);
-        response.data[i]["Total Penyusutan"] =
-          "Rp" + thousands_separators(response.data[i]["Total Penyusutan"]);
-        response.data[i]["Nilai Asset saat ini"] =
-          "Rp" + thousands_separators(response.data[i]["Nilai Asset saat ini"]);
-        response.data[i]["Tanggal Output"] = moment(
-          response.data[i]["Tanggal Output"]
-        ).format("YYYY-MM-DDTHH:MM");
-        response.data[i]["BAST Output"] = moment(
-          response.data[i]["BAST Output"]
-        ).format("YYYY-MM-DDTHH:MM");
+      try {
+        const response = await overviewService.getAssetByPagination(currentPage);
+        for (let i in response.data) {
+          response.data[i]["Harga Perolehan"] =
+            "Rp" + thousands_separators(response.data[i]["Harga Perolehan"]);
+          response.data[i]["Biaya Lain-Lain"] =
+            "Rp" + thousands_separators(response.data[i]["Biaya Lain-Lain"]);
+          response.data[i]["PPN"] =
+            "Rp" + thousands_separators(response.data[i]["PPN"]);
+          response.data[i]["Penyusutan Perbulan"] =
+            "Rp" + thousands_separators(response.data[i]["Penyusutan Perbulan"]);
+          response.data[i]["Total Harga Perolehan"] =
+            "Rp" +
+            thousands_separators(response.data[i]["Total Harga Perolehan"]);
+          response.data[i]["Total Penyusutan"] =
+            "Rp" + thousands_separators(response.data[i]["Total Penyusutan"]);
+          response.data[i]["Nilai Asset saat ini"] =
+            "Rp" + thousands_separators(response.data[i]["Nilai Asset saat ini"]);
+          response.data[i]["Tanggal Output"] = moment(
+            response.data[i]["Tanggal Output"]
+          ).format("YYYY-MM-DDTHH:MM");
+          response.data[i]["BAST Output"] = moment(
+            response.data[i]["BAST Output"]
+          ).format("YYYY-MM-DDTHH:MM");
+        }
+        onCountAsset();
+        setDatas(response.data);
+        console.log(response);
+      } catch (e) {
+        console.log(e);
+      } finally {
+        setLoading(false);
       }
-      onCountAsset();
-      setDatas(response.data);
-      console.log(response);
-    } catch (e) {
-      console.log(e);
-    } finally {
-      setLoading(false);
     }
-  };
+
+    const getAssetsByGA= async (currentPage) => {
+      setLoading(true);
+        try {
+          const response = await overviewService.getAssetByGA(currentPage);
+          for (let i in response.data) {
+            response.data[i]["Harga Perolehan"] =
+              "Rp" + thousands_separators(response.data[i]["Harga Perolehan"]);
+            response.data[i]["Biaya Lain-Lain"] =
+              "Rp" + thousands_separators(response.data[i]["Biaya Lain-Lain"]);
+            response.data[i]["PPN"] =
+              "Rp" + thousands_separators(response.data[i]["PPN"]);
+            response.data[i]["Penyusutan Perbulan"] =
+              "Rp" + thousands_separators(response.data[i]["Penyusutan Perbulan"]);
+            response.data[i]["Total Harga Perolehan"] =
+              "Rp" +
+              thousands_separators(response.data[i]["Total Harga Perolehan"]);
+            response.data[i]["Total Penyusutan"] =
+              "Rp" + thousands_separators(response.data[i]["Total Penyusutan"]);
+            response.data[i]["Nilai Asset saat ini"] =
+              "Rp" + thousands_separators(response.data[i]["Nilai Asset saat ini"]);
+            response.data[i]["Tanggal Output"] = moment(
+              response.data[i]["Tanggal Output"]
+            ).format("YYYY-MM-DDTHH:MM");
+            response.data[i]["BAST Output"] = moment(
+              response.data[i]["BAST Output"]
+            ).format("YYYY-MM-DDTHH:MM");
+          }
+          onCountAsset();
+          setDatas(response.data);
+          console.log(response);
+        } catch (e) {
+          console.log(e);
+        } finally {
+          setLoading(false);
+        }
+      }
+  
+    const getAssetsByIT = async (currentPage) => {
+      setLoading(true)
+      try {
+        const response = await overviewService.getAssetByIT(currentPage);
+        for (let i in response.data) {
+          response.data[i]["Harga Perolehan"] =
+            "Rp" + thousands_separators(response.data[i]["Harga Perolehan"]);
+          response.data[i]["Biaya Lain-Lain"] =
+            "Rp" + thousands_separators(response.data[i]["Biaya Lain-Lain"]);
+          response.data[i]["PPN"] =
+            "Rp" + thousands_separators(response.data[i]["PPN"]);
+          response.data[i]["Penyusutan Perbulan"] =
+            "Rp" + thousands_separators(response.data[i]["Penyusutan Perbulan"]);
+          response.data[i]["Total Harga Perolehan"] =
+            "Rp" +
+            thousands_separators(response.data[i]["Total Harga Perolehan"]);
+          response.data[i]["Total Penyusutan"] =
+            "Rp" + thousands_separators(response.data[i]["Total Penyusutan"]);
+          response.data[i]["Nilai Asset saat ini"] =
+            "Rp" + thousands_separators(response.data[i]["Nilai Asset saat ini"]);
+          response.data[i]["Tanggal Output"] = moment(
+            response.data[i]["Tanggal Output"]
+          ).format("YYYY-MM-DDTHH:MM");
+          response.data[i]["BAST Output"] = moment(
+            response.data[i]["BAST Output"]
+          ).format("YYYY-MM-DDTHH:MM");
+        }
+        onCountAsset();
+        setDatas(response.data);
+        console.log(response);
+      } catch (e) {
+        console.log(e);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    const getAssetsByLocation = async (id, page) => {
+      setLoading(true)
+      try {
+        const response = await overviewService.getAssetByIdLocation(id, page);
+        for (let i in response.data) {
+          response.data[i]["Harga Perolehan"] =
+            "Rp" + thousands_separators(response.data[i]["Harga Perolehan"]);
+          response.data[i]["Biaya Lain-Lain"] =
+            "Rp" + thousands_separators(response.data[i]["Biaya Lain-Lain"]);
+          response.data[i]["PPN"] =
+            "Rp" + thousands_separators(response.data[i]["PPN"]);
+          response.data[i]["Penyusutan Perbulan"] =
+            "Rp" + thousands_separators(response.data[i]["Penyusutan Perbulan"]);
+          response.data[i]["Total Harga Perolehan"] =
+            "Rp" +
+            thousands_separators(response.data[i]["Total Harga Perolehan"]);
+          response.data[i]["Total Penyusutan"] =
+            "Rp" + thousands_separators(response.data[i]["Total Penyusutan"]);
+          response.data[i]["Nilai Asset saat ini"] =
+            "Rp" + thousands_separators(response.data[i]["Nilai Asset saat ini"]);
+          response.data[i]["Tanggal Output"] = moment(
+            response.data[i]["Tanggal Output"]
+          ).format("YYYY-MM-DDTHH:MM");
+          response.data[i]["BAST Output"] = moment(
+            response.data[i]["BAST Output"]
+          ).format("YYYY-MM-DDTHH:MM");
+        }
+        setDatas(response.data);
+        setPageCount(Math.ceil(response.count / 10));
+        console.log(response);
+      } catch (e) {
+        console.log(e);
+      } finally {
+        setLoading(false);
+      }
+    }
 
   const handlePageClick = async (data) => {
     console.log(data.selected);
     let currentPage = data.selected + 1;
+    console.log(data.selected);
     getAssetsPagination(currentPage);
+    onFilterMultiple(searchCondition, searchVendor, searchLocation, searchProduct, searchSubproduct, searchCategory, currentPage)
   };
 
   //Event Log
@@ -731,141 +535,209 @@ export const Overview = () => {
     }
   };
 
-  //Get User
-  const { getCookie } = useAuth();
-  const[user,setUser]= useState({
-    name:'',
-    role:'',
-    level_approval:'',
-    location_id:'',
-    tap:'',
-    cluster:'',
-    department: ''
-  })
-  const onGetCookie = ()=>{
-    let savedUserJsonString = getCookie("user")
-    let savedUser = JSON.parse(savedUserJsonString)
-    setUser(prevObj=>({...prevObj,name:(savedUser.name), role:(savedUser.role), level_approval:(savedUser.level_approval), location_id:(savedUser.location_id), tap:(savedUser.TAP), cluster:(savedUser.Cluster), department:(savedUser.department)}))
+  //Filter Multiple Condition
+  const [countFilter, setCountFilter] = useState(0)
+  const onFilterMultiple = async (condition, vendor, location, product, subproduct, category, page) => {
+    if (user.role == 'GA') {
+      try {
+        const response = await overviewService.filterAssetMultipleConditionByGA(condition, vendor, location, product, subproduct, category, page)
+      for (let i in response.data) {
+        response.data[i]["Harga Perolehan"] =
+          "Rp" + thousands_separators(response.data[i]["Harga Perolehan"]);
+        response.data[i]["Biaya Lain-Lain"] =
+          "Rp" + thousands_separators(response.data[i]["Biaya Lain-Lain"]);
+        response.data[i]["PPN"] =
+          "Rp" + thousands_separators(response.data[i]["PPN"]);
+        response.data[i]["Penyusutan Perbulan"] =
+          "Rp" +
+          thousands_separators(response.data[i]["Penyusutan Perbulan"]);
+        response.data[i]["Total Harga Perolehan"] =
+          "Rp" +
+          thousands_separators(response.data[i]["Total Harga Perolehan"]);
+        response.data[i]["Total Penyusutan"] =
+          "Rp" + thousands_separators(response.data[i]["Total Penyusutan"]);
+        response.data[i]["Nilai Asset saat ini"] =
+          "Rp" +
+          thousands_separators(response.data[i]["Nilai Asset saat ini"]);
+        response.data[i]["Tanggal Output"] = moment(
+          response.data[i]["Tanggal Output"]
+        ).format("YYYY-MM-DDTHH:MM");
+        response.data[i]["BAST Output"] = moment(
+          response.data[i]["BAST Output"]
+        ).format("YYYY-MM-DDTHH:MM");
+        }
+        setDatas(response.data);
+        console.log('ini filter', response.data);
+        setPageCount(Math.ceil(response.count / 10));
+      } catch (e) {
+        console.log(e.response);
+      }
+    } else if (user.role == 'IT') {
+      try {
+      const response = await overviewService.filterAssetMultipleConditionByIT(condition, vendor, location, product, subproduct, category, page)
+      for (let i in response.data) {
+        response.data[i]["Harga Perolehan"] =
+          "Rp" + thousands_separators(response.data[i]["Harga Perolehan"]);
+        response.data[i]["Biaya Lain-Lain"] =
+          "Rp" + thousands_separators(response.data[i]["Biaya Lain-Lain"]);
+        response.data[i]["PPN"] =
+          "Rp" + thousands_separators(response.data[i]["PPN"]);
+        response.data[i]["Penyusutan Perbulan"] =
+          "Rp" +
+          thousands_separators(response.data[i]["Penyusutan Perbulan"]);
+        response.data[i]["Total Harga Perolehan"] =
+          "Rp" +
+          thousands_separators(response.data[i]["Total Harga Perolehan"]);
+        response.data[i]["Total Penyusutan"] =
+          "Rp" + thousands_separators(response.data[i]["Total Penyusutan"]);
+        response.data[i]["Nilai Asset saat ini"] =
+          "Rp" +
+          thousands_separators(response.data[i]["Nilai Asset saat ini"]);
+        response.data[i]["Tanggal Output"] = moment(
+          response.data[i]["Tanggal Output"]
+        ).format("YYYY-MM-DDTHH:MM");
+        response.data[i]["BAST Output"] = moment(
+          response.data[i]["BAST Output"]
+        ).format("YYYY-MM-DDTHH:MM");
+        }
+        setDatas(response.data);
+        setPageCount(Math.ceil(response.count / 10));
+      } catch (e) {
+        console.log(e.response);
+      }
+    } else if (user.role == 'Admin') {
+      try {
+        const response = await overviewService.filterAssetMultipleConditionByAdmin(condition, vendor, location, product, subproduct, category, page)
+        for (let i in response.data) {
+          response.data[i]["Harga Perolehan"] =
+            "Rp" + thousands_separators(response.data[i]["Harga Perolehan"]);
+          response.data[i]["Biaya Lain-Lain"] =
+            "Rp" + thousands_separators(response.data[i]["Biaya Lain-Lain"]);
+          response.data[i]["PPN"] =
+            "Rp" + thousands_separators(response.data[i]["PPN"]);
+          response.data[i]["Penyusutan Perbulan"] =
+            "Rp" +
+            thousands_separators(response.data[i]["Penyusutan Perbulan"]);
+          response.data[i]["Total Harga Perolehan"] =
+            "Rp" +
+            thousands_separators(response.data[i]["Total Harga Perolehan"]);
+          response.data[i]["Total Penyusutan"] =
+            "Rp" + thousands_separators(response.data[i]["Total Penyusutan"]);
+          response.data[i]["Nilai Asset saat ini"] =
+            "Rp" +
+            thousands_separators(response.data[i]["Nilai Asset saat ini"]);
+          response.data[i]["Tanggal Output"] = moment(
+            response.data[i]["Tanggal Output"]
+          ).format("YYYY-MM-DDTHH:MM");
+          response.data[i]["BAST Output"] = moment(
+            response.data[i]["BAST Output"]
+          ).format("YYYY-MM-DDTHH:MM");
+          }
+          setDatas(response.data);
+          setPageCount(Math.ceil(response.count / 10));
+        } catch (e) {
+          console.log(e.response);
+        }
+    }
   }
+  
+  const [searchCondition, setSearchCondition] = useState('')
+  const [searchVendor, setSearchVendor] = useState('')
+  const [searchLocation, setSearchLocation] = useState('')
+  const [searchProduct, setSearchProduct] = useState('')
+  const [searchSubproduct, setSearchSubproduct] = useState('')
+  const [searchCategory, setSearchCategory] = useState('')
 
   return (
     <>
-      {/* <Sidebar> */}
-      {/* <div className="body"> */}
       <div className="overview-container">
         <div className="overview-card">
           {/* <div className="title-overview">
                 <p>List of Assets</p>
               </div> */}
-          <div className="table-container">
-            <div className="search-overview">
-              <div className="input-group mb-3">
-                <button
-                  className="btn btn-outline-secondary dropdown-toggle"
-                  type="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  Search by {dropdownName}
-                </button>
-                <ul className="dropdown-menu">
-                  <li>
-                    <a
-                      className="dropdown-item"
-                      onClick={() => {
-                        onChangeDropdown("Vendor");
-                      }}
-                    >
-                      Vendor
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      className="dropdown-item"
-                      onClick={() => {
-                        onChangeDropdown("Location");
-                      }}
-                    >
-                      Location
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      className="dropdown-item"
-                      onClick={() => {
-                        onChangeDropdown("Condition");
-                      }}
-                    >
-                      Condition
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      className="dropdown-item"
-                      onClick={() => {
-                        onChangeDropdown("Item Name");
-                      }}
-                    >
-                      Item Name
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      className="dropdown-item"
-                      onClick={() => {
-                        onChangeDropdown("Subproduct");
-                      }}
-                    >
-                      Subproduct
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      className="dropdown-item"
-                      onClick={() => {
-                        onChangeDropdown("Product");
-                      }}
-                    >
-                      Product
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      className="dropdown-item"
-                      onClick={() => {
-                        onChangeDropdown("Category");
-                      }}
-                    >
-                      Category
-                    </a>
-                  </li>
-                </ul>
-                <input
-                  ref={ref}
-                  disabled={fill}
-                  type="text"
-                  className="form-control"
-                  aria-label="Text input with dropdown button"
-                  onChange={onChangeFilter}
-                />
-                <div className="input-group-append">
-                  <button
-                    value="submit"
-                    className="btn btn-primary form-button"
-                    onClick={onFilter}
-                  >
-                    <i className="fa fa-search"></i>
-                  </button>
-                  <button
-                    value="submit"
-                    className="btn btn-danger form-button"
-                    onClick={onClearForm}
-                  >
-                    <i className="fa fa-times"></i>
-                  </button>
+          <div className='search-container'>
+            <div className='box-search-container'>
+              <div className='search-box-item'>
+                <div className='title-search'>
+                <a>Condition:</a>
                 </div>
+                <input value={searchCondition}  type="text" className="input-search" placeholder="Condition" onChange={(e)=>setSearchCondition(e.target.value)}/>
+              </div>
+              <div className='search-box-item'>
+              <div className='title-search'>
+                <a>Vendor:</a>
+                </div>
+                <input value={searchVendor} type="text" className="input-search" placeholder="Vendor" onChange={(e)=>setSearchVendor(e.target.value)}/>
+              </div>
+              <div className='search-box-item'>
+              <div className='title-search'>
+                <a>Location:</a>
+                </div>
+                <input value={searchLocation} type="text" className="input-search" placeholder="Location" onChange={(e)=>setSearchLocation(e.target.value)}/>
               </div>
             </div>
+            <div className='box-search-container'>
+              <div className='search-box-item'>
+              <div className='title-search'>
+                <a>Subproduct:</a>
+                </div>
+                <input value={searchSubproduct} type="text" className="input-search" placeholder="Subproduct" onChange={(e)=>setSearchSubproduct(e.target.value)}/>
+              </div>
+              <div className='search-box-item'>
+              <div className='title-search'>
+                <a>Product:</a>
+                </div>
+                <input value={searchProduct} type="text" className="input-search" placeholder="Product" onChange={(e)=>setSearchProduct(e.target.value)}/>
+              </div>
+              <div className='search-box-item'>
+              <div className='title-search'>
+                <a>Category:</a>
+                </div>
+                <input value={searchCategory} type="text" className="input-search" placeholder="Category" onChange={(e)=>setSearchCategory(e.target.value)}/>
+              </div>
+            </div>
+          </div>
+          <div className='button-search-container'>
+            <button
+                    value="submit"
+                    className="button-box"
+                    onClick={()=>onFilterMultiple(searchCondition, searchVendor, searchLocation, searchProduct, searchSubproduct, searchCategory, 1)}>
+                      Search
+            </button>
+            <button
+                    value="submit"
+                    className="button-box"
+                    style={{backgroundColor:'rgb(255, 178, 0)'}}
+                    onClick={onClearForm}>
+                      Clear
+            </button>
+            <div
+            className="clearfix">
+              Showing {datas.length} out of {totalAsset}
+          </div>
+          <div style={{marginRight: '2vw', marginTop: '1vh'}}>
+          <ReactPaginate
+              previousLabel={"prev"}
+              nextLabel={"next"}
+              breakLabel={"..."}
+              pageCount={pageCount}
+              marginPagesDisplayed={2}
+              pageRangeDisplayed={3}
+              onPageChange={handlePageClick}
+              containerClassName={"pagination justify-content-center"}
+              pageClassName={"page-item"}
+              pageLinkClassName={"page-link"}
+              previousClassName={"page-item"}
+              previousLinkClassName={"page-link"}
+              nextClassName={"page-item"}
+              nextLinkClassName={"page-link"}
+              breakClassName={"page-item"}
+              breakLinkClassName={"page-link"}
+              activeClassName={"active"}
+            />
+            </div>
+            </div>
+          <div className="table-container">
             <div className="table-box">
               <table className="table table-bordered table-striped table-responsive table-hover">
                 <thead className="table-header">
@@ -1118,7 +990,8 @@ export const Overview = () => {
                               &#xe00a;
                             </i>
                           </a>
-                          <a
+                          {(user.role=='GA' ||user.role=='Admin') && (
+                            <a
                             onClick={() => {
                               handleEditShow(data["Nomor Asset"]);
                             }}
@@ -1135,6 +1008,7 @@ export const Overview = () => {
                               &#xe3c9;
                             </i>
                           </a>
+                          )}
                         </th>
                         <td>{data["Tanggal Output"]}</td>
                         <td>{data["Tahun"]}</td>
@@ -1172,71 +1046,6 @@ export const Overview = () => {
               </table>
             </div>
           </div>
-          {/* <div className="clearfix" style={{marginRight:'2vw'}}>
-            <div className="hint-text">
-              Showing <b> {currentItems.length} </b> out of <b>{datas.length}</b>{" "}
-              enteries
-            </div>
-          </div>
-          <ul className="pageNumbers">
-            <li>
-            <a style={{marginRight:'10px'}}
-                onClick={handleFirstBtn}
-                disabled={currentPage == pages[0] ? true : false}
-              >
-                &laquo;
-              </a>
-              <a
-                onClick={handlePrevbtn}
-                disabled={currentPage == pages[0] ? true : false}
-              >
-                Prev
-              </a>
-            </li>
-            {pageDecrementBtn}
-            {renderPageNumbers}
-            {pageIncrementBtn}
-            <li>
-              <a
-                onClick={handleNextbtn}
-                disabled={currentPage == pages[pages.length - 1] ? true : false}
-              >
-                Next
-              </a>
-              <a
-              style={{marginLeft:'10px'}}
-                onClick={handleLastBtn}
-                // disabled={currentPage == pages[0] ? true : false}
-              >
-                &raquo;
-              </a>
-            </li>
-          </ul> */}
-          <div
-            className="clearfix"
-            style={{ marginRight: "2vw", marginTop: "2vh" }}
-          >
-            <ReactPaginate
-              previousLabel={"prev"}
-              nextLabel={"next"}
-              breakLabel={"..."}
-              // pageCount = {Math.ceil(datas.length/10)}
-              pageCount={pageCount}
-              marginPagesDisplayed={2}
-              pageRangeDisplayed={3}
-              onPageChange={handlePageClick}
-              containerClassName={"pagination justify-content-center"}
-              pageClassName={"page-item"}
-              pageLinkClassName={"page-link"}
-              previousClassName={"page-item"}
-              previousLinkClassName={"page-link"}
-              nextClassName={"page-item"}
-              nextLinkClassName={"page-link"}
-              breakClassName={"page-item"}
-              breakLinkClassName={"page-link"}
-              activeClassName={"active"}
-            />
-          </div>
         </div>
       </div>
       {/* </div> */}
@@ -1257,6 +1066,8 @@ export const Overview = () => {
                 <div className="image-view">
                   <img src={rowData["Asset Image"]}></img>
                 </div>
+                <div className="row">
+                <div className="col-md-6 mb-3 mt-3">
                 <label>No Asset</label>
                 <input
                   type="text"
@@ -1264,6 +1075,8 @@ export const Overview = () => {
                   value={rowData["Nomor Asset"]}
                   readOnly
                 />
+                </div>
+                <div className="col-md-6 mb-3 mt-3">
                 <label>Asset Name</label>
                 <input
                   type="text"
@@ -1271,6 +1084,8 @@ export const Overview = () => {
                   value={rowData["Nama Barang"]}
                   readOnly
                 />
+                </div>
+                <div className="col-md-6 mb-3">
                 <label>Asset Category</label>
                 <input
                   type="text"
@@ -1278,6 +1093,8 @@ export const Overview = () => {
                   value={rowData["Kategori Aset Tetap"]}
                   readOnly
                 />
+                </div>
+                <div className="col-md-6 mb-3">
                 <label>Product Name</label>
                 <input
                   type="text"
@@ -1285,6 +1102,8 @@ export const Overview = () => {
                   value={rowData["Kategori Jenis Produk"]}
                   readOnly
                 />
+                </div>
+                <div className="col-md-6 mb-3">
                 <label>Subproduct Name</label>
                 <input
                   type="text"
@@ -1292,6 +1111,8 @@ export const Overview = () => {
                   value={rowData["Jenis Produk"]}
                   readOnly
                 />
+                </div>
+                <div className="col-md-6 mb-3">
                 <label>No PO</label>
                 <input
                   type="text"
@@ -1299,6 +1120,8 @@ export const Overview = () => {
                   value={rowData["No. PO / Dokumenen Pendukung"]}
                   readOnly
                 />
+                </div>
+                <div className="col-md-6 mb-3">
                 <label>Location</label>
                 <input
                   type="text"
@@ -1306,6 +1129,8 @@ export const Overview = () => {
                   value={rowData["Lokasi"]}
                   readOnly
                 />
+                </div>
+                <div className="col-md-6 mb-3">
                 <label>Vendor</label>
                 <input
                   type="text"
@@ -1313,6 +1138,8 @@ export const Overview = () => {
                   value={rowData["Vendor"]}
                   readOnly
                 />
+                </div>
+                <div className="col-md-6 mb-3">
                 <label>Lifetime</label>
                 <input
                   type="text"
@@ -1320,6 +1147,8 @@ export const Overview = () => {
                   value={rowData["Masa Manfaat (Bulan)"]}
                   readOnly
                 />
+                </div>
+                <div className="col-md-6 mb-3">
                 <label>Current Asset Value</label>
                 <input
                   type="text"
@@ -1327,6 +1156,8 @@ export const Overview = () => {
                   value={rowData["Nilai Asset saat ini"]}
                   readOnly
                 />
+                </div>
+              </div>
               </div>
             </div>
           </Modal.Body>
@@ -1473,14 +1304,11 @@ export const Overview = () => {
                         </div>
                        )} 
                     </div>
-                    <input
-                      id="upload"
-                      accept="image/*"
-                      type="file"
-                      name="Asset Image"
-                      onChange={imageChange}
-                      ref={ref}
-                    />
+                    <div className="choose-file">
+                    <input ref={ref} accept="image/*" onChange={imageChange} type="file" id="actual-btn" hidden/>
+                    <label for="actual-btn">Choose File</label>
+                    <span  id="file-chosen">{fileName}</span>
+                    </div>
                   </div>
                   {/* <div className="inputBox" style={{ marginTop: "30px" }}>
                   <span>PPN :</span>
@@ -1496,7 +1324,7 @@ export const Overview = () => {
                     <option value='0'>No</option>
                   </select>
                   </div> */}
-                   <div className="inputBox">
+                   <div className="inputBox" style={{marginTop:'1vh'}}>
                     <span>Purchase Price :</span>
                     <input
                       type="number"

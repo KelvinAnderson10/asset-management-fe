@@ -5,7 +5,7 @@ import '../PageNotFound/PageNotFound.css'
 export const PageNotFound = () => {
     const navigate = useNavigate()
     const onButton = () => {
-        navigate('/home', {replace: true})
+        navigate('/main', {replace: true})
     }
 
     return (

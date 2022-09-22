@@ -3,7 +3,7 @@ import React from 'react'
 export const generalSettingService = ({doGet,doPut}) => {
     const getGeneralSetting = async () => {
         try {
-            return await doGet({url: '/api/'})
+            return await doGet({url: '/api/setting'})
         } catch (e) {
             throw e;
         }
