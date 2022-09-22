@@ -336,7 +336,7 @@ export const ListApproved = () => {
                     </label>
                     <input
                       readOnly
-                      value="Inventory"
+                      value={POById.tipe}
                       type="text"
                       name="tipe"
                       className="form-control"

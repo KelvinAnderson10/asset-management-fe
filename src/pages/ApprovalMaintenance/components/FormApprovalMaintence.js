@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate, useRoutes } from "react-router-dom";
-import Sidebar from "../../../shared/components/Sidebar/Sidebar";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useDeps } from "../../../shared/context/DependencyContext";
-import { UseApprovalInventory } from "../UseApprovalInventory";
-import "./FormApprovalInventory.css";
-import * as MdIcons from "react-icons/md";
+import { UseApprovalMaintenance } from "../UseApprovalMaintenance";
 import Swal from "sweetalert2";
 import { Failed } from "../../../shared/components/Notification/Failed";
 import { STATUS } from "../../../shared/constants";
-import { Row } from "antd";
+import * as MdIcons from "react-icons/md";
+import Sidebar from "../../../shared/components/Sidebar/Sidebar";
 
-export const FormApprovalInventory = () => {
-  const { user, setpoDetail, setPOHeader } = UseApprovalInventory();
-  const { vendorService, userService, purchaseOrderService, generalSettingService } = useDeps();
+export const FormApprovalMaintence = () => {
+  const { user, setpoDetail, setPOHeader } = UseApprovalMaintenance();
+  const {
+    vendorService,
+    userService,
+    purchaseOrderService,
+    generalSettingService,
+  } = useDeps();
 
   const handleFormChange = (event, index) => {
     const newArray = location.state.detail.map((item, i) => {
@@ -23,12 +26,12 @@ export const FormApprovalInventory = () => {
         } else if (event.target.value == 2) {
           item.vendor_selected = item.vendor_2;
           item.item_price_selected = item.item_price_2;
-        } else{
+        } else {
           item.vendor_selected = item.vendor_3;
           item.item_price_selected = Number(item.item_price_3);
         }
         console.log("ini item", item);
-        return { ...item, [event.target.name]:event.target.value };
+        return { ...item, [event.target.name]: event.target.value };
       } else {
         return item;
       }
@@ -47,20 +50,7 @@ export const FormApprovalInventory = () => {
     });
     setpoDetail(newArray2);
   };
-  // const handleFormChange3 = (event, index) => {
-  //   const newArray2 = location.state.detail.map((item, i) => {
-  //     if (index === i) {
-  //       if(event.target.value ==3){
-  //         item.vendor_selected = item.vendor_3;
-  //         item.item_price_selected = item.item_price_3;
-  //       }
-  //       return { ...item, [event.target.name]: event.target.value };
-  //     } else {
-  //       return item;
-  //     }
-  //   });
-  //   setpoDetail(newArray2);
-  // };
+
   const [vendor, setVendor] = useState([]);
   const onGetAllVendor = async () => {
     try {
@@ -80,7 +70,7 @@ export const FormApprovalInventory = () => {
 
   const navigate = useNavigate();
   const onClickBack = () => {
-    navigate("/approval-data/inventory", { replace: true });
+    navigate("/approval-data/maintenance", { replace: true });
   };
 
   // console.log("ini state", location.state.header);
@@ -101,7 +91,7 @@ export const FormApprovalInventory = () => {
         try {
           const response = purchaseOrderService.deletePO(id);
           Swal.fire("Reject!", "This request has been rejected.", "success");
-          navigate("/approval-data/inventory", { replace: true });
+          navigate("/approval-data/maintenance", { replace: true });
         } catch (e) {
           console.log(e.response);
           Failed("Failed to reject");
@@ -112,7 +102,7 @@ export const FormApprovalInventory = () => {
 
   useEffect(() => {
     onApproved();
-    onGetGeneralSetting()
+    onGetGeneralSetting();
   }, []);
 
   //Approval
@@ -122,13 +112,23 @@ export const FormApprovalInventory = () => {
       for (let i in location.state.detail) {
         location.state.detail[i].ppn = Number(location.state.detail[i].ppn);
         location.state.detail[i].ppn = Boolean(location.state.detail[i].ppn);
-        location.state.detail[i].is_asset = Number(location.state.detail[i].is_asset);
-        location.state.detail[i].is_asset = Boolean(location.state.detail[i].is_asset);
-        location.state.detail[i].item_price_selected = Number(location.state.detail[i].item_price_selected);
-        if (location.state.detail[i].item_price_selected >= setting.minimum_asset){
-          location.state.detail[i].is_asset = true
+        location.state.detail[i].is_asset = Number(
+          location.state.detail[i].is_asset
+        );
+        location.state.detail[i].is_asset = Boolean(
+          location.state.detail[i].is_asset
+        );
+        location.state.detail[i].item_price_selected = Number(
+          location.state.detail[i].item_price_selected
+        );
+        if (
+          location.state.detail[i].item_price_selected >= setting.minimum_asset
+        ) {
+          location.state.detail[i].is_asset = true;
         }
-        location.state.detail[i].item_price_3 = Number(location.state.detail[i].item_price_3)
+        location.state.detail[i].item_price_3 = Number(
+          location.state.detail[i].item_price_3
+        );
         console.log("ini yg akan di submit", location.state.detail);
         const response = await purchaseOrderService.updatePODetail(
           location.state.detail[i].po_id_detail,
@@ -142,11 +142,11 @@ export const FormApprovalInventory = () => {
       if (location.state.header.approverLevel3 == "-") {
         try {
           const response = await purchaseOrderService.approvedByLevel2(id);
-          location.state.header.status= STATUS.APPROVE_GA_IT
+          location.state.header.status = STATUS.APPROVE_GA_IT;
           console.log(location.state.header);
-          setPOHeader(location.state.header)
+          setPOHeader(location.state.header);
           Swal.fire("Success!", "This request has been approved.", "success");
-          navigate("/approval-data/inventory", { replace: true });
+          navigate("/approval-data/maintenance", { replace: true });
         } catch (e) {
           console.log(e.response);
           Failed("Failed to approved");
@@ -155,7 +155,7 @@ export const FormApprovalInventory = () => {
         try {
           const response = await purchaseOrderService.approvedByLevel3(id);
           Swal.fire("Success!", "This request has been approved.", "success");
-          navigate("/approval-data/inventory", { replace: true });
+          navigate("/approval-data/maintenance", { replace: true });
         } catch (e) {
           console.log(e.response);
           Failed("Failed to approved");
@@ -165,16 +165,16 @@ export const FormApprovalInventory = () => {
   };
 
   //Setting
-  const [setting, setSetting] = useState({})
-  const onGetGeneralSetting = async () =>{
+  const [setting, setSetting] = useState({});
+  const onGetGeneralSetting = async () => {
     try {
-        const response = await generalSettingService.getGeneralSetting();
-        setSetting(response.data)
-        console.log(response.data);
+      const response = await generalSettingService.getGeneralSetting();
+      setSetting(response.data);
+      console.log(response.data);
     } catch (e) {
-        console.log(e)
+      console.log(e);
     }
-  }
+  };
 
   return (
     <>
@@ -463,44 +463,44 @@ export const FormApprovalInventory = () => {
                               value={form["Biaya Lain-Lain"]}
                             />
                           </div>
-                          {form.item_price_selected >= setting.minimum_asset ?  <div className="inputBoxPO mb-3 col-md-3">
-                            <label>
-                              Is Asset
-                              <span className="text-danger">*</span>
-                            </label>
-                            <select
-                              required
-                              name="is_asset"
-                              value={form.is_asset}
-                              onChange={(event) =>
-                                handleFormChange2(event, index)
-                              }
-                              style={{ width: "95%" }}
-                              disabled
-                            >
-                              <option value="">Select</option>
-                              <option value="1">Yes</option>
-                              <option value="0">No</option>
-                            </select>
-                          </div> : <div className="inputBoxPO mb-3 col-md-3">
-                            <label>
-                              Is Asset
-                              <span className="text-danger">*</span>
-                            </label>
-                            <select
-                              required
-                              name="is_asset"
-                              value={form.is_asset}
-                              onChange={(event) =>
-                                handleFormChange2(event, index)
-                              }
-                              style={{ width: "95%" }}
-                            >
-                              <option value="">Select</option>
-                              <option value="1">Yes</option>
-                              <option value="0">No</option>
-                            </select>
-                          </div>}
+                          {/* {form.item_price_selected >= setting.minimum_asset ?  <div className="inputBoxPO mb-3 col-md-3">
+                              <label>
+                                Is Asset
+                                <span className="text-danger">*</span>
+                              </label>
+                              <select
+                                required
+                                name="is_asset"
+                                value={form.is_asset}
+                                onChange={(event) =>
+                                  handleFormChange2(event, index)
+                                }
+                                style={{ width: "95%" }}
+                                disabled
+                              >
+                                <option value="">Select</option>
+                                <option value="1">Yes</option>
+                                <option value="0">No</option>
+                              </select>
+                            </div> : <div className="inputBoxPO mb-3 col-md-3">
+                              <label>
+                                Is Asset
+                                <span className="text-danger">*</span>
+                              </label>
+                              <select
+                                required
+                                name="is_asset"
+                                value={form.is_asset}
+                                onChange={(event) =>
+                                  handleFormChange2(event, index)
+                                }
+                                style={{ width: "95%" }}
+                              >
+                                <option value="">Select</option>
+                                <option value="1">Yes</option>
+                                <option value="0">No</option>
+                              </select>
+                            </div>} */}
                         </div>
                       </div>
                     );
