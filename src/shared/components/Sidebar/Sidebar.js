@@ -559,7 +559,7 @@ const Sidebar = ({ children }) => {
                 <Noty
                   width={"30px"}
                   color={"#122C34"}
-                  count={viewNotif.length}
+                  count={viewNotif && viewNotif.length}
                 />
                 {notif && (
                   <div className="modalNotif">

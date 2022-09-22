@@ -255,7 +255,7 @@ export const Dashboard = () => {
     try {
       const response = await dashboardService.getSumAssetValue();
       console.log("ini sum", response);
-      response.data = 'Rp' + ' ' + formatCash(response.data);
+      response.data = "Rp" + " " + formatCash(response.data);
       setsumAssetValue(response.data);
     } catch (e) {
       console.log(e);
@@ -377,12 +377,18 @@ export const Dashboard = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {subproduct.map((item) => (
-                      <tr>
-                        <td>{item.Subproduct_Name}</td>
-                        <td>{item.Total}</td>
-                      </tr>
-                    ))}
+                    {subproduct ? (
+                      subproduct.map((item) => (
+                        <tr>
+                          <td>{item.Subproduct_Name}</td>
+                          <td>{item.Total}</td>
+                        </tr>
+                      ))) : (
+                        <tr>
+                          <th>No Data</th>
+                        </tr>
+                      )
+                    }
                   </tbody>
                 </table>
               </div>
