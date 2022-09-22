@@ -1,0 +1,15 @@
+.noty-icons-style{
+    position: relative;
+    display: inline
+}
+
+.noty-num-style{
+    position: absolute;
+    /* right: 0; */
+    background-color: rgb(29, 161, 242);
+    font-size: 11px;
+    color: white;
+    display: inline;
+    padding: 3px 5px;
+    border-radius: 20px;
+}
