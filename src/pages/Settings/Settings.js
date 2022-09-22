@@ -21,7 +21,8 @@ export const Settings = () => {
         }
     }
 
-    const handleEdit = async ()=>{
+    const handleEdit = async (e)=>{
+      e.preventDefault()
         try{
             const response = await generalSettingService.updateGeneralSetting(data)
             setData(response)
