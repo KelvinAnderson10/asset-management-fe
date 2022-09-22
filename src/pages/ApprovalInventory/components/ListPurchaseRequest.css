@@ -5,6 +5,7 @@
     align-content: center;
     height: 79vh;
     flex-direction: column;
+    font-family: "Poppins";
 }
 
 .approval-inv-list-container .title-container{

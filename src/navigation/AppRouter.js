@@ -20,6 +20,8 @@ import { POMaintenance } from "../pages/PurchaseOrderMtnc/POMaintenance";
 import { POInventory } from "../pages/PurchaseOrderInv/POInventory";
 import { FormApprovalInventory } from "../pages/ApprovalInventory/components/FormApprovalInventory";
 import { AppInv } from "../pages/ApprovalInventory/AppInv";
+import { AppMaintenance } from "../pages/ApprovalMaintenance/AppMaintenance";
+import { FormApprovalMaintence } from "../pages/ApprovalMaintenance/components/FormApprovalMaintence";
 
 
 
@@ -41,6 +43,8 @@ export const AppRouter = () => {
         <Route path="/purchase-request/maintenance" element={<POMaintenance/>}/>
         <Route path="/approval-data/inventory" element={<AppInv/>} />
         <Route path="/approval-data/inventory/form" element={<FormApprovalInventory/>} />
+        <Route path="/approval-data/maintenance" element={<AppMaintenance/>} />
+        <Route path="/approval-data/maintenance/form" element={<FormApprovalMaintence/>} />
         <Route path="/settings" element={<Settings/>} />
         <Route path="*" element={<PageNotFound />} />
       </Route>

@@ -1,14 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../../services/UseAuth";
-import Sidebar from "../../shared/components/Sidebar/Sidebar";
 import { useDeps } from "../../shared/context/DependencyContext";
-
 import moment from "moment";
 
-export const UseApprovalInventory = () => {
+export const UseApprovalMaintenance = () => {
   const [appData, setAppData] = useState([]);
-  const [appData1, setAppData1]= useState([])
+  const [appData1, setAppData1] = useState([]);
 
   const { purchaseOrderService } = useDeps();
   let poDetailData;
@@ -17,35 +15,37 @@ export const UseApprovalInventory = () => {
   const onGetPOListByApproval = async (name) => {
     try {
       const response = await purchaseOrderService.getPOListByApproval(name);
-      console.log(response);
+      console.log("ini response get po", response);
       for (let i in response.data) {
         response.data[i].CreatedAt = moment(response.data[i].CreatedAt).format(
           "LL"
         );
-        if (response.data[i].tipe == 'Inventory'){
-          if (response.data[i].is_approved_level1 == true && response.data[i].is_approved_level2 == true && response.data[i].is_approved_level3 == true
-          
-            ) {
-              setAppData1((appData1) => [...appData1, response.data[i]]);
-              console.log('ini response data',response.data[i]);
-    
-             
-            } else if((response.data[i].approver_level3 == "-" && response.data[i].is_approved_level1 == true) ||(response.data[i].is_approved_level1 == true &&response.data[i].is_approved_level2 == true)){
-              setAppData((appData) => [...appData, response.data[i]]);
-              console.log('ini response data',response.data[i]);
-              
-            }
+        if (response.data[i].tipe == "Maintenance") {
+          if (
+            response.data[i].is_approved_level1 == true &&
+            response.data[i].is_approved_level2 == true &&
+            response.data[i].is_approved_level3 == true
+          ) {
+            setAppData1((appData1) => [...appData1, response.data[i]]);
+            console.log("ini response data", response.data[i]);
+          } else if (
+            (response.data[i].approver_level3 == "-" &&
+              response.data[i].is_approved_level1 == true) ||
+            (response.data[i].is_approved_level1 == true &&
+              response.data[i].is_approved_level2 == true)
+          ) {
+            setAppData((appData) => [...appData, response.data[i]]);
+            console.log("ini response data", response.data[i]);
           }
         }
-        
+      }
     } catch (e) {
       console.log(e.response);
     }
   };
 
-
-  console.log('ini app data',appData)
-  console.log('ini app data1',appData1)
+  console.log("ini app data", appData);
+  console.log("ini app data1", appData1);
 
   //Get User
   const { getCookie } = useAuth();
@@ -104,6 +104,7 @@ export const UseApprovalInventory = () => {
       poHeaderInFunc.jenisProduk = jenisProduk;
       poHeaderInFunc.approverLevel3 = approverLevel3;
       poHeaderInFunc.tipe = tipe;
+
       setPOHeader(poHeaderInFunc);
 
       const response = await purchaseOrderService.getPODetailById(id);
@@ -126,7 +127,7 @@ export const UseApprovalInventory = () => {
   useEffect(() => {
     console.log("detail po use effect", poDetail);
     if (poDetail.length != 0) {
-      navigate("/approval-data/inventory/form", {
+      navigate("/approval-data/maintenance/form", {
         state: { header: poHeader, detail: poDetail },
       });
     }
@@ -141,6 +142,6 @@ export const UseApprovalInventory = () => {
     setpoDetail,
     poHeader,
     setPOHeader,
-    appData1
+    appData1,
   };
 };
