@@ -63,11 +63,6 @@ export const Main = () => {
     setClassNavbarAsset('main-navbar-asset')
     setClassNavbarDashboard('main-navbar-dashboard2')
   }
-<<<<<<< HEAD
-  document.querySelector("body").style.overflow = "auto";
-  return (
-    <>
-=======
 
   const onView = () => {
     switch (user.role){
@@ -87,7 +82,6 @@ export const Main = () => {
     default:
       return (
       <>
->>>>>>> 2eaa1f3ba60b9b4d166e8782175aaa6f4cd28a1d
       <Sidebar>
         <div className='mainhome-container'>
             <div className='main-navbar-container'>
