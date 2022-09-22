@@ -4,19 +4,20 @@ import { BiAnalyse, BiSearch } from "react-icons/bi";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import SidebarMenu from "./SubMenu";
-import * as GoIcons from 'react-icons/go';
-import * as IoIcons from 'react-icons/io';
-import * as BiIcons from 'react-icons/bi';
-import * as FaIcons from 'react-icons/fa';
-import * as BsIcons from 'react-icons/bs';
-import * as MdIcons from 'react-icons/md';
-import './Sidebar.css'
-import * as AiIcons from 'react-icons/ai';
+import * as GoIcons from "react-icons/go";
+import * as IoIcons from "react-icons/io";
+import * as BiIcons from "react-icons/bi";
+import * as FaIcons from "react-icons/fa";
+import * as BsIcons from "react-icons/bs";
+import * as MdIcons from "react-icons/md";
+import "./Sidebar.css";
+import * as AiIcons from "react-icons/ai";
 import { useAuth } from "../../../services/UseAuth";
-import {CgProfile} from 'react-icons/cg'
+import { CgProfile } from "react-icons/cg";
 import { fontSize } from "@mui/system";
-import logo from '../../../assets/images/default.png'
+import logo from "../../../assets/images/default.png";
 import { Noty } from "../Noty/Noty";
+import { useDeps } from "../../context/DependencyContext";
 
 const routesAdmin = [
   {
@@ -27,44 +28,44 @@ const routesAdmin = [
   {
     path: "/data-management",
     name: "Data Management",
-    icon: <GoIcons.GoDatabase/>,
+    icon: <GoIcons.GoDatabase />,
     subRoutes: [
-        {
-          path: "/data-management/asset-item",
-          name: "Asset Item",
-          icon: <IoIcons.IoIosPaper/>,
-        },
-        {
-          path: "/data-management/asset-category",
-          name: "Asset Category",
-          icon: <BiIcons.BiCategoryAlt/>,
-        },
-        {
-          path: "/data-management/vendor",
-          name: "Vendor",
-          icon: <FaIcons.FaStore/>,
-        },
-        {
-            path: "/data-management/location",
-            name: "Location",
-            icon: <GoIcons.GoLocation/>,
-          },
-          {
-            path: "/data-management/user",
-            name: "User",
-            icon: <BsIcons.BsPeople/>,
-          },
-      ],
+      {
+        path: "/data-management/asset-item",
+        name: "Asset Item",
+        icon: <IoIcons.IoIosPaper />,
+      },
+      {
+        path: "/data-management/asset-category",
+        name: "Asset Category",
+        icon: <BiIcons.BiCategoryAlt />,
+      },
+      {
+        path: "/data-management/vendor",
+        name: "Vendor",
+        icon: <FaIcons.FaStore />,
+      },
+      {
+        path: "/data-management/location",
+        name: "Location",
+        icon: <GoIcons.GoLocation />,
+      },
+      {
+        path: "/data-management/user",
+        name: "User",
+        icon: <BsIcons.BsPeople />,
+      },
+    ],
   },
   {
     path: "/upload-data",
     name: "Import Data",
-    icon: <FaIcons.FaFileUpload/>,
+    icon: <FaIcons.FaFileUpload />,
   },
   {
     path: "/settings",
     name: "Settings",
-    icon: <AiIcons.AiFillSetting/>,
+    icon: <AiIcons.AiFillSetting />,
   },
 ];
 
@@ -77,59 +78,58 @@ const routesGA = [
   {
     path: "/data-management",
     name: "Data Management",
-    icon: <GoIcons.GoDatabase/>,
+    icon: <GoIcons.GoDatabase />,
     subRoutes: [
-        {
-          path: "/data-management/asset-item",
-          name: "Asset Item",
-          icon: <IoIcons.IoIosPaper/>,
-        },
-        {
-          path: "/data-management/asset-category",
-          name: "Asset Category",
-          icon: <BiIcons.BiCategoryAlt/>,
-        },
-        {
-          path: "/data-management/vendor",
-          name: "Vendor",
-          icon: <FaIcons.FaStore/>,
-        },
-        {
-            path: "/data-management/location",
-            name: "Location",
-            icon: <GoIcons.GoLocation/>,
-          },
-          {
-            path: "/data-management/user",
-            name: "User",
-            icon: <BsIcons.BsPeople/>,
-          },
-      ],
+      {
+        path: "/data-management/asset-item",
+        name: "Asset Item",
+        icon: <IoIcons.IoIosPaper />,
+      },
+      {
+        path: "/data-management/asset-category",
+        name: "Asset Category",
+        icon: <BiIcons.BiCategoryAlt />,
+      },
+      {
+        path: "/data-management/vendor",
+        name: "Vendor",
+        icon: <FaIcons.FaStore />,
+      },
+      {
+        path: "/data-management/location",
+        name: "Location",
+        icon: <GoIcons.GoLocation />,
+      },
+      {
+        path: "/data-management/user",
+        name: "User",
+        icon: <BsIcons.BsPeople />,
+      },
+    ],
   },
   {
     path: "/approval-data",
     name: "Approval Data",
-    icon: <BsIcons.BsFillFileEarmarkCheckFill/>,
+    icon: <BsIcons.BsFillFileEarmarkCheckFill />,
     subRoutes: [
       {
         path: "/approval-data/inventory",
         name: "Inventory",
-        icon: <IoIcons.IoIosPaper/>,
+        icon: <IoIcons.IoIosPaper />,
       },
       {
         path: "/approval-data/maintenance",
         name: "Maintenance",
-        icon: <BiIcons.BiCategoryAlt/>,
+        icon: <BiIcons.BiCategoryAlt />,
       },
       {
         path: "/approval-data/rent",
         name: "Rent",
-        icon: <FaIcons.FaStore/>,
+        icon: <FaIcons.FaStore />,
       },
     ],
   },
-  
-]
+];
 
 const routesIT = [
   {
@@ -140,22 +140,21 @@ const routesIT = [
   {
     path: "/approval-data",
     name: "Approval Data",
-    icon: <BsIcons.BsFillFileEarmarkCheckFill/>,
+    icon: <BsIcons.BsFillFileEarmarkCheckFill />,
     subRoutes: [
       {
         path: "/approval-data/inventory",
         name: "Inventory",
-        icon: <IoIcons.IoIosPaper/>,
+        icon: <IoIcons.IoIosPaper />,
       },
       {
         path: "/approval-data/maintenance",
         name: "Maintenance",
-        icon: <BiIcons.BiCategoryAlt/>,
+        icon: <BiIcons.BiCategoryAlt />,
       },
     ],
   },
-  
-]
+];
 
 const routesUserRegular = [
   {
@@ -166,27 +165,26 @@ const routesUserRegular = [
   {
     path: "/purchase-request",
     name: "Purchase Request",
-    icon: <AiIcons.AiFillShopping/>,
+    icon: <AiIcons.AiFillShopping />,
     subRoutes: [
-        {
-          path: "/purchase-request/inventory",
-          name: "Inventory",
-          icon: <IoIcons.IoIosPaper/>,
-        },
-        {
-          path: "/purchase-request/maintenance",
-          name: "Maintenance",
-          icon: <BiIcons.BiCategoryAlt/>,
-        },
-        {
-          path: "/purchase-request/rent",
-          name: "Rent",
-          icon: <FaIcons.FaStore/>,
-        },
-      ],
+      {
+        path: "/purchase-request/inventory",
+        name: "Inventory",
+        icon: <IoIcons.IoIosPaper />,
+      },
+      {
+        path: "/purchase-request/maintenance",
+        name: "Maintenance",
+        icon: <BiIcons.BiCategoryAlt />,
+      },
+      {
+        path: "/purchase-request/rent",
+        name: "Rent",
+        icon: <FaIcons.FaStore />,
+      },
+    ],
   },
-  
-]
+];
 
 const routesUserGMSPVVP = [
   {
@@ -197,35 +195,47 @@ const routesUserGMSPVVP = [
   {
     path: "/approval-data",
     name: "Approval Data",
-    icon: <BsIcons.BsFillFileEarmarkCheckFill/>,
+    icon: <BsIcons.BsFillFileEarmarkCheckFill />,
   },
-]
+];
 
-const Sidebar = ({children}) => {
+const Sidebar = ({ children }) => {
   const { getCookie } = useAuth();
-  const[user,setUser]= useState({
-    name:'',
-    role:'',
-    level_approval:'',
-    location_id:'',
-    tap:'',
-    cluster:'',
-    department: ''
-  })
+  const [user, setUser] = useState({
+    name: "",
+    role: "",
+    level_approval: "",
+    location_id: "",
+    tap: "",
+    cluster: "",
+    department: "",
+  });
+
+  const [viewNotif, setViewNotif] = useState([]);
+  const { dashboardService } = useDeps();
+  const [notif, setNotif] = useState(false);
 
   useEffect(() => {
     onGetCookie();
   }, []);
 
-const onGetCookie = ()=>{
-  
-  let savedUserJsonString = getCookie("user")
-  let savedUser = JSON.parse(savedUserJsonString)
-  setUser(prevObj=>({...prevObj,name:(savedUser.name), role:(savedUser.role), level_approval:(savedUser.level_approval), location_id:(savedUser.location_id), tap:(savedUser.TAP), cluster:(savedUser.Cluster), department:(savedUser.department)}))
+  const onGetCookie = () => {
+    let savedUserJsonString = getCookie("user");
+    let savedUser = JSON.parse(savedUserJsonString);
+    setUser((prevObj) => ({
+      ...prevObj,
+      name: savedUser.name,
+      role: savedUser.role,
+      level_approval: savedUser.level_approval,
+      location_id: savedUser.location_id,
+      tap: savedUser.TAP,
+      cluster: savedUser.Cluster,
+      department: savedUser.department,
+    }));
 
-  console.log(user.name)
-}
-  
+    console.log(user.name);
+  };
+
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
   const inputAnimation = {
@@ -262,13 +272,33 @@ const onGetCookie = ()=>{
     },
   };
 
-  const { eraseCookie } = useAuth()
+  // Notif
+
+  useEffect(() => {
+    onGetTotalSubproduct();
+  }, []);
+
+  const onGetTotalSubproduct = async () => {
+    try {
+      const response = await dashboardService.getTotalAssetBySubProduct();
+      console.log("ini response subproduct sidebar", response);
+      setViewNotif(response.data);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const { eraseCookie } = useAuth();
 
   const navigate = useNavigate();
   const onLogout = () => {
-  eraseCookie()
-  navigate('/', {replace: true})
-  } 
+    eraseCookie();
+    navigate("/", { replace: true });
+  };
+
+  const onClickViewNotif = () => {
+    setNotif(true);
+  };
 
   return (
     <>
@@ -303,237 +333,278 @@ const onGetCookie = ()=>{
               <FaBars onClick={toggle} />
             </div>
           </div>
-          {user.role==="Admin" && (
-          <section className="routes">
-            {routesAdmin.map((route, index) => {
-              if (route.subRoutes) {
+          {user.role === "Admin" && (
+            <section className="routes">
+              {routesAdmin.map((route, index) => {
+                if (route.subRoutes) {
+                  return (
+                    <SidebarMenu
+                      setIsOpen={setIsOpen}
+                      route={route}
+                      showAnimation={showAnimation}
+                      isOpen={isOpen}
+                    />
+                  );
+                }
+
                 return (
-                  <SidebarMenu
-                    setIsOpen={setIsOpen}
-                    route={route}
-                    showAnimation={showAnimation}
-                    isOpen={isOpen}
-                  />
+                  <NavLink
+                    to={route.path}
+                    key={index}
+                    className="link"
+                    activeclassname="active"
+                  >
+                    <div className="icon">{route.icon}</div>
+                    <AnimatePresence>
+                      {isOpen && (
+                        <motion.div
+                          variants={showAnimation}
+                          initial="hidden"
+                          animate="show"
+                          exit="hidden"
+                          className="link_text"
+                        >
+                          {route.name}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </NavLink>
                 );
-              }
-     
-              return (
-                <NavLink
-                  to={route.path}
-                  key={index}
-                  className="link"
-                  activeclassname="active"
-                >
-                  <div className="icon">{route.icon}</div>
-                  <AnimatePresence>
-                    {isOpen && (
-                      <motion.div
-                        variants={showAnimation}
-                        initial="hidden"
-                        animate="show"
-                        exit="hidden"
-                        className="link_text"
-                      >
-                        {route.name}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </NavLink>
-              );
-            })}
-          </section>
+              })}
+            </section>
           )}
-{user.role==="GA" && (
-          <section className="routes">
-            {routesGA.map((route, index) => {
-              if (route.subRoutes) {
+          {user.role === "GA" && (
+            <section className="routes">
+              {routesGA.map((route, index) => {
+                if (route.subRoutes) {
+                  return (
+                    <SidebarMenu
+                      setIsOpen={setIsOpen}
+                      route={route}
+                      showAnimation={showAnimation}
+                      isOpen={isOpen}
+                    />
+                  );
+                }
+
                 return (
-                  <SidebarMenu
-                    setIsOpen={setIsOpen}
-                    route={route}
-                    showAnimation={showAnimation}
-                    isOpen={isOpen}
-                  />
+                  <NavLink
+                    to={route.path}
+                    key={index}
+                    className="link"
+                    activeclassname="active"
+                  >
+                    <div className="icon">{route.icon}</div>
+                    <AnimatePresence>
+                      {isOpen && (
+                        <motion.div
+                          variants={showAnimation}
+                          initial="hidden"
+                          animate="show"
+                          exit="hidden"
+                          className="link_text"
+                        >
+                          {route.name}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </NavLink>
                 );
-              }
-     
-              return (
-                <NavLink
-                  to={route.path}
-                  key={index}
-                  className="link"
-                  activeclassname="active"
-                >
-                  <div className="icon">{route.icon}</div>
-                  <AnimatePresence>
-                    {isOpen && (
-                      <motion.div
-                        variants={showAnimation}
-                        initial="hidden"
-                        animate="show"
-                        exit="hidden"
-                        className="link_text"
-                      >
-                        {route.name}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </NavLink>
-              );
-            })}
-          </section>
+              })}
+            </section>
           )}
-{user.role==="IT" && (
-          <section className="routes">
-            {routesIT.map((route, index) => {
-              if (route.subRoutes) {
+          {user.role === "IT" && (
+            <section className="routes">
+              {routesIT.map((route, index) => {
+                if (route.subRoutes) {
+                  return (
+                    <SidebarMenu
+                      setIsOpen={setIsOpen}
+                      route={route}
+                      showAnimation={showAnimation}
+                      isOpen={isOpen}
+                    />
+                  );
+                }
+
                 return (
-                  <SidebarMenu
-                    setIsOpen={setIsOpen}
-                    route={route}
-                    showAnimation={showAnimation}
-                    isOpen={isOpen}
-                  />
+                  <NavLink
+                    to={route.path}
+                    key={index}
+                    className="link"
+                    activeclassname="active"
+                  >
+                    <div className="icon">{route.icon}</div>
+                    <AnimatePresence>
+                      {isOpen && (
+                        <motion.div
+                          variants={showAnimation}
+                          initial="hidden"
+                          animate="show"
+                          exit="hidden"
+                          className="link_text"
+                        >
+                          {route.name}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </NavLink>
                 );
-              }
-     
-              return (
-                <NavLink
-                  to={route.path}
-                  key={index}
-                  className="link"
-                  activeclassname="active"
-                >
-                  <div className="icon">{route.icon}</div>
-                  <AnimatePresence>
-                    {isOpen && (
-                      <motion.div
-                        variants={showAnimation}
-                        initial="hidden"
-                        animate="show"
-                        exit="hidden"
-                        className="link_text"
-                      >
-                        {route.name}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </NavLink>
-              );
-            })}
-          </section>
+              })}
+            </section>
           )}
-          {user.role==="Regular" && user.level_approval==="Regular" && (
-          <section className="routes">
-            {routesUserRegular.map((route, index) => {
-              if (route.subRoutes) {
+          {user.role === "Regular" && user.level_approval === "Regular" && (
+            <section className="routes">
+              {routesUserRegular.map((route, index) => {
+                if (route.subRoutes) {
+                  return (
+                    <SidebarMenu
+                      setIsOpen={setIsOpen}
+                      route={route}
+                      showAnimation={showAnimation}
+                      isOpen={isOpen}
+                    />
+                  );
+                }
+
                 return (
-                  <SidebarMenu
-                    setIsOpen={setIsOpen}
-                    route={route}
-                    showAnimation={showAnimation}
-                    isOpen={isOpen}
-                  />
+                  <NavLink
+                    to={route.path}
+                    key={index}
+                    className="link"
+                    activeclassname="active"
+                  >
+                    <div className="icon">{route.icon}</div>
+                    <AnimatePresence>
+                      {isOpen && (
+                        <motion.div
+                          variants={showAnimation}
+                          initial="hidden"
+                          animate="show"
+                          exit="hidden"
+                          className="link_text"
+                        >
+                          {route.name}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </NavLink>
                 );
-              }
-     
-              return (
-                <NavLink
-                  to={route.path}
-                  key={index}
-                  className="link"
-                  activeclassname="active"
-                >
-                  <div className="icon">{route.icon}</div>
-                  <AnimatePresence>
-                    {isOpen && (
-                      <motion.div
-                        variants={showAnimation}
-                        initial="hidden"
-                        animate="show"
-                        exit="hidden"
-                        className="link_text"
-                      >
-                        {route.name}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </NavLink>
-              );
-            })}
-          </section>
+              })}
+            </section>
           )}
-          {user.role==="Regular" && (user.level_approval==="GM" || user.level_approval==="SPV" || user.level_approval==="VP_TRAD")&& (
-          <section className="routes">
-            {routesUserGMSPVVP.map((route, index) => {
-              if (route.subRoutes) {
-                return (
-                  <SidebarMenu
-                    setIsOpen={setIsOpen}
-                    route={route}
-                    showAnimation={showAnimation}
-                    isOpen={isOpen}
-                  />
-                );
-              }
-     
-              return (
-                <NavLink
-                  to={route.path}
-                  key={index}
-                  className="link"
-                  activeclassname="active"
-                >
-                  <div className="icon">{route.icon}</div>
-                  <AnimatePresence>
-                    {isOpen && (
-                      <motion.div
-                        variants={showAnimation}
-                        initial="hidden"
-                        animate="show"
-                        exit="hidden"
-                        className="link_text"
-                      >
-                        {route.name}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </NavLink>
-              );
-            })}
-          </section>
-          )}
+          {user.role === "Regular" &&
+            (user.level_approval === "GM" ||
+              user.level_approval === "SPV" ||
+              user.level_approval === "VP_TRAD") && (
+              <section className="routes">
+                {routesUserGMSPVVP.map((route, index) => {
+                  if (route.subRoutes) {
+                    return (
+                      <SidebarMenu
+                        setIsOpen={setIsOpen}
+                        route={route}
+                        showAnimation={showAnimation}
+                        isOpen={isOpen}
+                      />
+                    );
+                  }
+
+                  return (
+                    <NavLink
+                      to={route.path}
+                      key={index}
+                      className="link"
+                      activeclassname="active"
+                    >
+                      <div className="icon">{route.icon}</div>
+                      <AnimatePresence>
+                        {isOpen && (
+                          <motion.div
+                            variants={showAnimation}
+                            initial="hidden"
+                            animate="show"
+                            exit="hidden"
+                            className="link_text"
+                          >
+                            {route.name}
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </NavLink>
+                  );
+                })}
+              </section>
+            )}
           <AnimatePresence>
-              {isOpen && (
-                <motion.h1
-                  variants={showAnimation}
-                  initial="hidden"
-                  animate="show"
-                  exit="hidden"
-                  className='footer-main'
-                >
-                  <p>Copyright © by Group 6, All Rights Reserved</p>
-                </motion.h1>
-              )}
-            </AnimatePresence>          
+            {isOpen && (
+              <motion.h1
+                variants={showAnimation}
+                initial="hidden"
+                animate="show"
+                exit="hidden"
+                className="footer-main"
+              >
+                <p>Copyright © by Group 6, All Rights Reserved</p>
+              </motion.h1>
+            )}
+          </AnimatePresence>
         </motion.div>
 
         <main>
           <nav className="navbar navbar-expand-lg header-main">
-            <img src={logo} style={{width: '7.8vw', height: '4vh'}}></img>
+            <img src={logo} style={{ width: "7.8vw", height: "4vh" }}></img>
             <div className="nav-right">
-            <Noty width={'30px'} color={"#122C34"} count={10}/>
-            <div className="nav-item dropdown">
-            <a href="#" data-bs-toggle="dropdown" className="nav-item nav-link dropdown-toggle user-action"><CgProfile style={{fontSize:'28px', marginRight:"5%"}} />{user.name} <b className="caret"></b></a>
-            <div className="dropdown-menu">
-            <div className="divider dropdown-divider"></div>
-            <a onClick={onLogout} className="dropdown-item"><i className="material-icons">&#xE8AC;</i> Logout</a>
-				  </div>
-			    </div>
+              <div onClick={onClickViewNotif}>
+                <Noty
+                  width={"30px"}
+                  color={"#122C34"}
+                  count={viewNotif.length}
+                />
+                {notif && (
+                  <div className="modalNotif">
+                    <div className="card border-light shadow-sm">
+                      <ul className="list-group list-group-flush">
+                        {viewNotif ? (
+                          viewNotif.map((d, index) => {
+                            return (
+                              <li
+                                key={index}
+                                className="list-group-item list-group-item-action"
+                              >
+                                {d.Subproduct_Name} depreciation {d.Total}
+                              </li>
+                            );
+                          })
+                        ) : (
+                          <></>
+                        )}
+                      </ul>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="nav-item dropdown">
+                <a
+                  href="#"
+                  data-bs-toggle="dropdown"
+                  className="nav-item nav-link dropdown-toggle user-action"
+                >
+                  <CgProfile style={{ fontSize: "28px", marginRight: "5%" }} />
+                  {user.name} <b className="caret"></b>
+                </a>
+                <div className="dropdown-menu">
+                  <div className="divider dropdown-divider"></div>
+                  <a onClick={onLogout} className="dropdown-item">
+                    <i className="material-icons">&#xE8AC;</i> Logout
+                  </a>
+                </div>
+              </div>
             </div>
           </nav>
           {children}
-          </main>
+        </main>
       </div>
     </>
   );

@@ -57,10 +57,10 @@ export const dashboardService = ({ doGet }) => {
       throw e;
     }
   };
-  const getAssetAlmostDeprecated = async () => {
+  const getAssetAlmostDeprecated = async (page) => {
     try {
       return await doGet({
-        url: "api/asset/dashboard/almostdeprecated",
+        url: `api/asset/almostdeprecated/${page}`,
       });
     } catch (e) {
       throw e;

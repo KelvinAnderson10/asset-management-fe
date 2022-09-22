@@ -179,6 +179,17 @@ export const overviewService = ({doGet, doPut}) => {
         }
     }
 
+    const filterAssetMultipleConditionByUser = async (condition, vendor, location, product, subproduct, category, page) => {
+        try {
+            return await doGet({
+                url: `/api/asset/user/search?condition=${condition}&vendor=${vendor}&location=${location}&product=${product}&subproduct=${subproduct}&category=${category}&page=${page}`
+            })
+        } catch (e) {
+            throw e
+        }
+    }
+
+
     const getAssetByGA = async (page) => {
         try {
             return await doGet({
@@ -199,5 +210,5 @@ export const overviewService = ({doGet, doPut}) => {
         }
     }
 
-    return {filterAssetMultipleConditionByAdmin, getAllAsset, getAssetByAssetName, updateAsset,getAssetByVendor,getAssetByCondition,getAssetByLocation, getAssetByPagination, getAssetBySubproduct, getAssetByItemName, getAssetByProduct, getAssetByCategory, getCountAllAsset, getAssetByIT, getCountAssetByIT, getAssetByIdLocation, filterAssetMultipleConditionByGA, filterAssetMultipleConditionByIT, getAssetByGA, getCountAssetByGA}
+    return {filterAssetMultipleConditionByAdmin,filterAssetMultipleConditionByUser, getAllAsset, getAssetByAssetName, updateAsset,getAssetByVendor,getAssetByCondition,getAssetByLocation, getAssetByPagination, getAssetBySubproduct, getAssetByItemName, getAssetByProduct, getAssetByCategory, getCountAllAsset, getAssetByIT, getCountAssetByIT, getAssetByIdLocation, filterAssetMultipleConditionByGA, filterAssetMultipleConditionByIT, getAssetByGA, getCountAssetByGA}
 }
