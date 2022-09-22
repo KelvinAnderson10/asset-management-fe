@@ -61,6 +61,7 @@ export const ListPOInventory = () => {
                     response.data[i].ppn = 'No'
                 }
             }
+            getPOById(id)
             setPODetailData(response.data)
             console.log(response);
         } catch (e) {
@@ -214,6 +215,17 @@ export const ListPOInventory = () => {
         pageDecrementBtn = <li onClick={handlePrevbtn}> &hellip; </li>;
       }
       
+    const [POById, setPOById] = useState({})
+    const getPOById = async (id) => {
+      try {
+        const response = await purchaseOrderService.getPOById(id)
+        setPOById(response.data)
+        console.log(response);
+    } catch (e) {
+        console.log(e.response);
+    }
+    }
+
     return (
         <>
             <div className='po-inv-list-container'>
@@ -349,7 +361,68 @@ export const ListPOInventory = () => {
                     </div>
                     <form>
                 <div className="formPOInput">
-                  <div className="row">
+                  <div className="row" style={{textAlign:'left'}}>
+                  <h3 style={{textAlign:'left', color:'#B70621'}}>PO Number {POById.po_id} </h3>
+            <div className="mb-3 col-md-4">
+                    <label>
+                      Area Code
+                    </label>
+                    <input
+                      value={POById['Kode Wilayah']}
+                      readOnly
+                      type="text"
+                      name="Kode Wilayah"
+                      className="form-control"
+                    />
+                  </div>
+                  <div className="mb-3 col-md-4">
+                    <label>
+                      To User
+                    </label>
+                    <input
+                      type="text"
+                      name="ToUser"
+                      className="form-control"
+                      value={POById.ToUser}
+                      readOnly
+                    />
+                  </div>
+                  <div className="mb-3 col-md-4">
+                    <label>
+                      Position
+                    </label>
+                    <input
+                      type="text"
+                      name="Jabatan"
+                      className="form-control"
+                      value={POById.Jabatan}
+                      readOnly
+                    />
+                  </div>
+                  <div className="inputBoxPO mb-3 col-md-6 ">
+                    <label>
+                      Subproduct Name
+                    </label>
+                    <input
+                      value={POById['Jenis Produk']}
+                      type="text"
+                      name="Jenis Produk"
+                      className="form-control"
+                      readOnly
+                    />
+                  </div>
+                  <div className="mb-3 col-md-6 ">
+                    <label>
+                      Type
+                    </label>
+                    <input
+                      readOnly
+                      value="Inventory"
+                      type="text"
+                      name="tipe"
+                      className="form-control"
+                    />
+                  </div>
                     { poDetailData.length === 0 ? (
                             <p>Not request</p>
                         ): (

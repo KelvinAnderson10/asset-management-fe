@@ -54,15 +54,15 @@ export const Dashboard = () => {
       role: savedUser.role,
       level_approval: savedUser.level_approval,
       location_id: savedUser.location_id,
-      tap: savedUser.TAP,
-      cluster: savedUser.Cluster,
+      tap: savedUser.tap,
+      cluster: savedUser.cluster,
       department: savedUser.department,
     }));
   };
 
   const getAllEventLog = async () => {
     try {
-      if (user.role === "GA" || user.role === "Admin") {
+      if (user.role !== "Regular") {
         const response = await eventLogService.getEventLog();
         for (let i in response.data) {
           response.data[i]["CreatedAt"] = moment(
@@ -253,7 +253,7 @@ export const Dashboard = () => {
     try {
       const response = await dashboardService.getSumAssetValue();
       console.log("ini sum", response);
-      response.data = formatCash(response.data);
+      response.data = 'Rp' + ' ' + formatCash(response.data);
       setsumAssetValue(response.data);
     } catch (e) {
       console.log(e);
@@ -359,7 +359,7 @@ export const Dashboard = () => {
           <div className="content-dashboard-center">
             <div className="piechart">
               <div className="title-piechart">
-                <p>Status Purchase Order</p>
+                <p>Status Purchase Request</p>
               </div>
               <div>
                 <PieChart chartData={POData} />

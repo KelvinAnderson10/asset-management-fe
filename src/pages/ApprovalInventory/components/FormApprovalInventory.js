@@ -8,10 +8,11 @@ import * as MdIcons from "react-icons/md";
 import Swal from "sweetalert2";
 import { Failed } from "../../../shared/components/Notification/Failed";
 import { STATUS } from "../../../shared/constants";
+import { Row } from "antd";
 
 export const FormApprovalInventory = () => {
   const { user, setpoDetail, setPOHeader } = UseApprovalInventory();
-  const { vendorService, userService, purchaseOrderService } = useDeps();
+  const { vendorService, userService, purchaseOrderService, generalSettingService } = useDeps();
 
   const handleFormChange = (event, index) => {
     const newArray = location.state.detail.map((item, i) => {
@@ -24,7 +25,7 @@ export const FormApprovalInventory = () => {
           item.item_price_selected = item.item_price_2;
         } else{
           item.vendor_selected = item.vendor_3;
-          item.item_price_selected = item.item_price_3;
+          item.item_price_selected = Number(item.item_price_3);
         }
         console.log("ini item", item);
         return { ...item, [event.target.name]:event.target.value };
@@ -111,6 +112,7 @@ export const FormApprovalInventory = () => {
 
   useEffect(() => {
     onApproved();
+    onGetGeneralSetting()
   }, []);
 
   //Approval
@@ -123,6 +125,9 @@ export const FormApprovalInventory = () => {
         location.state.detail[i].is_asset = Number(location.state.detail[i].is_asset);
         location.state.detail[i].is_asset = Boolean(location.state.detail[i].is_asset);
         location.state.detail[i].item_price_selected = Number(location.state.detail[i].item_price_selected);
+        if (location.state.detail[i].item_price_selected >= setting.minimum_asset){
+          location.state.detail[i].is_asset = true
+        }
         location.state.detail[i].item_price_3 = Number(location.state.detail[i].item_price_3)
         console.log("ini yg akan di submit", location.state.detail);
         const response = await purchaseOrderService.updatePODetail(
@@ -158,6 +163,18 @@ export const FormApprovalInventory = () => {
       }
     }
   };
+
+  //Setting
+  const [setting, setSetting] = useState({})
+  const onGetGeneralSetting = async () =>{
+    try {
+        const response = await generalSettingService.getGeneralSetting();
+        setSetting(response.data)
+        console.log(response.data);
+    } catch (e) {
+        console.log(e)
+    }
+  }
 
   return (
     <>
@@ -388,7 +405,7 @@ export const FormApprovalInventory = () => {
                               onChange={(event) =>
                                 handleFormChange(event, index)
                               }
-                              value={form.item_price_3}
+                              value={Number(form.item_price_3)}
                             />
                           </div>
                           <div className="inputBoxPO mb-3 col-md-3">
@@ -437,7 +454,26 @@ export const FormApprovalInventory = () => {
                               value={form["Biaya Lain-Lain"]}
                             />
                           </div>
-                          <div className="inputBoxPO mb-3 col-md-3">
+                          {form.item_price_selected >= setting.minimum_asset ?  <div className="inputBoxPO mb-3 col-md-3">
+                            <label>
+                              Is Asset
+                              <span className="text-danger">*</span>
+                            </label>
+                            <select
+                              required
+                              name="is_asset"
+                              value={form.is_asset}
+                              onChange={(event) =>
+                                handleFormChange2(event, index)
+                              }
+                              style={{ width: "95%" }}
+                              disabled
+                            >
+                              <option value="">Select</option>
+                              <option value="1">Yes</option>
+                              <option value="0">No</option>
+                            </select>
+                          </div> : <div className="inputBoxPO mb-3 col-md-3">
                             <label>
                               Is Asset
                               <span className="text-danger">*</span>
@@ -455,7 +491,7 @@ export const FormApprovalInventory = () => {
                               <option value="1">Yes</option>
                               <option value="0">No</option>
                             </select>
-                          </div>
+                          </div>}
                         </div>
                       </div>
                     );

@@ -85,6 +85,7 @@ export const ListApproved = () => {
                 response.data[i].ppn = 'No'
             }
         }
+        getPOById(id)
         setPODetail(response.data)
         console.log(response);
     } catch (e) {
@@ -170,7 +171,18 @@ export const ListApproved = () => {
     let modalDecrementBtn = null;
     if (minModalNumberLimit >= 1) {
       modalDecrementBtn = <li onClick={handlePrevbtn}> &hellip; </li>;
-    }    
+    }
+  
+  const [POById, setPOById] = useState({})
+  const getPOById = async (id) => {
+    try {
+      const response = await purchaseOrderService.getPOById(id)
+      setPOById(response.data)
+      console.log(response);
+  } catch (e) {
+      console.log(e.response);
+  }
+  }
 
   return (
     <div>
@@ -180,7 +192,7 @@ export const ListApproved = () => {
           {appData1.length === 0 ? (
             <p>Not request</p>
           ) : (
-            appData1.map((data) => (
+            currentItems.map((data) => (
               <div
                 className="approval-inv-box-item"
                 key={data.po_id}
@@ -268,7 +280,68 @@ export const ListApproved = () => {
               </div>
               <form>
           <div className="formPOInput">
-            <div className="row">
+            <div className="row" style={{textAlign:'left'}}>
+            <h3 style={{textAlign:'left', color:'#B70621'}}>PO Number {POById.po_id} </h3>
+            <div className="mb-3 col-md-4">
+                    <label>
+                      Area Code
+                    </label>
+                    <input
+                      value={POById['Kode Wilayah']}
+                      readOnly
+                      type="text"
+                      name="Kode Wilayah"
+                      className="form-control"
+                    />
+                  </div>
+                  <div className="mb-3 col-md-4">
+                    <label>
+                      To User
+                    </label>
+                    <input
+                      type="text"
+                      name="ToUser"
+                      className="form-control"
+                      value={POById.ToUser}
+                      readOnly
+                    />
+                  </div>
+                  <div className="mb-3 col-md-4">
+                    <label>
+                      Position
+                    </label>
+                    <input
+                      type="text"
+                      name="Jabatan"
+                      className="form-control"
+                      value={POById.Jabatan}
+                      readOnly
+                    />
+                  </div>
+                  <div className="inputBoxPO mb-3 col-md-6 ">
+                    <label>
+                      Subproduct Name
+                    </label>
+                    <input
+                      value={POById['Jenis Produk']}
+                      type="text"
+                      name="Jenis Produk"
+                      className="form-control"
+                      readOnly
+                    />
+                  </div>
+                  <div className="mb-3 col-md-6 ">
+                    <label>
+                      Type
+                    </label>
+                    <input
+                      readOnly
+                      value="Inventory"
+                      type="text"
+                      name="tipe"
+                      className="form-control"
+                    />
+                  </div>
               { poDetail.length === 0 ? (
                       <p>Not request</p>
                   ): (
@@ -276,7 +349,7 @@ export const ListApproved = () => {
                 return (
                   <div className='list-detail-po-container' key={data.po_id_detail}>
                       <div className='header-item-add'>
-                      <h3 style={{textAlign:'center'}}>Item {indexModal} </h3>
+                      <h4 style={{textAlign:'center'}}>Item {indexModal} </h4>
                       </div>
                     <div className="row" style={{textAlign:'left'}}>
                       <div className="inputBoxPO mb-3">  
@@ -289,74 +362,25 @@ export const ListApproved = () => {
                           defaultValue={data["Nama Barang"]}
                         />
                       </div>
-
                       <div className="inputBoxPO mb-3 col-md-6 ">
                         <label>
-                          1<span className="subscript">st</span>{" "}
                           Vendor
                         </label>
                         <input
                           readOnly
-                          name="vendor_1"
-                          defaultValue={data.vendor_1}
+                          name="vendor_selected"
+                          defaultValue={data.vendor_selected}
                         />
                       </div>
                       <div className="inputBoxPO mb-3 col-md-6">
                         <label>
-                          1<span className="subscript">st</span> Item
-                          Price
-                        </label>
-                        <input
-                          readOnly
-                          type='number'
-                          name="item_price_1"
-                          defaultValue={data.item_price_1}
-                        />
-                      </div>
-                      <div className="inputBoxPO mb-3 col-md-6 ">
-                        <label>
-                          2<span className="subscript">nd</span>{" "}
-                          Vendor
-                        </label>
-                        <input
-                          readOnly
-                          name="vendor_2"
-                          defaultValue={data.vendor_2}
-                        />
-                      </div>
-                      <div className="inputBoxPO mb-3 col-md-6">
-                        <label>
-                          2<span className="subscript">nd</span> Item
-                          Price
-                        </label>
-                        <input
-                          readOnly
-                          type='number'
-                          name="item_price_2"
-                          defaultValue={data.item_price_2}
-                        />
-                      </div>
-                      <div className="inputBoxPO mb-3 col-md-6 ">
-                        <label>
-                          3<span className="subscript">st</span>{" "}
-                          Vendor
-                        </label>
-                        <input
-                          readOnly
-                          name="vendor_3"
-                          defaultValue={data.vendor_3}
-                        />
-                      </div>
-                      <div className="inputBoxPO mb-3 col-md-6">
-                        <label>
-                          3<span className="subscript">rd</span> Item
                           Price
                         </label>
                         <input
                         type='number'
-                          name="item_price_3"
+                          name="item_price_selected"
                           readOnly
-                          defaultValue={data.item_price_3}
+                          defaultValue={data.item_price_selected}
                         />
                       </div>
                       <div className="inputBoxPO mb-3 col-md-4">
