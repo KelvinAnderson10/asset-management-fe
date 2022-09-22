@@ -520,7 +520,14 @@ export const Overview = () => {
     let currentPage = data.selected + 1;
     console.log(data.selected);
     getAssetsPagination(currentPage);
-    onFilterMultiple(searchCondition, searchVendor, searchLocation, searchProduct, searchSubproduct, searchCategory, currentPage)
+
+    if (user.role == 'Regular'){
+      onFilterMultiple(searchCondition, searchVendor, user.location_id, searchProduct, searchSubproduct, searchCategory, currentPage)
+
+    }else{
+      onFilterMultiple(searchCondition, searchVendor, searchLocation, searchProduct, searchSubproduct, searchCategory, currentPage)
+    }
+   
   };
 
   //Event Log
@@ -638,6 +645,39 @@ export const Overview = () => {
         } catch (e) {
           console.log(e.response);
         }
+    }else if (user.role == 'Regular') {
+      try {
+        const response = await overviewService.filterAssetMultipleConditionByUser(condition, vendor, location, product, subproduct, category, page)
+        for (let i in response.data) {
+          response.data[i]["Harga Perolehan"] =
+            "Rp" + thousands_separators(response.data[i]["Harga Perolehan"]);
+          response.data[i]["Biaya Lain-Lain"] =
+            "Rp" + thousands_separators(response.data[i]["Biaya Lain-Lain"]);
+          response.data[i]["PPN"] =
+            "Rp" + thousands_separators(response.data[i]["PPN"]);
+          response.data[i]["Penyusutan Perbulan"] =
+            "Rp" +
+            thousands_separators(response.data[i]["Penyusutan Perbulan"]);
+          response.data[i]["Total Harga Perolehan"] =
+            "Rp" +
+            thousands_separators(response.data[i]["Total Harga Perolehan"]);
+          response.data[i]["Total Penyusutan"] =
+            "Rp" + thousands_separators(response.data[i]["Total Penyusutan"]);
+          response.data[i]["Nilai Asset saat ini"] =
+            "Rp" +
+            thousands_separators(response.data[i]["Nilai Asset saat ini"]);
+          response.data[i]["Tanggal Output"] = moment(
+            response.data[i]["Tanggal Output"]
+          ).format("YYYY-MM-DDTHH:MM");
+          response.data[i]["BAST Output"] = moment(
+            response.data[i]["BAST Output"]
+          ).format("YYYY-MM-DDTHH:MM");
+          }
+          setDatas(response.data);
+          setPageCount(Math.ceil(response.count / 10));
+        } catch (e) {
+          console.log(e.response);
+        }
     }
   }
   
@@ -671,9 +711,9 @@ export const Overview = () => {
               </div>
               <div className='search-box-item'>
               <div className='title-search'>
-                <a>Location:</a>
+                <a>Category:</a>
                 </div>
-                <input value={searchLocation} type="text" className="input-search" placeholder="Location" onChange={(e)=>setSearchLocation(e.target.value)}/>
+                <input value={searchCategory} type="text" className="input-search" placeholder="Category" onChange={(e)=>setSearchCategory(e.target.value)}/>
               </div>
             </div>
             <div className='box-search-container'>
@@ -689,19 +729,22 @@ export const Overview = () => {
                 </div>
                 <input value={searchProduct} type="text" className="input-search" placeholder="Product" onChange={(e)=>setSearchProduct(e.target.value)}/>
               </div>
-              <div className='search-box-item'>
-              <div className='title-search'>
-                <a>Category:</a>
+              {user.role != 'Regular' && (
+                <div className='search-box-item'>
+                <div className='title-search'>
+                  <a>Location:</a>
+                  </div>
+                  <input value={searchLocation} type="text" className="input-search" placeholder="Location" onChange={(e)=>setSearchLocation(e.target.value)}/>
                 </div>
-                <input value={searchCategory} type="text" className="input-search" placeholder="Category" onChange={(e)=>setSearchCategory(e.target.value)}/>
-              </div>
+              )}
+              
             </div>
           </div>
           <div className='button-search-container'>
             <button
                     value="submit"
                     className="button-box"
-                    onClick={()=>onFilterMultiple(searchCondition, searchVendor, searchLocation, searchProduct, searchSubproduct, searchCategory, 1)}>
+                    onClick={()=> {user.role == 'Regular' ? (onFilterMultiple(searchCondition, searchVendor, user.location_id, searchProduct, searchSubproduct, searchCategory, 1)):(onFilterMultiple(searchCondition, searchVendor, searchLocation, searchProduct, searchSubproduct, searchCategory, 1))} }>
                       Search
             </button>
             <button

@@ -23,11 +23,10 @@ main {
 
 /* Sidebar */
 .sidebar {
-  background: #B70621;
+  background: #b70621;
   color: white;
   min-height: 100vh;
   /* overflow-y: auto; */
-
 }
 
 .top_section {
@@ -81,7 +80,7 @@ main {
 }
 .link:hover {
   border-right: 4px solid white;
-  background:#888888;
+  background: #888888;
   transition: 0.2s cubic-bezier(0.6, -0.28, 0.735, 0.045);
 }
 .active {
@@ -91,7 +90,7 @@ main {
 .link_text {
   white-space: nowrap;
   font-size: 20px;
-  color:#fff;
+  color: #fff;
 }
 
 .menu {
@@ -118,18 +117,18 @@ main {
 }
 
 .main-container .header-main {
-    background:rgb(255, 255, 255);
-    height: 7vh;
-    color: #B70621;
-    /* align-items: flex-end; */
-    justify-content: space-between;
-    padding-right: 2%;
-    font-size: 1.5em;
-    padding-left: 1.2%;
+  background: rgb(255, 255, 255);
+  height: 7vh;
+  color: #b70621;
+  /* align-items: flex-end; */
+  justify-content: space-between;
+  padding-right: 2%;
+  font-size: 1.5em;
+  padding-left: 1.2%;
 }
 
 .footer-main {
-  font-family: 'Mulish';
+  font-family: "Mulish";
   font-style: normal;
   font-weight: 600;
   font-size: 16px;
@@ -140,18 +139,32 @@ main {
 }
 
 .navbar .user-action {
-	padding: 9px 15px;
-	font-size: 18px;
+  padding: 9px 15px;
+  font-size: 18px;
 }
-.icon{
-  color: #fff
+.icon {
+  color: #fff;
 }
 
-.header-main .nav-right{
+.header-main .nav-right {
   width: 20%;
   height: 100%;
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
   align-items: center;
+}
+
+.modalNotif {
+  position: absolute;
+  width: 250px;
+  font-size: small;
+  top: 40px;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  text-align: start;
+  background-color: #f0f3f7;
+  border-radius: 10px;
+  z-index: 101;
 }

@@ -35,6 +35,7 @@ export const Dashboard = () => {
   const [subproduct, setSubproduct] = useState([]);
   const [viewDetailSpending, setViewDetailSpending] = useState(false);
   const [viewDetailUnit, setViewDetailUnit] = useState(false);
+  const [pageCount, setPageCount] = useState(0);
 
   const [user, setUser] = useState({
     name: "",
@@ -229,11 +230,12 @@ export const Dashboard = () => {
     }
   };
 
-  const onGetAssetAlmostDeprecated = async () => {
+  const onGetAssetAlmostDeprecated = async (page) => {
     try {
-      const response = await dashboardService.getAssetAlmostDeprecated();
-      response.data = formatCash(response.data);
-      setCountAssetDeprecated(response.data);
+      const response = await dashboardService.getAssetAlmostDeprecated(page);
+      response.count = formatCash(response.count);
+      setCountAssetDeprecated(response.count);
+      setPageCount(Math.ceil(response.count / 10));
     } catch (e) {
       console.log(e);
     }
@@ -253,7 +255,7 @@ export const Dashboard = () => {
     try {
       const response = await dashboardService.getSumAssetValue();
       console.log("ini sum", response);
-      response.data = 'Rp' + ' ' + formatCash(response.data);
+      response.data = "Rp" + " " + formatCash(response.data);
       setsumAssetValue(response.data);
     } catch (e) {
       console.log(e);
@@ -375,12 +377,18 @@ export const Dashboard = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {subproduct && subproduct.map((item) => (
+                    {subproduct.length === 0 ? (
                       <tr>
-                        <td>{item.Subproduct_Name}</td>
-                        <td>{item.Total}</td>
+                        <th>No data</th>
                       </tr>
-                    ))}
+                    ) : (
+                      subproduct.map((item) => (
+                        <tr>
+                          <td>{item.Subproduct_Name}</td>
+                          <td>{item.Total}</td>
+                        </tr>
+                      ))
+                    )}
                   </tbody>
                 </table>
               </div>
