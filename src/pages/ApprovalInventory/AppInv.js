@@ -28,12 +28,19 @@ export const AppInv = () => {
     <Sidebar>
        <div className='po-inventory-container'>
             <div className='navbar-po-container'>
-            <div className={classNavbarForm} onClick={() => handleClickForm()}>
+                <div className='navbar-po-left'>
+                <div className={classNavbarForm} onClick={() => handleClickForm()}>
                 <a>List Purchase Request</a>
-            </div>
-            <div className={classNavbarList} onClick={() => handleClickList()}>
-                <a>Approved</a>
-            </div> 
+                </div>
+                <div className={classNavbarList} onClick={() => handleClickList()}>
+                    <a>Approved</a>
+                </div> 
+                </div>
+                <div className='title-right'>
+                <div className='title-box'>
+                    <a>Inventory</a>
+                </div>
+                </div>
             </div>
        </div>
        {requestForm && <ListPurchaseRequest/>}

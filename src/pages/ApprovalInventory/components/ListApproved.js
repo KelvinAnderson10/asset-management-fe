@@ -200,7 +200,7 @@ export const ListApproved = () => {
               >
                 <div className="header-list-approval">
                   <a className="approval-num">{data.po_id}</a>
-                  <a className="status-approval" style={{backgroundColor: data.status == 'Rejected' ? 'rgb(183, 6, 33)': 'rgb(255, 178, 0)' && data.status== 'Approved' ? 'rgb(92, 184, 92, 0.75)': 'rgb(255, 178, 0)' && data.status== 'Delivered' ? 'rgba(7, 124, 234, 0.714)': 'rgb(255, 178, 0)'}}>{data.status}</a>
+                  <a className="status-approval" style={{backgroundColor: data.status == 'Denied' ? 'rgb(183, 6, 33)': 'rgb(255, 178, 0)' && data.status== 'Approved' ? 'rgb(92, 184, 92, 0.75)': 'rgb(255, 178, 0)' && data.status== 'Delivered' ? 'rgba(7, 124, 234, 0.714)': 'rgb(255, 178, 0)'}}>{data.status}</a>
                 </div>
                 <div className="approval-content-container">
                   <div className="box-content-approval">

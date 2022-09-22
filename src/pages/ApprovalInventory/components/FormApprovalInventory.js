@@ -47,20 +47,7 @@ export const FormApprovalInventory = () => {
     });
     setpoDetail(newArray2);
   };
-  // const handleFormChange3 = (event, index) => {
-  //   const newArray2 = location.state.detail.map((item, i) => {
-  //     if (index === i) {
-  //       if(event.target.value ==3){
-  //         item.vendor_selected = item.vendor_3;
-  //         item.item_price_selected = item.item_price_3;
-  //       }
-  //       return { ...item, [event.target.name]: event.target.value };
-  //     } else {
-  //       return item;
-  //     }
-  //   });
-  //   setpoDetail(newArray2);
-  // };
+
   const [vendor, setVendor] = useState([]);
   const onGetAllVendor = async () => {
     try {
@@ -82,8 +69,6 @@ export const FormApprovalInventory = () => {
   const onClickBack = () => {
     navigate("/approval-data/inventory", { replace: true });
   };
-
-  // console.log("ini state", location.state.header);
 
   //Reject
   const onRejectPO = async (e, id) => {
@@ -115,6 +100,20 @@ export const FormApprovalInventory = () => {
     onGetGeneralSetting()
   }, []);
 
+  //Edit Status
+  const updateStatus = async (id, status) => {
+    try {
+      const response = await purchaseOrderService.updatePO(
+        id,
+        status
+      )
+      setPOHeader(response.data)
+      console.log(response);
+    } catch (e){
+      console.log(e.response);
+    }
+  }
+
   //Approval
   const onApproved = async (e, id) => {
     e.preventDefault(e);
@@ -142,7 +141,6 @@ export const FormApprovalInventory = () => {
       if (location.state.header.approverLevel3 == "-") {
         try {
           const response = await purchaseOrderService.approvedByLevel2(id);
-          location.state.header.status= STATUS.APPROVE_GA_IT
           console.log(location.state.header);
           setPOHeader(location.state.header)
           Swal.fire("Success!", "This request has been approved.", "success");
@@ -150,15 +148,19 @@ export const FormApprovalInventory = () => {
         } catch (e) {
           console.log(e.response);
           Failed("Failed to approved");
+        } finally{
+          updateStatus(id, {"status": STATUS.APPROVE_GA_IT})
         }
       } else {
         try {
-          const response = await purchaseOrderService.approvedByLevel3(id);
+          const response = await purchaseOrderService.approvedByLevel3(id);  
           Swal.fire("Success!", "This request has been approved.", "success");
           navigate("/approval-data/inventory", { replace: true });
         } catch (e) {
           console.log(e.response);
           Failed("Failed to approved");
+        } finally{
+          updateStatus(id, {"status": STATUS.APPROVE_GA_IT})
         }
       }
     }

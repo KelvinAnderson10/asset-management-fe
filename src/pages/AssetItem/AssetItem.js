@@ -338,14 +338,6 @@ export const AssetItem = () => {
                 <label for="actual-btn">Choose File</label>
                 <span  id="file-chosen">{fileName}</span>
                 </div>
-                  {/* <input 
-                    ref={ref}
-                    id="upload"
-                    accept="image/*"
-                    type="file"
-                    name="Asset Image"
-                    onChange={imageChange}
-                  /> */}
                 </div>
                 <div className="inputBox">
                   <span>Additional Cost :</span>

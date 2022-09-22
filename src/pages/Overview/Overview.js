@@ -31,14 +31,9 @@ export const Overview = () => {
   const [viewShow, setViewShow] = useState();
   const [asset, setAsset] = useState({});
   const [isLoading, setLoading] = useState(false);
+  const [fileName, setFileName]= useState('No file chosen')
 
-  const handleChangeAsset = (e) => {
-    const newData = { ...asset };
-    newData[e.target.name] = e.target.value;
-    setAsset(newData);
-  };
-
-  const handleViewShow = () => {
+    const handleViewShow = () => {
     setViewShow(true);
   };
 
@@ -174,6 +169,7 @@ export const Overview = () => {
   let reader = new FileReader();
 
   const imageChange = async (e) => {
+    setFileName(e.target.files[0].name)
     if (e.target.files && e.target.files.length > 0) {
       const imageFiles = e.target.files[0]
       console.log('originalFile instanceof Blob', imageFiles instanceof Blob); // true
@@ -199,12 +195,6 @@ export const Overview = () => {
   };
 
   const ref = useRef(null)
-  const ref1 = useRef(null);
-  const ref2 = useRef(null);
-  const ref3 = useRef(null);
-  const ref4 = useRef(null);
-  const ref5 = useRef(null);
-  const ref6 = useRef(null);
 
   const removeSelectedImage = () => {
     setImageBase64("")
@@ -304,26 +294,7 @@ export const Overview = () => {
     setAssetEdit(newData);
   };
 
-  const handleCancel = (e) => {
-    e.target.reset();
-  };
-
-  //Search
-
-  const [filter, setFilter] = useState("");
-  const [dropdownName, setDropdownName] = useState("");
-  const [fill, setFill] = useState(true);
-
-  const onChangeFilter = (e) => {
-    setFilter(e.target.value);
-  };
-
-  const onChangeDropdown = (dropdownName) => {
-    setDropdownName(dropdownName);
-    setFill(false);
-  };
-
-  const onClearForm = () => {
+   const onClearForm = () => {
     setSearchCondition('')
     setSearchVendor('')
     setSearchLocation('')
@@ -354,7 +325,7 @@ export const Overview = () => {
     } else if (user.role=='IT'){
       getAssetsByIT(1);
     } else if (user.role=='Regular') {
-      getAssetsByLocation(user.location_id)
+      getAssetsByLocation(user.location_id,1)
     } else if (user.role=='GA'){
       getAssetsByGA(1)
     }
@@ -507,10 +478,10 @@ export const Overview = () => {
       }
     }
 
-    const getAssetsByLocation = async (id) => {
+    const getAssetsByLocation = async (id, page) => {
       setLoading(true)
       try {
-        const response = await overviewService.getAssetByIdLocation(id);
+        const response = await overviewService.getAssetByIdLocation(id, page);
         for (let i in response.data) {
           response.data[i]["Harga Perolehan"] =
             "Rp" + thousands_separators(response.data[i]["Harga Perolehan"]);
@@ -534,8 +505,8 @@ export const Overview = () => {
             response.data[i]["BAST Output"]
           ).format("YYYY-MM-DDTHH:MM");
         }
-        onCountAsset();
         setDatas(response.data);
+        setPageCount(Math.ceil(response.count / 10));
         console.log(response);
       } catch (e) {
         console.log(e);
@@ -549,6 +520,7 @@ export const Overview = () => {
     let currentPage = data.selected + 1;
     console.log(data.selected);
     getAssetsPagination(currentPage);
+    onFilterMultiple(searchCondition, searchVendor, searchLocation, searchProduct, searchSubproduct, searchCategory, currentPage)
   };
 
   //Event Log
@@ -564,10 +536,11 @@ export const Overview = () => {
   };
 
   //Filter Multiple Condition
-  const onFilterMultiple = async (condition, vendor, location, product, subproduct, category) => {
-    if (user.role == 'Admin' || user.role == 'GA') {
+  const [countFilter, setCountFilter] = useState(0)
+  const onFilterMultiple = async (condition, vendor, location, product, subproduct, category, page) => {
+    if (user.role == 'GA') {
       try {
-        const response = await overviewService.filterAssetMultipleConditionByGA(condition, vendor, location, product, subproduct, category)
+        const response = await overviewService.filterAssetMultipleConditionByGA(condition, vendor, location, product, subproduct, category, page)
       for (let i in response.data) {
         response.data[i]["Harga Perolehan"] =
           "Rp" + thousands_separators(response.data[i]["Harga Perolehan"]);
@@ -594,13 +567,14 @@ export const Overview = () => {
         ).format("YYYY-MM-DDTHH:MM");
         }
         setDatas(response.data);
-        setPageCount(Math.ceil(datas / 10));
+        console.log('ini filter', response.data);
+        setPageCount(Math.ceil(response.count / 10));
       } catch (e) {
         console.log(e.response);
       }
     } else if (user.role == 'IT') {
       try {
-      const response = await overviewService.filterAssetMultipleConditionByIT(condition, vendor, location, product, subproduct, category)
+      const response = await overviewService.filterAssetMultipleConditionByIT(condition, vendor, location, product, subproduct, category, page)
       for (let i in response.data) {
         response.data[i]["Harga Perolehan"] =
           "Rp" + thousands_separators(response.data[i]["Harga Perolehan"]);
@@ -627,10 +601,43 @@ export const Overview = () => {
         ).format("YYYY-MM-DDTHH:MM");
         }
         setDatas(response.data);
-        setPageCount(Math.ceil(datas / 10));
+        setPageCount(Math.ceil(response.count / 10));
       } catch (e) {
         console.log(e.response);
       }
+    } else if (user.role == 'Admin') {
+      try {
+        const response = await overviewService.filterAssetMultipleConditionByAdmin(condition, vendor, location, product, subproduct, category, page)
+        for (let i in response.data) {
+          response.data[i]["Harga Perolehan"] =
+            "Rp" + thousands_separators(response.data[i]["Harga Perolehan"]);
+          response.data[i]["Biaya Lain-Lain"] =
+            "Rp" + thousands_separators(response.data[i]["Biaya Lain-Lain"]);
+          response.data[i]["PPN"] =
+            "Rp" + thousands_separators(response.data[i]["PPN"]);
+          response.data[i]["Penyusutan Perbulan"] =
+            "Rp" +
+            thousands_separators(response.data[i]["Penyusutan Perbulan"]);
+          response.data[i]["Total Harga Perolehan"] =
+            "Rp" +
+            thousands_separators(response.data[i]["Total Harga Perolehan"]);
+          response.data[i]["Total Penyusutan"] =
+            "Rp" + thousands_separators(response.data[i]["Total Penyusutan"]);
+          response.data[i]["Nilai Asset saat ini"] =
+            "Rp" +
+            thousands_separators(response.data[i]["Nilai Asset saat ini"]);
+          response.data[i]["Tanggal Output"] = moment(
+            response.data[i]["Tanggal Output"]
+          ).format("YYYY-MM-DDTHH:MM");
+          response.data[i]["BAST Output"] = moment(
+            response.data[i]["BAST Output"]
+          ).format("YYYY-MM-DDTHH:MM");
+          }
+          setDatas(response.data);
+          setPageCount(Math.ceil(response.count / 10));
+        } catch (e) {
+          console.log(e.response);
+        }
     }
   }
   
@@ -694,7 +701,7 @@ export const Overview = () => {
             <button
                     value="submit"
                     className="button-box"
-                    onClick={()=>onFilterMultiple(searchCondition, searchVendor, searchLocation, searchProduct, searchSubproduct, searchCategory)}>
+                    onClick={()=>onFilterMultiple(searchCondition, searchVendor, searchLocation, searchProduct, searchSubproduct, searchCategory, 1)}>
                       Search
             </button>
             <button
@@ -1059,6 +1066,8 @@ export const Overview = () => {
                 <div className="image-view">
                   <img src={rowData["Asset Image"]}></img>
                 </div>
+                <div className="row">
+                <div className="col-md-6 mb-3 mt-3">
                 <label>No Asset</label>
                 <input
                   type="text"
@@ -1066,6 +1075,8 @@ export const Overview = () => {
                   value={rowData["Nomor Asset"]}
                   readOnly
                 />
+                </div>
+                <div className="col-md-6 mb-3 mt-3">
                 <label>Asset Name</label>
                 <input
                   type="text"
@@ -1073,6 +1084,8 @@ export const Overview = () => {
                   value={rowData["Nama Barang"]}
                   readOnly
                 />
+                </div>
+                <div className="col-md-6 mb-3">
                 <label>Asset Category</label>
                 <input
                   type="text"
@@ -1080,6 +1093,8 @@ export const Overview = () => {
                   value={rowData["Kategori Aset Tetap"]}
                   readOnly
                 />
+                </div>
+                <div className="col-md-6 mb-3">
                 <label>Product Name</label>
                 <input
                   type="text"
@@ -1087,6 +1102,8 @@ export const Overview = () => {
                   value={rowData["Kategori Jenis Produk"]}
                   readOnly
                 />
+                </div>
+                <div className="col-md-6 mb-3">
                 <label>Subproduct Name</label>
                 <input
                   type="text"
@@ -1094,6 +1111,8 @@ export const Overview = () => {
                   value={rowData["Jenis Produk"]}
                   readOnly
                 />
+                </div>
+                <div className="col-md-6 mb-3">
                 <label>No PO</label>
                 <input
                   type="text"
@@ -1101,6 +1120,8 @@ export const Overview = () => {
                   value={rowData["No. PO / Dokumenen Pendukung"]}
                   readOnly
                 />
+                </div>
+                <div className="col-md-6 mb-3">
                 <label>Location</label>
                 <input
                   type="text"
@@ -1108,6 +1129,8 @@ export const Overview = () => {
                   value={rowData["Lokasi"]}
                   readOnly
                 />
+                </div>
+                <div className="col-md-6 mb-3">
                 <label>Vendor</label>
                 <input
                   type="text"
@@ -1115,6 +1138,8 @@ export const Overview = () => {
                   value={rowData["Vendor"]}
                   readOnly
                 />
+                </div>
+                <div className="col-md-6 mb-3">
                 <label>Lifetime</label>
                 <input
                   type="text"
@@ -1122,6 +1147,8 @@ export const Overview = () => {
                   value={rowData["Masa Manfaat (Bulan)"]}
                   readOnly
                 />
+                </div>
+                <div className="col-md-6 mb-3">
                 <label>Current Asset Value</label>
                 <input
                   type="text"
@@ -1129,6 +1156,8 @@ export const Overview = () => {
                   value={rowData["Nilai Asset saat ini"]}
                   readOnly
                 />
+                </div>
+              </div>
               </div>
             </div>
           </Modal.Body>
@@ -1275,14 +1304,11 @@ export const Overview = () => {
                         </div>
                        )} 
                     </div>
-                    <input
-                      id="upload"
-                      accept="image/*"
-                      type="file"
-                      name="Asset Image"
-                      onChange={imageChange}
-                      ref={ref}
-                    />
+                    <div className="choose-file">
+                    <input ref={ref} accept="image/*" onChange={imageChange} type="file" id="actual-btn" hidden/>
+                    <label for="actual-btn">Choose File</label>
+                    <span  id="file-chosen">{fileName}</span>
+                    </div>
                   </div>
                   {/* <div className="inputBox" style={{ marginTop: "30px" }}>
                   <span>PPN :</span>
@@ -1298,7 +1324,7 @@ export const Overview = () => {
                     <option value='0'>No</option>
                   </select>
                   </div> */}
-                   <div className="inputBox">
+                   <div className="inputBox" style={{marginTop:'1vh'}}>
                     <span>Purchase Price :</span>
                     <input
                       type="number"

@@ -139,30 +139,40 @@ export const overviewService = ({doGet, doPut}) => {
         }
     }
 
-    const getAssetByIdLocation = async (id) => {
+    const getAssetByIdLocation = async (id, page) => {
         try {
             return await doGet({
-                url: `/api/asset/location/${id}`
+                url: `/api/asset/location/search?id=${id}&page=${page}`
             })
         } catch (e) {
             throw e
         }
     }
 
-    const filterAssetMultipleConditionByGA = async (condition, vendor, location, product, subproduct, category) => {
+    const filterAssetMultipleConditionByGA = async (condition, vendor, location, product, subproduct, category, page) => {
         try {
             return await doGet({
-                url: `/api/asset/ga/search?condition=${condition}&vendor=${vendor}&location=${location}&product=${product}&subproduct=${subproduct}&category=${category}`
+                url: `/api/asset/ga/search?condition=${condition}&vendor=${vendor}&location=${location}&product=${product}&subproduct=${subproduct}&category=${category}&page=${page}`
             })
         } catch (e) {
             throw e
         }
     }
 
-    const filterAssetMultipleConditionByIT = async () => {
+    const filterAssetMultipleConditionByIT = async (condition, vendor, location, product, subproduct, category, page) => {
         try {
             return await doGet({
-                url: '/api/asset/it/search'
+                url: `/api/asset/it/search?condition=${condition}&vendor=${vendor}&location=${location}&product=${product}&subproduct=${subproduct}&category=${category}&page=${page}`
+            })
+        } catch (e) {
+            throw e
+        }
+    }
+
+    const filterAssetMultipleConditionByAdmin = async (condition, vendor, location, product, subproduct, category, page) => {
+        try {
+            return await doGet({
+                url: `/api/asset/admin/search?condition=${condition}&vendor=${vendor}&location=${location}&product=${product}&subproduct=${subproduct}&category=${category}&page=${page}`
             })
         } catch (e) {
             throw e
@@ -189,5 +199,5 @@ export const overviewService = ({doGet, doPut}) => {
         }
     }
 
-    return {getAllAsset, getAssetByAssetName, updateAsset,getAssetByVendor,getAssetByCondition,getAssetByLocation, getAssetByPagination, getAssetBySubproduct, getAssetByItemName, getAssetByProduct, getAssetByCategory, getCountAllAsset, getAssetByIT, getCountAssetByIT, getAssetByIdLocation, filterAssetMultipleConditionByGA, filterAssetMultipleConditionByIT, getAssetByGA, getCountAssetByGA}
+    return {filterAssetMultipleConditionByAdmin, getAllAsset, getAssetByAssetName, updateAsset,getAssetByVendor,getAssetByCondition,getAssetByLocation, getAssetByPagination, getAssetBySubproduct, getAssetByItemName, getAssetByProduct, getAssetByCategory, getCountAllAsset, getAssetByIT, getCountAssetByIT, getAssetByIdLocation, filterAssetMultipleConditionByGA, filterAssetMultipleConditionByIT, getAssetByGA, getCountAssetByGA}
 }

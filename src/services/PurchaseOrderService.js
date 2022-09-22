@@ -95,7 +95,17 @@ export const purchaseOrderService = ({doGet,doPost,doPut,doDelete}) => {
             throw e;
         }
     }
+    const updatePO = async (id, newData) => {
+        try {
+            return await doPut({
+                url: `/api/po/status/${id}`, data: newData
+                
+            })
+        } catch (e) {
+            throw e;
+        }
+    }
    
 
-  return {updatePODetail,getPOById,getPOByUserName,deletePO,createPO, getPOByRequester, getPODetailById, getPOListByApproval, approvedByLevel1, approvedByLevel2, approvedByLevel3}
+  return {updatePO, updatePODetail,getPOById,getPOByUserName,deletePO,createPO, getPOByRequester, getPODetailById, getPOListByApproval, approvedByLevel1, approvedByLevel2, approvedByLevel3}
 }

@@ -73,8 +73,6 @@ export const FormApprovalMaintence = () => {
     navigate("/approval-data/maintenance", { replace: true });
   };
 
-  // console.log("ini state", location.state.header);
-
   //Reject
   const onRejectPO = async (e, id) => {
     e.preventDefault(e);
@@ -104,6 +102,21 @@ export const FormApprovalMaintence = () => {
     onApproved();
     onGetGeneralSetting();
   }, []);
+
+  //Edit Status
+  const updateStatus = async (id, status) => {
+    try {
+      const response = await purchaseOrderService.updatePO(
+        id,
+        status
+      )
+      setPOHeader(response.data)
+      console.log(response);
+    } catch (e){
+      console.log(e.response);
+      Failed("Failed to approved");
+    }
+  }
 
   //Approval
   const onApproved = async (e, id) => {
@@ -137,7 +150,8 @@ export const FormApprovalMaintence = () => {
         console.log(response);
       }
     } catch (e) {
-      console.log(e);
+      console.log(e.response);
+      Failed("Failed to approved");
     } finally {
       if (location.state.header.approverLevel3 == "-") {
         try {
@@ -150,6 +164,8 @@ export const FormApprovalMaintence = () => {
         } catch (e) {
           console.log(e.response);
           Failed("Failed to approved");
+        } finally{
+          updateStatus(id, {"status": STATUS.APPROVE_GA_IT})
         }
       } else {
         try {
@@ -159,6 +175,8 @@ export const FormApprovalMaintence = () => {
         } catch (e) {
           console.log(e.response);
           Failed("Failed to approved");
+        } finally{
+          updateStatus(id, {"status": STATUS.APPROVE_GA_IT})
         }
       }
     }
@@ -417,7 +435,7 @@ export const FormApprovalMaintence = () => {
                               value={Number(form.item_price_3)}
                             />
                           </div>
-                          <div className="inputBoxPO mb-3 col-md-3">
+                          <div className="inputBoxPO mb-3 col-md-4">
                             <label>
                               Quantity
                               <span className="text-danger">*</span>
@@ -432,7 +450,7 @@ export const FormApprovalMaintence = () => {
                               }
                             />
                           </div>
-                          <div className="inputBoxPO mb-3 col-md-3">
+                          <div className="inputBoxPO mb-3 col-md-4">
                             <label>
                               PPN
                               <span className="text-danger">*</span>
@@ -451,7 +469,7 @@ export const FormApprovalMaintence = () => {
                               <option value="0">No</option>
                             </select>
                           </div>
-                          <div className="inputBoxPO mb-3 col-md-3">
+                          <div className="inputBoxPO mb-3 col-md-4">
                             <label>Additional Cost</label>
                             <input
                               type="number"
