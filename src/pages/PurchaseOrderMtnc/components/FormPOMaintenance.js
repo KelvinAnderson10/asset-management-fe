@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { useAuth } from '../../../services/UseAuth';
 import { useDeps } from '../../../shared/context/DependencyContext';
-import './FormPOInventory.css'
-import * as BsIcons from 'react-icons/bs'
+import './FormPOMaintenance.css'
 import swal from "sweetalert";
 import { STATUS } from '../../../shared/constants';
 
-export const FormPOInventory = () => {
+export const FormPOMaintenance = () => {
     const [POdata, setPOData] = useState(
         [    
         {
@@ -17,7 +16,7 @@ export const FormPOInventory = () => {
           item_price_1: "",
           item_price_2: "",
           item_price_3: "",
-          quantity: "",
+          quantity: 1,
           ppn: "",
           
           ["Biaya Lain-Lain"]: "",
@@ -26,7 +25,7 @@ export const FormPOInventory = () => {
 
     const [POHeader, setPOHeader] = useState({
         PurchaseOrderDetail :[],
-        tipe:"Inventory",
+        tipe:"Maintenance",
       });
     
     const [data, setData] = useState([]);
@@ -54,36 +53,13 @@ export const FormPOInventory = () => {
         console.log(POdata);
     };
 
-    const addFields = (e) => {
-        e.preventDefault();
-        let object = {
-          ["Nama Barang"]: "",
-          vendor_1: "",
-          vendor_2: "",
-          vendor_3: "",
-          item_price_1: "",
-          item_price_2: "",
-          item_price_3: "",
-          quantity: "",
-          ppn: "",
-          ["Biaya Lain-Lain"]: "",
-        };
-        setPOData([...POdata, object]);
-    };
-
-    const removeFields = (index) => {
-        let data = [...POdata];
-        data.splice(index, 1);
-        setPOData(data);
-    };
-
     const onSubmitPO = async (e) => {
         e.preventDefault()
         try {
           POHeader['Kode Wilayah'] = user.location_id
           POHeader['requester']= user.name
+          POHeader['tipe']= 'Maintenance'
           POHeader.status = STATUS.CREATE_PO
-          POHeader['tipe']= 'Inventory'
           for (let i in POdata) {
           POdata[i].item_price_1= Number(POdata[i].item_price_1)
           POdata[i].item_price_2= Number(POdata[i].item_price_2)
@@ -171,8 +147,8 @@ export const FormPOInventory = () => {
 
     return (
         <>
-            <div className='po-inv-form-container'>
-                <div className='po-inv-form-card'>
+            <div className='po-mtnc-form-container'>
+                <div className='po-mtnc-form-card'>
                 <form  onSubmit={onSubmitPO} >
                     <h4 className="mb-5 text-danger">
                       Purchase Order Request Form
@@ -242,7 +218,7 @@ export const FormPOInventory = () => {
                           </label>
                           <input
                             readOnly
-                            value="Inventory"
+                            value="Maintenance"
                             type="text"
                             name="tipe"
                             className="form-control"
@@ -252,12 +228,6 @@ export const FormPOInventory = () => {
                         {POdata.map((form, index) => {
                           return (
                             <div key={index}>
-                                <div className='header-item-add'>
-                                <h3 style={{textAlign:'center'}}>Item {index+1} </h3>
-                                {index > 0 && 
-                                        <a onClick={() => removeFields(index)}><BsIcons.BsTrash size='2em' color='red'/></a>
-                                    }
-                                </div>
                               <div className="row">
                                 <div className="inputBoxPO mb-3">  
                                 <label>
@@ -297,7 +267,7 @@ export const FormPOInventory = () => {
                                         {item.name}
                                         </option>
                                       }     
-                                    })}
+                                  })}
                                   </select>
                                 </div>
                                 <div className="inputBoxPO mb-3 col-md-6">
@@ -333,7 +303,7 @@ export const FormPOInventory = () => {
                                   >
                                     <option value="">Select Vendor</option>
                                     {vendor && vendor.map((item) => {
-                                      if (form.vendor_3 == item.name || form.vendor_1 == item.name) {
+                                      if (form.vendor_1 == item.name || form.vendor_3 == item.name) {
                                         return null;
                                       } else {
                                         return <option key={item.name} value={item.name}>
@@ -405,13 +375,11 @@ export const FormPOInventory = () => {
                                     <span className="text-danger">*</span>
                                   </label>
                                   <input
-                                  type='number'
+                                    type='number'
                                     name="quantity"
                                     placeholder="Quantity"
-                                    onChange={(event) =>
-                                      handleFormChange(event, index)
-                                    }
-                                    value={form.quantity}
+                                    value={1}
+                                    readOnly
                                   />
                                 </div>
                                 <div className="inputBoxPO mb-3 col-md-4">
@@ -452,9 +420,6 @@ export const FormPOInventory = () => {
                             </div>
                           );
                         })}
-                        <div className='col-md-12'>
-                            <button className='btn btn-success float-start' onClick={addFields}>Add More..</button>
-                        </div>
                         <div className="col-md-12">
                           <button className="btn btn-primary float-end" style={{marginLeft:'20px', marginRight:'20px'}}>
                             Submit

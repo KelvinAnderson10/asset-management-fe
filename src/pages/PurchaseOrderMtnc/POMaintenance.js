@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import Sidebar from '../../shared/components/Sidebar/Sidebar'
+import { FormPOMaintenance } from './components/FormPOMaintenance'
+import { ListPOMaintenance } from './components/ListPOMaintenance'
 import './POMaintenance.css'
 
 export const POMaintenance = () => {
@@ -25,18 +27,25 @@ export const POMaintenance = () => {
   return (
     <div>
         <Sidebar>
-            <div className='body'>
-                <div className='po-maintenance-list-container'>
-                    <div className='navbar-po-maintenance-container'>
-                        <div className='navbar-po-maintenance-box'>
+                <div className='po-maintenance-container'>
+                    <div className='navbar-po-container'>
+                      <div className='navbar-po-left'>
+                      <div className={classNavbarForm} onClick={() => handleClickForm()}>
                             <a>Form Request</a>
                         </div>
-                        <div className='navbar-po-maintenance-box2'>
+                        <div className={classNavbarList} onClick={() => handleClickList()}>
                             <a>List Request</a>
                         </div>
+                      </div>
+                      <div className='title-right'>
+                        <div className='title-box'>
+                        <a>Maintenance</a>
+                        </div>
+                      </div>
                     </div>
                 </div>
-            </div>
+                {requestList && <ListPOMaintenance/>}
+               {requestForm && <FormPOMaintenance/>}
         </Sidebar>
     </div>
   )
