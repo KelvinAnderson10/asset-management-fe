@@ -10,10 +10,6 @@ import {FaSort} from 'react-icons/fa'
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import swal from "sweetalert";
-import { Row } from "react-bootstrap";
-import { Failed } from "../../shared/components/Notification/Failed";
-import { EVENT } from "../../shared/constants";
-import { useAuth } from "../../services/UseAuth";
 
 export const UserManage = () => {
   //Define here local state that store the form Data
@@ -21,7 +17,7 @@ export const UserManage = () => {
 
   const [isLoading, setLoading] = useState(false);
   const [doneAddForm, setDoneAddform] = useState(false);
-  const { userService, locationService, eventLogService } = useDeps();
+  const { userService, locationService } = useDeps();
 
 
   const [data, setData] = useState([]);
@@ -92,7 +88,7 @@ export const UserManage = () => {
     setLoading(true);
     e.preventDefault();
     try {
-        userData["location_id"] = Number(userData["location_id"]);
+        userData["location id"] = Number(userData["location id"]);
       const response = await userService.createUser(userData);
       setUserData(response.data);
       SetPostShow(false);
@@ -105,15 +101,9 @@ export const UserManage = () => {
         })
       }
       onGetAllUser();
-      let event = {
-        event: EVENT.CREATE_USER,
-        user: user.name,
-      };
-      createEventImportData(event);
       clearForm();
     } catch (error) {
       console.log(error.response);
-      Failed('Your data failed to save because '+ error.response.data.error.Detail)
     } finally {
       setLoading(false);
     }
@@ -164,14 +154,8 @@ export const UserManage = () => {
           const response = userService.deleteUser(name);
 
           onGetAllUser();
-          let event = {
-            event: EVENT.DELETE_USER,
-            user: user.name,
-          };
-          createEventImportData(event);
         } catch (e) {
           console.log(e);
-          Failed('Your data failed to save because '+ e.response.data.error.Detail)
         } finally {
           setLoading(false);
         }
@@ -224,14 +208,8 @@ export const UserManage = () => {
       }
       SetEditShow(false);
       onGetAllUser();
-      let event = {
-        event: EVENT.UPDATE_ASSET,
-        user: user.name,
-      };
-      createEventImportData(event);
     } catch (error) {
       console.log(error.response);
-      Failed('Your data failed to save because '+ error.response.data.error.Detail)
     } finally {
       setLoading(false);
     }
@@ -319,34 +297,13 @@ export const UserManage = () => {
       setOrder("ASC");
     }
   };
-
-  const sortingNum = (col) => {
-    if (order === "ASC") {
-        const sorted = [...data].sort((a, b) =>
-          a[col] > b[col] ? 1 : -1
-        );
-        setData(sorted);
-        setOrder("DSC");
-      }
-      if (order === "DSC") {
-        const sorted = [...data].sort((a, b) =>
-          a[col] < b[col] ? 1 : -1
-        );
-        setData(sorted);
-        setOrder("ASC");
-      }
-  }
   // CLEAR FORM
   const clearForm = () => {
     setUserData({
-      nik: '',
-      email: '',
       name: '',
-      role: '',
-      level_approval: '',
-      location_id: '',
-      tap: '',
-      department: '',
+      address: '',
+      phone: '',
+      account_number: '',
     });
     
 }
@@ -357,40 +314,7 @@ const onClearForm = (e) => {
   ref.current.value = ''; 
   onGetAllUser();
 }
-
-//Event Log
-const [event, setEvent] = useState({});
-
-const createEventImportData = async (eventLoc) => {
-  try {
-    const response = await eventLogService.createEventLog(eventLoc);
-    setEvent(response.data);
-  } catch (e) {
-    console.log(e);
-  }
-};
-
-//Get User
-const { getCookie } = useAuth();
-const[user,setUser]= useState({
-  name:'',
-  role:'',
-  level_approval:'',
-  location_id:'',
-  tap:'',
-  cluster:'',
-  department: ''
-})
-const onGetCookie = ()=>{
-  let savedUserJsonString = getCookie("user")
-  let savedUser = JSON.parse(savedUserJsonString)
-  setUser(prevObj=>({...prevObj,name:(savedUser.name), role:(savedUser.role), level_approval:(savedUser.level_approval), location_id:(savedUser.location_id), tap:(savedUser.TAP), cluster:(savedUser.Cluster), department:(savedUser.department)}))
-}
-
-useEffect(() => {
-  onGetCookie();
-}, []);
-
+document.querySelector("body").style.overflow = "auto";
   return (
     <>
       <Sidebar>
@@ -428,6 +352,12 @@ useEffect(() => {
               Add New User
             </Button>
           </div>
+        
+        
+        
+
+        
+
             <div className="table-responsive">
               <div className="table-wrapper">
                 <div className="table-title">
@@ -444,10 +374,6 @@ useEffect(() => {
                   <thead>
                     <tr>
                       <th>No</th>
-                      <th onClick={() => sorting("nik")}>
-                        {" "}
-                        <FaSort /> NIK
-                      </th>
                       <th onClick={() => sorting("email")}>
                         {" "}
                         <FaSort /> Email
@@ -460,25 +386,21 @@ useEffect(() => {
                         {" "}
                         <FaSort /> Role
                       </th>
-                      <th onClick={() => sorting("level_approval")}>
+                      <th onClick={() => sorting("position")}>
                         {" "}
-                        <FaSort /> Level Approval
+                        <FaSort /> Position
                       </th>
-                      <th onClick={() => sortingNum("location_id")}>
+                      <th onClick={() => sorting("location_id")}>
                         {" "}
                         <FaSort /> Area Code
                       </th>
                       <th onClick={() => sorting("TAP")}>
                         {" "}
-                        <FaSort /> Location
+                        <FaSort /> TAP
                       </th>
                       <th onClick={() => sorting("Cluster")}>
                         {" "}
                         <FaSort /> Cluster
-                      </th>
-                      <th onClick={() => sorting("department")}>
-                        {" "}
-                        <FaSort /> Department
                       </th>
                       <th>Actions</th>
                     </tr>
@@ -492,15 +414,13 @@ useEffect(() => {
                       currentItems.map((item, index) => (
                         <tr key={item.name}>
                           <th>{index + 1}</th>
-                          <th>{item.nik}</th>
                           <th>{item.email}</th>
                           <th>{item.name}</th>
                           <th>{item.role}</th>
-                          <th>{item.level_approval}</th>
+                          <th>{item.position}</th>
                           <th>{item.location_id}</th>
                           <th>{item.TAP}</th>
                           <th>{item.Cluster}</th>
-                          <th>{item.department}</th>
                           <td>
                             <a
                               onClick={() => {
@@ -612,18 +532,6 @@ useEffect(() => {
             <p style={{color:"red"}}>Please complete all required fields</p>
                 
               <div className="form-user">
-              <div className="form-group mt-3">
-                  <label className="form-label">NIK <span style={{color :"red"}} >*</span></label>
-                  <input
-                  required
-                    type="text"
-                    className="form-control"
-                    onChange={handleChange}
-                    placeholder="Please enter NIK"
-                    name="nik"
-                    value={userData.nik}
-                  />
-                </div>
                 <div className="form-group mt-3">
                   <label className="form-label">Email <span style={{color :"red"}} >*</span></label>
                   <input
@@ -658,31 +566,27 @@ useEffect(() => {
                     onChange={handleChange}
                     style={{width:'100%'}}
                   >
-                    <option disable value="">Select</option>
-                    <option>Admin</option>
-                    <option>Manager GA</option>
-                    <option>Manager IT</option>
-                    <option>Regular</option>
+                    <option value="">Select</option>
+                    <option>GA</option>
+                    <option>IT</option>
+                    <option>User Cabang</option>
                   </select>
                   </div>
-                  {userData.role!== 'Admin' &&  <div className="inputBoxUser">
-                  <label className="form-label mt-3">Level Approval<span style={{color :"red"}} >*</span></label>
+                <div className="inputBoxUser">
+                  <label className="form-label mt-3">Position <span style={{color :"red"}} >*</span></label>
                   <select
                     required
-                    name="level_approval"
-                    value={userData.level_approval}
+                    name="position"
+                    value={userData.position}
                     onChange={handleChange}
                     style={{width:'100%'}}
                   >
-                    <option disable value="">Select</option>
-                    <option>General Manager</option>
+                    <option value="">Select</option>
+                    <option>Manager</option>
                     <option>Supervisor</option>
-                    <option>VP Trade</option>
-                    <option>Regular</option>
-                    <option>GA</option>
-                    <option>IT</option>
+                    <option>Staff</option>
                   </select>
-                </div>}
+                </div>
                 <div className="inputBoxUser">
                   <label className="form-label mt-3">Location <span style={{color :"red"}} >*</span></label>
                   <select
@@ -700,26 +604,9 @@ useEffect(() => {
                     ))}
                   </select>
                 </div>
-                {userData.role !== 'Admin' && <div className="inputBoxUser">
-                  <label className="form-label mt-3">Department<span style={{color :"red"}} >*</span></label>
-                  <select
-                    required
-                    name="department"
-                    value={userData.department}
-                    onChange={handleChange}
-                    style={{width:'100%'}}
-                  >
-                    <option disable value="">Select</option>
-                    <option>Finance</option>
-                    <option>Cluster</option>
-                    <option>Sales</option>
-                    <option>HR</option>
-                    <option>OS</option>
-                    <option>GA</option>
-                    <option>IT</option>
-                  </select>
-                </div>}  
                 </div>
+                
+                
                 <Button
                   type="submit"
                   className="btn btn-success mt-4"
@@ -753,31 +640,16 @@ useEffect(() => {
               <form onSubmit={(e)=>handleEdit(e,RowData.name)}>
               <div className="form-user">
                 <div className="form-group">
-                <div className="inputBoxUser">
-                  <label className="form-label mt-3">NIK</label>
+                  <label>Email</label>
                   <input
                   required
                     type="text"
-                    className="form-control"
-                    onChange={handleChange}
-                    placeholder="Please enter NIK"
-                    name="nik"
-                    defaultValue={RowData.nik}
-                  />
-                </div>
-                   <div className="inputBoxUser">
-                   <label className="form-label mt-3">Email</label>
-                  <input
-                  required
-                    type="email"
                     className="form-control"
                     onChange={handleChange}
                     placeholder="Please enter Email"
                     name="email"
                     defaultValue={RowData.email}
                   />
-                   </div>
-                  
                   <div className="inputBoxUser">
                   <label className="form-label mt-3">Role <span style={{color :"red"}} >*</span></label>
                   <select
@@ -787,37 +659,33 @@ useEffect(() => {
                     onChange={handleChange}
                     style={{width:'100%'}}
                   >
-                    <option disable value="">Select</option>
-                    <option>Admin</option>
-                    <option>Manager GA</option>
-                    <option>Manager IT</option>
-                    <option>Regular</option>
+                    <option value="">Select</option>
+                    <option>GA</option>
+                    <option>IT</option>
+                    <option>User Cabang</option>
                   </select>
                   </div>
-                  {RowData.role!== 'Admin' &&  <div className="inputBoxUser">
-                  <label className="form-label mt-3">Level Approval<span style={{color :"red"}} >*</span></label>
+                  <div className="inputBoxUser">
+                  <label className="form-label mt-3">Position <span style={{color :"red"}} >*</span></label>
                   <select
                     required
-                    name="level_approval"
-                    defaultValue={RowData.level_approval}
+                    name="position"
+                    defaultValue={userData.position}
                     onChange={handleChange}
                     style={{width:'100%'}}
                   >
-                    <option disabled value="">Select</option>
-                    <option>General Manager</option>
+                    <option value="">Select</option>
+                    <option>Manager</option>
                     <option>Supervisor</option>
-                    <option>VP Trade</option>
-                    <option>Regular</option>
-                    <option>GA</option>
-                    <option>IT</option>
+                    <option>Staff</option>
                   </select>
-                </div>}
+                </div>
                 <div className="inputBoxUser">
                   <label className="form-label mt-3">Location <span style={{color :"red"}} >*</span></label>
                   <select
                     required
                     name="location_id"
-                    defaultValue={RowData.location_id}
+                    defaultValue={userData.location_id}
                     onChange={handleChange}
                     style={{width:'100%'}}
                   >
@@ -829,30 +697,13 @@ useEffect(() => {
                     ))}
                   </select>
                 </div>
-                {RowData.role !== 'Admin' && <div className="inputBoxUser">
-                  <label className="form-label mt-3">Department<span style={{color :"red"}} >*</span></label>
-                  <select
-                    required
-                    name="department"
-                    defaultValue={RowData.department}
-                    onChange={handleChange}
-                    style={{width:'100%'}}
-                  >
-                    <option disable value="">Select</option>
-                    <option>Finance</option>
-                    <option>Cluster</option>
-                    <option>Sales</option>
-                    <option>HR</option>
-                    <option>OS</option>
-                    <option>GA</option>
-                    <option>IT</option>
-                  </select>
-                </div>}  
                 </div>
                 </div>
                 <Button
+               
                   type="submit"
-                  className="btn btn-warning mt-4"  
+                  className="btn btn-warning mt-4"
+                 
                 >
                   Save Changes
                 </Button>
@@ -876,25 +727,11 @@ useEffect(() => {
             keyboard={false}
           >
             <Modal.Header closeButton>
-              <Modal.Title>View Data {RowData.name}</Modal.Title>
+              <Modal.Title>View Data</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <div className="form-user">
                 <div className="form-group">
-                <label>NIK</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={RowData.nik}
-                    readOnly
-                  />
-                  <label>Email</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={RowData.email}
-                    readOnly
-                  />
                   <label>Username </label>
                   <input
                     type="text"
@@ -902,18 +739,26 @@ useEffect(() => {
                     value={RowData.name}
                     readOnly
                   />
+                  <label>Email </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={RowData.email}
+                    readOnly
+                  />
                   <label>Role </label>
                   <input
+            
                     type="text"
                     className="form-control"
                     value={RowData.role}
                     readOnly
                   />
-                  <label>Level Approval</label>
+                  <label>Position </label>
                   <input
                     type="text"
                     className="form-control"
-                    value={RowData.level_approval}
+                    value={RowData.position}
                     readOnly
                   />
                   <label>Area Code </label>
@@ -923,28 +768,13 @@ useEffect(() => {
                     value={RowData.location_id}
                     readOnly
                   />
-                  <label>Location</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={RowData.TAP}
-                    readOnly
-                  />
-                   <label>Cluster</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={RowData.Cluster}
-                    readOnly
-                  />
-                  <label>Department</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={RowData.department}
-                    readOnly
-                  />
                 </div>
+
+                {/* {
+                                Delete && (
+                                    <Button type='submit' className='btn btn-danger mt-4' onClick={handleDelete}>Delete Employee</Button>
+                                )
+                            } */}
               </div>
             </Modal.Body>
             <Modal.Footer>
