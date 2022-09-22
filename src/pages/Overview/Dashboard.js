@@ -377,18 +377,18 @@ export const Dashboard = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {subproduct.length === 0 ? (
-                      <tr>
-                        <th>No data</th>
-                      </tr>
-                    ) : (
+                    {subproduct ? (
                       subproduct.map((item) => (
                         <tr>
                           <td>{item.Subproduct_Name}</td>
                           <td>{item.Total}</td>
                         </tr>
-                      ))
-                    )}
+                      ))) : (
+                        <tr>
+                          <th>No Data</th>
+                        </tr>
+                      )
+                    }
                   </tbody>
                 </table>
               </div>
