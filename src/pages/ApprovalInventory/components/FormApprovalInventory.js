@@ -25,7 +25,7 @@ export const FormApprovalInventory = () => {
           item.item_price_selected = item.item_price_2;
         } else{
           item.vendor_selected = item.vendor_3;
-          item.item_price_selected = item.item_price_3;
+          item.item_price_selected = Number(item.item_price_3);
         }
         console.log("ini item", item);
         return { ...item, [event.target.name]:event.target.value };
@@ -454,7 +454,7 @@ export const FormApprovalInventory = () => {
                               value={form["Biaya Lain-Lain"]}
                             />
                           </div>
-                          {form.item_price_selected >= setting.minimum_asset ? <div className="inputBoxPO mb-3 col-md-3">
+                          {form.item_price_selected >= setting.minimum_asset ?  <div className="inputBoxPO mb-3 col-md-3">
                             <label>
                               Is Asset
                               <span className="text-danger">*</span>
