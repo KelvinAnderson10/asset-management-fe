@@ -157,6 +157,7 @@ main {
 
 .modalNotif {
   position: absolute;
+  max-height: 35vh;
   width: 250px;
   font-size: small;
   top: 40px;
@@ -166,5 +167,15 @@ main {
   text-align: start;
   background-color: #f0f3f7;
   border-radius: 10px;
+  border-style: solid ;
+  border-color: #888888;
+  border-width: 2px;
   z-index: 101;
+  overflow-y: scroll;
+  margin-top: 2.5vh;
+  margin-right: 2vw;
+}
+.title-menu-sidebar{
+  font-size: 22px;
+  margin-top: 1.2vh;
 }

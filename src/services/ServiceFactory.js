@@ -5,6 +5,7 @@ import { dashboardService } from './DashboardService'
 import { eventLogService } from './EventLogService'
 import { generalSettingService } from './GeneralSettingService'
 import { locationService } from './LocationService'
+import { notificationService } from './NotificationService'
 import { overviewService } from './OverviewService'
 import { purchaseOrderService } from './PurchaseOrderService'
 import { userService } from './UserService'
@@ -22,5 +23,6 @@ export const ServiceFactory = (apiClient) => {
     purchaseOrderService: purchaseOrderService(apiClient),
     generalSettingService: generalSettingService(apiClient),
     dashboardService: dashboardService(apiClient),
+    notificationService: notificationService(apiClient),
   }
 }

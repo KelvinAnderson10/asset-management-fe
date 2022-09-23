@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Sidebar from "../../shared/components/Sidebar/Sidebar";
 import * as XLSX from "xlsx";
 import { useDeps } from "../../shared/context/DependencyContext";
@@ -20,13 +20,13 @@ export const ImportData = () => {
   const [isLoadingscd, setIsLoadingscd] = useState(false);
   const [uploadBackendData, setUploadBackendData] = useState([]);
   const [upload, setUpload] = useState(true);
-  const [fileName, setFileName]= useState('No file chosen')
+  const [fileName, setFileName] = useState("No file chosen");
 
   const { assetItemService, eventLogService } = useDeps();
 
   const handleSubmit = async () => {
     setUpload(false);
-    setIsLoadingscd(true);
+    setIsLoading(true);
 
     try {
       const response = await assetItemService.batchInsert(uploadBackendData);
@@ -49,10 +49,11 @@ export const ImportData = () => {
         );
       }
       console.log(error);
-      
     } finally {
-      setIsLoadingscd(false);
+      setIsLoading(false);
       setUpload(true);
+      setDoneUploadExcel(false);
+      setFileName("No file Chosen");
     }
   };
 
@@ -64,8 +65,8 @@ export const ImportData = () => {
 
   const readUploadFile = (e) => {
     e.preventDefault();
-    setFileName(e.target.files[0].name)
-    
+    setFileName(e.target.files[0].name);
+
     if (e.target.files[0]) {
       setIsLoading(true);
       const reader = new FileReader();
@@ -86,14 +87,12 @@ export const ImportData = () => {
       };
       reader.readAsArrayBuffer(e.target.files[0]);
     }
-
   };
 
   useEffect(() => {
     setDoneUploadExcel(true);
     setIsLoading(false);
     setIsLoadingscd(false);
-    
   }, [excelData]);
 
   //Event Log
@@ -110,20 +109,29 @@ export const ImportData = () => {
 
   //Get User
   const { getCookie } = useAuth();
-  const[user,setUser]= useState({
-    name:'',
-    role:'',
-    level_approval:'',
-    location_id:'',
-    tap:'',
-    cluster:'',
-    department: ''
-  })
-  const onGetCookie = ()=>{
-    let savedUserJsonString = getCookie("user")
-    let savedUser = JSON.parse(savedUserJsonString)
-    setUser(prevObj=>({...prevObj,name:(savedUser.name), role:(savedUser.role), level_approval:(savedUser.level_approval), location_id:(savedUser.location_id), tap:(savedUser.TAP), cluster:(savedUser.Cluster), department:(savedUser.department)}))
-  }
+  const [user, setUser] = useState({
+    name: "",
+    role: "",
+    level_approval: "",
+    location_id: "",
+    tap: "",
+    cluster: "",
+    department: "",
+  });
+  const onGetCookie = () => {
+    let savedUserJsonString = getCookie("user");
+    let savedUser = JSON.parse(savedUserJsonString);
+    setUser((prevObj) => ({
+      ...prevObj,
+      name: savedUser.name,
+      role: savedUser.role,
+      level_approval: savedUser.level_approval,
+      location_id: savedUser.location_id,
+      tap: savedUser.TAP,
+      cluster: savedUser.Cluster,
+      department: savedUser.department,
+    }));
+  };
 
   useEffect(() => {
     onGetCookie();
@@ -135,16 +143,22 @@ export const ImportData = () => {
     <>
       <Sidebar>
         <div>
-          <div className="body">
+          <div className="body-import">
             <div className="container">
               <div className="title-container">
                 <h4>Add Multiple Asset</h4>
               </div>
               <div className="form-upload-container">
                 <div className="choose-file">
-                <input accept=".xlsx" onChange={readUploadFile} type="file" id="actual-btn" hidden/>
-                <label for="actual-btn">Choose File</label>
-                <span  id="file-chosen">{fileName}</span>
+                  <input
+                    accept=".xlsx"
+                    onChange={readUploadFile}
+                    type="file"
+                    id="actual-btn"
+                    hidden
+                  />
+                  <label for="actual-btn">Choose File</label>
+                  <span id="file-chosen">{fileName}</span>
                 </div>
 
                 <button className="download-excel">
@@ -182,11 +196,8 @@ export const ImportData = () => {
               </div>
 
               <div>
-                <div className="import-box">
+                <div className="import-box-excel">
                   <br></br>
-                  {/* <h3>
-                          Upload <b>Assets</b>
-                      </h3> */}
                   <div className="table-responsive">
                     <div className="table-import-wrapper">
                       <div className="">
@@ -296,8 +307,7 @@ export const ImportData = () => {
               </div>
             </div>
           </div>
-          {isLoading && <Loading />}
-          {isLoadingscd && <UploadLoading />}
+          {isLoading && <UploadLoading />}
         </div>
       </Sidebar>
     </>

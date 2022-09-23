@@ -250,13 +250,18 @@ export const Dashboard = () => {
       console.log(e);
     }
   };
-
+  let format;
   const onGetSumAssetValue = async () => {
     try {
       const response = await dashboardService.getSumAssetValue();
       console.log("ini sum", response);
-      response.data = "Rp" + " " + formatCash(response.data);
-      setsumAssetValue(response.data);
+      if (response.data < 0) {
+        format = "-" + formatCash(-1 * response.data);
+      } else {
+        format = formatCash(response.data);
+      }
+      format = "Rp" + " " + format;
+      setsumAssetValue(format);
     } catch (e) {
       console.log(e);
     }
@@ -383,12 +388,12 @@ export const Dashboard = () => {
                           <td>{item.Subproduct_Name}</td>
                           <td>{item.Total}</td>
                         </tr>
-                      ))) : (
-                        <tr>
-                          <th>No Data</th>
-                        </tr>
-                      )
-                    }
+                      ))
+                    ) : (
+                      <tr>
+                        <th>No Data</th>
+                      </tr>
+                    )}
                   </tbody>
                 </table>
               </div>

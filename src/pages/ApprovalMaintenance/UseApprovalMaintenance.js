@@ -94,7 +94,8 @@ export const UseApprovalMaintenance = () => {
     jenisProduk,
     approverLevel3,
     tipe,
-    status
+    status,
+    requester
   ) => {
     try {
       let poHeaderInFunc = {};
@@ -105,6 +106,7 @@ export const UseApprovalMaintenance = () => {
       poHeaderInFunc.jenisProduk = jenisProduk;
       poHeaderInFunc.approverLevel3 = approverLevel3;
       poHeaderInFunc.tipe = tipe;
+      poHeaderInFunc.requester = requester
 
       setPOHeader(poHeaderInFunc);
 

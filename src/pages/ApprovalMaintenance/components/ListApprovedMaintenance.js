@@ -102,77 +102,8 @@ export const ListApprovedMaintenance = () => {
   
     const onClickClocePODetail = () => {
         setViewDetail(false)
-        setcurrentModal(1)
-        setIndexModal(1)
     }
   
-    //Pagination Detail PO
-    const [currentModal, setcurrentModal] = useState(1);
-    const [itemsPerModal, setitemsPerModal] = useState(1);
-    const [modalNumberLimit, setModalNumberLimit] = useState(5);
-    const [maxModalNumberLimit, setmaxModalNumberLimit] = useState(5);
-    const [minModalNumberLimit, setminModalNumberLimit] = useState(0);
-    const [indexModal, setIndexModal] = useState(1)
-  
-    const handleClickModal = (event) => {
-        setcurrentModal(Number(event.target.id));
-        setIndexModal(event.target.id)
-      };
-    
-      const modals = [];
-      for (let i = 1; i <= Math.ceil(poDetail.length / itemsPerModal); i++) {
-        modals.push(i);
-      }
-    
-      const indexOfLastItemDetail = currentModal * itemsPerModal;
-      const indexOfFirstItemDetail = indexOfLastItemDetail - itemsPerModal;
-      const currentItemsDetail = poDetail.slice(indexOfFirstItemDetail, indexOfLastItemDetail);
-  
-      const renderModalNumbers = modals.map((number) => {
-        if (number < maxModalNumberLimit + 1 && number > minModalNumberLimit) {
-          return (
-            <li
-              key={number}
-              id={number}
-              onClick={handleClickModal}
-              className={currentModal == number ? "active" : null}
-            >
-              {number}
-            </li>
-          );
-        } else {
-          return null;
-        }
-      });
-    
-      const handleNextbtnModal = () => {
-        setcurrentModal(currentModal + 1);
-        setIndexModal(indexModal + 1)
-        if (currentModal + 1 > maxModalNumberLimit) {
-          setmaxModalNumberLimit(maxModalNumberLimit + modalNumberLimit);
-          setminModalNumberLimit(minModalNumberLimit + modalNumberLimit);
-        }
-      };
-    
-      const handlePrevbtnModal = () => {
-        setcurrentModal(currentModal - 1);
-        setIndexModal(indexModal - 1)
-        if ((currentModal - 1) % modalNumberLimit == 0) {
-          setmaxModalNumberLimit(maxModalNumberLimit - modalNumberLimit);
-          setminModalNumberLimit(minModalNumberLimit - modalNumberLimit);
-        }
-      };
-    
-      let modalIncrementBtn = null;
-      if (modals.length > maxModalNumberLimit) {
-        modalIncrementBtn = <li onClick={handleNextbtn}> &hellip; </li>;
-      }
-    
-      let modalDecrementBtn = null;
-      if (minModalNumberLimit >= 1) {
-        modalDecrementBtn = <li onClick={handlePrevbtn}> &hellip; </li>;
-      }
-    
     const [POById, setPOById] = useState({})
     const getPOById = async (id) => {
       try {
@@ -345,12 +276,9 @@ export const ListApprovedMaintenance = () => {
                 { poDetail.length === 0 ? (
                         <p>Not request</p>
                     ): (
-                currentItemsDetail.map((data, index) => {
+                poDetail.map((data, index) => {
                   return (
                     <div className='list-detail-po-container' key={data.po_id_detail}>
-                        <div className='header-item-add'>
-                        <h4 style={{textAlign:'center'}}>Item {indexModal} </h4>
-                        </div>
                       <div className="row" style={{textAlign:'left'}}>
                         <div className="inputBoxPO mb-3">  
                         <label>
@@ -423,32 +351,6 @@ export const ListApprovedMaintenance = () => {
               </div>
             </div>
           </form>
-          <div className='pagination-modal'>
-          <ul className="modalNumbers">
-                <li style={{ borderRadius:  '1vh 0vh 0vh 1vh'}}>
-                  <button
-                    onClick={handlePrevbtnModal}
-                    disabled={currentModal == modals[0] ? true : false}
-                  >
-                    <span class="material-icons">chevron_left</span>
-                  </button>
-                </li>
-                {modalDecrementBtn}
-                {renderModalNumbers}
-                {modalIncrementBtn}
-  
-                <li style={{ borderRadius:  '0px 1vh 1vh 0px'}}>
-                  <button
-                    onClick={handleNextbtnModal}
-                    disabled={
-                      currentModal == modals[modals.length - 1] ? true : false
-                    }
-                  >
-                    <span class="material-icons">chevron_right</span>
-                  </button>
-                </li>
-              </ul>
-              </div>
             </div>
         </div>}
       </div>

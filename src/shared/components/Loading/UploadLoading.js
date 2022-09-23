@@ -1,5 +1,6 @@
 import './UploadLoading.css';
-import gif from '../../../assets/images/loadinggif.gif'
+import Lottie from "lottie-react"
+import loadingLottie from '../../../assets/images/loading.json'
 
 function UploadLoading() {
   return (
@@ -7,7 +8,7 @@ function UploadLoading() {
         <div className=''>
       <div className='uploadloadingScreen'>
         <div className='uploadloadingContainer'>
-          <img className='gif' width="250px" height="250px" src={gif}></img>
+        <Lottie animationData={loadingLottie} loop={true} style={{width:'250px',height:'250px'}} />
           <p>Loading...</p>
         </div>
       </div>
