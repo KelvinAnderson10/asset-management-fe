@@ -1,0 +1,73 @@
+.overview-container-deprecated {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  height: 93vh;
+  margin-top: 0.5vh;
+  font-family: "Poppins";
+}
+
+.overview-container-deprecated .overview-card-deprecated {
+  background-color: white;
+  width: 90vw;
+  display: flex;
+  justify-content: center;
+  height: 88vh;
+  align-items: flex-end;
+  flex-direction: column;
+  /* align-content: center; */
+  border-radius: 10px;
+  /* box-shadow: 1px 2px 2px 3px rgb(221, 219, 219) */
+}
+.overview-card-deprecated .table-container {
+  display: flex;
+  height: 85%;
+  width: 100%;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.overview-card-deprecated .table-box {
+  width: 96%;
+  height: 100%;
+  border-radius: 10px;
+  overflow-x: scroll;
+  margin-top: 2vh;
+  margin-left: 2vw;
+}
+.overview-card-deprecated .clearfix {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1vh;
+  padding-right: 2vw;
+}
+
+.table-box .table-header {
+  background-color: white;
+  color: rgb(219, 66, 66);
+  /* height: ; */
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.overview-card-deprecated .pagination-deprecated {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.overview-card-deprecated .title-deprecated {
+  font-size: 2.5vh;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 1vh;
+  padding-left: 2vw;
+  font-weight: bold;
+  color : #B70621;
+  align-items: center;
+
+}

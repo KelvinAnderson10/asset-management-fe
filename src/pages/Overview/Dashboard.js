@@ -8,6 +8,9 @@ import PieChart from "./components/PieChart";
 import "./Dashboard.css";
 import * as FaIcons from "react-icons/fa";
 import * as CgIcons from "react-icons/cg";
+import { TableAssetDeprecated } from "./components/TableAssetDeprecated";
+import { useNavigate } from "react-router-dom";
+
 
 export const Dashboard = () => {
   const { eventLogService, dashboardService } = useDeps();
@@ -36,6 +39,8 @@ export const Dashboard = () => {
   const [viewDetailSpending, setViewDetailSpending] = useState(false);
   const [viewDetailUnit, setViewDetailUnit] = useState(false);
   const [pageCount, setPageCount] = useState(0);
+
+  const[viewAssetDep, setViewAssetDep] = useState(false)
 
   const [user, setUser] = useState({
     name: "",
@@ -233,6 +238,7 @@ export const Dashboard = () => {
   const onGetAssetAlmostDeprecated = async (page) => {
     try {
       const response = await dashboardService.getAssetAlmostDeprecated(page);
+      console.log('response asset deprecated',response)
       response.count = formatCash(response.count);
       setCountAssetDeprecated(response.count);
       setPageCount(Math.ceil(response.count / 10));
@@ -289,6 +295,13 @@ export const Dashboard = () => {
   const onClickCloseViewUnit = () => {
     setViewDetailUnit(false);
   };
+
+  const navigate = useNavigate()
+  const onClickViewAssetDep = ()=>{
+    navigate('/main/tableassetdeprecated', {replace: true})
+
+  }
+
   return (
     <>
       <div className="dashboard-container">
@@ -320,9 +333,10 @@ export const Dashboard = () => {
               <div className="content-icon">
                 <i class="fa fa-archive" style={{ color: "white" }}></i>
               </div>
-              <div className="content-non-icon">
+              
+              <div onClick={onClickViewAssetDep} title='Click to View Detail' className="content-non-icon">
                 <a className="count-number">{countAssetDeprecated}</a>
-                <a style={{ color: "white", fontSize: "20px" }}>
+                <a  style={{ color: "white", fontSize: "20px" }}>
                   Total Asset Deprecated
                 </a>
               </div>
