@@ -4,7 +4,7 @@ import { useDeps } from "../../../shared/context/DependencyContext";
 import { UseApprovalMaintenance } from "../UseApprovalMaintenance";
 import Swal from "sweetalert2";
 import { Failed } from "../../../shared/components/Notification/Failed";
-import { STATUS } from "../../../shared/constants";
+import { NOTIF, PUSHNOTIF, STATUS } from "../../../shared/constants";
 import * as MdIcons from "react-icons/md";
 import Sidebar from "../../../shared/components/Sidebar/Sidebar";
 
@@ -12,7 +12,7 @@ export const FormApprovalMaintence = () => {
   const { user, setpoDetail, setPOHeader } = UseApprovalMaintenance();
   const {
     vendorService,
-    userService,
+    notificationService,
     purchaseOrderService,
     generalSettingService,
   } = useDeps();
@@ -90,6 +90,21 @@ export const FormApprovalMaintence = () => {
           const response = purchaseOrderService.deletePO(id);
           Swal.fire("Reject!", "This request has been rejected.", "success");
           navigate("/approval-data/maintenance", { replace: true });
+
+          let pushNotifObj = {
+            to: location.state.header.requester,
+            title: `${PUSHNOTIF.REJECTED.TITLE} ${location.state.header.requester}`,
+            body: PUSHNOTIF.REJECTED.BODY,
+          };
+          createPushNotification(pushNotifObj);
+
+          let notifObj = {
+            to: location.state.header.requester,
+            title: NOTIF.REJECTED.TITLE,
+            body: NOTIF.REJECTED.BODY,
+          };
+          createNotification(notifObj);
+          
         } catch (e) {
           console.log(e.response);
           Failed("Failed to reject");
@@ -106,17 +121,35 @@ export const FormApprovalMaintence = () => {
   //Edit Status
   const updateStatus = async (id, status) => {
     try {
-      const response = await purchaseOrderService.updatePO(
-        id,
-        status
-      )
-      setPOHeader(response.data)
+      const response = await purchaseOrderService.updatePO(id, status);
+      setPOHeader(response.data);
       console.log(response);
-    } catch (e){
+    } catch (e) {
       console.log(e.response);
       Failed("Failed to approved");
     }
-  }
+  };
+  const [notifData, setNotifData] = useState({});
+
+  const createNotification = async (notifPO) => {
+    try {
+      const response = await notificationService.createNotif(notifPO);
+      setNotifData(response.data);
+    } catch (e) {
+      console.log(e);
+    } finally {
+    }
+  };
+
+  const createPushNotification = async (notifPO) => {
+    try {
+      const response = await notificationService.createPushNotif(notifPO);
+      setNotifData(response.data);
+    } catch (e) {
+      console.log(e);
+    } finally {
+    }
+  };
 
   //Approval
   const onApproved = async (e, id) => {
@@ -153,6 +186,7 @@ export const FormApprovalMaintence = () => {
       console.log(e.response);
       Failed("Failed to approved");
     } finally {
+      console.log("ini");
       if (location.state.header.approverLevel3 == "-") {
         try {
           const response = await purchaseOrderService.approvedByLevel2(id);
@@ -164,8 +198,21 @@ export const FormApprovalMaintence = () => {
         } catch (e) {
           console.log(e.response);
           Failed("Failed to approved");
-        } finally{
-          updateStatus(id, {"status": STATUS.APPROVE_GA_IT})
+        } finally {
+          updateStatus(id, { status: STATUS.APPROVE_GA_IT });
+          let pushNotifObj = {
+            to: location.state.header.requester,
+            title: `${PUSHNOTIF.APPROVED.TITLE} ${location.state.header.requester}`,
+            body: PUSHNOTIF.APPROVED.BODY,
+          };
+          createPushNotification(pushNotifObj);
+
+          let notifObj = {
+            to: location.state.header.requester,
+            title: NOTIF.APPROVED.TITLE,
+            body: NOTIF.APPROVED.BODY,
+          };
+          createNotification(notifObj);
         }
       } else {
         try {
@@ -175,8 +222,22 @@ export const FormApprovalMaintence = () => {
         } catch (e) {
           console.log(e.response);
           Failed("Failed to approved");
-        } finally{
-          updateStatus(id, {"status": STATUS.APPROVE_GA_IT})
+        } finally {
+          updateStatus(id, { status: STATUS.APPROVE_GA_IT });
+          let pushNotifObj = {
+            to: location.state.header.requester,
+            title:
+              PUSHNOTIF.APPROVED.TITLE + `${location.state.header.requester}`,
+            body: PUSHNOTIF.APPROVED.BODY,
+          };
+          createPushNotification(pushNotifObj);
+
+          let notifObj = {
+            to: location.state.header.requester,
+            title: NOTIF.APPROVED.TITLE,
+            body: NOTIF.APPROVED.BODY,
+          };
+          createNotification(notifObj);
         }
       }
     }
@@ -247,10 +308,7 @@ export const FormApprovalMaintence = () => {
                     />
                   </div>
                   <div className="inputBoxPO mb-3 col-md-6 ">
-                    <label>
-                      Subproduct Name
-                      <span className="text-danger">*</span>{" "}
-                    </label>
+                    <label>Subproduct Name</label>
                     <input
                       value={location.state.header.jenisProduk}
                       type="text"
@@ -259,10 +317,7 @@ export const FormApprovalMaintence = () => {
                     />
                   </div>
                   <div className="mb-3 col-md-6 ">
-                    <label>
-                      Type
-                      <span className="text-danger">*</span>{" "}
-                    </label>
+                    <label>Type</label>
                     <input
                       readOnly
                       value={location.state.header.tipe}
@@ -274,29 +329,20 @@ export const FormApprovalMaintence = () => {
                   {location.state.detail.map((form, index) => {
                     return (
                       <div key={form.po_id_detail}>
-                        <div className="header-item-add">
-                          <h3 style={{ textAlign: "center" }}>
-                            Item {index + 1}{" "}
-                          </h3>
-                        </div>
                         <div className="row">
                           <div className="inputBoxPO mb-3">
-                            <label>
-                              Item Name
-                              <span className="text-danger">*</span>{" "}
-                            </label>
+                            <label>Item Name</label>
                             <input
+                              readOnly
                               name="Nama Barang"
                               placeholder="Item Name"
                               value={form["Nama Barang"]}
                             />
                           </div>
                           <div className="inputBoxPO mb-3">
-                            <label>
-                              PO ID Detail
-                              <span className="text-danger">*</span>{" "}
-                            </label>
+                            <label>PO ID Detail</label>
                             <input
+                              readOnly
                               name="po_id_detail"
                               placeholder="PO ID Detail"
                               value={form.po_id_detail}
@@ -309,6 +355,7 @@ export const FormApprovalMaintence = () => {
                           </label>
                           <div className="checkBox col-md-1">
                             <input
+                              required
                               type="radio"
                               name={`vendor_selected${index}`}
                               onChange={(event) =>
@@ -324,6 +371,7 @@ export const FormApprovalMaintence = () => {
                             </label>
 
                             <input
+                              readOnly
                               defaultValue={form.vendor_1}
                               type="text"
                               name="vendor_1"
@@ -338,6 +386,7 @@ export const FormApprovalMaintence = () => {
                             </label>
 
                             <input
+                              readOnly
                               type="number"
                               name="item_price_1"
                               placeholder="item_price_1"
@@ -346,6 +395,7 @@ export const FormApprovalMaintence = () => {
                           </div>
                           <div className="checkBox col-md-1">
                             <input
+                              required
                               type="radio"
                               name={`vendor_selected${index}`}
                               onChange={(event) =>
@@ -361,6 +411,7 @@ export const FormApprovalMaintence = () => {
                             </label>
 
                             <input
+                              readOnly
                               defaultValue={form.vendor_2}
                               type="text"
                               name="vendor_2"
@@ -374,6 +425,7 @@ export const FormApprovalMaintence = () => {
                             </label>
 
                             <input
+                              readOnly
                               type="number"
                               name="item_price_2"
                               placeholder="item_price_2"
@@ -382,6 +434,7 @@ export const FormApprovalMaintence = () => {
                           </div>
                           <div className="checkBox col-md-1">
                             <input
+                              required
                               type="radio"
                               name={`vendor_selected${index}`}
                               onChange={(event) =>
@@ -424,9 +477,9 @@ export const FormApprovalMaintence = () => {
                             <label>
                               3<span className="subscript">rd</span> Item Price
                             </label>
-
                             <input
                               type="number"
+                              min="0"
                               name="item_price_3"
                               placeholder="item_price_3"
                               onChange={(event) =>
@@ -441,6 +494,7 @@ export const FormApprovalMaintence = () => {
                               <span className="text-danger">*</span>
                             </label>
                             <input
+                              readOnly
                               type="number"
                               name="quantity"
                               placeholder="Quantity"
@@ -456,6 +510,7 @@ export const FormApprovalMaintence = () => {
                               <span className="text-danger">*</span>
                             </label>
                             <select
+                              readOnly
                               required
                               name="ppn"
                               defaultValue={form.ppn}
@@ -472,6 +527,7 @@ export const FormApprovalMaintence = () => {
                           <div className="inputBoxPO mb-3 col-md-4">
                             <label>Additional Cost</label>
                             <input
+                              readOnly
                               type="number"
                               name="Biaya Lain-Lain"
                               placeholder="Additional Cost"
@@ -481,44 +537,6 @@ export const FormApprovalMaintence = () => {
                               value={form["Biaya Lain-Lain"]}
                             />
                           </div>
-                          {/* {form.item_price_selected >= setting.minimum_asset ?  <div className="inputBoxPO mb-3 col-md-3">
-                              <label>
-                                Is Asset
-                                <span className="text-danger">*</span>
-                              </label>
-                              <select
-                                required
-                                name="is_asset"
-                                value={form.is_asset}
-                                onChange={(event) =>
-                                  handleFormChange2(event, index)
-                                }
-                                style={{ width: "95%" }}
-                                disabled
-                              >
-                                <option value="">Select</option>
-                                <option value="1">Yes</option>
-                                <option value="0">No</option>
-                              </select>
-                            </div> : <div className="inputBoxPO mb-3 col-md-3">
-                              <label>
-                                Is Asset
-                                <span className="text-danger">*</span>
-                              </label>
-                              <select
-                                required
-                                name="is_asset"
-                                value={form.is_asset}
-                                onChange={(event) =>
-                                  handleFormChange2(event, index)
-                                }
-                                style={{ width: "95%" }}
-                              >
-                                <option value="">Select</option>
-                                <option value="1">Yes</option>
-                                <option value="0">No</option>
-                              </select>
-                            </div>} */}
                         </div>
                       </div>
                     );
@@ -529,13 +547,13 @@ export const FormApprovalMaintence = () => {
                       className="btn btn-primary float-end"
                       style={{ marginLeft: "20px", marginRight: "20px" }}
                     >
-                      Accept
+                      Approve
                     </button>
                     <button
                       className="btn btn-warning float-end"
                       onClick={(e) => onRejectPO(e, location.state.header.id)}
                     >
-                      Decline
+                      Reject
                     </button>
                   </div>
                 </div>

@@ -7,12 +7,17 @@ import "./FormApprovalInventory.css";
 import * as MdIcons from "react-icons/md";
 import Swal from "sweetalert2";
 import { Failed } from "../../../shared/components/Notification/Failed";
-import { STATUS } from "../../../shared/constants";
+import { NOTIF, PUSHNOTIF, STATUS } from "../../../shared/constants";
 import { Row } from "antd";
 
 export const FormApprovalInventory = () => {
   const { user, setpoDetail, setPOHeader } = UseApprovalInventory();
-  const { vendorService, userService, purchaseOrderService, generalSettingService } = useDeps();
+  const {
+    vendorService,
+    notificationService,
+    purchaseOrderService,
+    generalSettingService,
+  } = useDeps();
 
   const handleFormChange = (event, index) => {
     const newArray = location.state.detail.map((item, i) => {
@@ -23,12 +28,12 @@ export const FormApprovalInventory = () => {
         } else if (event.target.value == 2) {
           item.vendor_selected = item.vendor_2;
           item.item_price_selected = item.item_price_2;
-        } else{
+        } else {
           item.vendor_selected = item.vendor_3;
           item.item_price_selected = Number(item.item_price_3);
         }
         console.log("ini item", item);
-        return { ...item, [event.target.name]:event.target.value };
+        return { ...item, [event.target.name]: event.target.value };
       } else {
         return item;
       }
@@ -87,6 +92,20 @@ export const FormApprovalInventory = () => {
           const response = purchaseOrderService.deletePO(id);
           Swal.fire("Reject!", "This request has been rejected.", "success");
           navigate("/approval-data/inventory", { replace: true });
+          
+          let pushNotifObj = {
+            to: location.state.header.requester,
+            title: `${PUSHNOTIF.REJECTED.TITLE} ${location.state.header.requester}`,
+            body: PUSHNOTIF.REJECTED.BODY,
+          };
+          createPushNotification(pushNotifObj);
+
+          let notifObj = {
+            to: location.state.header.requester,
+            title: NOTIF.REJECTED.TITLE,
+            body: NOTIF.REJECTED.BODY,
+          };
+          createNotification(notifObj);
         } catch (e) {
           console.log(e.response);
           Failed("Failed to reject");
@@ -97,22 +116,41 @@ export const FormApprovalInventory = () => {
 
   useEffect(() => {
     onApproved();
-    onGetGeneralSetting()
+    onGetGeneralSetting();
   }, []);
 
   //Edit Status
   const updateStatus = async (id, status) => {
     try {
-      const response = await purchaseOrderService.updatePO(
-        id,
-        status
-      )
-      setPOHeader(response.data)
+      const response = await purchaseOrderService.updatePO(id, status);
+      setPOHeader(response.data);
       console.log(response);
-    } catch (e){
+    } catch (e) {
       console.log(e.response);
     }
-  }
+  };
+
+  const [notifData, setNotifData] = useState({});
+
+  const createNotification = async (notifPO) => {
+    try {
+      const response = await notificationService.createNotif(notifPO);
+      setNotifData(response.data);
+    } catch (e) {
+      console.log(e);
+    } finally {
+    }
+  };
+
+  const createPushNotification = async (notifPO) => {
+    try {
+      const response = await notificationService.createPushNotif(notifPO);
+      setNotifData(response.data);
+    } catch (e) {
+      console.log(e);
+    } finally {
+    }
+  };
 
   //Approval
   const onApproved = async (e, id) => {
@@ -121,13 +159,23 @@ export const FormApprovalInventory = () => {
       for (let i in location.state.detail) {
         location.state.detail[i].ppn = Number(location.state.detail[i].ppn);
         location.state.detail[i].ppn = Boolean(location.state.detail[i].ppn);
-        location.state.detail[i].is_asset = Number(location.state.detail[i].is_asset);
-        location.state.detail[i].is_asset = Boolean(location.state.detail[i].is_asset);
-        location.state.detail[i].item_price_selected = Number(location.state.detail[i].item_price_selected);
-        if (location.state.detail[i].item_price_selected >= setting.minimum_asset){
-          location.state.detail[i].is_asset = true
+        location.state.detail[i].is_asset = Number(
+          location.state.detail[i].is_asset
+        );
+        location.state.detail[i].is_asset = Boolean(
+          location.state.detail[i].is_asset
+        );
+        location.state.detail[i].item_price_selected = Number(
+          location.state.detail[i].item_price_selected
+        );
+        if (
+          location.state.detail[i].item_price_selected >= setting.minimum_asset
+        ) {
+          location.state.detail[i].is_asset = true;
         }
-        location.state.detail[i].item_price_3 = Number(location.state.detail[i].item_price_3)
+        location.state.detail[i].item_price_3 = Number(
+          location.state.detail[i].item_price_3
+        );
         console.log("ini yg akan di submit", location.state.detail);
         const response = await purchaseOrderService.updatePODetail(
           location.state.detail[i].po_id_detail,
@@ -142,41 +190,69 @@ export const FormApprovalInventory = () => {
         try {
           const response = await purchaseOrderService.approvedByLevel2(id);
           console.log(location.state.header);
-          setPOHeader(location.state.header)
+          setPOHeader(location.state.header);
           Swal.fire("Success!", "This request has been approved.", "success");
           navigate("/approval-data/inventory", { replace: true });
         } catch (e) {
           console.log(e.response);
           Failed("Failed to approved");
-        } finally{
-          updateStatus(id, {"status": STATUS.APPROVE_GA_IT})
+        } finally {
+          updateStatus(id, { status: STATUS.APPROVE_GA_IT });
+          let pushNotifObj = {
+            to: location.state.header.requester,
+            title: `${PUSHNOTIF.APPROVED.TITLE} ${location.state.header.requester}`,
+            body: PUSHNOTIF.APPROVED.BODY,
+          };
+          createPushNotification(pushNotifObj);
+
+          let notifObj = {
+            to: location.state.header.requester,
+            title: NOTIF.APPROVED.TITLE,
+            body: NOTIF.APPROVED.BODY,
+          };
+          createNotification(notifObj);
         }
       } else {
         try {
-          const response = await purchaseOrderService.approvedByLevel3(id);  
+          console.log("ini header", location.state.header);
+          const response = await purchaseOrderService.approvedByLevel3(id);
           Swal.fire("Success!", "This request has been approved.", "success");
           navigate("/approval-data/inventory", { replace: true });
         } catch (e) {
           console.log(e.response);
           Failed("Failed to approved");
-        } finally{
-          updateStatus(id, {"status": STATUS.APPROVE_GA_IT})
+        } finally {
+          updateStatus(id, { status: STATUS.APPROVE_GA_IT });
+          let pushNotifObj = {
+            to: location.state.header.requester,
+            title:
+              PUSHNOTIF.APPROVED.TITLE + `${location.state.header.requester}`,
+            body: PUSHNOTIF.APPROVED.BODY,
+          };
+          createPushNotification(pushNotifObj);
+
+          let notifObj = {
+            to: location.state.header.requester,
+            title: NOTIF.APPROVED.TITLE,
+            body: NOTIF.APPROVED.BODY,
+          };
+          createNotification(notifObj);
         }
       }
     }
   };
 
   //Setting
-  const [setting, setSetting] = useState({})
-  const onGetGeneralSetting = async () =>{
+  const [setting, setSetting] = useState({});
+  const onGetGeneralSetting = async () => {
     try {
-        const response = await generalSettingService.getGeneralSetting();
-        setSetting(response.data)
-        console.log(response.data);
+      const response = await generalSettingService.getGeneralSetting();
+      setSetting(response.data);
+      console.log(response.data);
     } catch (e) {
-        console.log(e)
+      console.log(e);
     }
-  }
+  };
 
   return (
     <>
@@ -231,10 +307,7 @@ export const FormApprovalInventory = () => {
                     />
                   </div>
                   <div className="inputBoxPO mb-3 col-md-6 ">
-                    <label>
-                      Subproduct Name
-                      <span className="text-danger">*</span>{" "}
-                    </label>
+                    <label>Subproduct Name</label>
                     <input
                       value={location.state.header.jenisProduk}
                       type="text"
@@ -243,10 +316,7 @@ export const FormApprovalInventory = () => {
                     />
                   </div>
                   <div className="mb-3 col-md-6 ">
-                    <label>
-                      Type
-                      <span className="text-danger">*</span>{" "}
-                    </label>
+                    <label>Type</label>
                     <input
                       readOnly
                       value={location.state.header.tipe}
@@ -265,10 +335,7 @@ export const FormApprovalInventory = () => {
                         </div>
                         <div className="row">
                           <div className="inputBoxPO mb-3">
-                            <label>
-                              Item Name
-                              <span className="text-danger">*</span>{" "}
-                            </label>
+                            <label>Item Name</label>
                             <input
                               name="Nama Barang"
                               placeholder="Item Name"
@@ -276,10 +343,7 @@ export const FormApprovalInventory = () => {
                             />
                           </div>
                           <div className="inputBoxPO mb-3">
-                            <label>
-                              PO ID Detail
-                              <span className="text-danger">*</span>{" "}
-                            </label>
+                            <label>PO ID Detail</label>
                             <input
                               name="po_id_detail"
                               placeholder="PO ID Detail"
@@ -293,6 +357,7 @@ export const FormApprovalInventory = () => {
                           </label>
                           <div className="checkBox col-md-1">
                             <input
+                              required
                               type="radio"
                               name={`vendor_selected${index}`}
                               onChange={(event) =>
@@ -330,6 +395,7 @@ export const FormApprovalInventory = () => {
                           </div>
                           <div className="checkBox col-md-1">
                             <input
+                              required
                               type="radio"
                               name={`vendor_selected${index}`}
                               onChange={(event) =>
@@ -366,6 +432,7 @@ export const FormApprovalInventory = () => {
                           </div>
                           <div className="checkBox col-md-1">
                             <input
+                              required
                               type="radio"
                               name={`vendor_selected${index}`}
                               onChange={(event) =>
@@ -410,6 +477,7 @@ export const FormApprovalInventory = () => {
                             </label>
 
                             <input
+                              min="0"
                               type="number"
                               name="item_price_3"
                               placeholder="item_price_3"
@@ -425,6 +493,7 @@ export const FormApprovalInventory = () => {
                               <span className="text-danger">*</span>
                             </label>
                             <input
+                              readOnly
                               type="number"
                               name="quantity"
                               placeholder="Quantity"
@@ -440,6 +509,7 @@ export const FormApprovalInventory = () => {
                               <span className="text-danger">*</span>
                             </label>
                             <select
+                              readOnly
                               required
                               name="ppn"
                               defaultValue={form.ppn}
@@ -456,6 +526,7 @@ export const FormApprovalInventory = () => {
                           <div className="inputBoxPO mb-3 col-md-3">
                             <label>Additional Cost</label>
                             <input
+                              readOnly
                               type="number"
                               name="Biaya Lain-Lain"
                               placeholder="Additional Cost"
@@ -465,44 +536,48 @@ export const FormApprovalInventory = () => {
                               value={form["Biaya Lain-Lain"]}
                             />
                           </div>
-                          {form.item_price_selected >= setting.minimum_asset ?  <div className="inputBoxPO mb-3 col-md-3">
-                            <label>
-                              Is Asset
-                              <span className="text-danger">*</span>
-                            </label>
-                            <select
-                              required
-                              name="is_asset"
-                              value={form.is_asset}
-                              onChange={(event) =>
-                                handleFormChange2(event, index)
-                              }
-                              style={{ width: "95%" }}
-                              disabled
-                            >
-                              <option value="">Select</option>
-                              <option value="1">Yes</option>
-                              <option value="0">No</option>
-                            </select>
-                          </div> : <div className="inputBoxPO mb-3 col-md-3">
-                            <label>
-                              Is Asset
-                              <span className="text-danger">*</span>
-                            </label>
-                            <select
-                              required
-                              name="is_asset"
-                              value={form.is_asset}
-                              onChange={(event) =>
-                                handleFormChange2(event, index)
-                              }
-                              style={{ width: "95%" }}
-                            >
-                              <option value="">Select</option>
-                              <option value="1">Yes</option>
-                              <option value="0">No</option>
-                            </select>
-                          </div>}
+                          {form.item_price_selected >= setting.minimum_asset ? (
+                            <div className="inputBoxPO mb-3 col-md-3">
+                              <label>
+                                Is Asset
+                                <span className="text-danger">*</span>
+                              </label>
+                              <select
+                                required
+                                name="is_asset"
+                                value={form.is_asset}
+                                onChange={(event) =>
+                                  handleFormChange2(event, index)
+                                }
+                                style={{ width: "95%" }}
+                                disabled
+                              >
+                                <option value="">Select</option>
+                                <option value="1">Yes</option>
+                                <option value="0">No</option>
+                              </select>
+                            </div>
+                          ) : (
+                            <div className="inputBoxPO mb-3 col-md-3">
+                              <label>
+                                Is Asset
+                                <span className="text-danger">*</span>
+                              </label>
+                              <select
+                                required
+                                name="is_asset"
+                                value={form.is_asset}
+                                onChange={(event) =>
+                                  handleFormChange2(event, index)
+                                }
+                                style={{ width: "95%" }}
+                              >
+                                <option value="">Select</option>
+                                <option value="1">Yes</option>
+                                <option value="0">No</option>
+                              </select>
+                            </div>
+                          )}
                         </div>
                       </div>
                     );
@@ -513,13 +588,13 @@ export const FormApprovalInventory = () => {
                       className="btn btn-primary float-end"
                       style={{ marginLeft: "20px", marginRight: "20px" }}
                     >
-                      Accept
+                      Approve
                     </button>
                     <button
                       className="btn btn-warning float-end"
                       onClick={(e) => onRejectPO(e, location.state.header.id)}
                     >
-                      Decline
+                      Reject
                     </button>
                   </div>
                 </div>

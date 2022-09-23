@@ -518,15 +518,15 @@ export const Overview = () => {
   const handlePageClick = async (data) => {
     console.log(data.selected);
     let currentPage = data.selected + 1;
-    console.log(data.selected);
-    getAssetsPagination(currentPage);
-
-    if (user.role == 'Regular'){
+    if (searchCondition==''&& searchVendor==''&& searchLocation==''&&searchProduct==''&&searchCategory==''&&searchSubproduct=='') {
+      getAssetsPagination(currentPage);
+      } else {
+      if (user.role == 'Regular'){
       onFilterMultiple(searchCondition, searchVendor, user.location_id, searchProduct, searchSubproduct, searchCategory, currentPage)
-
-    }else{
+      }else{
       onFilterMultiple(searchCondition, searchVendor, searchLocation, searchProduct, searchSubproduct, searchCategory, currentPage)
-    }
+      }
+      } 
    
   };
 

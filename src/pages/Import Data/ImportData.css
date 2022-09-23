@@ -27,7 +27,7 @@
   height: 8vh;
   font-size: 1.8em;
   font-weight: 600;
-  color: #999;
+  color: #b70621;
   text-align: left;
   letter-spacing: 0.8px;
   /* padding-left: 2%; */
@@ -41,7 +41,7 @@
 .download-excel {
   width: 12vw;
   height: 3.5vh;
-  background-color: whitesmoke;
+  background-color: rgb(255, 255, 255);
   border-radius: 10px;
   color: white;
   border: 0em;
@@ -55,7 +55,7 @@
 .note {
   width: 100%;
   height: 16vh;
-  background: #6dadb7;
+  background: #fd746a;
   margin-top: 1em;
   border-radius: 10px;
   color: white;
@@ -80,7 +80,7 @@
   align-items: flex-start;
 }
 
-.import-card .import-box {
+.import-card .import-box-excel {
   width: 100%;
   height: 65vh;
   box-shadow: 0px 0px 0px 1px rgba(152, 161, 178, 0.1),
@@ -100,20 +100,24 @@
   justify-items: center;
 }
 
-.import-box .button-save {
+.import-box-excel .button-save {
   width: 100%;
   height: 5vh;
-  margin-top: 5vh;
-  margin-bottom: 5vh;
+  margin-top: 2vh;
+  margin-bottom: 2vh;
 }
 .table-responsive .table-import-wrapper {
-  /* overflow-x: auto; */
   width: 3100px;
-  max-height: 95vh;
-  background: rgb(255, 255, 255);
-  padding: 20px 25px;
+  max-height: 48vh;
+  /* padding: 20px 25px; */
   border-radius: 3px;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+.table-import-wrapper .table-secondary {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  z-index: 2;
 }
 .new-button {
   display: inline-block;
@@ -126,16 +130,15 @@
 }
 
 .choose-file label {
-  background-color: #0A2495;
+  background-color: #0a2495;
   color: white;
   padding: 0.5rem;
   font-family: sans-serif;
   border-radius: 0.3rem;
   cursor: pointer;
-  margin-top: 1rem;
 }
 
-#file-chosen{
+#file-chosen {
   margin-left: 0.3rem;
   font-family: sans-serif;
 }

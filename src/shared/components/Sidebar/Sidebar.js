@@ -122,11 +122,11 @@ const routesGA = [
         name: "Maintenance",
         icon: <BiIcons.BiCategoryAlt />,
       },
-      {
-        path: "/approval-data/rent",
-        name: "Rent",
-        icon: <FaIcons.FaStore />,
-      },
+      // {
+      //   path: "/approval-data/rent",
+      //   name: "Rent",
+      //   icon: <FaIcons.FaStore />,
+      // },
     ],
   },
 ];
@@ -177,11 +177,11 @@ const routesUserRegular = [
         name: "Maintenance",
         icon: <BiIcons.BiCategoryAlt />,
       },
-      {
-        path: "/purchase-request/rent",
-        name: "Rent",
-        icon: <FaIcons.FaStore />,
-      },
+      // {
+      //   path: "/purchase-request/rent",
+      //   name: "Rent",
+      //   icon: <FaIcons.FaStore />,
+      // },
     ],
   },
 ];
@@ -192,11 +192,11 @@ const routesUserGMSPVVP = [
     name: "Overview",
     icon: <FaHome />,
   },
-  {
-    path: "/approval-data",
-    name: "Approval Data",
-    icon: <BsIcons.BsFillFileEarmarkCheckFill />,
-  },
+  // {
+  //   path: "/approval-data",
+  //   name: "Approval Data",
+  //   icon: <BsIcons.BsFillFileEarmarkCheckFill />,
+  // },
 ];
 
 const Sidebar = ({ children }) => {
@@ -212,7 +212,8 @@ const Sidebar = ({ children }) => {
   });
 
   const [viewNotif, setViewNotif] = useState([]);
-  const { dashboardService } = useDeps();
+  const [countNotif, setCountNotif] = useState('');
+  const { notificationService } = useDeps();
   const [notif, setNotif] = useState(false);
 
   useEffect(() => {
@@ -275,13 +276,27 @@ const Sidebar = ({ children }) => {
   // Notif
 
   useEffect(() => {
-    onGetTotalSubproduct();
-  }, []);
+    onGetCountNotification(user.name);
+  }, [user.name,countNotif]);
 
-  const onGetTotalSubproduct = async () => {
+  const onGetCountNotification = async (name) => {
     try {
-      const response = await dashboardService.getTotalAssetBySubProduct();
-      console.log("ini response subproduct sidebar", response);
+      const response = await notificationService.countNotificationByUser(name);
+      console.log("ini response count notification", response);
+      if (response.data >2){
+        setCountNotif('99+')
+      }else{
+        setCountNotif(String(response.data));
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const onReadNotification = async (name) => {
+    try {
+      const response = await notificationService.readNotif(name);
+      console.log("ini response read notif", response);
       setViewNotif(response.data);
     } catch (e) {
       console.log(e);
@@ -297,7 +312,13 @@ const Sidebar = ({ children }) => {
   };
 
   const onClickViewNotif = () => {
-    setNotif(true);
+    if (notif == false) {
+      setNotif(true);
+      onReadNotification(user.name)
+      setCountNotif('0')
+    } else {
+      setNotif(false);
+    }
   };
 
   return (
@@ -325,7 +346,9 @@ const Sidebar = ({ children }) => {
                   exit="hidden"
                   className="logo"
                 >
-                  Narindo
+                  <div className="title-menu-sidebar">
+                    <b>MENU</b>
+                  </div>
                 </motion.h1>
               )}
             </AnimatePresence>
@@ -556,11 +579,7 @@ const Sidebar = ({ children }) => {
             <img src={logo} style={{ width: "7.8vw", height: "4vh" }}></img>
             <div className="nav-right">
               <div onClick={onClickViewNotif}>
-                <Noty
-                  width={"30px"}
-                  color={"#122C34"}
-                  count={viewNotif && viewNotif.length}
-                />
+                <Noty width={"30px"} color={"#122C34"} count={countNotif} />
                 {notif && (
                   <div className="modalNotif">
                     <div className="card border-light shadow-sm">
@@ -572,7 +591,7 @@ const Sidebar = ({ children }) => {
                                 key={index}
                                 className="list-group-item list-group-item-action"
                               >
-                                {d.Subproduct_Name} depreciation {d.Total}
+                                Hi {d.to}, {d.body}
                               </li>
                             );
                           })

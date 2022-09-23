@@ -22,6 +22,7 @@ import { FormApprovalInventory } from "../pages/ApprovalInventory/components/For
 import { AppInv } from "../pages/ApprovalInventory/AppInv";
 import { AppMaintenance } from "../pages/ApprovalMaintenance/AppMaintenance";
 import { FormApprovalMaintence } from "../pages/ApprovalMaintenance/components/FormApprovalMaintence";
+import { TableAssetDeprecated } from "../pages/Overview/components/TableAssetDeprecated";
 
 
 
@@ -33,6 +34,7 @@ export const AppRouter = () => {
       <Route element={<ProtectedPage></ProtectedPage>}>
        
         <Route path="/main" element={<Main/>} />
+        <Route path="/main/tableassetdeprecated" element={<TableAssetDeprecated/>} />
         <Route path="/data-management/asset-item" element={<AssetItem />} />
         <Route path="/data-management/asset-category" element={<AssetCategory />}/>
         <Route path="/data-management/vendor" element={<VendorManage />} />
@@ -45,6 +47,7 @@ export const AppRouter = () => {
         <Route path="/approval-data/inventory/form" element={<FormApprovalInventory/>} />
         <Route path="/approval-data/maintenance" element={<AppMaintenance/>} />
         <Route path="/approval-data/maintenance/form" element={<FormApprovalMaintence/>} />
+        
         <Route path="/settings" element={<Settings/>} />
         <Route path="*" element={<PageNotFound />} />
       </Route>

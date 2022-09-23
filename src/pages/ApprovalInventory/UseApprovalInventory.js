@@ -94,7 +94,8 @@ export const UseApprovalInventory = () => {
     jenisProduk,
     approverLevel3,
     tipe,
-    status
+    status,
+    requester,
   ) => {
     try {
       let poHeaderInFunc = {};
@@ -106,6 +107,7 @@ export const UseApprovalInventory = () => {
       poHeaderInFunc.approverLevel3 = approverLevel3;
       poHeaderInFunc.tipe = tipe;
       poHeaderInFunc.status = status
+      poHeaderInFunc.requester = requester
       setPOHeader(poHeaderInFunc);
 
       const response = await purchaseOrderService.getPODetailById(id);
