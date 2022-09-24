@@ -510,7 +510,8 @@ export const FormPOInventory = () => {
                     Submit
                   </button>
                   <button
-                    onClick={handleClearForm}
+                    type="reset"
+                    // onClick={handleClearForm}
                     className="btn btn-warning float-end"
                   >
                     Cancel

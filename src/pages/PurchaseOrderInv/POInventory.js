@@ -10,6 +10,7 @@ export const POInventory = () => {
     const [requestList, setRequestList] = useState(false)
     const [classNavbarForm, setClassNavbarForm] = useState('navbar-po-box')
     const [classNavbarList, setClassNavbarList] = useState('navbar-po-box2')
+    const [isLoading, setIsloading] = useState(false)
 
     const handleClickForm = () => {
         setRequestForm(true)
