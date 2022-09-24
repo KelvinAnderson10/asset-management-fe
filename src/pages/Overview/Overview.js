@@ -310,6 +310,8 @@ export const Overview = () => {
     } else if (user.role=='GA'){
       getAssetsByGA(1)
     }
+    setPageCount(0)
+    
   };
 
   //Pagination From Backend
@@ -766,7 +768,7 @@ export const Overview = () => {
             className="clearfix">
               Showing {datas.length} out of {totalAsset}
           </div>
-          <div style={{marginRight: '2vw', marginTop: '1vh'}}>
+          <div key={pageCount} style={{marginRight: '2vw', marginTop: '1vh'}}>
           <ReactPaginate
               previousLabel={"prev"}
               nextLabel={"next"}

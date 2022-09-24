@@ -301,7 +301,7 @@ export const Dashboard = () => {
     navigate('/main/tableassetdeprecated', {replace: false})
 
   }
-
+  document.querySelector("body").style.overflow = "auto";
   return (
     <>
       <div className="dashboard-container">
