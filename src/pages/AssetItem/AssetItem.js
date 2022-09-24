@@ -445,7 +445,7 @@ export const AssetItem = () => {
           text='Here an introduction sentence (Optional)'
         > 
         </LoadingScreen> */
-        <UploadLoading/>
+        <AssetLoading/>
       }
     </>
   );

@@ -283,7 +283,7 @@ const Sidebar = ({ children }) => {
     try {
       const response = await notificationService.countNotificationByUser(name);
       console.log("ini response count notification", response);
-      if (response.data >2){
+      if (response.data > 99){
         setCountNotif('99+')
       }else{
         setCountNotif(String(response.data));
