@@ -272,10 +272,11 @@ export const FormPOMaintenance = () => {
                           </label>
                           <input
                             required
+                            type="text"
                             name="Nama Barang"
                             placeholder="Item Name"
                             onChange={(event) => handleFormChange(event, index)}
-                            value={form["Nama Barang"]}
+                            className="form-control"
                           />
                         </div>
 
@@ -462,7 +463,7 @@ export const FormPOMaintenance = () => {
                     Submit
                   </button>
                   <button
-                    onClick={handleClearForm}
+                    type="reset"
                     className="btn btn-warning float-end"
                   >
                     Cancel

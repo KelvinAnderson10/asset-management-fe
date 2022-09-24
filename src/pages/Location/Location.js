@@ -610,7 +610,7 @@ export const Location = () => {
             keyboard={false}
           >
             <Modal.Header closeButton>
-              <Modal.Title>Edit </Modal.Title>
+              <Modal.Title>Edit Area Code {RowData['kode wilayah']}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <form onSubmit={(e) => handleEdit(e, RowData["kode wilayah"])}>
@@ -647,9 +647,9 @@ export const Location = () => {
               </form>
             </Modal.Body>
             <Modal.Footer>
-              {/* <Button variant="secondary" onClick={hanldeEditClose}>
+              <Button variant="secondary" onClick={hanldeEditClose}>
                 Close
-              </Button> */}
+              </Button>
             </Modal.Footer>
           </Modal>
         </div>
@@ -686,22 +686,15 @@ export const Location = () => {
                     readOnly
                   />
                 </div>
-
-                {/* {
-                                Delete && (
-                                    <Button type='submit' className='btn btn-danger mt-4' onClick={handleDelete}>Delete Employee</Button>
-                                )
-                            } */}
               </div>
             </Modal.Body>
             <Modal.Footer>
-              {/* <Button variant="secondary" onClick={hanldeViewClose}>
+              <Button variant="secondary" onClick={hanldeViewClose}>
                 Close
-              </Button> */}
+              </Button>
             </Modal.Footer>
           </Modal>
         </div>
-        {/* </div> */}
       </Sidebar>
     </>
   );

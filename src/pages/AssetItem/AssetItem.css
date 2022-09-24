@@ -130,6 +130,7 @@
   margin-right: 10px;
   margin-left: 20px;
   display: flex;
+  background-repeat: no-repeat;
 }
 .image .cancel {
   cursor: "pointer";

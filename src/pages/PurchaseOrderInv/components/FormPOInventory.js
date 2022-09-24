@@ -308,10 +308,11 @@ export const FormPOInventory = () => {
                           </label>
                           <input
                           required
+                          type="text"
                             name="Nama Barang"
                             placeholder="Item Name"
+                            className="form-control"
                             onChange={(event) => handleFormChange(event, index)}
-                            value={form["Nama Barang"]}
                           />
                         </div>
 
@@ -511,7 +512,6 @@ export const FormPOInventory = () => {
                   </button>
                   <button
                     type="reset"
-                    // onClick={handleClearForm}
                     className="btn btn-warning float-end"
                   >
                     Cancel

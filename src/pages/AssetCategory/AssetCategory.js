@@ -205,9 +205,7 @@ export const AssetCategory = () => {
       setLoading(true);
       try {
         const response = await assetCategoryService.getDataByAssetCategoryLike(filter);
-        
         setData(response.data);
-        
       } catch (e) {
         console.log(e);
       } finally {
@@ -419,10 +417,8 @@ export const AssetCategory = () => {
                   >
                   <FiPlus />
                   Add New Asset Category
-                </Button> 
-                               
+                </Button>                    
             </div>
-
             <div className="body container table-wrapper table-responsive">
                     <div className="table-title">
                     <div className="row">
@@ -667,11 +663,11 @@ export const AssetCategory = () => {
                 </form>
                 </Modal.Body>
                 <Modal.Footer>
-                
+                  <Button variant="secondary" onClick={handleViewClose}>
+                    Close
+                  </Button>
                 </Modal.Footer>
-            </Modal>
-             
-            
+            </Modal>            
             </div>
 
             {/* EDIT MODAL */}
@@ -754,6 +750,9 @@ export const AssetCategory = () => {
                 </form>
                 </Modal.Body>
                 <Modal.Footer>
+                  <Button variant="secondary" onClick={handleViewClose}>
+                    Close
+                  </Button>
                 </Modal.Footer>
             </Modal>
             </div>
@@ -824,6 +823,9 @@ export const AssetCategory = () => {
                 </div>
                 </Modal.Body>
                 <Modal.Footer>
+                  <Button variant="secondary" onClick={handleViewClose}>
+                    Close
+                  </Button>
                 </Modal.Footer>
             </Modal>
             </div>

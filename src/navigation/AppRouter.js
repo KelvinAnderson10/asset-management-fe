@@ -24,9 +24,6 @@ import { AppMaintenance } from "../pages/ApprovalMaintenance/AppMaintenance";
 import { FormApprovalMaintence } from "../pages/ApprovalMaintenance/components/FormApprovalMaintence";
 import { TableAssetDeprecated } from "../pages/Overview/components/TableAssetDeprecated";
 
-
-
-
 export const AppRouter = () => {
   return (
     <Routes>
