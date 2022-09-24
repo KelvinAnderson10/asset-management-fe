@@ -142,10 +142,6 @@ export const AssetItem = () => {
     }
   };
 
-  const handleCancel = (e) => {
-    clearForm();
-  };
-
   const clearForm = () => {
     setData({});
     setSelectedImage();
@@ -179,7 +175,7 @@ export const AssetItem = () => {
     setUser(prevObj=>({...prevObj,name:(savedUser.name), role:(savedUser.role), level_approval:(savedUser.level_approval), location_id:(savedUser.location_id), tap:(savedUser.TAP), cluster:(savedUser.Cluster), department:(savedUser.department)}))
   }
 
-  // document.querySelector("body").style.overflow = "hidden";
+  document.querySelector("body").style.overflow = "hidden";
 
   return (
     <>
@@ -423,7 +419,6 @@ export const AssetItem = () => {
                       type="submit"
                       className="btn btn-primary button-submit"
                     >
-                      {/* <a href="#input">Submit</a> */}
                       Submit
                     </button>
                   </a>
@@ -433,19 +428,8 @@ export const AssetItem = () => {
           </form>
         </div>
         </div>
-
       </Sidebar>
-      {isLoading && 
-      
-      /* <LoadingScreen
-          loading={true}
-          bgColor='#f1f1f1'
-          spinnerColor='#9ee5f8'
-          textColor='#676767'
-          text='Here an introduction sentence (Optional)'
-        > 
-        </LoadingScreen> */
-        <UploadLoading/>
+      {isLoading && <UploadLoading/>
       }
     </>
   );

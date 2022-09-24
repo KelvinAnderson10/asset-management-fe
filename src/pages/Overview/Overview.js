@@ -306,7 +306,7 @@ export const Overview = () => {
     } else if (user.role=='IT'){
       getAssetsByIT(1);
     } else if (user.role=='Regular') {
-      getAssetsByLocation(user.location_id)
+      getAssetsByLocation(user.location_id,1)
     } else if (user.role=='GA'){
       getAssetsByGA(1)
     }
@@ -519,14 +519,22 @@ export const Overview = () => {
     console.log(data.selected);
     let currentPage = data.selected + 1;
     if (searchCondition==''&& searchVendor==''&& searchLocation==''&&searchProduct==''&&searchCategory==''&&searchSubproduct=='') {
-      getAssetsPagination(currentPage);
-      } else {
-      if (user.role == 'Regular'){
-      onFilterMultiple(searchCondition, searchVendor, user.location_id, searchProduct, searchSubproduct, searchCategory, currentPage)
-      }else{
-      onFilterMultiple(searchCondition, searchVendor, searchLocation, searchProduct, searchSubproduct, searchCategory, currentPage)
+      if (user.role=='Admin') {
+        getAssetsPagination(currentPage);
+      } else if (user.role=='IT'){
+        getAssetsByIT(currentPage);
+      } else if (user.role=='Regular') {
+        getAssetsByLocation(user.location_id,currentPage)
+      } else if (user.role=='GA'){
+        getAssetsByGA(currentPage)
       }
-      } 
+    } else {
+      if (user.role == 'Regular'){
+        onFilterMultiple(searchCondition, searchVendor, user.location_id, searchProduct, searchSubproduct, searchCategory, currentPage)
+      }else{
+        onFilterMultiple(searchCondition, searchVendor, searchLocation, searchProduct, searchSubproduct, searchCategory, currentPage)
+      }
+    } 
    
   };
 
@@ -1452,7 +1460,6 @@ export const Overview = () => {
         </div>
       )}
       {isLoading && <Loading />}
-      {/* </Sidebar> */}
     </>
   );
 };

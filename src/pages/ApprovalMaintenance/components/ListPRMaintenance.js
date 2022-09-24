@@ -76,7 +76,7 @@ export const ListPRMaintenance = () => {
              {appData.length === 0 ? (
                <p>Not request</p>
              ) : (
-                 appData.map((data) => (
+                 currentItems.map((data) => (
                      <div className='approval-inv-box-item' key={data.po_id} onClick={()=>handleClickApproval(data.po_id, data.ToUser, data.Jabatan, data['Kode Wilayah'], data['Jenis Produk'], data.approver_level3, data.tipe, data.status, data.requester)}>
                          <div className='header-list-approval'>
                              <a className='approval-num'>{data.po_id}</a>

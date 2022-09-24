@@ -5,13 +5,11 @@ import { useDeps } from "../../shared/context/DependencyContext";
 import "./ImportData.css";
 import guidelines from "../../assets/file/guidelines.xlsx";
 import template from "../../assets/file/template.xlsx";
-
-import { Success } from "../../shared/components/Notification/Success";
 import { Failed } from "../../shared/components/Notification/Failed";
 import UploadLoading from "../../shared/components/Loading/UploadLoading";
-import Loading from "../../shared/components/Loading/Loading";
 import { EVENT } from "../../shared/constants";
 import { useAuth } from "../../services/UseAuth";
+import Swal from "sweetalert2";
 
 export const ImportData = () => {
   const [excelData, setExcelData] = useState([]);
@@ -30,7 +28,7 @@ export const ImportData = () => {
 
     try {
       const response = await assetItemService.batchInsert(uploadBackendData);
-      Success("uploaded");
+      Swal.fire("Success!", "Data upload successfully", "success");
       let event = {
         event: EVENT.IMPORT_DATA,
         user: user.name,
@@ -45,7 +43,7 @@ export const ImportData = () => {
         );
       } else {
         Failed(
-          `Upload failed because one of data in subproduct column doesn't exist`
+          `Upload failed`
         );
       }
       console.log(error);
@@ -172,9 +170,6 @@ export const ImportData = () => {
                   </a>
                 </button>
               </div>
-              {/* <div className='download-excel'>
-              
-            </div>  */}
               <div className="note">
                 <h5>Notes</h5>
                 <div className="content-note">

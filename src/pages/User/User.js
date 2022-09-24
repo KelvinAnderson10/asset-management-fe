@@ -232,7 +232,7 @@ export const UserManage = () => {
       SetEditShow(false);
       onGetAllUser();
       let event = {
-        event: EVENT.UPDATE_ASSET,
+        event: EVENT.UPDATE_USER,
         user: user.name,
       };
       createEventImportData(event);
@@ -754,7 +754,7 @@ useEffect(() => {
             keyboard={false}
           >
             <Modal.Header closeButton>
-              <Modal.Title>Edit User Data </Modal.Title>
+              <Modal.Title>Edit {RowData.name} Data </Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <form onSubmit={(e)=>handleEdit(e,RowData.name)}>
@@ -883,7 +883,7 @@ useEffect(() => {
             keyboard={false}
           >
             <Modal.Header closeButton>
-              <Modal.Title>View Data {RowData.name}</Modal.Title>
+              <Modal.Title>View Data</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <div className="form-user">

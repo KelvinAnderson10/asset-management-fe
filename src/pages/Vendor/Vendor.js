@@ -359,15 +359,11 @@ document.querySelector("body").style.overflow = "auto";
       <div>
       <div className="body">
           <div className="container">
-          <div className="vendor-container-item" >
-            
-          
-          
+          <div className="vendor-container-item" >  
           <form>
             <div className="input-group ">
               <input
                 placeholder="Search Vendor Name"
-                // value={searchLocation}
                 onChange={onChangeSearchLocation}
                 type="text"
                 className="form-control"
@@ -393,12 +389,6 @@ document.querySelector("body").style.overflow = "auto";
               Add New Vendor
             </Button>
           </div>
-        
-        
-        
-
-        
-
             <div className="table-responsive">
               <div className="table-wrapper">
                 <div className="table-title">
@@ -464,7 +454,6 @@ document.querySelector("body").style.overflow = "auto";
                                 &#xe8f4;
                               </i>
                             </a>
-
                             <a
                               onClick={() => {
                                 handleEditShow(item.name, item);
@@ -531,9 +520,6 @@ document.querySelector("body").style.overflow = "auto";
                       </button>
                     </li>
                   </ul>
-                  {/* <button onClick={handleLoadMore} className="loadmore">
-                    Load More
-                  </button> */}
                 </div>
               </div>
             </div>
@@ -639,7 +625,7 @@ document.querySelector("body").style.overflow = "auto";
             keyboard={false}
           >
             <Modal.Header closeButton>
-              <Modal.Title>Edit Vendor Data </Modal.Title>
+              <Modal.Title>Edit {RowData.name} Data </Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <form onSubmit={(e)=>handleEdit(e,RowData.name)}>
@@ -681,20 +667,17 @@ document.querySelector("body").style.overflow = "auto";
                 </div>
                 </div>
                 <Button
-               
                   type="submit"
-                  className="btn btn-warning mt-4"
-                 
+                  className="btn btn-warning mt-4"               
                 >
                   Save Changes
                 </Button>
-  
               </form>
             </Modal.Body>
             <Modal.Footer>
-              {/* <Button variant="secondary" onClick={hanldeEditClose}>
+              <Button variant="secondary" onClick={hanldeEditClose}>
                 Close
-              </Button> */}
+              </Button>
             </Modal.Footer>
           </Modal>
         </div>
@@ -746,12 +729,6 @@ document.querySelector("body").style.overflow = "auto";
                     readOnly
                   />
                 </div>
-
-                {/* {
-                                Delete && (
-                                    <Button type='submit' className='btn btn-danger mt-4' onClick={handleDelete}>Delete Employee</Button>
-                                )
-                            } */}
               </div>
             </Modal.Body>
             <Modal.Footer>

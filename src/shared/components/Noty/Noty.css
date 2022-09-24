@@ -7,9 +7,12 @@
     position: absolute;
     /* right: 0; */
     background-color: rgb(29, 161, 242);
-    font-size: 11px;
+    font-size: 15px;
     color: white;
     display: inline;
     /* padding: 3px 5px; */
-    border-radius: 10px;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    text-align: center;
 }

@@ -298,7 +298,7 @@ export const Dashboard = () => {
 
   const navigate = useNavigate()
   const onClickViewAssetDep = ()=>{
-    navigate('/main/tableassetdeprecated', {replace: true})
+    navigate('/main/tableassetdeprecated', {replace: false})
 
   }
 
@@ -334,7 +334,7 @@ export const Dashboard = () => {
                 <i class="fa fa-archive" style={{ color: "white" }}></i>
               </div>
               
-              <div onClick={onClickViewAssetDep} title='Click to View Detail' className="content-non-icon">
+              <div onClick={onClickViewAssetDep} title='Click to View Detail' className="content-non-icon" style={{cursor: "pointer"}}>
                 <a className="count-number">{countAssetDeprecated}</a>
                 <a  style={{ color: "white", fontSize: "20px" }}>
                   Total Asset Deprecated

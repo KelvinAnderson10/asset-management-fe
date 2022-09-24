@@ -9,12 +9,10 @@ import * as IoIcons from "react-icons/io";
 import * as BiIcons from "react-icons/bi";
 import * as FaIcons from "react-icons/fa";
 import * as BsIcons from "react-icons/bs";
-import * as MdIcons from "react-icons/md";
 import "./Sidebar.css";
 import * as AiIcons from "react-icons/ai";
 import { useAuth } from "../../../services/UseAuth";
 import { CgProfile } from "react-icons/cg";
-import { fontSize } from "@mui/system";
 import logo from "../../../assets/images/default.png";
 import { Noty } from "../Noty/Noty";
 import { useDeps } from "../../context/DependencyContext";
@@ -216,10 +214,6 @@ const Sidebar = ({ children }) => {
   const { notificationService } = useDeps();
   const [notif, setNotif] = useState(false);
 
-  useEffect(() => {
-    onGetCookie();
-  }, []);
-
   const onGetCookie = () => {
     let savedUserJsonString = getCookie("user");
     let savedUser = JSON.parse(savedUserJsonString);
@@ -236,6 +230,10 @@ const Sidebar = ({ children }) => {
 
     console.log(user.name);
   };
+
+  useEffect(() => {
+    onGetCookie();
+  }, []);
 
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
@@ -274,24 +272,25 @@ const Sidebar = ({ children }) => {
   };
 
   // Notif
-
-  useEffect(() => {
-    onGetCountNotification(user.name);
-  }, [user.name,countNotif]);
-
   const onGetCountNotification = async (name) => {
     try {
       const response = await notificationService.countNotificationByUser(name);
       console.log("ini response count notification", response);
-      if (response.data >2){
+      if (response.data > 99){
         setCountNotif('99+')
       }else{
         setCountNotif(String(response.data));
       }
     } catch (e) {
       console.log(e);
-    }
+    } 
   };
+
+  useEffect(() => {
+    if (user.name != ''){
+      onGetCountNotification(user.name);
+    }
+  }, [user.name,countNotif]);
 
   const onReadNotification = async (name) => {
     try {
