@@ -363,7 +363,7 @@ export const Dashboard = () => {
               </div>
               <div className="content-non-icon">
                 <a className="count-number">{sumAssetValue} </a>
-                <a style={{ color: "white", fontSize: "20px" }}>
+                <a style={{ color: "white", fontSize: "20px", marginTop:'8px' }}>
                   Sum Asset Value
                 </a>
               </div>
