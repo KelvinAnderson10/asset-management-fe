@@ -315,6 +315,7 @@ export const AssetItem = () => {
                   <div className="inputBox">
                     <span>Purchase Price :</span>
                     <input
+                      min="0"
                       type="number"
                       required
                       name="Harga Perolehan"
@@ -361,6 +362,7 @@ export const AssetItem = () => {
                   <div className="inputBox">
                     <span>Additional Cost :</span>
                     <input
+                      min="0"
                       type="number"
                       required
                       name="Biaya Lain-Lain"

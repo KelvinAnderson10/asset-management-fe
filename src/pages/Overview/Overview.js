@@ -1033,6 +1033,11 @@ export const Overview = () => {
                     <th
                       style={{ minWidth: "240px" }}
                     >
+                      Tracking Number{" "}
+                    </th>
+                    <th
+                      style={{ minWidth: "240px" }}
+                    >
                       Type
                     </th>
                   </tr>
@@ -1125,6 +1130,7 @@ export const Overview = () => {
                         <td>{data["Total Bulan Penyusutan"]}</td>
                         <td>{data["Total Penyusutan"]}</td>
                         <td>{data["Nilai Asset saat ini"]}</td>
+                        <td>{data["Nomor Resi"]}</td>
                         <td>{data.Tipe}</td>
                       </tr>
                     ))

@@ -499,6 +499,7 @@ export const FormApprovalMaintence = () => {
                               <span className="text-danger">*</span>
                             </label>
                             <select
+                              disabled
                               readOnly
                               required
                               name="ppn"

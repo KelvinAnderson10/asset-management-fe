@@ -70,7 +70,7 @@ export const Dashboard = () => {
         for (let i in response.data) {
           response.data[i]["CreatedAt"] = moment(
             response.data[i]["CreatedAt"]
-          ).format("YYYY-MM-DDTHH:MM");
+          ).format("YYYY-MM-DD HH:MM A");
         }
         setEvent(response.data);
         console.log(response.data);
@@ -420,7 +420,7 @@ export const Dashboard = () => {
                       <a> : </a>
                       <a>{data.event}</a>
                       <br />
-                      <a style={{ color: "white" }}>{data.CreatedAt}</a>
+                      <a style={{ color: "green" }}>{data.CreatedAt}</a>
                     </div>
                   ))
                 )}
@@ -428,10 +428,10 @@ export const Dashboard = () => {
             </div>
           </div>
           <div className="content-dashboard-bottom">
-            <div className="grafik-box" onClick={onClickViewSpending}>
+            <div title="Click to View Detail"  className="grafik-box" onClick={onClickViewSpending}>
               <BarChart index={"x"} chartData={chartData} />
             </div>
-            <div className="grafik-box" onClick={onClickViewUnit}>
+            <div title="Click to View Detail"  className="grafik-box" onClick={onClickViewUnit}>
               <BarChart index={"x"} chartData={unitClusterData2} />
             </div>
           </div>
