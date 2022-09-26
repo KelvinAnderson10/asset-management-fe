@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useDeps } from '../../../shared/context/DependencyContext';
 import { UseApprovalMaintenance } from '../UseApprovalMaintenance';
 import * as CgIcons from 'react-icons/cg'
+import { NoData } from '../../../shared/components/NoData/NoData';
 
 export const ListApprovedMaintenance = () => {
     const {appData1 } = UseApprovalMaintenance();
@@ -121,7 +122,7 @@ export const ListApprovedMaintenance = () => {
         <div className="approval-inv-box-container">
           <div className="approval-inv-list-card">
             {appData1.length === 0 ? (
-              <p>Not request</p>
+              <NoData/>
             ) : (
               currentItems.map((data) => (
                 <div

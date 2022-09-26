@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { NoData } from '../../../shared/components/NoData/NoData';
 import { UseApprovalMaintenance } from '../UseApprovalMaintenance'
 
 export const ListPRMaintenance = () => {
@@ -74,7 +75,7 @@ export const ListPRMaintenance = () => {
            <div className='approval-inv-box-container'>
            <div className='approval-inv-list-card'>
              {appData.length === 0 ? (
-               <p>Not request</p>
+               <NoData/>
              ) : (
                  currentItems.map((data) => (
                      <div className='approval-inv-box-item' key={data.po_id} onClick={()=>handleClickApproval(data.po_id, data.ToUser, data.Jabatan, data['Kode Wilayah'], data['Jenis Produk'], data.approver_level3, data.tipe, data.status, data.requester)}>

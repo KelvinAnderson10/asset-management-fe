@@ -67,7 +67,7 @@
     margin-bottom: 20px;
 }
 
-.approval-inv-list-card :hover{
+.approval-inv-box-item:hover{
     background-color: #f7b1ae;
     cursor: pointer;
     color: white;

@@ -6,6 +6,7 @@ import * as CgIcons from 'react-icons/cg'
 import * as BsIcons from 'react-icons/bs'
 import * as AiIcons from 'react-icons/ai'
 import Loading from '../../../shared/components/Loading/Loading'
+import { NoData } from '../../../shared/components/NoData/NoData'
 
 export const ListPOMaintenance= () => {
     const [poData, setPOData] = useState([])
@@ -169,7 +170,7 @@ export const ListPOMaintenance= () => {
                 <div className='po-mtnc-box-container'>
                 <div className='po-mtnc-list-card'>
                         {poData.length === 0 ? (
-                            <p>Not request</p>
+                            <NoData/>
                         ): (
                             currentItems.map((data) => (
                                 <div className='po-mtnc-list-box-item' 

@@ -583,7 +583,7 @@ const Sidebar = ({ children }) => {
                   <div className="modalNotif">
                     <div className="card border-light shadow-sm">
                       <ul className="list-group list-group-flush">
-                        {viewNotif ? (
+                        {viewNotif.length !== 0 ?  (
                           viewNotif.map((d, index) => {
                             return (
                               <li
@@ -595,7 +595,7 @@ const Sidebar = ({ children }) => {
                             );
                           })
                         ) : (
-                          <></>
+                          <div>No notification yet</div>
                         )}
                       </ul>
                     </div>
