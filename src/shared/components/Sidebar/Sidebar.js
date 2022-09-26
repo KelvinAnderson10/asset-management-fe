@@ -16,6 +16,7 @@ import { CgProfile } from "react-icons/cg";
 import logo from "../../../assets/images/default.png";
 import { Noty } from "../Noty/Noty";
 import { useDeps } from "../../context/DependencyContext";
+import moment from "moment";
 
 const routesAdmin = [
   {
@@ -296,6 +297,10 @@ const Sidebar = ({ children }) => {
     try {
       const response = await notificationService.readNotif(name);
       console.log("ini response read notif", response);
+      for (let i in response.data){
+        response.data[i].CreatedAt = moment(response.data[i].CreatedAt).format("LL")
+      }
+    
       setViewNotif(response.data);
     } catch (e) {
       console.log(e);
@@ -583,19 +588,24 @@ const Sidebar = ({ children }) => {
                   <div className="modalNotif">
                     <div className="card border-light shadow-sm">
                       <ul className="list-group list-group-flush">
-                        {viewNotif ? (
+                        {viewNotif.length !== 0 ?  (
                           viewNotif.map((d, index) => {
                             return (
                               <li
                                 key={index}
                                 className="list-group-item list-group-item-action"
                               >
-                                Hi {d.to}, {d.body}
+                                Hi {d.to}, {d.body} 
+                                <div>
+                                <a style={{ color: "#B70621"}} >{d.CreatedAt} </a>
+                                </div>
+                                
+                                
                               </li>
                             );
                           })
                         ) : (
-                          <></>
+                          <div>No notification yet</div>
                         )}
                       </ul>
                     </div>

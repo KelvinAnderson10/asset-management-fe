@@ -1,5 +1,5 @@
 import moment from "moment";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useAuth } from "../../services/UseAuth";
 import Loading from "../../shared/components/Loading/Loading";
 import { useDeps } from "../../shared/context/DependencyContext";
@@ -10,7 +10,7 @@ import * as FaIcons from "react-icons/fa";
 import * as CgIcons from "react-icons/cg";
 import { TableAssetDeprecated } from "./components/TableAssetDeprecated";
 import { useNavigate } from "react-router-dom";
-
+import { ExportToExcel } from "../../shared/components/ExportExcel/ExportToExcel";
 
 export const Dashboard = () => {
   const { eventLogService, dashboardService } = useDeps();
@@ -40,7 +40,7 @@ export const Dashboard = () => {
   const [viewDetailUnit, setViewDetailUnit] = useState(false);
   const [pageCount, setPageCount] = useState(0);
 
-  const[viewAssetDep, setViewAssetDep] = useState(false)
+  const [viewAssetDep, setViewAssetDep] = useState(false);
 
   const [user, setUser] = useState({
     name: "",
@@ -97,11 +97,12 @@ export const Dashboard = () => {
     onGetTotalUniCluster2();
   }, [user.role]);
 
+  const [dataCluster, setDataCLuster] = useState({})
   const onGetTotalSpenCluster = async () => {
     try {
       const response = await dashboardService.getTotalSpendingCluster();
       console.log("ini response spending cluster", response);
-
+      setDataCLuster(response.data)
       if (response.status === "SUCCESS") {
         const chartData = {
           labels: response.data.slice(0, 5).map((data) => data.Cluster),
@@ -238,7 +239,7 @@ export const Dashboard = () => {
   const onGetAssetAlmostDeprecated = async (page) => {
     try {
       const response = await dashboardService.getAssetAlmostDeprecated(page);
-      console.log('response asset deprecated',response)
+      console.log("response asset deprecated", response);
       response.count = formatCash(response.count);
       setCountAssetDeprecated(response.count);
       setPageCount(Math.ceil(response.count / 10));
@@ -301,6 +302,9 @@ export const Dashboard = () => {
     navigate('/main/tableassetdeprecated', {replace: false})
 
   }
+
+  const fileName =  'total-asset-spending-by-cluster'
+
   document.querySelector("body").style.overflow = "auto";
   return (
     <>
@@ -333,10 +337,15 @@ export const Dashboard = () => {
               <div className="content-icon">
                 <i class="fa fa-archive" style={{ color: "white" }}></i>
               </div>
-              
-              <div onClick={onClickViewAssetDep} title='Click to View Detail' className="content-non-icon" style={{cursor: "pointer"}}>
+
+              <div
+                onClick={onClickViewAssetDep}
+                title="Click to View Detail"
+                className="content-non-icon"
+                style={{ cursor: "pointer" }}
+              >
                 <a className="count-number">{countAssetDeprecated}</a>
-                <a  style={{ color: "white", fontSize: "20px" }}>
+                <a style={{ color: "white", fontSize: "20px" }}>
                   Total Asset Deprecated
                 </a>
               </div>
@@ -445,16 +454,21 @@ export const Dashboard = () => {
           </div>
         </div>
       </div>
-      {isLoading && <Loading />}
+      {/* {isLoading && <Loading />} */}
 
       {viewDetailSpending && (
         <div className="view-spending-container">
           <div className="box-spending-cluster-detail">
+            <div className="box-spending-header">
+            <div className="download-excel">
+              <ExportToExcel apiData={dataCluster} fileName={fileName} />
+            </div>
             <div className="close-spending">
               <CgIcons.CgClose
                 size={"2em"}
                 onClick={onClickCloseViewSpending}
               />
+            </div>
             </div>
             <div>
               <BarChart index={"y"} chartData={chartData2} />
@@ -474,6 +488,7 @@ export const Dashboard = () => {
           </div>
         </div>
       )}
+      {/* {isLoading && <AssetLoading/>} */}
     </>
   );
 };

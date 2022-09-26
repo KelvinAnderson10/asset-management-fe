@@ -4,9 +4,11 @@ import { UseApprovalInventory } from '../UseApprovalInventory'
 import './ListPurchaseRequest.css'
 import { ASSET_CATEGORY_ICON } from '../../../shared/constants'
 import { useDeps } from '../../../shared/context/DependencyContext'
+import { NoData } from '../../../shared/components/NoData/NoData'
+import Loading from '../../../shared/components/Loading/Loading'
 
 export const ListPurchaseRequest = () => {
-    const {handleClickApproval, onGetPOListByApproval,poDetail,appData} = UseApprovalInventory()
+    const {handleClickApproval, onGetPOListByApproval,poDetail,appData, isLoading} = UseApprovalInventory()
     // console.log('ini appdata',appData)
     // console.log('detail po list page',poDetail)
     
@@ -81,7 +83,7 @@ export const ListPurchaseRequest = () => {
               <div className='approval-inv-box-container'>
               <div className='approval-inv-list-card'>
                 {appData.length === 0 ? (
-                  <p>Not request</p>
+                  <NoData/>
                 ) : (
                     appData.map((data) => (
                         <div className='approval-inv-box-item' key={data.po_id} onClick={()=>handleClickApproval(data.po_id, data.ToUser, data.Jabatan, data['Kode Wilayah'], data['Jenis Produk'], data.approver_level3, data.tipe, data.status, data.requester)}>
@@ -161,6 +163,7 @@ export const ListPurchaseRequest = () => {
                   </div>
               </div>
             </div>
+            {isLoading && <Loading/>}
     </div>
   )
 }

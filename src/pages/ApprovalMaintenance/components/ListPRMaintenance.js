@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
+import Loading from '../../../shared/components/Loading/Loading';
+import { NoData } from '../../../shared/components/NoData/NoData';
 import { UseApprovalMaintenance } from '../UseApprovalMaintenance'
 
 export const ListPRMaintenance = () => {
-    const {handleClickApproval,poDetail,appData} = UseApprovalMaintenance()
+    const {handleClickApproval,poDetail,appData,isLoading} = UseApprovalMaintenance()
  //Pagination PR
  const [currentPage, setcurrentPage] = useState(1);
  const [itemsPerPage, setitemsPerPage] = useState(10);
@@ -74,7 +76,7 @@ export const ListPRMaintenance = () => {
            <div className='approval-inv-box-container'>
            <div className='approval-inv-list-card'>
              {appData.length === 0 ? (
-               <p>Not request</p>
+               <NoData/>
              ) : (
                  currentItems.map((data) => (
                      <div className='approval-inv-box-item' key={data.po_id} onClick={()=>handleClickApproval(data.po_id, data.ToUser, data.Jabatan, data['Kode Wilayah'], data['Jenis Produk'], data.approver_level3, data.tipe, data.status, data.requester)}>
@@ -154,6 +156,7 @@ export const ListPRMaintenance = () => {
                </div>
            </div>
          </div>
+         {isLoading && <Loading/>}
  </div>
 )
 }

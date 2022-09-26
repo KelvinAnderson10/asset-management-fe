@@ -7,12 +7,14 @@ import moment from "moment";
 export const UseApprovalMaintenance = () => {
   const [appData, setAppData] = useState([]);
   const [appData1, setAppData1] = useState([]);
+  const [isLoading,setIsloading] = useState(false)
 
   const { purchaseOrderService } = useDeps();
   let poDetailData;
 
   //Get PO List By Approval
   const onGetPOListByApproval = async (name) => {
+    setIsloading(true)
     try {
       const response = await purchaseOrderService.getPOListByApproval(name);
       console.log("ini response get po", response);
@@ -41,6 +43,8 @@ export const UseApprovalMaintenance = () => {
       }
     } catch (e) {
       console.log(e.response);
+    } finally{
+      setIsloading(false)
     }
   };
 
@@ -146,5 +150,6 @@ export const UseApprovalMaintenance = () => {
     poHeader,
     setPOHeader,
     appData1,
+    isLoading
   };
 };

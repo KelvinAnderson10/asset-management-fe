@@ -1,0 +1,9 @@
+.button-download{
+    width: 8vw;
+    height: 80%;
+    background-color: #41b706;
+    border-radius: 1vw;
+    color: white;
+    font-size: 0.8vw;
+    border-style: none;
+}

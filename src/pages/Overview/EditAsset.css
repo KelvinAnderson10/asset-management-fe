@@ -21,12 +21,43 @@
   z-index: 100;
 }
 
+.edit-container-reg{
+  font-family: 'Poppins', sans-serif;
+  margin:0; padding:0;
+  box-sizing: border-box;
+  outline: none; border:none;
+  text-transform: capitalize;
+  transition: all .2s linear;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  min-height: 100vh;
+  background-color: rgba(10, 10, 10, 0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 100;
+}
+
+
 .edit-container .asset-edit-container{
   display: flex;
   justify-content: center;
   align-items: center;
   padding:35px;
   height: 90vh;
+}
+
+.edit-container-reg .asset-edit-reg-container{
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 40vw;
+  height: 40vh;
+  background-color: white;
 }
 
 .asset-edit-container form{
@@ -72,6 +103,35 @@
   margin-top: 10px;
 }
 
+.asset-edit-reg-container form{
+  padding:40px;
+  width: 80vw;
+  height: auto;
+  background: white;
+  box-shadow: 0 5px 10px rgba(58, 5, 5, 0.1);
+  border-radius: 20px;
+}
+.asset-edit-reg-container form .inputBoxReg {
+  margin:0px 0;
+}
+.asset-edit-reg-container form .inputBoxReg span{
+  margin-bottom: 5px;
+  display: block;
+  text-align: left;
+  margin-top: 10px;
+}
+.asset-edit-reg-container form .inputBoxReg input{
+  width: 100%;
+  border:1px solid rgb(180, 178, 178);
+  padding:8px 20px;
+  font-size: 16px;
+  text-transform: none;
+  align-items: flex-start;
+  display: flex;
+  border-radius:10px;
+  
+}
+
 .asset-edit-container form .row .col .inputBox input{
   width: 100%;
   border:1px solid rgb(180, 178, 178);
@@ -114,7 +174,16 @@
   filter: drop-shadow(0 0 1px #000);
 }
 
+.asset-edit-reg-container form .image-box{
+  width: 200px;
+  height: 140px;
+  background-image: url('../../assets/images/No-image-available.png');
+  margin-right: 10px;
+  display: flex;
+  background-repeat: no-repeat; 
+  background-size: 100% 100%; 
 
+}
 .asset-edit-container form .row .col .image-box {
   width: 200px;
   height: 140px;
@@ -134,6 +203,16 @@
   width: 100%;
 }
 
+.asset-edit-reg-container form .asset-image-container{
+  display: flex;
+  flex-direction: row;
+  margin: 20px;
+  width: 90%;
+  height: 137px;
+  margin-bottom: 10px;
+
+}
+
 .asset-edit-container form .row .col .asset-image-container{
   display: flex;
   flex-direction: row;
@@ -143,6 +222,10 @@
   margin-bottom: 10px;
 }
 
+.asset-edit-reg-container form .button-cancel{
+  margin-right: 20px;
+  
+}
 .asset-edit-container form .row .col .button-submit{
  
   width: 120px;
@@ -159,7 +242,12 @@
   font-size: 20px;
   align-items: center;
 }
+.asset-edit-reg-container form .button-asset{
+  display: flex;
+  justify-content: flex-end;
+ margin-top: 10px;
 
+}
 .asset-edit-container form .row .col  .button-asset {
   width: 100%;
   display: flex;

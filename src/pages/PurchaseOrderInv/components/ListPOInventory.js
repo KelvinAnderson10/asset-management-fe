@@ -6,6 +6,7 @@ import * as CgIcons from 'react-icons/cg'
 import * as BsIcons from 'react-icons/bs'
 import * as AiIcons from 'react-icons/ai'
 import Loading from '../../../shared/components/Loading/Loading'
+import { NoData } from '../../../shared/components/NoData/NoData'
 
 export const ListPOInventory = () => {
     const [poData, setPOData] = useState([])
@@ -238,7 +239,7 @@ export const ListPOInventory = () => {
                 <div className='po-inv-box-container'>
                 <div className='po-inv-list-card'>
                         {poData.length === 0 ? (
-                            <p>Not request</p>
+                            <NoData/>
                         ): (
                             currentItems.map((data) => (
                                 <div className='po-inv-list-box-item' 
