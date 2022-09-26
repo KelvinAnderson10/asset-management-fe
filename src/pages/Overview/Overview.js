@@ -1257,7 +1257,7 @@ export const Overview = () => {
                         <td>{data["Total Bulan Penyusutan"]}</td>
                         <td>{data["Total Penyusutan"]}</td>
                         <td>{data["Nilai Asset saat ini"]}</td>
-                        <td>{data.tipe}</td>
+                        <td>{data.Tipe}</td>
                       </tr>
                     ))
                   )}
