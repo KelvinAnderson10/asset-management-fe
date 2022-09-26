@@ -1,11 +1,11 @@
-import './AssetItemLoading.css';
+import './AssetLoading.css';
 import gif from '../../../assets/images/loadinggif.gif'
 
-function AssetItemLoading() {
+function AssetLoading() {
   return (
     <div className='App'>
-      <div className='assetloadingScreen'>
-        <div className='assetloadingContainer'>
+      <div className='assetloadingoverviewScreen'>
+        <div className='assetloadingoverviewContainer'>
           <img className='gif' width="250px" height="250px" src={gif}></img>
           <p>Loading...</p>
         </div>
@@ -14,4 +14,4 @@ function AssetItemLoading() {
   );
 }
 
-export default AssetItemLoading;
+export default AssetLoading;
