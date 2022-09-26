@@ -40,17 +40,6 @@ export const FormApprovalMaintence = () => {
     setPOHeader(location.state.header);
   };
 
-  const handleFormChange2 = (event, index) => {
-    const newArray2 = location.state.detail.map((item, i) => {
-      if (index === i) {
-        return { ...item, [event.target.name]: event.target.value };
-      } else {
-        return item;
-      }
-    });
-    setpoDetail(newArray2);
-  };
-
   const [vendor, setVendor] = useState([]);
   const onGetAllVendor = async () => {
     try {
