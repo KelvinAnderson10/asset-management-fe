@@ -5,13 +5,12 @@ import { useDeps } from "../../shared/context/DependencyContext";
 import { Failed } from "../../shared/components/Notification/Failed";
 import moment from "moment";
 import "./AssetItem.css";
-import Loading from "../../shared/components/Loading/Loading";
-import UploadLoading from "../../shared/components/Loading/UploadLoading";
-import AssetLoading from "../../shared/components/Loading/AssetItemLoad";
+
 import { EVENT } from "../../shared/constants";
 import { useAuth } from "../../services/UseAuth";
 import imageCompression from 'browser-image-compression';
 import LoadingScreen from 'react-loading-screen';
+import AssetItemLoading from "../../shared/components/Loading/AssetItemLoad";
 
 export const AssetItem = () => {
   const [data, setData] = useState({});
@@ -429,7 +428,7 @@ export const AssetItem = () => {
         </div>
         </div>
       </Sidebar>
-      {isLoading && <UploadLoading/>
+      {isLoading && <AssetItemLoading/>
       }
     </>
   );
