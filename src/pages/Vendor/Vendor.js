@@ -21,7 +21,6 @@ export const VendorManage = () => {
   const [isLoading, setLoading] = useState(false);
   const [doneAddForm, setDoneAddform] = useState(false);
   const { vendorService, eventLogService } = useDeps();
-  const areAllFieldsFilled = vendorData !== "";
 
   const [data, setData] = useState([]);
   const [order, setOrder] = useState("ASC");
@@ -76,10 +75,6 @@ export const VendorManage = () => {
   const [pageNumberLimit, setpageNumberLimit] = useState(5);
   const [maxPageNumberLimit, setmaxPageNumberLimit] = useState(5);
   const [minPageNumberLimit, setminPageNumberLimit] = useState(0);
-
-  const handleLocation = (e) => {
-    const location = e.target.value;
-  };
 
   useEffect(() => {
     onGetAllVendor();
