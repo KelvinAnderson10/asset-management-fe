@@ -231,6 +231,20 @@
   background-color: white;
   border-radius: 10px;
 }
+
+.box-spending-cluster-detail .box-spending-header{
+  height: 6vh;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.download-excel{
+  display: flex;
+  justify-content: flex-start;
+  margin: 4px 10px;
+}
 .close-spending{
   display: flex;
   color: #B70621;

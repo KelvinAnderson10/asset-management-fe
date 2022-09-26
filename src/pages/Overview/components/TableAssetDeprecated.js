@@ -6,6 +6,7 @@ import ReactPaginate from "react-paginate";
 import "./TableAssetDep.css";
 import * as MdIcons from "react-icons/md";
 import { useNavigate } from "react-router-dom";
+import { ExportToExcel } from "../../../shared/components/ExportExcel/ExportToExcel";
 
 export const TableAssetDeprecated = () => {
   const [datas, setDatas] = useState([]);
@@ -17,6 +18,7 @@ export const TableAssetDeprecated = () => {
     onGetAssetAlmostDeprecated(1);
   }, []);
 
+  const [page, setPage] = useState()
   const handlePageClick = async (data) => {
     let currentPage = data.selected + 1;
     onGetAssetAlmostDeprecated(currentPage);
@@ -31,6 +33,7 @@ export const TableAssetDeprecated = () => {
   const onGetAssetAlmostDeprecated = async (page) => {
     try {
       const response = await dashboardService.getAssetAlmostDeprecated(page);
+      setPage(page)
       for (let i in response.data) {
         response.data[i]["Harga Perolehan"] =
           "Rp" + thousands_separators(response.data[i]["Harga Perolehan"]);
@@ -67,6 +70,8 @@ export const TableAssetDeprecated = () => {
     navigate('/main', {replace: true})
   }
 
+  const fileName =  `asset-almost-deprecated ${page}`
+
   return (
     <div>
       <Sidebar>
@@ -76,7 +81,11 @@ export const TableAssetDeprecated = () => {
                   color="black"
                   onClick={onClickBack}
                   style={{ cursor: "pointer", marginRight:'5px'}}
-                />List Asset Almost Deprecated</div>
+                />List Asset Almost Deprecated
+                <div className="download-excel">
+                <ExportToExcel apiData={datas} fileName={fileName} />
+                </div> 
+                </div>
             <div className="pagination-deprecated">
               <div className="clearfix">
                 Showing {datas.length} out of {totalAsset}
