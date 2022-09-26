@@ -3,9 +3,10 @@ import { UseApprovalInventory } from "../UseApprovalInventory";
 import * as CgIcons from 'react-icons/cg'
 import { useDeps } from "../../../shared/context/DependencyContext";
 import { NoData } from "../../../shared/components/NoData/NoData";
+import Loading from "../../../shared/components/Loading/Loading";
 
 export const ListApproved = () => {
-  const {appData1 } = UseApprovalInventory();
+  const {appData1, isLoading } = UseApprovalInventory();
   const [poDetail, setPODetail] = useState([])
   const {purchaseOrderService} = useDeps()
 
@@ -452,6 +453,7 @@ export const ListApproved = () => {
             </div>
           </div>
       </div>}
+      {isLoading && <Loading/>}
     </div>
     
   );

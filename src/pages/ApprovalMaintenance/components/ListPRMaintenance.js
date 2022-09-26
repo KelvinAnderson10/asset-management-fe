@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
+import Loading from '../../../shared/components/Loading/Loading';
 import { NoData } from '../../../shared/components/NoData/NoData';
 import { UseApprovalMaintenance } from '../UseApprovalMaintenance'
 
 export const ListPRMaintenance = () => {
-    const {handleClickApproval,poDetail,appData} = UseApprovalMaintenance()
+    const {handleClickApproval,poDetail,appData,isLoading} = UseApprovalMaintenance()
  //Pagination PR
  const [currentPage, setcurrentPage] = useState(1);
  const [itemsPerPage, setitemsPerPage] = useState(10);
@@ -155,6 +156,7 @@ export const ListPRMaintenance = () => {
                </div>
            </div>
          </div>
+         {isLoading && <Loading/>}
  </div>
 )
 }

@@ -5,9 +5,10 @@ import './ListPurchaseRequest.css'
 import { ASSET_CATEGORY_ICON } from '../../../shared/constants'
 import { useDeps } from '../../../shared/context/DependencyContext'
 import { NoData } from '../../../shared/components/NoData/NoData'
+import Loading from '../../../shared/components/Loading/Loading'
 
 export const ListPurchaseRequest = () => {
-    const {handleClickApproval, onGetPOListByApproval,poDetail,appData} = UseApprovalInventory()
+    const {handleClickApproval, onGetPOListByApproval,poDetail,appData, isLoading} = UseApprovalInventory()
     // console.log('ini appdata',appData)
     // console.log('detail po list page',poDetail)
     
@@ -162,6 +163,7 @@ export const ListPurchaseRequest = () => {
                   </div>
               </div>
             </div>
+            {isLoading && <Loading/>}
     </div>
   )
 }

@@ -3,9 +3,10 @@ import { useDeps } from '../../../shared/context/DependencyContext';
 import { UseApprovalMaintenance } from '../UseApprovalMaintenance';
 import * as CgIcons from 'react-icons/cg'
 import { NoData } from '../../../shared/components/NoData/NoData';
+import Loading from '../../../shared/components/Loading/Loading';
 
 export const ListApprovedMaintenance = () => {
-    const {appData1 } = UseApprovalMaintenance();
+    const {appData1,isLoading } = UseApprovalMaintenance();
     const [poDetail, setPODetail] = useState([])
     const {purchaseOrderService} = useDeps()
   
@@ -354,6 +355,7 @@ export const ListApprovedMaintenance = () => {
           </form>
             </div>
         </div>}
+        {isLoading && <Loading/>}
       </div>
       
     );
