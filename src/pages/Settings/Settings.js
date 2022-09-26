@@ -15,7 +15,6 @@ export const Settings = () => {
     try {
       const response = await generalSettingService.getGeneralSetting();
       setData(response.data);
-      console.log(response.data);
     } catch (e) {
       console.log(e);
     }
@@ -28,7 +27,6 @@ export const Settings = () => {
       data.minimum_asset = Number(data.minimum_asset)
       const response = await generalSettingService.updateGeneralSetting(data);
       setData(response);
-      console.log('ini response edit',response)
       if (response.status === "SUCCESS") {
         swal({
           title: "Success!",
@@ -48,7 +46,6 @@ export const Settings = () => {
     const newData = { ...data };
     newData[e.target.name] = e.target.value;
     setData(newData);
-    console.log(newData);
   };
 
   return (

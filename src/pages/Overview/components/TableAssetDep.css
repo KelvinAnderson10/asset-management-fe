@@ -16,9 +16,7 @@
   height: 88vh;
   align-items: flex-end;
   flex-direction: column;
-  /* align-content: center; */
   border-radius: 10px;
-  /* box-shadow: 1px 2px 2px 3px rgb(221, 219, 219) */
 }
 .overview-card-deprecated .table-container {
   display: flex;
@@ -46,7 +44,6 @@
 .table-box .table-header {
   background-color: white;
   color: rgb(219, 66, 66);
-  /* height: ; */
   position: -webkit-sticky;
   position: sticky;
   top: 0;

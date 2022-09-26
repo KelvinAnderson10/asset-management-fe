@@ -79,7 +79,6 @@ export const ListApproved = () => {
   const onGetPODetailById = async (id) => {
     try {
         const response = await purchaseOrderService.getPODetailById(id)
-        console.log(id);
         for (let i in response.data) {
             if (response.data[i].ppn === true){
                 response.data[i].ppn = 'Yes'
@@ -89,7 +88,6 @@ export const ListApproved = () => {
         }
         getPOById(id)
         setPODetail(response.data)
-        console.log(response);
     } catch (e) {
         console.log(e.response);
     }
@@ -180,7 +178,7 @@ export const ListApproved = () => {
     try {
       const response = await purchaseOrderService.getPOById(id)
       setPOById(response.data)
-      console.log(response);
+     
   } catch (e) {
       console.log(e.response);
   }

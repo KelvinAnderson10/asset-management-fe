@@ -30,7 +30,7 @@ export const FormApprovalMaintence = () => {
           item.vendor_selected = item.vendor_3;
           item.item_price_selected = Number(item.item_price_3);
         }
-        console.log("ini item", item);
+        
         return { ...item, [event.target.name]: event.target.value };
       } else {
         return item;
@@ -40,23 +40,12 @@ export const FormApprovalMaintence = () => {
     setPOHeader(location.state.header);
   };
 
-  const handleFormChange2 = (event, index) => {
-    const newArray2 = location.state.detail.map((item, i) => {
-      if (index === i) {
-        return { ...item, [event.target.name]: event.target.value };
-      } else {
-        return item;
-      }
-    });
-    setpoDetail(newArray2);
-  };
-
   const [vendor, setVendor] = useState([]);
   const onGetAllVendor = async () => {
     try {
       const response = await vendorService.getAllVendor();
       setVendor(response.data);
-      console.log(response.data);
+     
     } catch (e) {
       console.log(e);
     } finally {
@@ -123,7 +112,7 @@ export const FormApprovalMaintence = () => {
     try {
       const response = await purchaseOrderService.updatePO(id, status);
       setPOHeader(response.data);
-      console.log(response);
+     
     } catch (e) {
       console.log(e.response);
       Failed("Failed to approved");
@@ -175,23 +164,23 @@ export const FormApprovalMaintence = () => {
         location.state.detail[i].item_price_3 = Number(
           location.state.detail[i].item_price_3
         );
-        console.log("ini yg akan di submit", location.state.detail);
+       
         const response = await purchaseOrderService.updatePODetail(
           location.state.detail[i].po_id_detail,
           location.state.detail[i]
         );
-        console.log(response);
+       
       }
     } catch (e) {
       console.log(e.response);
       Failed("Failed to approved");
     } finally {
-      console.log("ini");
+      
       if (location.state.header.approverLevel3 == "-") {
         try {
           const response = await purchaseOrderService.approvedByLevel2(id);
           location.state.header.status = STATUS.APPROVE_GA_IT;
-          console.log(location.state.header);
+         
           setPOHeader(location.state.header);
           Swal.fire("Success!", "This request has been approved.", "success");
           navigate("/approval-data/maintenance", { replace: true });
@@ -249,7 +238,7 @@ export const FormApprovalMaintence = () => {
     try {
       const response = await generalSettingService.getGeneralSetting();
       setSetting(response.data);
-      console.log(response.data);
+      
     } catch (e) {
       console.log(e);
     }
@@ -510,6 +499,7 @@ export const FormApprovalMaintence = () => {
                               <span className="text-danger">*</span>
                             </label>
                             <select
+                              disabled
                               readOnly
                               required
                               name="ppn"

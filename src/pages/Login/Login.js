@@ -159,10 +159,6 @@ export const Login = () => {
                   allowedCharacters="numeric"
                 ></AuthCode>
                 <h6 className="message">If you cant'find the OTP in your inbox, please check your spam folder</h6>
-                {/* <button type="submit" onClick={validateOTP} className="btn">
-                
-                  SUBMIT
-                </button> */}
               </Card.Body>
             </Card>
           </div>

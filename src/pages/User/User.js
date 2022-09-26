@@ -50,7 +50,6 @@ export const UserManage = () => {
     const newData = { ...userData };
     newData[e.target.name] = e.target.value;
     setUserData(newData);
-    console.log(newData)
   };
 
   //For Edit Model
@@ -143,7 +142,6 @@ export const UserManage = () => {
     setLoading(true);
     try {
       const response = await userService.getAllUser();
-      console.log(response)
       setData(response.data);
     } catch (e) {
       console.log(e);
@@ -409,7 +407,6 @@ useEffect(() => {
             <div className="input-group ">
               <input
                 placeholder="Search User Name"
-                // value={searchLocation}
                 onChange={onChangeSearchLocation}
                 type="text"
                 className="form-control"
@@ -592,9 +589,6 @@ useEffect(() => {
                       </button>
                     </li>
                   </ul>
-                  {/* <button onClick={handleLoadMore} className="loadmore">
-                    Load More
-                  </button> */}
                 </div>
               </div>
             </div>

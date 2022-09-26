@@ -24,7 +24,6 @@
     align-items: center;
     flex-direction: column;
     border-radius: 10px;
-    /* box-shadow: 0px 0px 5px 5px rgb(221, 219, 219); */
     position: relative;
     padding: 10px;
     overflow-y: scroll;
@@ -42,7 +41,6 @@
     align-items: flex-start;
     font-size: 1vw;
     margin-bottom: 20px;
-    /* background-color:  rgba(7, 124, 234, 0.714); */
 }
 
 .po-mtnc-list-box-item:hover{

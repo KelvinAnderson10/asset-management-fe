@@ -1,10 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Button, Modal, Table } from "react-bootstrap";
-import Sidebar from "../../shared/components/Sidebar/Sidebar";
 import { useDeps } from "../../shared/context/DependencyContext";
 import "./Overview.css";
-import { FaSort } from "react-icons/fa";
-import { CgClose } from "react-icons/cg";
 import moment from "moment";
 import "./EditAsset.css";
 import swal from "sweetalert";
@@ -12,7 +9,6 @@ import Loading from "../../shared/components/Loading/Loading";
 import ReactPaginate from "react-paginate";
 import { EVENT } from "../../shared/constants";
 import { useAuth } from "../../services/UseAuth";
-import defaultImg from "../../assets/images/No-image-available.png";
 import imageCompression from "browser-image-compression";
 import AssetLoading from "../../shared/components/Loading/AssetLoading";
 
@@ -21,8 +17,6 @@ export const Overview = () => {
     overviewService,
     vendorService,
     locationService,
-    userService,
-    assetItemService,
     assetCategoryService,
     eventLogService,
   } = useDeps();
@@ -30,7 +24,6 @@ export const Overview = () => {
   const [order, setOrder] = useState("ASC");
   const [rowData, setRowData] = useState([]);
   const [viewShow, setViewShow] = useState();
-  const [asset, setAsset] = useState({});
   const [isLoading, setLoading] = useState(false);
   const [isLoading2, setLoading2] = useState(false)
   const [fileName, setFileName] = useState("No file chosen");
@@ -76,56 +69,12 @@ export const Overview = () => {
     onGetCookie();
   }, []);
 
-  //Sorting
-  const sorting = (col) => {
-    if (order === "ASC") {
-      const sorted = [...datas].sort((a, b) =>
-        a[col].toLowerCase() > b[col].toLowerCase() ? 1 : -1
-      );
-      setDatas(sorted);
-      setOrder("DSC");
-    }
-    if (order === "DSC") {
-      const sorted = [...datas].sort((a, b) =>
-        a[col].toLowerCase() < b[col].toLowerCase() ? 1 : -1
-      );
-      setDatas(sorted);
-      setOrder("ASC");
-    }
-  };
-
-  const sortingNum = (col) => {
-    if (order === "ASC") {
-      const sorted = [...datas].sort((a, b) => (a[col] > b[col] ? 1 : -1));
-      setDatas(sorted);
-      setOrder("DSC");
-    }
-    if (order === "DSC") {
-      const sorted = [...datas].sort((a, b) => (a[col] < b[col] ? 1 : -1));
-      setDatas(sorted);
-      setOrder("ASC");
-    }
-  };
-
+  
   //GetById
   const [size, setSize] = useState(400);
   const [bgColor, setBgColor] = useState("ffffff");
 
-  const handleGetAssetById = async (name) => {
-    setLoading(true);
-    try {
-      const response = await overviewService.getAssetByAssetName(name);
-      setRowData(response.data);
-      setViewShow(true);
-    } catch (e) {
-      console.log(e);
-    } finally {
-      setLoading(false);
-    }
-  };
   // GET ID FOR EDIT SHOW
-
-  const [date, setNewDate] = useState();
   const [showEdit, setShowEdit] = useState(false);
 
   const handleEditAssetById = async (name) => {
@@ -145,29 +94,19 @@ export const Overview = () => {
       ).format("YYYY-MM-DDTHH:MM");
 
       setAssetEdit(response.data);
-      // setImageBase64(response.data["Asset Image"]);
       setShowEdit(!showEdit);
-
-      console.log(response.data["Asset Image"]);
     } catch (e) {
       console.log(e);
     }
   };
 
   useEffect(() => {
-    console.log("asset edit", assetEdit["Asset Image"]);
     setImageBase64(assetEdit["Asset Image"]);
-    console.log("cek image", imageBase64);
   }, [showEdit]);
 
   const [assetEdit, setAssetEdit] = useState({});
   const [editShow, setEditShow] = useState(false);
-  const [trackingNum, setTrackingNum] = useState("");
   const [editShowRegular, setEditShowRegular] = useState(false);
-
-  useEffect(() => {
-    // setImageBase64(assetEdit["Asset Image"]);
-  }, [assetEdit]);
 
   const handleEditClose = () => {
     if (user.role != "Regular") {
@@ -199,7 +138,6 @@ export const Overview = () => {
       console.log("originalFile size", imageFiles.size / 1024 / 1024, "MB");
       const options = {
         maxSizeMB: 0.5,
-        // maxWidthOrHeight: 200,
         useWebWorker: true,
       };
       try {
@@ -333,7 +271,6 @@ export const Overview = () => {
   const handleChange = (e) => {
     const newData = { ...assetEdit };
     newData[e.target.name] = e.target.value;
-    console.log("ini data baru", newData);
     setAssetEdit(newData);
   };
 
@@ -361,7 +298,6 @@ export const Overview = () => {
   const [totalAsset, setTotalAsset] = useState(0);
 
   useEffect(() => {
-    console.log("ini user", user);
     if (user.role == "Admin") {
       getAssetsPagination(1);
     } else if (user.role == "IT") {
@@ -436,7 +372,6 @@ export const Overview = () => {
       }
       onCountAsset();
       setDatas(response.data);
-      console.log(response);
     } catch (e) {
       console.log(e);
     } finally {
@@ -473,7 +408,6 @@ export const Overview = () => {
       }
       onCountAsset();
       setDatas(response.data);
-      console.log(response);
     } catch (e) {
       console.log(e);
     } finally {
@@ -510,7 +444,6 @@ export const Overview = () => {
       }
       onCountAsset();
       setDatas(response.data);
-      console.log(response);
     } catch (e) {
       console.log(e);
     } finally {
@@ -548,7 +481,6 @@ export const Overview = () => {
       setDatas(response.data);
       setPageCount(Math.ceil(response.count / 10));
       setTotalAsset(response.count)
-      console.log(response);
     } catch (e) {
       console.log(e);
     } finally {
@@ -557,7 +489,6 @@ export const Overview = () => {
   };
 
   const handlePageClick = async (data) => {
-    console.log(data.selected);
     let currentPage = data.selected + 1;
     if (
       searchCondition == "" &&
@@ -614,7 +545,6 @@ export const Overview = () => {
   };
 
   //Filter Multiple Condition
-  const [countFilter, setCountFilter] = useState(0);
   const onFilterMultiple = async (
     condition,
     vendor,
@@ -661,7 +591,6 @@ export const Overview = () => {
           ).format("YYYY-MM-DDTHH:MM");
         }
         setDatas(response.data);
-        console.log("ini filter", response.data);
         setPageCount(Math.ceil(response.count / 10));
       } catch (e) {
         console.log(e.response);
@@ -805,9 +734,6 @@ export const Overview = () => {
     <>
       <div className="overview-container">
         <div className="overview-card">
-          {/* <div className="title-overview">
-                <p>List of Assets</p>
-              </div> */}
           <div className="search-container">
             <div className="box-search-container">
               <div className="search-box-item">
@@ -960,213 +886,159 @@ export const Overview = () => {
                     <th>No</th>
                     <th style={{ minWidth: "150px" }}>Action</th>
                     <th
-                      // onClick={() => sorting("Tanggal Output")}
                       style={{ minWidth: "200px" }}
                     >
                       Purchase Date
-                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                     </th>
                     <th
-                      // onClick={() => sortingNum("Tahun")}
                       style={{ minWidth: "200px" }}
                     >
                       Year
-                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
-                    </th>
+                     </th>
                     <th
-                      // onClick={() => sorting("No. PO / Dokumenen Pendukung")}
                       style={{ minWidth: "200px" }}
                     >
                       PO Number
-                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                     </th>
                     <th
-                      // onClick={() => sorting("Vendor")}
                       style={{ minWidth: "200px" }}
                     >
                       Vendor Name
-                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                     </th>
                     <th
-                      // onClick={() => sorting("Nama Barang")}
                       style={{ minWidth: "300px" }}
                     >
                       Item Name
-                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                     </th>
                     <th
-                      // onClick={() => sortingNum("Harga Perolehan")}
                       style={{ minWidth: "230px" }}
                     >
                       Acquisition Cost{" "}
-                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                     </th>
                     <th
-                      // onClick={() => sortingNum("PPN")}
                       style={{ minWidth: "200px" }}
                     >
                       PPN
-                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                     </th>
                     <th
-                      // onClick={() => sortingNum("Biaya Lain-Lain")}
                       style={{ minWidth: "200px" }}
                     >
                       Additional Cost{" "}
-                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                     </th>
                     <th
-                      // onClick={() => sortingNum("Total Harga Perolehan")}
                       style={{ minWidth: "270px" }}
                     >
                       Total Acquisition Cost{" "}
-                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                     </th>
                     <th
-                      // onClick={() => sorting("Jenis Produk")}
                       style={{ minWidth: "220px" }}
                     >
                       Subproduct Name{" "}
-                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                     </th>
                     <th
-                      // onClick={() => sorting("Kategori Jenis Produk")}
                       style={{ minWidth: "200px" }}
                     >
                       Product Name
-                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                     </th>
                     <th
-                      // onClick={() => sorting("Kategori Aset Tetap")}
                       style={{ minWidth: "200px" }}
                     >
                       Asset Category{" "}
-                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                     </th>
                     <th
-                      // onClick={() => sorting("BAST Output")}
                       style={{ minWidth: "200px" }}
                     >
                       BAST
-                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                     </th>
                     <th
-                      // onClick={() => sorting("Kondisi")}
                       style={{ minWidth: "200px" }}
                     >
                       Condition
-                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                     </th>
                     <th
-                      // onClick={() => sorting("Insurance")}
                       style={{ minWidth: "200px" }}
                     >
                       Insurance
-                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                     </th>
                     <th
-                      // onClick={() => sorting("Lokasi")}
                       style={{ minWidth: "200px" }}
                     >
                       Location
-                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                     </th>
                     <th
-                      // onClick={() => sorting("User")}
                       style={{ minWidth: "200px" }}
                     >
                       User
-                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                     </th>
                     <th
-                      // onClick={() => sorting("Jabatan")}
                       style={{ minWidth: "200px" }}
                     >
                       Position
-                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                     </th>
                     <th
-                      // onClick={() => sorting("Initisal")}
                       style={{ minWidth: "200px" }}
                     >
                       Initial
-                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                     </th>
                     <th
-                      // onClick={() => sortingNum("Kode Wilayah")}
                       style={{ minWidth: "200px" }}
                     >
                       Location ID
-                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                     </th>
                     <th
-                      // onClick={() => sorting("Kode Asset")}
                       style={{ minWidth: "200px" }}
                     >
                       Product Code
-                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                     </th>
                     <th
-                      // onClick={() => sortingNum("Tahun Pembelian")}
                       style={{ minWidth: "200px" }}
                     >
                       Purchase Year{" "}
-                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                     </th>
                     <th
-                      // onClick={() => sortingNum("Kode Urut barang")}
                       style={{ minWidth: "220px" }}
                     >
                       Item Order Code{" "}
-                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                     </th>
                     <th
-                      // onClick={() => sorting("Nomor Asset")}
                       style={{ minWidth: "200px" }}
                     >
                       Asset Number
-                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                     </th>
                     <th
-                      // onClick={() => sortingNum("Masa Manfaat (Bulan)")}
                       style={{ minWidth: "200px" }}
                     >
                       Useful Life
-                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                     </th>
                     <th
-                      // onClick={() => sortingNum("Penyusutan Perbulan")}
                       style={{ minWidth: "250px" }}
                     >
                       Monthly Depreciation{" "}
-                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                     </th>
                     <th
-                      // onClick={() => sortingNum("Total Bulan Penyusutan")}
                       style={{ minWidth: "240px" }}
                     >
                       Depreciation Month{" "}
-                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                     </th>
                     <th
-                      // onClick={() => sortingNum("Total Penyusutan")}
                       style={{ minWidth: "230px" }}
                     >
                       Total Depreciation{" "}
-                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                     </th>
                     <th
-                      // onClick={() => sortingNum("Nilai Asset saat ini")}
                       style={{ minWidth: "240px" }}
                     >
                       Current Asset Value{" "}
-                      {/* <FaSort style={{ marginLeft: "10%" }} /> */}
                     </th>
                     <th
-                      // onClick={() => sortingNum("Nilai Asset saat ini")}
                       style={{ minWidth: "240px" }}
                     >
-                      Type {/* <FaSort style={{ marginLeft: "10%" }} /> */}
+                      Tracking Number{" "}
+                    </th>
+                    <th
+                      style={{ minWidth: "240px" }}
+                    >
+                      Type
                     </th>
                   </tr>
                 </thead>
@@ -1258,6 +1130,7 @@ export const Overview = () => {
                         <td>{data["Total Bulan Penyusutan"]}</td>
                         <td>{data["Total Penyusutan"]}</td>
                         <td>{data["Nilai Asset saat ini"]}</td>
+                        <td>{data["Nomor Resi"]}</td>
                         <td>{data.Tipe}</td>
                       </tr>
                     ))
@@ -1268,7 +1141,6 @@ export const Overview = () => {
           </div>
         </div>
       </div>
-      {/* </div> */}
       <div className="model-box-view">
         <Modal
           dialogClassName="view-modal"
@@ -1536,20 +1408,6 @@ export const Overview = () => {
                       <span id="file-chosen">{fileName}</span>
                     </div>
                   </div>
-                  {/* <div className="inputBox" style={{ marginTop: "30px" }}>
-                  <span>PPN :</span>
-                    <select
-                    required
-                    name="PPN"
-                    value={assetEdit.PPN}
-                    onChange={handleChange}
-                    style={{width:'100%'}}
-                  >
-                    <option value="">Select Condition</option>
-                    <option value='1'>Yes</option>
-                    <option value='0'>No</option>
-                  </select>
-                  </div> */}
                   <div className="inputBox" style={{ marginTop: "1vh" }}>
                     <span>Purchase Price :</span>
                     <input

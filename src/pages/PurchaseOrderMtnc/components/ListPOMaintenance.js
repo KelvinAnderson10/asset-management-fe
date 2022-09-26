@@ -19,11 +19,9 @@ export const ListPOMaintenance= () => {
         setIsLoading(true)
         try{
         const response = await purchaseOrderService.getPOByRequester(name)
-        console.log(name);
         for (let i in response.data) {
           if (response.data[i].tipe == "Maintenance"){
             setPOData((poData) => [...poData, response.data[i]])
-            console.log('ini response', response);
           }
         }
         } catch (e) {
@@ -62,7 +60,6 @@ export const ListPOMaintenance= () => {
     const onGetPODetailById = async (id) => {
         try {
             const response = await purchaseOrderService.getPODetailById(id)
-            console.log(id);
             for (let i in response.data) {
                 if (response.data[i].ppn === true){
                     response.data[i].ppn = 'Yes'
@@ -72,7 +69,6 @@ export const ListPOMaintenance= () => {
             }
             getPOById(id)
             setPODetailData(response.data)
-            console.log(response);
         } catch (e) {
             console.log(e.response);
         }
@@ -158,7 +154,6 @@ export const ListPOMaintenance= () => {
       try {
         const response = await purchaseOrderService.getPOById(id)
         setPOById(response.data)
-        console.log(response);
     } catch (e) {
         console.log(e.response);
     }

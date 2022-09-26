@@ -22,7 +22,6 @@ export const ListPOInventory = () => {
         for (let i in response.data) {
           if (response.data[i].tipe == "Inventory"){
             setPOData((poData) => [...poData, response.data[i]])
-            console.log('ini response', response);
           }
         }
         } catch (e) {
@@ -61,7 +60,6 @@ export const ListPOInventory = () => {
     const onGetPODetailById = async (id) => {
         try {
             const response = await purchaseOrderService.getPODetailById(id)
-            console.log(id);
             for (let i in response.data) {
                 if (response.data[i].ppn === true){
                     response.data[i].ppn = 'Yes'
@@ -71,7 +69,6 @@ export const ListPOInventory = () => {
             }
             getPOById(id)
             setPODetailData(response.data)
-            console.log(response);
         } catch (e) {
             console.log(e.response);
         }
@@ -227,7 +224,6 @@ export const ListPOInventory = () => {
       try {
         const response = await purchaseOrderService.getPOById(id)
         setPOById(response.data)
-        console.log(response);
     } catch (e) {
         console.log(e.response);
     }

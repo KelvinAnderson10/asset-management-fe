@@ -363,7 +363,7 @@ export const AssetCategory = () => {
     try {
       const response = await eventLogService.createEventLog(eventLoc)
       setEvent(response.data)
-      console.log(response.data);
+      
     } catch (e) {
       console.log(e);
     }

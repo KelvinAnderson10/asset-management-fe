@@ -355,7 +355,6 @@ export const Location = () => {
       role: savedUser.role,
     }));
 
-    console.log(user.name);
   };
   document.querySelector("body").style.overflow = "auto";
   return (
@@ -369,7 +368,7 @@ export const Location = () => {
                   <input
                     ref={ref}
                     placeholder="Search"
-                    // value={searchLocation}
+                   
                     onChange={onChangeSearchLocation}
                     type="text"
                     className="form-control"
@@ -530,9 +529,7 @@ export const Location = () => {
                       </button>
                     </li>
                   </ul>
-                  {/* <button onClick={handleLoadMore} className="loadmore">
-                    Load More
-                  </button> */}
+                 
                 </div>
               </div>
             </div>
@@ -593,9 +590,7 @@ export const Location = () => {
               </form>
             </Modal.Body>
             <Modal.Footer>
-              {/* <Button variant="secondary" onClick={hanldePostClose}>
-                Close
-              </Button> */}
+             
             </Modal.Footer>
           </Modal>
         </div>

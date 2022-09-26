@@ -15,13 +15,7 @@
   min-height: 88vh;
   flex-direction: column;
   border-radius: 10px;
-  /* box-shadow: 1px 2px 2px 3px rgb(221, 219, 219) */
 }
-
-/* .dashboard-card .content-dashboard {
-    width: 70%;
-    height: 100%;
-} */
 
 .dashboard-card .content-dashboard-top {
   width: 100%;
@@ -37,9 +31,7 @@
   width: 20vw;
   height: 15vh;
   border-radius: 20px;
-  /* border-width: 0.3vh; */
   border-color: rgb(200, 200, 200);
-  /* border-style: solid; */
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   display: flex;
   font-family: 'Roboto';
@@ -63,6 +55,8 @@
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
+  font-family: "Poppins";
+  font-weight: 500;
 }
 
 .content-non-icon .count-number {
@@ -96,6 +90,7 @@
   font-weight: 800;
   font-size: 20px;
   color: #B70621;
+  letter-spacing: 1px;
 }
 .content-dashboard-center .linechart {
   width: 40%;
@@ -121,13 +116,14 @@
   width: 100%;
   height: 100%;
   position: relative;
-  font-family: "Poppins";
+  font-family: "Roboto";
 }
 
 .styled-table thead tr {
   background-color: #B70621;
   color: #ffffff;
   text-align: center;
+  letter-spacing: 1px;
   
 }
 
@@ -176,7 +172,6 @@
   border-radius: 3vh;
   margin-left: 2.5vw;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-  /* padding-bottom: 1.6vh; */
 }
 .eventlog-container .title-recent h5 {
   display: flex;
@@ -186,6 +181,7 @@
   font-family: 'Roboto';
   font-weight: 800;
   color: #B70621;
+  letter-spacing: 1px;
   
 }
 .eventlog-container .eventlog-box {

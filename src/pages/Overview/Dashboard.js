@@ -1,14 +1,12 @@
 import moment from "moment";
 import React, { useEffect, useRef, useState } from "react";
 import { useAuth } from "../../services/UseAuth";
-import Loading from "../../shared/components/Loading/Loading";
 import { useDeps } from "../../shared/context/DependencyContext";
 import BarChart from "./components/BarChart";
 import PieChart from "./components/PieChart";
 import "./Dashboard.css";
 import * as FaIcons from "react-icons/fa";
 import * as CgIcons from "react-icons/cg";
-import { TableAssetDeprecated } from "./components/TableAssetDeprecated";
 import { useNavigate } from "react-router-dom";
 import { ExportToExcel } from "../../shared/components/ExportExcel/ExportToExcel";
 
@@ -16,7 +14,6 @@ export const Dashboard = () => {
   const { eventLogService, dashboardService } = useDeps();
   const [event, setEvent] = useState([]);
   const [countAsset, setCountAsset] = useState(0);
-  const [isLoading, setIsloading] = useState(false);
   const { getCookie } = useAuth();
   const [countAssetDeprecated, setCountAssetDeprecated] = useState(0);
   const [totalPO, setTotalPO] = useState(0);
@@ -73,7 +70,7 @@ export const Dashboard = () => {
         for (let i in response.data) {
           response.data[i]["CreatedAt"] = moment(
             response.data[i]["CreatedAt"]
-          ).format("YYYY-MM-DDTHH:MM");
+          ).format("YYYY-MM-DD HH:MM A");
         }
         setEvent(response.data);
         console.log(response.data);
@@ -101,7 +98,6 @@ export const Dashboard = () => {
   const onGetTotalSpenCluster = async () => {
     try {
       const response = await dashboardService.getTotalSpendingCluster();
-      console.log("ini response spending cluster", response);
       setDataCLuster(response.data)
       if (response.status === "SUCCESS") {
         const chartData = {
@@ -124,8 +120,6 @@ export const Dashboard = () => {
   const onGetTotalSpenCluster2 = async () => {
     try {
       const response = await dashboardService.getTotalSpendingCluster();
-      console.log("ini response spending cluster", response);
-
       if (response.status === "SUCCESS") {
         const chartData = {
           labels: response.data.map((data) => data.Cluster),
@@ -147,8 +141,6 @@ export const Dashboard = () => {
   const onGetPODataByStatus = async () => {
     try {
       const response = await dashboardService.getTotalPOByStatus();
-      console.log("ini response spending cluster", response);
-
       if (response.status === "SUCCESS") {
         const chartData = {
           labels: response.data.map((data) => data.Status),
@@ -174,7 +166,6 @@ export const Dashboard = () => {
   const onGetTotalSubproduct = async () => {
     try {
       const response = await dashboardService.getTotalAssetBySubProduct();
-      console.log("ini response subproduct ", response);
       setSubproduct(response.data);
     } catch (e) {
       console.log(e);
@@ -184,8 +175,6 @@ export const Dashboard = () => {
   const onGetTotalUniCluster = async () => {
     try {
       const response = await dashboardService.getTotalUnitAssetCluster();
-      console.log("ini response unit", response);
-
       if (response.status === "SUCCESS") {
         const chartData = {
           labels: response.data.map((data) => data.Cluster),
@@ -206,8 +195,6 @@ export const Dashboard = () => {
   const onGetTotalUniCluster2 = async () => {
     try {
       const response = await dashboardService.getTotalUnitAssetCluster();
-      console.log("ini response unit", response);
-
       if (response.status === "SUCCESS") {
         const chartData = {
           labels: response.data.slice(0, 5).map((data) => data.Cluster),
@@ -239,7 +226,6 @@ export const Dashboard = () => {
   const onGetAssetAlmostDeprecated = async (page) => {
     try {
       const response = await dashboardService.getAssetAlmostDeprecated(page);
-      console.log("response asset deprecated", response);
       response.count = formatCash(response.count);
       setCountAssetDeprecated(response.count);
       setPageCount(Math.ceil(response.count / 10));
@@ -261,7 +247,6 @@ export const Dashboard = () => {
   const onGetSumAssetValue = async () => {
     try {
       const response = await dashboardService.getSumAssetValue();
-      console.log("ini sum", response);
       if (response.data < 0) {
         format = "-" + formatCash(-1 * response.data);
       } else {
@@ -310,7 +295,6 @@ export const Dashboard = () => {
     <>
       <div className="dashboard-container">
         <div className="dashboard-card">
-          {/* <div className="content-dashboard"> */}
           <div className="content-dashboard-top">
             <div
               className="count-dashboard"
@@ -384,7 +368,6 @@ export const Dashboard = () => {
                 </a>
               </div>
             </div>
-            {/* </div> */}
           </div>
           <div className="content-dashboard-center">
             <div className="piechart">
@@ -437,7 +420,7 @@ export const Dashboard = () => {
                       <a> : </a>
                       <a>{data.event}</a>
                       <br />
-                      <a style={{ color: "white" }}>{data.CreatedAt}</a>
+                      <a style={{ color: "green" }}>{data.CreatedAt}</a>
                     </div>
                   ))
                 )}
@@ -445,16 +428,15 @@ export const Dashboard = () => {
             </div>
           </div>
           <div className="content-dashboard-bottom">
-            <div className="grafik-box" onClick={onClickViewSpending}>
+            <div title="Click to View Detail"  className="grafik-box" onClick={onClickViewSpending}>
               <BarChart index={"x"} chartData={chartData} />
             </div>
-            <div className="grafik-box" onClick={onClickViewUnit}>
+            <div title="Click to View Detail"  className="grafik-box" onClick={onClickViewUnit}>
               <BarChart index={"x"} chartData={unitClusterData2} />
             </div>
           </div>
         </div>
       </div>
-      {/* {isLoading && <Loading />} */}
 
       {viewDetailSpending && (
         <div className="view-spending-container">
@@ -488,7 +470,6 @@ export const Dashboard = () => {
           </div>
         </div>
       )}
-      {/* {isLoading && <AssetLoading/>} */}
     </>
   );
 };
