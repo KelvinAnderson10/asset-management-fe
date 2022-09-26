@@ -547,6 +547,7 @@ export const Overview = () => {
       }
       setDatas(response.data);
       setPageCount(Math.ceil(response.count / 10));
+      setTotalAsset(response.count)
       console.log(response);
     } catch (e) {
       console.log(e);
