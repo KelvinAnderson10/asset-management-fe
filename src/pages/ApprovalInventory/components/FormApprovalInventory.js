@@ -32,7 +32,7 @@ export const FormApprovalInventory = () => {
           item.vendor_selected = item.vendor_3;
           item.item_price_selected = Number(item.item_price_3);
         }
-        console.log("ini item", item);
+
         return { ...item, [event.target.name]: event.target.value };
       } else {
         return item;
@@ -58,7 +58,6 @@ export const FormApprovalInventory = () => {
     try {
       const response = await vendorService.getAllVendor();
       setVendor(response.data);
-      console.log(response.data);
     } catch (e) {
       console.log(e);
     } finally {
@@ -92,7 +91,7 @@ export const FormApprovalInventory = () => {
           const response = purchaseOrderService.deletePO(id);
           Swal.fire("Reject!", "This request has been rejected.", "success");
           navigate("/approval-data/inventory", { replace: true });
-          
+
           let pushNotifObj = {
             to: location.state.header.requester,
             title: `${PUSHNOTIF.REJECTED.TITLE} ${location.state.header.requester}`,
@@ -124,7 +123,6 @@ export const FormApprovalInventory = () => {
     try {
       const response = await purchaseOrderService.updatePO(id, status);
       setPOHeader(response.data);
-      console.log(response);
     } catch (e) {
       console.log(e.response);
     }
@@ -176,12 +174,11 @@ export const FormApprovalInventory = () => {
         location.state.detail[i].item_price_3 = Number(
           location.state.detail[i].item_price_3
         );
-        console.log("ini yg akan di submit", location.state.detail);
+
         const response = await purchaseOrderService.updatePODetail(
           location.state.detail[i].po_id_detail,
           location.state.detail[i]
         );
-        console.log(response);
       }
     } catch (e) {
       console.log(e);
@@ -189,7 +186,6 @@ export const FormApprovalInventory = () => {
       if (location.state.header.approverLevel3 == "-") {
         try {
           const response = await purchaseOrderService.approvedByLevel2(id);
-          console.log(location.state.header);
           setPOHeader(location.state.header);
           Swal.fire("Success!", "This request has been approved.", "success");
           navigate("/approval-data/inventory", { replace: true });
@@ -214,7 +210,6 @@ export const FormApprovalInventory = () => {
         }
       } else {
         try {
-          console.log("ini header", location.state.header);
           const response = await purchaseOrderService.approvedByLevel3(id);
           Swal.fire("Success!", "This request has been approved.", "success");
           navigate("/approval-data/inventory", { replace: true });
@@ -248,7 +243,6 @@ export const FormApprovalInventory = () => {
     try {
       const response = await generalSettingService.getGeneralSetting();
       setSetting(response.data);
-      console.log(response.data);
     } catch (e) {
       console.log(e);
     }

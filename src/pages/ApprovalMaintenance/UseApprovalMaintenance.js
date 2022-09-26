@@ -17,7 +17,6 @@ export const UseApprovalMaintenance = () => {
     setIsloading(true)
     try {
       const response = await purchaseOrderService.getPOListByApproval(name);
-      console.log("ini response get po", response);
       for (let i in response.data) {
         response.data[i].CreatedAt = moment(response.data[i].CreatedAt).format(
           "LL"
@@ -29,7 +28,7 @@ export const UseApprovalMaintenance = () => {
             response.data[i].is_approved_level3 == true
           ) {
             setAppData1((appData1) => [...appData1, response.data[i]]);
-            console.log("ini response data", response.data[i]);
+           
           } else if (
             (response.data[i].approver_level3 == "-" &&
               response.data[i].is_approved_level1 == true) ||
@@ -37,7 +36,7 @@ export const UseApprovalMaintenance = () => {
               response.data[i].is_approved_level2 == true)
           ) {
             setAppData((appData) => [...appData, response.data[i]]);
-            console.log("ini response data", response.data[i]);
+           
           }
         }
       }
@@ -48,8 +47,6 @@ export const UseApprovalMaintenance = () => {
     }
   };
 
-  console.log("ini app data", appData);
-  console.log("ini app data1", appData1);
 
   //Get User
   const { getCookie } = useAuth();
@@ -115,8 +112,7 @@ export const UseApprovalMaintenance = () => {
       setPOHeader(poHeaderInFunc);
 
       const response = await purchaseOrderService.getPODetailById(id);
-      console.log("ini id", id);
-      console.log("response", response);
+     
       for (let i in response.data) {
         if (response.data[i].ppn === true) {
           response.data[i].ppn = "1";
@@ -125,14 +121,14 @@ export const UseApprovalMaintenance = () => {
         }
       }
       setpoDetail(response.data);
-      console.log("po detail data", poDetail);
+
     } catch (e) {
       console.log(e);
     }
   };
 
   useEffect(() => {
-    console.log("detail po use effect", poDetail);
+
     if (poDetail.length != 0) {
       navigate("/approval-data/maintenance/form", {
         state: { header: poHeader, detail: poDetail },

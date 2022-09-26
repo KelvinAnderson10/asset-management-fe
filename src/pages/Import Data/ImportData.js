@@ -15,7 +15,6 @@ export const ImportData = () => {
   const [excelData, setExcelData] = useState([]);
   const [doneUploadExcel, setDoneUploadExcel] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [isLoadingscd, setIsLoadingscd] = useState(false);
   const [uploadBackendData, setUploadBackendData] = useState([]);
   const [upload, setUpload] = useState(true);
   const [fileName, setFileName] = useState("No file chosen");
@@ -71,11 +70,10 @@ export const ImportData = () => {
       reader.onload = (e) => {
         const data = e.target.result;
         const workbook = XLSX.read(data, { type: "array" });
-        const sheetName = workbook.SheetNames[0]; // Sheetnya, misal produk berarti di index ke 2
+        const sheetName = workbook.SheetNames[0]; 
         const worksheet = workbook.Sheets[sheetName];
         let json = XLSX.utils.sheet_to_json(worksheet);
         console.log(json);
-        // Notes : yang dikirim ke backend tetap const json, const excelData hanya untuk tampilan
         setExcelData(json);
 
         setUploadBackendData(json);
@@ -90,7 +88,6 @@ export const ImportData = () => {
   useEffect(() => {
     setDoneUploadExcel(true);
     setIsLoading(false);
-    setIsLoadingscd(false);
   }, [excelData]);
 
   //Event Log
