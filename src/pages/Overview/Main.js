@@ -71,9 +71,6 @@ export const Main = () => {
         <>
       <Sidebar>
         <div className='mainhome-container'>
-            {/* <div className='main-navbar-container'>
-            
-            </div> */}
             {assetList && <Overview/>}
         </div>
       </Sidebar>    

@@ -46,14 +46,12 @@ export const FormPOMaintenance = () => {
     const newData = { ...POHeader };
     newData[e.target.name] = e.target.value;
     setPOHeader(newData);
-    console.log(newData);
   };
 
   const handleFormChange = (event, index) => {
     let data = [...POdata];
     data[index][event.target.name] = event.target.value;
     setPOData(data);
-    console.log(POdata);
   };
   const [notifData, setNotifData] = useState({});
 
@@ -94,9 +92,7 @@ export const FormPOMaintenance = () => {
         POdata[i]["Biaya Lain-Lain"] = Number(POdata[i]["Biaya Lain-Lain"]);
       }
       POHeader.PurchaseOrderDetail = [...POdata];
-      console.log("ini merge", POHeader);
       const response = await purchaseOrderService.createPO(POHeader);
-      console.log("ini response", response);
       handleClearForm();
       if (response.status === "SUCCESS") {
         swal({

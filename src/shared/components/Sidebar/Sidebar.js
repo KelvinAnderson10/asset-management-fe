@@ -191,11 +191,6 @@ const routesUserGMSPVVP = [
     name: "Overview",
     icon: <FaHome />,
   },
-  // {
-  //   path: "/approval-data",
-  //   name: "Approval Data",
-  //   icon: <BsIcons.BsFillFileEarmarkCheckFill />,
-  // },
 ];
 
 const Sidebar = ({ children }) => {
@@ -276,7 +271,6 @@ const Sidebar = ({ children }) => {
   const onGetCountNotification = async (name) => {
     try {
       const response = await notificationService.countNotificationByUser(name);
-      console.log("ini response count notification", response);
       if (response.data > 99){
         setCountNotif('99+')
       }else{
@@ -296,7 +290,6 @@ const Sidebar = ({ children }) => {
   const onReadNotification = async (name) => {
     try {
       const response = await notificationService.readNotif(name);
-      console.log("ini response read notif", response);
       for (let i in response.data){
         response.data[i].CreatedAt = moment(response.data[i].CreatedAt).format("LL")
       }

@@ -2,7 +2,6 @@
     display: flex;
     background-color: whitesmoke;
     width: 97w;
-    /* height: 100%; */
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -15,7 +14,6 @@
     height: 8vh;
     background-color: white;
     border-radius: 1vh;
-    /* box-shadow: 1px 2px 2px 3px rgb(221, 219, 219); */
     display: flex;
     align-items: center;
     padding-left: 2vw;

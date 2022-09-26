@@ -15,13 +15,7 @@
   min-height: 88vh;
   flex-direction: column;
   border-radius: 10px;
-  /* box-shadow: 1px 2px 2px 3px rgb(221, 219, 219) */
 }
-
-/* .dashboard-card .content-dashboard {
-    width: 70%;
-    height: 100%;
-} */
 
 .dashboard-card .content-dashboard-top {
   width: 100%;
@@ -37,9 +31,7 @@
   width: 20vw;
   height: 15vh;
   border-radius: 20px;
-  /* border-width: 0.3vh; */
   border-color: rgb(200, 200, 200);
-  /* border-style: solid; */
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   display: flex;
   font-family: 'Roboto';
@@ -176,7 +168,6 @@
   border-radius: 3vh;
   margin-left: 2.5vw;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-  /* padding-bottom: 1.6vh; */
 }
 .eventlog-container .title-recent h5 {
   display: flex;

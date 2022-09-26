@@ -10,9 +10,7 @@
   background-color: whitesmoke;
 }
 main {
-  /* padding: 20px; */
   width: 100%;
-  /* padding-left: 20px; */
 }
 
 .title {
@@ -26,7 +24,6 @@ main {
   background: #b70621;
   color: white;
   min-height: 100vh;
-  /* overflow-y: auto; */
 }
 
 .top_section {
@@ -120,7 +117,6 @@ main {
   background: rgb(255, 255, 255);
   height: 7vh;
   color: #b70621;
-  /* align-items: flex-end; */
   justify-content: space-between;
   padding-right: 2%;
   font-size: 1.5em;
