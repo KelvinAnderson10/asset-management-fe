@@ -77,5 +77,15 @@ export const dashboardService = ({ doGet }) => {
     }
   };
 
-  return {getTotalUnitAssetCluster, getTotalPOByStatus, getTotalAssetBySubProduct, getAllCountAsset, getTotalSpendingCluster, getTotalPO,getAssetAlmostDeprecated,getSumAssetValue };
+  const getAllDeprecated = async () => {
+    try {
+      return await doGet({
+        url: "api/asset/deprecated",
+      });
+    } catch (e) {
+      throw e;
+    }
+  };
+
+  return {getAllDeprecated,getTotalUnitAssetCluster, getTotalPOByStatus, getTotalAssetBySubProduct, getAllCountAsset, getTotalSpendingCluster, getTotalPO,getAssetAlmostDeprecated,getSumAssetValue };
 };

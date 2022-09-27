@@ -7,6 +7,8 @@ import "./TableAssetDep.css";
 import * as MdIcons from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { ExportToExcel } from "../../../shared/components/ExportExcel/ExportToExcel";
+import { CSVLink, CSVDownload } from "react-csv";
+import json2csv from "json2csv";
 
 export const TableAssetDeprecated = () => {
   const [datas, setDatas] = useState([]);
@@ -14,11 +16,7 @@ export const TableAssetDeprecated = () => {
   const [pageCount, setPageCount] = useState(0);
   const [totalAsset, setTotalAsset] = useState(0);
 
-  useEffect(() => {
-    onGetAssetAlmostDeprecated(1);
-  }, []);
-
-  const [page, setPage] = useState()
+  const [page, setPage] = useState();
   const handlePageClick = async (data) => {
     let currentPage = data.selected + 1;
     onGetAssetAlmostDeprecated(currentPage);
@@ -33,7 +31,7 @@ export const TableAssetDeprecated = () => {
   const onGetAssetAlmostDeprecated = async (page) => {
     try {
       const response = await dashboardService.getAssetAlmostDeprecated(page);
-      setPage(page)
+      setPage(page);
       for (let i in response.data) {
         response.data[i]["Harga Perolehan"] =
           "Rp" + thousands_separators(response.data[i]["Harga Perolehan"]);
@@ -64,28 +62,86 @@ export const TableAssetDeprecated = () => {
       console.log(e);
     }
   };
+  useEffect(() => {
+    onGetAssetAlmostDeprecated(1);
+    onGetAllAssetAlmostDeprecated();
+  }, []);
 
-  const navigate = useNavigate()
-  const onClickBack = ()=>{
-    navigate('/main', {replace: true})
-  }
+  const [header, setHeader] = useState([])
+  const [allAsset, setAllAsset] = useState([]);
+  const onGetAllAssetAlmostDeprecated = async () => {
+    try {
+      const response = await dashboardService.getAllDeprecated();
+      console.log("ini response all", response.data);
+      setHeader([
+        { label: "Tanggal Pembelian", key: "Tanggal Output" },
+        { label: "Tahun", key: "Tahun" },
+        { label: "No. PO / Dokumen Pendukung", key: "No. PO / Dokumenen Pendukung" },
+        { label: "Vendor", key: "Vendor" },
+        { label: "Nama Barang", key: "Nama Barang" },
+        { label: "Harga Perolehan", key: "Harga Perolehan" },
+        { label: "PPN", key: "PPN" },
+        { label: "Biaya Lain-Lain", key: "Biaya Lain-Lain" },
+        { label: "Total Harga Perolehan", key: "Total Harga Perolehan" },
+        { label: "Jenis Produk", key: "Jenis Produk" },
+        { label: "Kategori Jenis Produk", key: "Kategori Jenis Produk" },
+        { label: "Kategori Aset Tetap", key: "Kategori Aset Tetap" },
+        { label: "BAST", key: "BAST Output" },
+        { label: "Kondisi", key: "Kondisi" },
+        { label: "Insurance", key: "Insurance" },
+        { label: "Lokasi", key: "Lokasi" },
+        { label: "User", key: "User"},
+        { label: "Jabatan", key: "Jabatan" },
+        { label: "Initisal", key: "Initisal" },
+        { label: "Kode Wilayah", key: "Kode Wilayah" },
+        { label: "Kode Asset", key: "Kode Asset" },
+        { label: "Tahun Pembelian", key: "Tahun Pembelian" },
+        { label: "Kode Urut barang", key: "Kode Urut barang" },
+        { label: "Nomor Asset", key: "Nomor Asset" },
+        { label: "Masa Manfaat (Bulan)", key: "Masa Manfaat (Bulan)" },
+        { label: "Penyusutan Perbulan", key: "Penyusutan Perbulan" },
+        { label: "Total Bulan Penyusutan", key: "Total Bulan Penyusutan" },
+        { label: "Total Penyusutan", key: "Tanggal Output" },
+        { label: "Nilai Asset saat ini", key: "Nilai Asset saat ini" },
+        { label: "Tipe", key: "Tipe" },
+        
+    ])
+      setAllAsset(response.data);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
-  const fileName =  `asset-almost-deprecated ${page}`
+  const navigate = useNavigate();
+  const onClickBack = () => {
+    navigate("/main", { replace: true });
+  };
+
+  console.log("ini header", header);
 
   return (
     <div>
       <Sidebar>
         <div className="overview-container-deprecated">
           <div className="overview-card-deprecated">
-            <div className="title-deprecated"><MdIcons.MdOutlineArrowBackIosNew
-                  color="black"
-                  onClick={onClickBack}
-                  style={{ cursor: "pointer", marginRight:'5px'}}
-                />List Asset Almost Deprecated
-                <div className="download-excel">
-                <ExportToExcel apiData={datas} fileName={fileName} />
-                </div> 
-                </div>
+            <div className="title-deprecated">
+              <MdIcons.MdOutlineArrowBackIosNew
+                color="black"
+                onClick={onClickBack}
+                style={{ cursor: "pointer", marginRight: "5px" }}
+              />
+              List Asset Almost Deprecated
+              <div className="download-excel">
+                <CSVLink
+                  data={allAsset}
+                  headers={header}
+                  filename={"asset-almost-deprecated.csv"}
+                  className="btn btn-primary"
+                >
+                  Download here
+                </CSVLink>
+              </div>
+            </div>
             <div className="pagination-deprecated">
               <div className="clearfix">
                 Showing {datas.length} out of {totalAsset}
@@ -154,6 +210,8 @@ export const TableAssetDeprecated = () => {
                       <th style={{ minWidth: "240px" }}>
                         Current Asset Value{" "}
                       </th>
+                      <th style={{ minWidth: "240px" }}>Tracking Number </th>
+                      <th style={{ minWidth: "240px" }}>Type </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -194,6 +252,8 @@ export const TableAssetDeprecated = () => {
                           <td>{data["Total Bulan Penyusutan"]}</td>
                           <td>{data["Total Penyusutan"]}</td>
                           <td>{data["Nilai Asset saat ini"]}</td>
+                          <td>{data["Nomor Resi"]}</td>
+                          <td>{data.Tipe}</td>
                         </tr>
                       ))
                     )}

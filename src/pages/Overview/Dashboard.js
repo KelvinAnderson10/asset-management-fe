@@ -73,7 +73,6 @@ export const Dashboard = () => {
           ).format("YYYY-MM-DD HH:MM A");
         }
         setEvent(response.data);
-        console.log(response.data);
       }
     } catch (e) {
       console.log(e);
@@ -94,11 +93,11 @@ export const Dashboard = () => {
     onGetTotalUniCluster2();
   }, [user.role]);
 
-  const [dataCluster, setDataCLuster] = useState({})
+  const [dataCluster, setDataCLuster] = useState({});
   const onGetTotalSpenCluster = async () => {
     try {
       const response = await dashboardService.getTotalSpendingCluster();
-      setDataCLuster(response.data)
+      setDataCLuster(response.data);
       if (response.status === "SUCCESS") {
         const chartData = {
           labels: response.data.slice(0, 5).map((data) => data.Cluster),
@@ -282,13 +281,12 @@ export const Dashboard = () => {
     setViewDetailUnit(false);
   };
 
-  const navigate = useNavigate()
-  const onClickViewAssetDep = ()=>{
-    navigate('/main/tableassetdeprecated', {replace: false})
+  const navigate = useNavigate();
+  const onClickViewAssetDep = () => {
+    navigate("/main/tableassetdeprecated", { replace: false });
+  };
 
-  }
-
-  const fileName =  'total-asset-spending-by-cluster'
+  const fileName = "total-asset-spending-by-cluster";
 
   document.querySelector("body").style.overflow = "auto";
   return (
@@ -363,7 +361,9 @@ export const Dashboard = () => {
               </div>
               <div className="content-non-icon">
                 <a className="count-number">{sumAssetValue} </a>
-                <a style={{ color: "white", fontSize: "20px", marginTop:'8px' }}>
+                <a
+                  style={{ color: "white", fontSize: "20px", marginTop: "8px" }}
+                >
                   Sum Asset Value
                 </a>
               </div>
@@ -412,7 +412,7 @@ export const Dashboard = () => {
 
               <div className="eventlog-box">
                 {event.length === 0 ? (
-                  <p></p>
+                  <p>No Recent Activity</p>
                 ) : (
                   event.map((data) => (
                     <div className="eventlog-box-content">
@@ -420,7 +420,9 @@ export const Dashboard = () => {
                       <a> : </a>
                       <a>{data.event}</a>
                       <br />
-                      <a style={{ color: "green" }}>{data.CreatedAt}</a>
+                      <a style={{ color: "grey", fontSize: "12px" }}>
+                        {data.CreatedAt}
+                      </a>
                     </div>
                   ))
                 )}
@@ -428,10 +430,18 @@ export const Dashboard = () => {
             </div>
           </div>
           <div className="content-dashboard-bottom">
-            <div title="Click to View Detail"  className="grafik-box" onClick={onClickViewSpending}>
+            <div
+              title="Click to View Detail"
+              className="grafik-box"
+              onClick={onClickViewSpending}
+            >
               <BarChart index={"x"} chartData={chartData} />
             </div>
-            <div title="Click to View Detail"  className="grafik-box" onClick={onClickViewUnit}>
+            <div
+              title="Click to View Detail"
+              className="grafik-box"
+              onClick={onClickViewUnit}
+            >
               <BarChart index={"x"} chartData={unitClusterData2} />
             </div>
           </div>
@@ -442,15 +452,15 @@ export const Dashboard = () => {
         <div className="view-spending-container">
           <div className="box-spending-cluster-detail">
             <div className="box-spending-header">
-            <div className="download-excel">
-              <ExportToExcel apiData={dataCluster} fileName={fileName} />
-            </div>
-            <div className="close-spending">
-              <CgIcons.CgClose
-                size={"2em"}
-                onClick={onClickCloseViewSpending}
-              />
-            </div>
+              <div className="download-excel">
+                <ExportToExcel apiData={dataCluster} fileName={fileName} />
+              </div>
+              <div className="close-spending">
+                <CgIcons.CgClose
+                  size={"2em"}
+                  onClick={onClickCloseViewSpending}
+                />
+              </div>
             </div>
             <div>
               <BarChart index={"y"} chartData={chartData2} />

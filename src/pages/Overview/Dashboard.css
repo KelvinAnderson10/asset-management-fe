@@ -83,7 +83,7 @@
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   padding-top: 1vh;
-  padding-bottom: 2vh;
+  padding-bottom: 1.5vh;
 }
 .piechart .title-piechart {
   font-family: "Roboto";
@@ -195,7 +195,7 @@
   font-family: "Poppins";
   background-color: #ffdcdc;
   width: 100%;
-  height: 15%;
+  height: 18%;
   border-radius: 1vh;
   margin-top: 0.5vh;
   padding-left: 1vw;

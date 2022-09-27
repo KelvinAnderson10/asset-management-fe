@@ -125,6 +125,7 @@ export const AssetItem = () => {
         user: user.name,
       };
       createEventLogAssetItem(event);
+      document.querySelector("body").style.overflow = "auto";
 
       clearForm();
     } catch (error) {
@@ -133,7 +134,7 @@ export const AssetItem = () => {
     } finally {
       e.target.reset();
       setIsLoading(false);
-      document.querySelector("body").style.overflow = "auto";
+      
     }
   };
 

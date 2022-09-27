@@ -7,6 +7,7 @@ import * as BsIcons from 'react-icons/bs'
 import * as AiIcons from 'react-icons/ai'
 import Loading from '../../../shared/components/Loading/Loading'
 import { NoData } from '../../../shared/components/NoData/NoData'
+import moment from "moment";
 
 export const ListPOInventory = () => {
     const [poData, setPOData] = useState([])
@@ -21,6 +22,9 @@ export const ListPOInventory = () => {
         const response = await purchaseOrderService.getPOByRequester(name)
         for (let i in response.data) {
           if (response.data[i].tipe == "Inventory"){
+            response.data[i].CreatedAt = moment(response.data[i].CreatedAt).format(
+              "LL"
+            );
             setPOData((poData) => [...poData, response.data[i]])
           }
         }
@@ -323,6 +327,11 @@ export const ListPOInventory = () => {
                                                   }
                                                 </div>                             
                                             </div>
+                                    </div>
+                                    <div>
+                                      <br></br>
+                                      <br></br>
+                                      <a style={{fontSize:'16px'}} >{data.CreatedAt}</a> 
                                     </div>
                                     </div>
                                 </div>
