@@ -73,7 +73,7 @@ export const ImportData = () => {
         const sheetName = workbook.SheetNames[0]; 
         const worksheet = workbook.Sheets[sheetName];
         let json = XLSX.utils.sheet_to_json(worksheet);
-        console.log(json);
+       
         setExcelData(json);
 
         setUploadBackendData(json);

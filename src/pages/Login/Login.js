@@ -34,7 +34,6 @@ export const Login = () => {
    e.preventDefault()
     try {
       const response = await userService.getUserByEmail(email); 
-      console.log(response)
       setEmail(response.data.email);
       setUser(prevObj=>({...prevObj,name:(response.data.name), role:(response.data.role), level_approval:(response.data.level_approval), location_id:(response.data.location_id), tap:(response.data.TAP), cluster:(response.data.Cluster), department:(response.data.department)}))
       setOTP(response.otp);
@@ -42,7 +41,7 @@ export const Login = () => {
     } catch (error) {
       Failed("Email not registered yet, Please input a valid email");
     } finally {
-      console.log("ini OTP",OTP)
+      
       setLoading(false)
     }
   };
