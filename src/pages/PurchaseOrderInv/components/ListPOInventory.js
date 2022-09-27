@@ -328,9 +328,7 @@ export const ListPOInventory = () => {
                                                 </div>                             
                                             </div>
                                     </div>
-                                    <div>
-                                      <br></br>
-                                      <br></br>
+                                    <div className='date-request'>
                                       <a style={{fontSize:'16px'}} >{data.CreatedAt}</a> 
                                     </div>
                                     </div>

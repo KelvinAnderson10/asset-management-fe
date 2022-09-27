@@ -218,4 +218,9 @@
     outline: none;
 }
 
+.po-mtnc-list-box-item .date-request{
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 5vh;
+}
   
