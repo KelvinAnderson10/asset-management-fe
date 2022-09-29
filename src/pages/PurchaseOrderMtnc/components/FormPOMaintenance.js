@@ -4,6 +4,7 @@ import { useDeps } from "../../../shared/context/DependencyContext";
 import "./FormPOMaintenance.css";
 import swal from "sweetalert";
 import { NOTIF, PUSHNOTIF, STATUS } from "../../../shared/constants";
+import { Failed } from "../../../shared/components/Notification/Failed";
 
 export const FormPOMaintenance = () => {
   const [POdata, setPOData] = useState([
@@ -62,7 +63,6 @@ export const FormPOMaintenance = () => {
       setNotifData(response.data);
     } catch (e) {
       console.log(e);
-    } finally {
     }
   };
 
@@ -72,7 +72,6 @@ export const FormPOMaintenance = () => {
       setNotifData(response.data);
     } catch (e) {
       console.log(e);
-    } finally {
     }
   };
 
@@ -117,10 +116,10 @@ export const FormPOMaintenance = () => {
         body: `${NOTIF.REQUEST.BODY} ${user.name}`,
       };
       createNotification(notifObj);
+      e.target.reset();
     } catch (error) {
       console.log(error);
-    } finally {
-      e.target.reset();
+      Failed("Your data failed to save");
     }
   };
 
@@ -131,7 +130,6 @@ export const FormPOMaintenance = () => {
       setSubProductName(response.data);
     } catch (e) {
       console.log(e);
-    } finally {
     }
   };
 
@@ -144,7 +142,6 @@ export const FormPOMaintenance = () => {
       setVendor(response.data);
     } catch (e) {
       console.log(e);
-    } finally {
     }
   };
 
@@ -176,7 +173,7 @@ export const FormPOMaintenance = () => {
 
   const handleClearForm = () => {
     setPOHeader({});
-    setPOData([0]);
+    setPOData([{}]);
   };
 
   return (
