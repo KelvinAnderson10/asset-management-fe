@@ -1,4 +1,4 @@
-export const apiClientFactory = (client, firestore, exponotification) => {
+export const apiClientFactory = (client) => {
   const doPost = async ({ url = "", data = null }) => {
     try {
       const response = await client.post(url, data);
@@ -34,22 +34,8 @@ export const apiClientFactory = (client, firestore, exponotification) => {
       throw error;
     }
   };
-  const firestoreNotification = async ({ url = "", data = null }) => {
-    try {
-      const response = await firestore.post(url, data);
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
-  };
 
-  const expoNotification = async ({ url = "", data = null }) => {
-    try {
-      const response = await exponotification.post(url, data);
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
-  };
-  return { doPost, doGet, doPut, doDelete, expoNotification,firestoreNotification};
+
+
+  return { doPost, doGet, doPut, doDelete};
 };
