@@ -15,6 +15,7 @@ export const FormApprovalMaintence = () => {
     notificationService,
     purchaseOrderService,
     generalSettingService,
+    userService,
   } = useDeps();
 
   const handleFormChange = (event, index) => {
@@ -76,12 +77,12 @@ export const FormApprovalMaintence = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         try {
-          const response = purchaseOrderService.deletePO(id);
-          Swal.fire("Reject!", "This request has been rejected.", "success");
-          navigate("/approval-data/maintenance", { replace: true });
+          const reject = async ()=>{
+            const response = await purchaseOrderService.deletePO(id);
 
+          const user = await userService.getUserByName(location.state.header.requester)
           let pushNotifObj = {
-            to: location.state.header.requester,
+            to: user.data.token,
             title: `${PUSHNOTIF.REJECTED.TITLE} ${location.state.header.requester}`,
             body: PUSHNOTIF.REJECTED.BODY,
           };
@@ -93,6 +94,11 @@ export const FormApprovalMaintence = () => {
             body: NOTIF.REJECTED.BODY,
           };
           createNotification(notifObj);
+          Swal.fire("Reject!", "This request has been rejected.", "success");
+          navigate("/approval-data/maintenance", { replace: true });
+         
+          }
+          reject()
           
         } catch (e) {
           console.log(e.response);
@@ -182,39 +188,38 @@ export const FormApprovalMaintence = () => {
           location.state.header.status = STATUS.APPROVE_GA_IT;
          
           setPOHeader(location.state.header);
-          Swal.fire("Success!", "This request has been approved.", "success");
-          navigate("/approval-data/maintenance", { replace: true });
-        } catch (e) {
-          console.log(e.response);
-          Failed("Failed to approved");
-        } finally {
           updateStatus(id, { status: STATUS.APPROVE_GA_IT });
+
+          const user = await userService.getUserByName(location.state.header.requester)
           let pushNotifObj = {
-            to: location.state.header.requester,
+            to: user.data.token ,
             title: `${PUSHNOTIF.APPROVED.TITLE} ${location.state.header.requester}`,
             body: PUSHNOTIF.APPROVED.BODY,
           };
           createPushNotification(pushNotifObj);
-
+  
           let notifObj = {
             to: location.state.header.requester,
             title: NOTIF.APPROVED.TITLE,
             body: NOTIF.APPROVED.BODY,
           };
           createNotification(notifObj);
+          Swal.fire("Success!", "This request has been approved.", "success");     
+          navigate("/approval-data/maintenance", { replace: true });
+          
+        } catch (e) {
+          console.log(e.response);
+          Failed("Failed to approved");
         }
       } else {
         try {
           const response = await purchaseOrderService.approvedByLevel3(id);
-          Swal.fire("Success!", "This request has been approved.", "success");
-          navigate("/approval-data/maintenance", { replace: true });
-        } catch (e) {
-          console.log(e.response);
-          Failed("Failed to approved");
-        } finally {
           updateStatus(id, { status: STATUS.APPROVE_GA_IT });
+
+          const user = await userService.getUserByName(location.state.header.requester)
+
           let pushNotifObj = {
-            to: location.state.header.requester,
+            to: user.data.token,
             title:
               PUSHNOTIF.APPROVED.TITLE + `${location.state.header.requester}`,
             body: PUSHNOTIF.APPROVED.BODY,
@@ -227,7 +232,13 @@ export const FormApprovalMaintence = () => {
             body: NOTIF.APPROVED.BODY,
           };
           createNotification(notifObj);
-        }
+          Swal.fire("Success!", "This request has been approved.", "success");
+          navigate("/approval-data/maintenance", { replace: true });
+
+        } catch (e) {
+          console.log(e.response);
+          Failed("Failed to approved");
+        } 
       }
     }
   };

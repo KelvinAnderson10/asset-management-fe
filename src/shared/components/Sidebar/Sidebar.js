@@ -615,7 +615,6 @@ const Sidebar = ({ children }) => {
                   {user.name} <b className="caret"></b>
                 </a>
                 <div className="dropdown-menu">
-                  <div className="divider dropdown-divider"></div>
                   <a onClick={onLogout} className="dropdown-item">
                     <i className="material-icons">&#xE8AC;</i> Logout
                   </a>

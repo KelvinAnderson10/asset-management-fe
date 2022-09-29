@@ -17,6 +17,7 @@ export const FormApprovalInventory = () => {
     notificationService,
     purchaseOrderService,
     generalSettingService,
+    userService,
   } = useDeps();
 
   const handleFormChange = (event, index) => {
@@ -88,23 +89,28 @@ export const FormApprovalInventory = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         try {
-          const response = purchaseOrderService.deletePO(id);
-          Swal.fire("Reject!", "This request has been rejected.", "success");
-          navigate("/approval-data/inventory", { replace: true });
+          const reject = async () => {
+            const response = await purchaseOrderService.deletePO(id);
+            const user = await userService.getUserByName(
+              location.state.header.requester
+            );
+            let pushNotifObj = {
+              to: user.data.token,
+              title: `${PUSHNOTIF.REJECTED.TITLE} ${location.state.header.requester}`,
+              body: PUSHNOTIF.REJECTED.BODY,
+            };
+            createPushNotification(pushNotifObj);
 
-          let pushNotifObj = {
-            to: location.state.header.requester,
-            title: `${PUSHNOTIF.REJECTED.TITLE} ${location.state.header.requester}`,
-            body: PUSHNOTIF.REJECTED.BODY,
+            let notifObj = {
+              to: location.state.header.requester,
+              title: NOTIF.REJECTED.TITLE,
+              body: NOTIF.REJECTED.BODY,
+            };
+            createNotification(notifObj);
+            Swal.fire("Reject!", "This request has been rejected.", "success");
+            navigate("/approval-data/inventory", { replace: true });
           };
-          createPushNotification(pushNotifObj);
-
-          let notifObj = {
-            to: location.state.header.requester,
-            title: NOTIF.REJECTED.TITLE,
-            body: NOTIF.REJECTED.BODY,
-          };
-          createNotification(notifObj);
+          reject();
         } catch (e) {
           console.log(e.response);
           Failed("Failed to reject");
@@ -187,15 +193,12 @@ export const FormApprovalInventory = () => {
         try {
           const response = await purchaseOrderService.approvedByLevel2(id);
           setPOHeader(location.state.header);
-          Swal.fire("Success!", "This request has been approved.", "success");
-          navigate("/approval-data/inventory", { replace: true });
-        } catch (e) {
-          console.log(e.response);
-          Failed("Failed to approved");
-        } finally {
           updateStatus(id, { status: STATUS.APPROVE_GA_IT });
+          const user = await userService.getUserByName(
+            location.state.header.requester
+          );
           let pushNotifObj = {
-            to: location.state.header.requester,
+            to: user.data.token,
             title: `${PUSHNOTIF.APPROVED.TITLE} ${location.state.header.requester}`,
             body: PUSHNOTIF.APPROVED.BODY,
           };
@@ -207,19 +210,21 @@ export const FormApprovalInventory = () => {
             body: NOTIF.APPROVED.BODY,
           };
           createNotification(notifObj);
-        }
-      } else {
-        try {
-          const response = await purchaseOrderService.approvedByLevel3(id);
           Swal.fire("Success!", "This request has been approved.", "success");
           navigate("/approval-data/inventory", { replace: true });
         } catch (e) {
           console.log(e.response);
           Failed("Failed to approved");
-        } finally {
+        }
+      } else {
+        try {
+          const response = await purchaseOrderService.approvedByLevel3(id);
           updateStatus(id, { status: STATUS.APPROVE_GA_IT });
+          const user = await userService.getUserByName(
+            location.state.header.requester
+          );
           let pushNotifObj = {
-            to: location.state.header.requester,
+            to: user.data.token,
             title:
               PUSHNOTIF.APPROVED.TITLE + `${location.state.header.requester}`,
             body: PUSHNOTIF.APPROVED.BODY,
@@ -232,6 +237,11 @@ export const FormApprovalInventory = () => {
             body: NOTIF.APPROVED.BODY,
           };
           createNotification(notifObj);
+          Swal.fire("Success!", "This request has been approved.", "success");
+          navigate("/approval-data/inventory", { replace: true });
+        } catch (e) {
+          console.log(e.response);
+          Failed("Failed to approved");
         }
       }
     }

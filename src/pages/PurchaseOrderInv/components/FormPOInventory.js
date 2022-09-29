@@ -35,6 +35,7 @@ export const FormPOInventory = () => {
     vendorService,
     purchaseOrderService,
     notificationService,
+    userService,
   } = useDeps();
 
   useEffect(() => {
@@ -99,6 +100,8 @@ export const FormPOInventory = () => {
     }
   };
 
+
+
   const onSubmitPO = async (e) => {
     e.preventDefault();
     try {
@@ -126,8 +129,10 @@ export const FormPOInventory = () => {
           button: "OK!",
         });
 
+        const user = await userService.getUserByName(response.data.approver_level1)
+
         let pushNotifObj = {
-          to: response.data.approver_level1 ,
+          to: user.data.token,
           title: `${PUSHNOTIF.REQUEST.TITLE} ${response.data.approver_level1}`,
           body: `${PUSHNOTIF.REQUEST.BODY} ${user.name}`,
         };
