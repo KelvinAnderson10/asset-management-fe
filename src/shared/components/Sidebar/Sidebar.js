@@ -304,8 +304,7 @@ const Sidebar = ({ children }) => {
 
   const navigate = useNavigate();
   const onLogout = () => {
-    eraseCookie();
-    navigate("/", { replace: true });
+    eraseCookie();  
   };
 
   const onClickViewNotif = () => {

@@ -36,6 +36,7 @@ export const AuthProvider = ({children}) => {
         // document.cookie = name + '=; Max-Age=0'
         // document.cookie = "OTP= ; expires = Thu, 01 Jan 1970 00:00:00 GMT" 
         document.cookie = "user= ; expires = Thu, 01 Jan 1970 00:00:00 GMT"
+        navigate("/", { replace: true });
         } 
     return (
         <AuthContext.Provider value={{userOTP,setCookie,eraseCookie,getCookie}}>
