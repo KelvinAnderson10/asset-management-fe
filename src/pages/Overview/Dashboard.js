@@ -16,8 +16,8 @@ export const Dashboard = () => {
   const [countAsset, setCountAsset] = useState(0);
   const { getCookie } = useAuth();
   const [countAssetDeprecated, setCountAssetDeprecated] = useState(0);
-  const [totalPO, setTotalPO] = useState(0);
   const [sumAssetValue, setsumAssetValue] = useState(0);
+  const [assetBroken, setAssetBroken] = useState(0)
   const [chartData, setChartData] = useState({ labels: [], datasets: [{}] });
   const [chartData2, setChartData2] = useState({ labels: [], datasets: [{}] });
   const [unitClusterData, setUnitClusterData] = useState({
@@ -83,7 +83,7 @@ export const Dashboard = () => {
     getAllEventLog();
     onGetTotalAsset();
     onGetAssetAlmostDeprecated();
-    onGetTotalPO();
+    onGetAssetBroken();
     onGetSumAssetValue();
     onGetTotalSpenCluster();
     onGetTotalUniCluster();
@@ -233,15 +233,19 @@ export const Dashboard = () => {
     }
   };
 
-  const onGetTotalPO = async () => {
+
+  const onGetAssetBroken = async ()=>{
     try {
-      const response = await dashboardService.getTotalPO();
+      const response = await dashboardService.getAssetBrokenBeforeLifetime();
       response.data = formatCash(response.data);
-      setTotalPO(response.data);
-    } catch (e) {
-      console.log(e);
+      setAssetBroken(response.data)
+    }catch(e){
+      console.log(e)
     }
-  };
+  }
+
+
+
   let format;
   const onGetSumAssetValue = async () => {
     try {
@@ -343,9 +347,9 @@ export const Dashboard = () => {
                 <i class="fa fa-shopping-bag" style={{ color: "white" }}></i>
               </div>
               <div className="content-non-icon">
-                <a className="count-number">{totalPO} </a>
+                <a className="count-number">{assetBroken} </a>
                 <a style={{ color: "white", fontSize: "20px" }}>
-                  Total Purchase Order
+                  Total Asset Broken 
                 </a>
               </div>
             </div>

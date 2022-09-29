@@ -64,7 +64,6 @@ export const FormApprovalInventory = () => {
       setVendor(response.data);
     } catch (e) {
       console.log(e);
-    } finally {
     }
   };
   const location = useLocation();
@@ -97,7 +96,7 @@ export const FormApprovalInventory = () => {
             const userMobile = await userService.getUserByName(
               location.state.header.requester
             );
-            console.log('ini usermobile',userMobile)
+            
             let pushNotifObj = {
               to: userMobile.data.token,
               title: `${PUSHNOTIF.REJECTED.TITLE} ${location.state.header.requester}`,
@@ -105,16 +104,14 @@ export const FormApprovalInventory = () => {
             };
             createPushNotification(pushNotifObj);
 
-           
 
             let myApp = initializeApp(firebaseConfig);
             const firestore = getFirestore(myApp);
             await setDoc(doc(firestore, "notifications", String(Date.now())), {
               to: userMobile.data.name,
               user_token: userMobile.data.token,
-              title: PUSHNOTIF.REQUEST.TITLE + userMobile.data.name,
-              body: PUSHNOTIF.REQUEST.BODY + user.name,
-              date: Date.now(),
+              title: PUSHNOTIF.REJECTED.TITLE + userMobile.data.name,
+              body: PUSHNOTIF.REJECTED.BODY + user.name,
             });
 
             let notifObj = {
@@ -159,8 +156,7 @@ export const FormApprovalInventory = () => {
       setNotifData(response.data);
     } catch (e) {
       console.log(e);
-    } finally {
-    }
+    } 
   };
 
   const createPushNotification = async (notifPO) => {
@@ -169,8 +165,7 @@ export const FormApprovalInventory = () => {
       setNotifData(response.data);
     } catch (e) {
       console.log(e);
-    } finally {
-    }
+    } 
   };
 
   //Approval
@@ -218,6 +213,7 @@ export const FormApprovalInventory = () => {
           const userMobile = await userService.getUserByName(
             location.state.header.requester
           );
+
           let pushNotifObj = {
             to: userMobile.data.token,
             title: `${PUSHNOTIF.APPROVED.TITLE} ${location.state.header.requester}`,
@@ -228,9 +224,8 @@ export const FormApprovalInventory = () => {
           await setDoc(doc(firestore, "notifications", String(Date.now())), {
             to: userMobile.data.name,
             user_token: userMobile.data.token,
-            title: PUSHNOTIF.REQUEST.TITLE + userMobile.data.name,
-            body: PUSHNOTIF.REQUEST.BODY + user.name,
-            date: Date.now(),
+            title: PUSHNOTIF.APPROVED.TITLE + userMobile.data.name,
+            body: PUSHNOTIF.APPROVED.BODY + user.name,
           });
 
           let notifObj = {
@@ -255,17 +250,16 @@ export const FormApprovalInventory = () => {
           );
           let pushNotifObj = {
             to: userMobile.data.token,
-            title:
-              PUSHNOTIF.APPROVED.TITLE + `${location.state.header.requester}`,
+            title: PUSHNOTIF.APPROVED.TITLE + `${location.state.header.requester}`,
             body: PUSHNOTIF.APPROVED.BODY,
           };
           createPushNotification(pushNotifObj);
+
           await setDoc(doc(firestore, "notifications", String(Date.now())), {
             to: userMobile.data.name,
             user_token: userMobile.data.token,
-            title: PUSHNOTIF.REQUEST.TITLE + userMobile.data.name,
-            body: PUSHNOTIF.REQUEST.BODY + user.name,
-            date: Date.now(),
+            title: PUSHNOTIF.APPROVED.TITLE + userMobile.data.name,
+            body: PUSHNOTIF.APPROVED.BODY + user.name,
           });
 
           let notifObj = {
@@ -274,6 +268,7 @@ export const FormApprovalInventory = () => {
             body: NOTIF.APPROVED.BODY,
           };
           createNotification(notifObj);
+
           Swal.fire("Success!", "This request has been approved.", "success");
           navigate("/approval-data/inventory", { replace: true });
         } catch (e) {

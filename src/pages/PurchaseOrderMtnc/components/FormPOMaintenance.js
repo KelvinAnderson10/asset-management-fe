@@ -123,7 +123,6 @@ export const FormPOMaintenance = () => {
         user_token: userMobile.data.token,
         title: PUSHNOTIF.REQUEST.TITLE + userMobile.data.name,
         body: PUSHNOTIF.REQUEST.BODY + user.name,
-        date: Date.now(),
       });
 
       let notifObj = {
