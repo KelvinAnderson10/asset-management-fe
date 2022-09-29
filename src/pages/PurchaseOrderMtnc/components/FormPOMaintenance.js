@@ -5,6 +5,9 @@ import "./FormPOMaintenance.css";
 import swal from "sweetalert";
 import { NOTIF, PUSHNOTIF, STATUS } from "../../../shared/constants";
 import { Failed } from "../../../shared/components/Notification/Failed";
+import { firebaseConfig } from "../../../shared/firebaseClient";
+import { initializeApp } from "firebase/app";
+import { getFirestore, setDoc, doc } from "firebase/firestore";
 
 export const FormPOMaintenance = () => {
   const [POdata, setPOData] = useState([
@@ -94,6 +97,8 @@ export const FormPOMaintenance = () => {
       POHeader.PurchaseOrderDetail = [...POdata];
       const response = await purchaseOrderService.createPO(POHeader);
       handleClearForm();
+      let myApp = initializeApp(firebaseConfig);
+      const firestore = getFirestore(myApp);
       if (response.status === "SUCCESS") {
         swal({
           title: "Success!",
@@ -102,13 +107,24 @@ export const FormPOMaintenance = () => {
           button: "OK!",
         });
       }
-      const user = await userService.getUserByName(response.data.approver_level1) 
+      const userMobile = await userService.getUserByName(
+        response.data.approver_level1
+      );
+      
       let pushNotifObj = {
-        to: user.data.token,
+        to: userMobile.data.token,
         title: `${PUSHNOTIF.REQUEST.TITLE} ${response.data.approver_level1}`,
         body: `${PUSHNOTIF.REQUEST.BODY} ${user.name}`,
       };
       createPushNotification(pushNotifObj);
+
+      await setDoc(doc(firestore, "notifications", String(Date.now())), {
+        to: userMobile.data.name,
+        user_token: userMobile.data.token,
+        title: PUSHNOTIF.REQUEST.TITLE + userMobile.data.name,
+        body: PUSHNOTIF.REQUEST.BODY + user.name,
+        date: Date.now(),
+      });
 
       let notifObj = {
         to: response.data.approver_level1,
@@ -457,10 +473,7 @@ export const FormPOMaintenance = () => {
                   >
                     Submit
                   </button>
-                  <button
-                    type="reset"
-                    className="btn btn-warning float-end"
-                  >
+                  <button type="reset" className="btn btn-warning float-end">
                     Cancel
                   </button>
                 </div>
