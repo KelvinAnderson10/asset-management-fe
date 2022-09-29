@@ -156,12 +156,12 @@ export const ImportData = () => {
                   <span id="file-chosen">{fileName}</span>
                 </div>
 
-                <button className="download-excel">
+                <button className="download-excel-temp">
                   <a href={guidelines} download="Upload Guidelines.xlsx">
                     Download Guidelines
                   </a>
                 </button>
-                <button className="download-excel">
+                <button className="download-excel-temp">
                   <a href={template} download="Template.xlsx">
                     Download Template
                   </a>

@@ -37,8 +37,7 @@
   font-family: "Encode Sans";
   margin-bottom: 2vh;
 }
-
-.download-excel {
+.download-excel-temp {
   width: 12vw;
   height: 3.5vh;
   background-color: rgb(255, 255, 255);
@@ -48,7 +47,7 @@
   margin-left: 10px;
 }
 
-.download-excel > a {
+.download-excel-temp > a {
   text-decoration: none;
 }
 

@@ -267,11 +267,12 @@ input.form-control:focus{
 }
 
 .button-search-container .button-box{
-  width: 5vw;
+  width: 5.8vw;
   height: 3.5vh;
   background-color: #0A2495;
   border-radius: 10px;
   color: white;
   margin-right: 0.6vw;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  
 }

@@ -1045,7 +1045,7 @@ export const Overview = () => {
                 <tbody>
                   {datas.length === 0 ? (
                     <tr>
-                      <th colSpan="31">Data is not found</th>
+                      <th colSpan="33">Data is not found</th>
                     </tr>
                   ) : (
                     datas.map((data, index) => (
@@ -1083,23 +1083,26 @@ export const Overview = () => {
                               &#xe00a;
                             </i>
                           </a>
+                          {(user.level_approval == 'Regular' || user.level_approval == 'GA' || user.level_approval== 'IT' || user.role == 'Admin') &&
                           <a
-                            onClick={() => {
-                              handleEditShow(data["Nomor Asset"]);
-                            }}
-                            className="edit"
-                            data-toggle="modal"
-                            style={{ cursor: "pointer" }}
+                          onClick={() => {
+                            handleEditShow(data["Nomor Asset"]);
+                          }}
+                          className="edit"
+                          data-toggle="modal"
+                          style={{ cursor: "pointer" }}
+                        >
+                          <i
+                            className="material-icons"
+                            data-toggle="tooltip"
+                            title="Edit"
+                            style={{ fontSize: "25px" }}
                           >
-                            <i
-                              className="material-icons"
-                              data-toggle="tooltip"
-                              title="Edit"
-                              style={{ fontSize: "25px" }}
-                            >
-                              &#xe3c9;
-                            </i>
-                          </a>
+                            &#xe3c9;
+                          </i>
+                        </a>
+                        }
+                          
                         </th>
                         <td>{data["Tanggal Output"]}</td>
                         <td>{data["Tahun"]}</td>

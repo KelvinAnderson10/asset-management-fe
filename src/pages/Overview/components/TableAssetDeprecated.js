@@ -217,7 +217,7 @@ export const TableAssetDeprecated = () => {
                   <tbody>
                     {datas.length === 0 ? (
                       <tr>
-                        <th colSpan="31">Data is not found</th>
+                        <th colSpan="32">Data is not found</th>
                       </tr>
                     ) : (
                       datas.map((data, index) => (
