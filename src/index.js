@@ -8,12 +8,12 @@ import "@fontsource/mulish";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.min.js";
 import { apiClientFactory } from './shared/ApiClientFactory';
-import { clientInstance } from './shared/AxiosClient';
+import { clientInstance,firestoreInstance,notificationInstance } from './shared/AxiosClient';
 import { ServiceFactory } from './services/ServiceFactory';
 import { DepsProvider } from './shared/context/DependencyContext';
 
 
-const apiClient = apiClientFactory(clientInstance)
+const apiClient = apiClientFactory(clientInstance,firestoreInstance,notificationInstance)
 const services = ServiceFactory(apiClient)
 
 
