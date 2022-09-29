@@ -97,7 +97,6 @@ export const FormPOInventory = () => {
     try {
       const response = await notificationService.createPushNotif(notifPO);
       setNotifData(response.data);
-      console.log('ini response push',response)
     } catch (e) {
       console.log(e);
     }
@@ -138,7 +137,7 @@ export const FormPOInventory = () => {
         const userMobile = await userService.getUserByName(
           response.data.approver_level1
         );
-        console.log('ini usermobile',userMobile)
+       
         let pushNotifObj = {
           to: userMobile.data.token,
           title: `${PUSHNOTIF.REQUEST.TITLE} ${response.data.approver_level1}`,
@@ -146,14 +145,11 @@ export const FormPOInventory = () => {
         };
         createPushNotification(pushNotifObj);
 
-
-
         await setDoc(doc(firestore, "notifications", String(Date.now())), {
           to: userMobile.data.name,
           user_token: userMobile.data.token,
           title: PUSHNOTIF.REQUEST.TITLE + userMobile.data.name,
           body: PUSHNOTIF.REQUEST.BODY + user.name,
-          date: Date.now(),
         });
 
         //NOTIF

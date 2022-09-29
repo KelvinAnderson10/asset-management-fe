@@ -87,5 +87,16 @@ export const dashboardService = ({ doGet }) => {
     }
   };
 
-  return {getAllDeprecated,getTotalUnitAssetCluster, getTotalPOByStatus, getTotalAssetBySubProduct, getAllCountAsset, getTotalSpendingCluster, getTotalPO,getAssetAlmostDeprecated,getSumAssetValue };
+  const getAssetBrokenBeforeLifetime = async () => {
+    try {
+      return await doGet({
+        url: "api/asset/dashboard/broken",
+      });
+    } catch (e) {
+      throw e;
+    }
+  };
+
+
+  return {getAssetBrokenBeforeLifetime, getAllDeprecated, getTotalUnitAssetCluster, getTotalPOByStatus, getTotalAssetBySubProduct, getAllCountAsset, getTotalSpendingCluster, getTotalPO,getAssetAlmostDeprecated,getSumAssetValue };
 };
