@@ -214,8 +214,8 @@ export const ListApprovedMaintenance = () => {
                 <form>
             <div className="formPOInput">
               <div className="row" style={{textAlign:'left'}}>
-              <h3 style={{textAlign:'left', color:'#B70621'}}>PO Number {POById.po_id} </h3>
-              <div className="mb-3 col-md-4">
+              <h4 style={{textAlign:'left', color:'#B70621'}}>PO Number {POById.po_id} </h4>
+              <div className="mb-2 col-md-4">
                       <label>
                         Area Code
                       </label>
@@ -227,7 +227,7 @@ export const ListApprovedMaintenance = () => {
                         className="form-control"
                       />
                     </div>
-                    <div className="mb-3 col-md-4">
+                    <div className="mb-2 col-md-4">
                       <label>
                         To User
                       </label>
@@ -239,7 +239,7 @@ export const ListApprovedMaintenance = () => {
                         readOnly
                       />
                     </div>
-                    <div className="mb-3 col-md-4">
+                    <div className="mb-2 col-md-4">
                       <label>
                         Position
                       </label>
@@ -251,7 +251,7 @@ export const ListApprovedMaintenance = () => {
                         readOnly
                       />
                     </div>
-                    <div className="inputBoxPO mb-3 col-md-6 ">
+                    <div className="inputBoxPO mb-2 col-md-6 ">
                       <label>
                         Subproduct Name
                       </label>
@@ -263,7 +263,7 @@ export const ListApprovedMaintenance = () => {
                         readOnly
                       />
                     </div>
-                    <div className="mb-3 col-md-6 ">
+                    <div className="mb-2 col-md-6 ">
                       <label>
                         Type
                       </label>
@@ -282,7 +282,7 @@ export const ListApprovedMaintenance = () => {
                   return (
                     <div className='list-detail-po-container' key={data.po_id_detail}>
                       <div className="row" style={{textAlign:'left'}}>
-                        <div className="inputBoxPO mb-3">  
+                        <div className="inputBoxPO mb-2">  
                         <label>
                             Item Name
                         </label>          
@@ -292,7 +292,7 @@ export const ListApprovedMaintenance = () => {
                             defaultValue={data["Nama Barang"]}
                           />
                         </div>
-                        <div className="inputBoxPO mb-3 col-md-6 ">
+                        <div className="inputBoxPO mb-2 col-md-6 ">
                           <label>
                             Vendor
                           </label>
@@ -302,7 +302,7 @@ export const ListApprovedMaintenance = () => {
                             defaultValue={data.vendor_selected}
                           />
                         </div>
-                        <div className="inputBoxPO mb-3 col-md-6">
+                        <div className="inputBoxPO mb-2 col-md-6">
                           <label>
                             Price
                           </label>
@@ -313,7 +313,7 @@ export const ListApprovedMaintenance = () => {
                             defaultValue={data.item_price_selected}
                           />
                         </div>
-                        <div className="inputBoxPO mb-3 col-md-4">
+                        <div className="inputBoxPO mb-2 col-md-4">
                         <label>
                             Quantity
                           </label>
@@ -324,7 +324,7 @@ export const ListApprovedMaintenance = () => {
                             defaultValue={data.quantity}
                           />
                         </div>
-                        <div className="inputBoxPO mb-3 col-md-4">
+                        <div className="inputBoxPO mb-2 col-md-4">
                         <label>
                             PPN
                           </label>
@@ -334,10 +334,9 @@ export const ListApprovedMaintenance = () => {
                             defaultValue={data.ppn}
                           />
                         </div>
-                        <div className="inputBoxPO mb-3 col-md-4">
+                        <div className="inputBoxPO mb-2 col-md-4">
                         <label>
                             Additional Cost
-                            <span className="text-danger">*</span>
                           </label>
                         <input
                           type='number'

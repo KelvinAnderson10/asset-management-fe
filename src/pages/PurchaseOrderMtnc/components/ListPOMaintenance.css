@@ -54,7 +54,7 @@
     display: flex;
     justify-content: space-between;
     padding-top: 5px;
-    height: 35%;
+    height: 30%;
 }
 .header-list-po .po-num{
     width: 2.5vw;
@@ -78,7 +78,7 @@
 
 .po-mtnc-list-box-item .po-content-container{
     width: 100%;
-    height: 65%;
+    height: 60%;
     display: flex;
     flex-direction: row;
 }
@@ -221,6 +221,9 @@
 .po-mtnc-list-box-item .date-request{
     display: flex;
     justify-content: flex-end;
-    margin-top: 5vh;
+    width: 100%;
+    height: 20%;
+    margin-bottom: 2vh;
+    align-items: center;
 }
   

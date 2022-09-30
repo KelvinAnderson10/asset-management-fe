@@ -11,6 +11,7 @@ import { EVENT } from "../../shared/constants";
 import { useAuth } from "../../services/UseAuth";
 import imageCompression from "browser-image-compression";
 import AssetLoading from "../../shared/components/Loading/AssetLoading";
+import { current } from "@reduxjs/toolkit";
 
 export const Overview = () => {
   const {
@@ -69,6 +70,8 @@ export const Overview = () => {
     onGetCookie();
   }, []);
 
+  const [pageFilter, setPageFilter] = useState(1)
+  
   
   //GetById
   const [size, setSize] = useState(400);
@@ -290,7 +293,7 @@ export const Overview = () => {
     } else if (user.role == "GA") {
       getAssetsByGA(1);
     }
-    setPageCount(0);
+    setCurrentPage(0)
   };
 
   //Pagination From Backend
@@ -488,8 +491,13 @@ export const Overview = () => {
     }
   };
 
+  const [currentPage, setCurrentPage] = useState(0)
   const handlePageClick = async (data) => {
-    let currentPage = data.selected + 1;
+    setCurrentPage(data.selected)
+    
+  };
+
+  useEffect(() =>{
     if (
       searchCondition == "" &&
       searchVendor == "" &&
@@ -499,13 +507,13 @@ export const Overview = () => {
       searchSubproduct == ""
     ) {
       if (user.role == "Admin") {
-        getAssetsPagination(currentPage);
+        getAssetsPagination(currentPage+1);
       } else if (user.role == "IT") {
-        getAssetsByIT(currentPage);
+        getAssetsByIT(currentPage+1);
       } else if (user.role == "Regular") {
-        getAssetsByLocation(user.location_id, currentPage);
+        getAssetsByLocation(user.location_id, currentPage+1);
       } else if (user.role == "GA") {
-        getAssetsByGA(currentPage);
+        getAssetsByGA(currentPage+1);
       }
     } else {
       if (user.role == "Regular") {
@@ -516,7 +524,7 @@ export const Overview = () => {
           searchProduct,
           searchSubproduct,
           searchCategory,
-          currentPage
+          currentPage+1
         );
       } else {
         onFilterMultiple(
@@ -526,11 +534,11 @@ export const Overview = () => {
           searchProduct,
           searchSubproduct,
           searchCategory,
-          currentPage
+          currentPage+1
         );
       }
     }
-  };
+  }, [currentPage])
 
   //Event Log
   const [event, setEvent] = useState({});
@@ -591,6 +599,7 @@ export const Overview = () => {
           ).format("YYYY-MM-DDTHH:MM");
         }
         setDatas(response.data);
+        setTotalAsset(response.count)
         setPageCount(Math.ceil(response.count / 10));
       } catch (e) {
         console.log(e.response);
@@ -632,6 +641,7 @@ export const Overview = () => {
           ).format("YYYY-MM-DDTHH:MM");
         }
         setDatas(response.data);
+        setTotalAsset(response.count)
         setPageCount(Math.ceil(response.count / 10));
       } catch (e) {
         console.log(e.response);
@@ -674,6 +684,7 @@ export const Overview = () => {
           ).format("YYYY-MM-DDTHH:MM");
         }
         setDatas(response.data);
+        setTotalAsset(response.count)
         setPageCount(Math.ceil(response.count / 10));
       } catch (e) {
         console.log(e.response);
@@ -716,6 +727,7 @@ export const Overview = () => {
           ).format("YYYY-MM-DDTHH:MM");
         }
         setDatas(response.data);
+        setTotalAsset(response.count)
         setPageCount(Math.ceil(response.count / 10));
       } catch (e) {
         console.log(e.response);
@@ -819,6 +831,7 @@ export const Overview = () => {
               value="submit"
               className="button-box"
               onClick={() => {
+                setCurrentPage(0)
                 user.role == "Regular"
                   ? onFilterMultiple(
                       searchCondition,
@@ -851,7 +864,7 @@ export const Overview = () => {
               Clear
             </button>
             <div className="clearfix">
-              Showing {datas.length} out of {totalAsset}
+              <a style={{fontSize:'12px'}}>Showing {datas.length} out of {totalAsset}</a>
             </div>
             <div
               key={pageCount}
@@ -875,6 +888,7 @@ export const Overview = () => {
                 breakClassName={"page-item"}
                 breakLinkClassName={"page-link"}
                 activeClassName={"active"}
+                forcePage={currentPage}
               />
             </div>
           </div>

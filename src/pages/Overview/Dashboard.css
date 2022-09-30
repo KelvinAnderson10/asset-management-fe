@@ -106,7 +106,7 @@
   width: 100%;
   height: 100%;
 }
-.styled-table {
+.table-subproduct .styled-table {
   border-spacing: 1;
   border-collapse: collapse;
   background: white;
@@ -124,11 +124,10 @@
   color: #ffffff;
   text-align: center;
   letter-spacing: 1px;
-  
+
 }
 
-.styled-table th,
-.styled-table td {
+.styled-table th{
   padding: 12px 15px;
   
 }
@@ -195,15 +194,33 @@
   font-family: "Poppins";
   background-color: #ffdcdc;
   width: 100%;
-  height: 18%;
+  height: 20%;
   border-radius: 1vh;
   margin-top: 0.5vh;
-  padding-left: 1vw;
+  padding-left: 0.5vw;
   padding-top: 0.5vh;
   font-size: 0.8vw;
   border-style: solid;
   border-color: rgb(255, 80, 80);
   border-width: 0px 0px 0px 10px;
+  display: flex;
+  flex-direction: column;
+}
+.eventlog-box-content .name-eventlog{
+  display: flex;
+  flex-direction: row;
+  max-height: 50%;
+}
+
+.eventlog-box-content .date-activity{
+  display: flex;
+  justify-content: flex-end;
+  color: gray;
+  font-size: 0.6vw;
+  margin-top: 0.8vh;
+  margin-right: 0.5vw;
+  height: 50%;
+  align-items: center;
 }
  .view-spending-container{
   width: 100%;
@@ -236,6 +253,11 @@
   align-items: center;
 }
 
+.box-spending-cluster-detail .bar-chart{
+  width: 100%;
+  height: 75vh;
+}
+
 .download-excel{
   display: flex;
   justify-content: flex-start;
@@ -246,4 +268,5 @@
   color: #B70621;
   justify-content: flex-end;
   margin: 4px 10px;
+  cursor: pointer;
 }

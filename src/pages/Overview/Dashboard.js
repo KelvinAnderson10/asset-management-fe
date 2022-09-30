@@ -332,7 +332,7 @@ export const Dashboard = () => {
               >
                 <a className="count-number">{countAssetDeprecated}</a>
                 <a style={{ color: "white", fontSize: "20px" }}>
-                  Total Asset Deprecated
+                  Asset Deprecated
                 </a>
               </div>
             </div>
@@ -344,12 +344,12 @@ export const Dashboard = () => {
               }}
             >
               <div className="content-icon">
-                <i class="fa fa-shopping-bag" style={{ color: "white" }}></i>
+                <i class="fa fa-exclamation-triangle" style={{ color: "white" }}></i>
               </div>
               <div className="content-non-icon">
                 <a className="count-number">{assetBroken} </a>
                 <a style={{ color: "white", fontSize: "20px" }}>
-                  Total Asset Broken 
+                  Asset Broken 
                 </a>
               </div>
             </div>
@@ -375,12 +375,7 @@ export const Dashboard = () => {
           </div>
           <div className="content-dashboard-center">
             <div className="piechart">
-              <div className="title-piechart">
-                <p>Status Purchase Request</p>
-              </div>
-              <div>
                 <PieChart chartData={POData} />
-              </div>
             </div>
             <div className="linechart">
               <div className="table-subproduct ">
@@ -420,13 +415,14 @@ export const Dashboard = () => {
                 ) : (
                   event.map((data) => (
                     <div className="eventlog-box-content">
-                      <a>{data.user}</a>
-                      <a> : </a>
-                      <a>{data.event}</a>
-                      <br />
-                      <a style={{ color: "grey", fontSize: "12px" }}>
+                      <div className="name-eventlog">
+                      <a>{data.user} : {data.event}</a>
+                     </div>
+                      <div className="date-activity">
+                       <a>
                         {data.CreatedAt}
                       </a>
+                      </div>
                     </div>
                   ))
                 )}
@@ -466,7 +462,7 @@ export const Dashboard = () => {
                 />
               </div>
             </div>
-            <div>
+            <div className='bar-chart'>
               <BarChart index={"y"} chartData={chartData2} />
             </div>
           </div>
@@ -478,7 +474,7 @@ export const Dashboard = () => {
             <div className="close-spending">
               <CgIcons.CgClose size={"2em"} onClick={onClickCloseViewUnit} />
             </div>
-            <div>
+            <div className="bar-chart">
               <BarChart index={"y"} chartData={unitClusterData} />
             </div>
           </div>

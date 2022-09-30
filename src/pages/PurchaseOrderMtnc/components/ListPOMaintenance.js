@@ -305,10 +305,10 @@ export const ListPOMaintenance = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="date-request">
-                      <a style={{ fontSize: "16px" }}>{data.CreatedAt}</a>
-                    </div>
                   </div>
+                  <div className="date-request">
+                      <a style={{ fontSize: "12px" }}>{data.CreatedAt}</a>
+                    </div>
                 </div>
               ))
             )}
@@ -349,10 +349,10 @@ export const ListPOMaintenance = () => {
             <form>
               <div className="formPOInput">
                 <div className="row" style={{ textAlign: "left" }}>
-                  <h3 style={{ textAlign: "left", color: "#B70621" }}>
+                  <h4 style={{ textAlign: "left", color: "#B70621" }}>
                     PO Number {POById.po_id}{" "}
-                  </h3>
-                  <div className="mb-3 col-md-4">
+                  </h4>
+                  <div className="mb-2 col-md-4">
                     <label>Area Code</label>
                     <input
                       value={POById["Kode Wilayah"]}
@@ -362,7 +362,7 @@ export const ListPOMaintenance = () => {
                       className="form-control"
                     />
                   </div>
-                  <div className="mb-3 col-md-4">
+                  <div className="mb-2 col-md-4">
                     <label>To User</label>
                     <input
                       type="text"
@@ -372,7 +372,7 @@ export const ListPOMaintenance = () => {
                       readOnly
                     />
                   </div>
-                  <div className="mb-3 col-md-4">
+                  <div className="mb-2 col-md-4">
                     <label>Position</label>
                     <input
                       type="text"
@@ -382,7 +382,7 @@ export const ListPOMaintenance = () => {
                       readOnly
                     />
                   </div>
-                  <div className="inputBoxPO mb-3 col-md-6 ">
+                  <div className="inputBoxPO mb-2 col-md-6 ">
                     <label>Subproduct Name</label>
                     <input
                       value={POById["Jenis Produk"]}
@@ -392,7 +392,7 @@ export const ListPOMaintenance = () => {
                       readOnly
                     />
                   </div>
-                  <div className="mb-3 col-md-6 ">
+                  <div className="mb-2 col-md-6 ">
                     <label>Type</label>
                     <input
                       readOnly
@@ -421,7 +421,7 @@ export const ListPOMaintenance = () => {
                               />
                             </div>
 
-                            <div className="inputBoxPO mb-3 col-md-6 ">
+                            <div className="inputBoxPO mb-2 col-md-6 ">
                               <label>
                                 1<span className="subscript">st</span> Vendor
                               </label>
@@ -431,7 +431,7 @@ export const ListPOMaintenance = () => {
                                 defaultValue={data.vendor_1}
                               />
                             </div>
-                            <div className="inputBoxPO mb-3 col-md-6">
+                            <div className="inputBoxPO mb-2 col-md-6">
                               <label>
                                 1<span className="subscript">st</span> Item
                                 Price
@@ -443,7 +443,7 @@ export const ListPOMaintenance = () => {
                                 defaultValue={data.item_price_1}
                               />
                             </div>
-                            <div className="inputBoxPO mb-3 col-md-6 ">
+                            <div className="inputBoxPO mb-2 col-md-6 ">
                               <label>
                                 2<span className="subscript">nd</span> Vendor
                               </label>
@@ -453,7 +453,7 @@ export const ListPOMaintenance = () => {
                                 defaultValue={data.vendor_2}
                               />
                             </div>
-                            <div className="inputBoxPO mb-3 col-md-6">
+                            <div className="inputBoxPO mb-2 col-md-6">
                               <label>
                                 2<span className="subscript">nd</span> Item
                                 Price
@@ -465,7 +465,7 @@ export const ListPOMaintenance = () => {
                                 defaultValue={data.item_price_2}
                               />
                             </div>
-                            <div className="inputBoxPO mb-3 col-md-6 ">
+                            <div className="inputBoxPO mb-2 col-md-6 ">
                               <label>
                                 3<span className="subscript">st</span> Vendor
                               </label>
@@ -475,7 +475,7 @@ export const ListPOMaintenance = () => {
                                 defaultValue={data.vendor_3}
                               />
                             </div>
-                            <div className="inputBoxPO mb-3 col-md-6">
+                            <div className="inputBoxPO mb-2 col-md-6">
                               <label>
                                 3<span className="subscript">rd</span> Item
                                 Price
@@ -487,7 +487,7 @@ export const ListPOMaintenance = () => {
                                 defaultValue={data.item_price_3}
                               />
                             </div>
-                            <div className="inputBoxPO mb-3 col-md-4">
+                            <div className="inputBoxPO mb-2 col-md-4">
                               <label>Quantity</label>
                               <input
                                 type="number"
@@ -496,7 +496,7 @@ export const ListPOMaintenance = () => {
                                 defaultValue={data.quantity}
                               />
                             </div>
-                            <div className="inputBoxPO mb-3 col-md-4">
+                            <div className="inputBoxPO mb-2 col-md-4">
                               <label>PPN</label>
                               <input
                                 name="ppn"
@@ -504,10 +504,9 @@ export const ListPOMaintenance = () => {
                                 defaultValue={data.ppn}
                               />
                             </div>
-                            <div className="inputBoxPO mb-3 col-md-4">
+                            <div className="inputBoxPO mb-2 col-md-4">
                               <label>
                                 Additional Cost
-                                <span className="text-danger">*</span>
                               </label>
                               <input
                                 type="number"
