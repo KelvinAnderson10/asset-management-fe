@@ -148,7 +148,7 @@ export const Location = () => {
       if (result.isConfirmed) {
         try {
           const response = locationService.deleteLocation(id);
-
+          console.log(response)
           onGetAllLocation();
           let event = {
             event: EVENT.DELETE_LOCATION,
@@ -465,7 +465,7 @@ export const Location = () => {
 
                             <a
                               onClick={() => {
-                                handleEditShow(RowData.ID, item);
+                                handleEditShow(RowData['kode wilayah'], item);
                               }}
                               className="edit"
                               data-toggle="modal"
@@ -481,7 +481,7 @@ export const Location = () => {
                             </a>
 
                             <a
-                              onClick={() => onDeleteLocation(item.ID)}
+                              onClick={() => onDeleteLocation(item['kode wilayah'])}
                               className="delete"
                               data-toggle="modal"
                               style={{ cursor: "pointer" }}
