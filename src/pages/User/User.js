@@ -678,10 +678,8 @@ useEffect(() => {
                     <option disable value="">Select</option>
                     <option value='GM'>General Manager</option>
                     <option value='SPV'>Supervisor</option>
-                    <option value='VP_TRAD'>VP Trade</option>
+                    <option value='VP_TRAD'>VP Tradisional</option>
                     <option>Regular</option>
-                    <option>GA</option>
-                    <option>IT</option>
                   </select>
                 </div>}
                 <div className="inputBoxUser">

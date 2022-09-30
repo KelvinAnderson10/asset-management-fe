@@ -14,16 +14,23 @@
 .setting-container .setting-card{
     background-color: white;
     width: 35vw;
-    height: 50vh;
+    /* height: 50vh; */
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
 }
 
 .setting-card h3{
-    padding: 25px 40px;
+    padding: 25px 15px;
     color: #B70621;
 }
 
 .setting-card .inputBox span{
     padding: 25px 30px;
+}
+
+.setting-card .inputBox span{
+    padding: 1vw 1.5vh;
 }
 
 .setting-card .inputBox input{
@@ -41,8 +48,8 @@
 
 .setting-card .button-setting{
     margin: 10px 20px;
-    
 }
 .setting-card .button-setting .btn-primary{
     margin-left: 20px;
+    margin-bottom: 2vh;    
 }

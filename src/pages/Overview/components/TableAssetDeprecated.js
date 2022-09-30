@@ -144,7 +144,7 @@ export const TableAssetDeprecated = () => {
             </div>
             <div className="pagination-deprecated">
               <div className="clearfix">
-                Showing {datas.length} out of {totalAsset}
+                <a style={{fontSize:'12px'}}>Showing {datas.length} out of {totalAsset}</a> 
               </div>
               <div style={{ marginRight: "2vw", marginTop: "1vh" }}>
                 <ReactPaginate

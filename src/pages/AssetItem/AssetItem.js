@@ -141,6 +141,7 @@ export const AssetItem = () => {
   const clearForm = () => {
     setData({});
     setSelectedImage();
+    setFileName('No file choosen')
   };
 
   // EVENT LOG
