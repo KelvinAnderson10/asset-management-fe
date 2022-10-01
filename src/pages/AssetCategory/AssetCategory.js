@@ -10,7 +10,6 @@ import Modal from "react-bootstrap/Modal";
 import swal from "sweetalert";
 import "./AssetCategory.css";
 import { Failed } from "../../shared/components/Notification/Failed";
-import { Success } from "../../shared/components/Notification/Success";
 import { EVENT } from "../../shared/constants";
 import { useAuth } from "../../services/UseAuth";
 
@@ -94,7 +93,12 @@ export const AssetCategory = () => {
       setDoneAddform(true);
 
       if (response.status === "SUCCESS") {
-        Success("added");
+        swal({
+          title: "Success!",
+          text: "Your data has been saved!",
+          icon: "success",
+          button: "OK!",
+        });
       }
       onGetAllAssetCategory();
       let event = {

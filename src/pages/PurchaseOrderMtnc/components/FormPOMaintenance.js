@@ -102,7 +102,7 @@ export const FormPOMaintenance = () => {
       if (response.status === "SUCCESS") {
         swal({
           title: "Success!",
-          text: "Your data has been saved!",
+          text: "Your request has been made!",
           icon: "success",
           button: "OK!",
         });
@@ -134,7 +134,7 @@ export const FormPOMaintenance = () => {
       e.target.reset();
     } catch (error) {
       console.log(error);
-      Failed("Your data failed to save");
+      Failed("Your request failed to made");
     }
   };
 
