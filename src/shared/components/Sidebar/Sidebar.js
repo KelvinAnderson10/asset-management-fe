@@ -304,8 +304,7 @@ const Sidebar = ({ children }) => {
 
   const navigate = useNavigate();
   const onLogout = () => {
-    eraseCookie();
-    navigate("/", { replace: true });
+    eraseCookie();  
   };
 
   const onClickViewNotif = () => {
@@ -556,7 +555,7 @@ const Sidebar = ({ children }) => {
                 })}
               </section>
             )}
-          <AnimatePresence>
+          {/* <AnimatePresence>
             {isOpen && (
               <motion.h1
                 variants={showAnimation}
@@ -568,14 +567,14 @@ const Sidebar = ({ children }) => {
                 <p>Copyright © by Group 6, All Rights Reserved</p>
               </motion.h1>
             )}
-          </AnimatePresence>
+          </AnimatePresence> */}
         </motion.div>
 
         <main>
           <nav className="navbar navbar-expand-lg header-main">
             <img src={logo} style={{ width: "7.8vw", height: "4vh" }}></img>
             <div className="nav-right">
-              <div onClick={onClickViewNotif}>
+              <div style={{cursor:'pointer'}} onClick={onClickViewNotif}>
                 <Noty width={"30px"} color={"#122C34"} count={countNotif} />
                 {notif && (
                   <div className="modalNotif">
@@ -616,8 +615,7 @@ const Sidebar = ({ children }) => {
                   {user.name} <b className="caret"></b>
                 </a>
                 <div className="dropdown-menu">
-                  <div className="divider dropdown-divider"></div>
-                  <a onClick={onLogout} className="dropdown-item">
+                  <a onClick={onLogout} className="dropdown-item" style={{cursor:'pointer'}}>
                     <i className="material-icons">&#xE8AC;</i> Logout
                   </a>
                 </div>

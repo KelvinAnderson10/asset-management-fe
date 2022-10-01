@@ -7,6 +7,7 @@ import * as BsIcons from 'react-icons/bs'
 import * as AiIcons from 'react-icons/ai'
 import Loading from '../../../shared/components/Loading/Loading'
 import { NoData } from '../../../shared/components/NoData/NoData'
+import moment from "moment";
 
 export const ListPOInventory = () => {
     const [poData, setPOData] = useState([])
@@ -21,6 +22,9 @@ export const ListPOInventory = () => {
         const response = await purchaseOrderService.getPOByRequester(name)
         for (let i in response.data) {
           if (response.data[i].tipe == "Inventory"){
+            response.data[i].CreatedAt = moment(response.data[i].CreatedAt).format(
+              "LL"
+            );
             setPOData((poData) => [...poData, response.data[i]])
           }
         }
@@ -325,6 +329,9 @@ export const ListPOInventory = () => {
                                             </div>
                                     </div>
                                     </div>
+                                    <div className='date-request'>
+                                      <a style={{fontSize:'12px'}} >{data.CreatedAt}</a> 
+                                    </div>
                                 </div>
                             ))
                         )}
@@ -365,7 +372,7 @@ export const ListPOInventory = () => {
                     <form>
                 <div className="formPOInput">
                   <div className="row" style={{textAlign:'left'}}>
-                  <h3 style={{textAlign:'left', color:'#B70621'}}>PO Number {POById.po_id} </h3>
+                  <h4 style={{textAlign:'left', color:'#B70621'}}>PO Number {POById.po_id} </h4>
             <div className="mb-3 col-md-4">
                     <label>
                       Area Code
@@ -433,10 +440,10 @@ export const ListPOInventory = () => {
                       return (
                         <div className='list-detail-po-container' key={data.po_id_detail}>
                             <div className='header-item-add'>
-                            <h3 style={{textAlign:'center'}}>Item {indexModal} </h3>
+                            <h4 style={{textAlign:'center'}}>Item {indexModal} </h4>
                             </div>
                           <div className="row" style={{textAlign:'left'}}>
-                            <div className="inputBoxPO mb-3">  
+                            <div className="inputBoxPO mb-2">  
                             <label>
                                 Item Name
                             </label>          
@@ -447,7 +454,7 @@ export const ListPOInventory = () => {
                               />
                             </div>
 
-                            <div className="inputBoxPO mb-3 col-md-6 ">
+                            <div className="inputBoxPO mb-2 col-md-6 ">
                               <label>
                                 1<span className="subscript">st</span>{" "}
                                 Vendor
@@ -458,7 +465,7 @@ export const ListPOInventory = () => {
                                 defaultValue={data.vendor_1}
                               />
                             </div>
-                            <div className="inputBoxPO mb-3 col-md-6">
+                            <div className="inputBoxPO mb-2 col-md-6">
                               <label>
                                 1<span className="subscript">st</span> Item
                                 Price
@@ -470,7 +477,7 @@ export const ListPOInventory = () => {
                                 defaultValue={data.item_price_1}
                               />
                             </div>
-                            <div className="inputBoxPO mb-3 col-md-6 ">
+                            <div className="inputBoxPO mb-2 col-md-6 ">
                               <label>
                                 2<span className="subscript">nd</span>{" "}
                                 Vendor
@@ -481,7 +488,7 @@ export const ListPOInventory = () => {
                                 defaultValue={data.vendor_2}
                               />
                             </div>
-                            <div className="inputBoxPO mb-3 col-md-6">
+                            <div className="inputBoxPO mb-2 col-md-6">
                               <label>
                                 2<span className="subscript">nd</span> Item
                                 Price
@@ -493,7 +500,7 @@ export const ListPOInventory = () => {
                                 defaultValue={data.item_price_2}
                               />
                             </div>
-                            <div className="inputBoxPO mb-3 col-md-6 ">
+                            <div className="inputBoxPO mb-2 col-md-6 ">
                               <label>
                                 3<span className="subscript">st</span>{" "}
                                 Vendor
@@ -504,7 +511,7 @@ export const ListPOInventory = () => {
                                 defaultValue={data.vendor_3}
                               />
                             </div>
-                            <div className="inputBoxPO mb-3 col-md-6">
+                            <div className="inputBoxPO mb-2 col-md-6">
                               <label>
                                 3<span className="subscript">rd</span> Item
                                 Price
@@ -516,7 +523,7 @@ export const ListPOInventory = () => {
                                 defaultValue={data.item_price_3}
                               />
                             </div>
-                            <div className="inputBoxPO mb-3 col-md-4">
+                            <div className="inputBoxPO mb-2 col-md-4">
                             <label>
                                 Quantity
                               </label>
@@ -527,7 +534,7 @@ export const ListPOInventory = () => {
                                 defaultValue={data.quantity}
                               />
                             </div>
-                            <div className="inputBoxPO mb-3 col-md-4">
+                            <div className="inputBoxPO mb-2 col-md-4">
                             <label>
                                 PPN
                               </label>
@@ -537,10 +544,9 @@ export const ListPOInventory = () => {
                                 defaultValue={data.ppn}
                               />
                             </div>
-                            <div className="inputBoxPO mb-3 col-md-4">
+                            <div className="inputBoxPO mb-2 col-md-4">
                             <label>
                                 Additional Cost
-                                <span className="text-danger">*</span>
                               </label>
                             <input
                               type='number'

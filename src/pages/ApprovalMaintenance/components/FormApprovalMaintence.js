@@ -7,6 +7,9 @@ import { Failed } from "../../../shared/components/Notification/Failed";
 import { NOTIF, PUSHNOTIF, STATUS } from "../../../shared/constants";
 import * as MdIcons from "react-icons/md";
 import Sidebar from "../../../shared/components/Sidebar/Sidebar";
+import { firebaseConfig } from "../../../shared/firebaseClient";
+import { initializeApp } from "firebase/app";
+import { getFirestore, setDoc, doc } from "firebase/firestore";
 
 export const FormApprovalMaintence = () => {
   const { user, setpoDetail, setPOHeader } = UseApprovalMaintenance();
@@ -15,6 +18,7 @@ export const FormApprovalMaintence = () => {
     notificationService,
     purchaseOrderService,
     generalSettingService,
+    userService,
   } = useDeps();
 
   const handleFormChange = (event, index) => {
@@ -30,7 +34,7 @@ export const FormApprovalMaintence = () => {
           item.vendor_selected = item.vendor_3;
           item.item_price_selected = Number(item.item_price_3);
         }
-        
+
         return { ...item, [event.target.name]: event.target.value };
       } else {
         return item;
@@ -45,11 +49,9 @@ export const FormApprovalMaintence = () => {
     try {
       const response = await vendorService.getAllVendor();
       setVendor(response.data);
-     
     } catch (e) {
       console.log(e);
-    } finally {
-    }
+    } 
   };
   const location = useLocation();
 
@@ -76,24 +78,38 @@ export const FormApprovalMaintence = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         try {
-          const response = purchaseOrderService.deletePO(id);
-          Swal.fire("Reject!", "This request has been rejected.", "success");
-          navigate("/approval-data/maintenance", { replace: true });
+          const reject = async () => {
+            const response = await purchaseOrderService.deletePO(id);
 
-          let pushNotifObj = {
-            to: location.state.header.requester,
-            title: `${PUSHNOTIF.REJECTED.TITLE} ${location.state.header.requester}`,
-            body: PUSHNOTIF.REJECTED.BODY,
-          };
-          createPushNotification(pushNotifObj);
+            const userMobile = await userService.getUserByName(
+              location.state.header.requester
+            );
+            let pushNotifObj = {
+              to: userMobile.data.token,
+              title: `${PUSHNOTIF.REJECTED.TITLE} ${location.state.header.requester}`,
+              body: PUSHNOTIF.REJECTED.BODY,
+            };
+            createPushNotification(pushNotifObj);
 
-          let notifObj = {
-            to: location.state.header.requester,
-            title: NOTIF.REJECTED.TITLE,
-            body: NOTIF.REJECTED.BODY,
+            let myApp = initializeApp(firebaseConfig);
+            const firestore = getFirestore(myApp);
+            await setDoc(doc(firestore, "notifications", String(Date.now())), {
+              to: userMobile.data.name,
+              user_token: userMobile.data.token,
+              title: PUSHNOTIF.REJECTED.TITLE + userMobile.data.name,
+              body: PUSHNOTIF.REJECTED.BODY + user.name,
+            });
+
+            let notifObj = {
+              to: location.state.header.requester,
+              title: NOTIF.REJECTED.TITLE,
+              body: NOTIF.REJECTED.BODY,
+            };
+            createNotification(notifObj);
+            Swal.fire("Reject!", "This request has been rejected.", "success");
+            navigate("/approval-data/maintenance", { replace: true });
           };
-          createNotification(notifObj);
-          
+          reject();
         } catch (e) {
           console.log(e.response);
           Failed("Failed to reject");
@@ -112,7 +128,6 @@ export const FormApprovalMaintence = () => {
     try {
       const response = await purchaseOrderService.updatePO(id, status);
       setPOHeader(response.data);
-     
     } catch (e) {
       console.log(e.response);
       Failed("Failed to approved");
@@ -126,8 +141,7 @@ export const FormApprovalMaintence = () => {
       setNotifData(response.data);
     } catch (e) {
       console.log(e);
-    } finally {
-    }
+    } 
   };
 
   const createPushNotification = async (notifPO) => {
@@ -136,8 +150,7 @@ export const FormApprovalMaintence = () => {
       setNotifData(response.data);
     } catch (e) {
       console.log(e);
-    } finally {
-    }
+    } 
   };
 
   //Approval
@@ -164,62 +177,79 @@ export const FormApprovalMaintence = () => {
         location.state.detail[i].item_price_3 = Number(
           location.state.detail[i].item_price_3
         );
-       
+
         const response = await purchaseOrderService.updatePODetail(
           location.state.detail[i].po_id_detail,
           location.state.detail[i]
         );
-       
       }
     } catch (e) {
       console.log(e.response);
       Failed("Failed to approved");
     } finally {
-      
+      let myApp = initializeApp(firebaseConfig);
+      const firestore = getFirestore(myApp);
       if (location.state.header.approverLevel3 == "-") {
         try {
           const response = await purchaseOrderService.approvedByLevel2(id);
           location.state.header.status = STATUS.APPROVE_GA_IT;
-         
+
           setPOHeader(location.state.header);
-          Swal.fire("Success!", "This request has been approved.", "success");
-          navigate("/approval-data/maintenance", { replace: true });
-        } catch (e) {
-          console.log(e.response);
-          Failed("Failed to approved");
-        } finally {
           updateStatus(id, { status: STATUS.APPROVE_GA_IT });
+
+          const userMobile = await userService.getUserByName(
+            location.state.header.requester
+          );
           let pushNotifObj = {
-            to: location.state.header.requester,
+            to: userMobile.data.token,
             title: `${PUSHNOTIF.APPROVED.TITLE} ${location.state.header.requester}`,
             body: PUSHNOTIF.APPROVED.BODY,
           };
           createPushNotification(pushNotifObj);
 
+          await setDoc(doc(firestore, "notifications", String(Date.now())), {
+            to: userMobile.data.name,
+            user_token: userMobile.data.token,
+            title: PUSHNOTIF.APPROVED.TITLE + userMobile.data.name,
+            body: PUSHNOTIF.APPROVED.BODY + user.name,
+          });
+
           let notifObj = {
             to: location.state.header.requester,
             title: NOTIF.APPROVED.TITLE,
             body: NOTIF.APPROVED.BODY,
           };
+
           createNotification(notifObj);
-        }
-      } else {
-        try {
-          const response = await purchaseOrderService.approvedByLevel3(id);
           Swal.fire("Success!", "This request has been approved.", "success");
           navigate("/approval-data/maintenance", { replace: true });
         } catch (e) {
           console.log(e.response);
           Failed("Failed to approved");
-        } finally {
+        }
+      } else {
+        try {
+          const response = await purchaseOrderService.approvedByLevel3(id);
           updateStatus(id, { status: STATUS.APPROVE_GA_IT });
+
+          const userMobile = await userService.getUserByName(
+            location.state.header.requester
+          );
+
           let pushNotifObj = {
-            to: location.state.header.requester,
-            title:
-              PUSHNOTIF.APPROVED.TITLE + `${location.state.header.requester}`,
+            to: userMobile.data.token,
+            title:PUSHNOTIF.APPROVED.TITLE + `${location.state.header.requester}`,
             body: PUSHNOTIF.APPROVED.BODY,
           };
           createPushNotification(pushNotifObj);
+
+          await setDoc(doc(firestore, "notifications", String(Date.now())), {
+            to: userMobile.data.name,
+            user_token: userMobile.data.token,
+            title: PUSHNOTIF.APPROVED.TITLE + userMobile.data.name,
+            body: PUSHNOTIF.APPROVED.BODY + user.name,
+            
+          });
 
           let notifObj = {
             to: location.state.header.requester,
@@ -227,6 +257,12 @@ export const FormApprovalMaintence = () => {
             body: NOTIF.APPROVED.BODY,
           };
           createNotification(notifObj);
+
+          Swal.fire("Success!", "This request has been approved.", "success");
+          navigate("/approval-data/maintenance", { replace: true });
+        } catch (e) {
+          console.log(e.response);
+          Failed("Failed to approved");
         }
       }
     }
@@ -238,7 +274,6 @@ export const FormApprovalMaintence = () => {
     try {
       const response = await generalSettingService.getGeneralSetting();
       setSetting(response.data);
-      
     } catch (e) {
       console.log(e);
     }

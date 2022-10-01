@@ -1,6 +1,6 @@
 import React from "react";
 
-export const notificationService = ({ doGet, doPost}) => {
+export const notificationService = ({ doGet, doPost }) => {
   const readNotif = async (name) => {
     try {
       return await doGet({ url: `/api/notification/${name}` });
@@ -23,15 +23,13 @@ export const notificationService = ({ doGet, doPost}) => {
   const createPushNotif = async (newNotif) => {
     try {
       return await doPost({
-        url: "https://exp.host/--/api/v2/push/send",
+        url: "/api/notification/push",
         data: newNotif,
       });
     } catch (e) {
       throw e;
     }
   };
-
-  
 
   const countNotificationByUser = async (name) => {
     try {
@@ -41,5 +39,5 @@ export const notificationService = ({ doGet, doPost}) => {
     }
   };
 
-  return {createPushNotif,readNotif,createNotif,countNotificationByUser};
+  return { createPushNotif, readNotif, createNotif, countNotificationByUser };
 };

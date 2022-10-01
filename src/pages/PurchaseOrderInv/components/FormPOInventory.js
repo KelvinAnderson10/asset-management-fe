@@ -5,6 +5,10 @@ import "./FormPOInventory.css";
 import * as BsIcons from "react-icons/bs";
 import swal from "sweetalert";
 import { NOTIF, PUSHNOTIF, STATUS } from "../../../shared/constants";
+import { Failed } from "../../../shared/components/Notification/Failed";
+import { firebaseConfig } from "../../../shared/firebaseClient";
+import { initializeApp } from "firebase/app";
+import { getFirestore, setDoc, doc } from "firebase/firestore";
 
 export const FormPOInventory = () => {
   const [POdata, setPOData] = useState([
@@ -35,6 +39,7 @@ export const FormPOInventory = () => {
     vendorService,
     purchaseOrderService,
     notificationService,
+    userService,
   } = useDeps();
 
   useEffect(() => {
@@ -85,7 +90,6 @@ export const FormPOInventory = () => {
       setNotifData(response.data);
     } catch (e) {
       console.log(e);
-    } finally {
     }
   };
 
@@ -95,7 +99,6 @@ export const FormPOInventory = () => {
       setNotifData(response.data);
     } catch (e) {
       console.log(e);
-    } finally {
     }
   };
 
@@ -118,6 +121,11 @@ export const FormPOInventory = () => {
       POHeader.PurchaseOrderDetail = [...POdata];
       const response = await purchaseOrderService.createPO(POHeader);
       handleClearForm();
+
+      // PUSH NOTIF
+      let myApp = initializeApp(firebaseConfig);
+      const firestore = getFirestore(myApp);
+
       if (response.status === "SUCCESS") {
         swal({
           title: "Success!",
@@ -126,25 +134,36 @@ export const FormPOInventory = () => {
           button: "OK!",
         });
 
+        const userMobile = await userService.getUserByName(
+          response.data.approver_level1
+        );
+       
         let pushNotifObj = {
-          to: response.data.approver_level1 ,
+          to: userMobile.data.token,
           title: `${PUSHNOTIF.REQUEST.TITLE} ${response.data.approver_level1}`,
           body: `${PUSHNOTIF.REQUEST.BODY} ${user.name}`,
         };
         createPushNotification(pushNotifObj);
 
+        await setDoc(doc(firestore, "notifications", String(Date.now())), {
+          to: userMobile.data.name,
+          user_token: userMobile.data.token,
+          title: PUSHNOTIF.REQUEST.TITLE + userMobile.data.name,
+          body: PUSHNOTIF.REQUEST.BODY + user.name,
+        });
+
+        //NOTIF
         let notifObj = {
-          to: response.data.approver_level1 ,
+          to: response.data.approver_level1,
           title: NOTIF.REQUEST.TITLE,
           body: `${NOTIF.REQUEST.BODY} ${user.name}`,
         };
-        createNotification(notifObj)
-
+        createNotification(notifObj);
       }
+      e.target.reset();
     } catch (error) {
       console.log(error);
-    } finally {
-      e.target.reset();
+      Failed("Your data failed to save");
     }
   };
 
@@ -155,7 +174,6 @@ export const FormPOInventory = () => {
       setSubProductName(response.data);
     } catch (e) {
       console.log(e);
-    } finally {
     }
   };
 
@@ -168,7 +186,6 @@ export const FormPOInventory = () => {
       setVendor(response.data);
     } catch (e) {
       console.log(e);
-    } finally {
     }
   };
 
@@ -200,7 +217,7 @@ export const FormPOInventory = () => {
 
   const handleClearForm = () => {
     setPOHeader({});
-    setPOData([0]);
+    setPOData([{}]);
   };
 
   return (
@@ -240,7 +257,7 @@ export const FormPOInventory = () => {
                     Position<span className="text-danger">*</span>
                   </label>
                   <input
-                  required
+                    required
                     type="text"
                     name="Jabatan"
                     className="form-control"
@@ -303,8 +320,8 @@ export const FormPOInventory = () => {
                             <span className="text-danger">*</span>{" "}
                           </label>
                           <input
-                          required
-                          type="text"
+                            required
+                            type="text"
                             name="Nama Barang"
                             placeholder="Item Name"
                             className="form-control"
@@ -347,7 +364,7 @@ export const FormPOInventory = () => {
                             <span className="text-danger">*</span>
                           </label>
                           <input
-                          required
+                            required
                             type="number"
                             min="0"
                             name="item_price_1"
@@ -392,7 +409,7 @@ export const FormPOInventory = () => {
                             <span className="text-danger">*</span>
                           </label>
                           <input
-                          required
+                            required
                             type="number"
                             min="0"
                             name="item_price_2"
@@ -448,9 +465,9 @@ export const FormPOInventory = () => {
                             <span className="text-danger">*</span>
                           </label>
                           <input
-                          required
+                            required
                             type="number"
-                            min="0"
+                            min="1"
                             name="quantity"
                             placeholder="Quantity"
                             onChange={(event) => handleFormChange(event, index)}
@@ -475,9 +492,7 @@ export const FormPOInventory = () => {
                           </select>
                         </div>
                         <div className="inputBoxPO mb-3 col-md-4">
-                          <label>
-                            Additional Cost
-                          </label>
+                          <label>Additional Cost</label>
                           <input
                             type="number"
                             min="0"
@@ -506,10 +521,7 @@ export const FormPOInventory = () => {
                   >
                     Submit
                   </button>
-                  <button
-                    type="reset"
-                    className="btn btn-warning float-end"
-                  >
+                  <button type="reset" className="btn btn-warning float-end">
                     Cancel
                   </button>
                 </div>

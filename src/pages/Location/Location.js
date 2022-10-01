@@ -146,22 +146,22 @@ export const Location = () => {
       confirmButtonText: "Yes!",
     }).then((result) => {
       if (result.isConfirmed) {
-        try {
-          const response = locationService.deleteLocation(id);
-
-          onGetAllLocation();
-          let event = {
-            event: EVENT.DELETE_LOCATION,
-            user: user.name,
-          };
-          createEventLogLocation(event);
-          Swal.fire("Deleted!", "Your data has been deleted.", "success");
-        } catch (e) {
-          console.log(e);
-          Failed("Your data failed to delete");
-        } finally {
-          setLoading(false);
-        }
+          const deleteLoc = async () => {
+            try {
+              await locationService.deleteLocation(id);
+              onGetAllLocation();
+              let event = {
+                event: EVENT.DELETE_LOCATION,
+                user: user.name,
+              };
+              createEventLogLocation(event);
+              Swal.fire("Deleted!", "Your data has been deleted.", "success");
+            } catch (e) {
+            console.log(e);
+            Failed("Your data failed to delete");
+            }
+          }
+          deleteLoc()
       }
     });
   };
@@ -465,7 +465,7 @@ export const Location = () => {
 
                             <a
                               onClick={() => {
-                                handleEditShow(RowData.ID, item);
+                                handleEditShow(RowData['kode wilayah'], item);
                               }}
                               className="edit"
                               data-toggle="modal"
@@ -481,7 +481,7 @@ export const Location = () => {
                             </a>
 
                             <a
-                              onClick={() => onDeleteLocation(item.ID)}
+                              onClick={() => onDeleteLocation(item['kode wilayah'])}
                               className="delete"
                               data-toggle="modal"
                               style={{ cursor: "pointer" }}

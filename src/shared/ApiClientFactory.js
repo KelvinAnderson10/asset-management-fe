@@ -35,5 +35,7 @@ export const apiClientFactory = (client) => {
     }
   };
 
-  return { doPost, doGet, doPut, doDelete };
+
+
+  return { doPost, doGet, doPut, doDelete};
 };

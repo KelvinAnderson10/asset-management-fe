@@ -86,7 +86,7 @@ export const Main = () => {
                 <a>Dashboard</a>
               </div>
               <div className={classNavbarAsset} onClick={() => handleClickAsset()}>
-                <a>List of Asset</a>
+                <a>List of Inventory</a>
               </div>
             </div>
             {dashboard && <Dashboard/>}

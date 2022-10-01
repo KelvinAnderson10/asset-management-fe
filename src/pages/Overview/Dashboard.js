@@ -16,8 +16,8 @@ export const Dashboard = () => {
   const [countAsset, setCountAsset] = useState(0);
   const { getCookie } = useAuth();
   const [countAssetDeprecated, setCountAssetDeprecated] = useState(0);
-  const [totalPO, setTotalPO] = useState(0);
   const [sumAssetValue, setsumAssetValue] = useState(0);
+  const [assetBroken, setAssetBroken] = useState(0)
   const [chartData, setChartData] = useState({ labels: [], datasets: [{}] });
   const [chartData2, setChartData2] = useState({ labels: [], datasets: [{}] });
   const [unitClusterData, setUnitClusterData] = useState({
@@ -73,7 +73,6 @@ export const Dashboard = () => {
           ).format("YYYY-MM-DD HH:MM A");
         }
         setEvent(response.data);
-        console.log(response.data);
       }
     } catch (e) {
       console.log(e);
@@ -84,7 +83,7 @@ export const Dashboard = () => {
     getAllEventLog();
     onGetTotalAsset();
     onGetAssetAlmostDeprecated();
-    onGetTotalPO();
+    onGetAssetBroken();
     onGetSumAssetValue();
     onGetTotalSpenCluster();
     onGetTotalUniCluster();
@@ -94,11 +93,11 @@ export const Dashboard = () => {
     onGetTotalUniCluster2();
   }, [user.role]);
 
-  const [dataCluster, setDataCLuster] = useState({})
+  const [dataCluster, setDataCLuster] = useState({});
   const onGetTotalSpenCluster = async () => {
     try {
       const response = await dashboardService.getTotalSpendingCluster();
-      setDataCLuster(response.data)
+      setDataCLuster(response.data);
       if (response.status === "SUCCESS") {
         const chartData = {
           labels: response.data.slice(0, 5).map((data) => data.Cluster),
@@ -234,15 +233,19 @@ export const Dashboard = () => {
     }
   };
 
-  const onGetTotalPO = async () => {
+
+  const onGetAssetBroken = async ()=>{
     try {
-      const response = await dashboardService.getTotalPO();
+      const response = await dashboardService.getAssetBrokenBeforeLifetime();
       response.data = formatCash(response.data);
-      setTotalPO(response.data);
-    } catch (e) {
-      console.log(e);
+      setAssetBroken(response.data)
+    }catch(e){
+      console.log(e)
     }
-  };
+  }
+
+
+
   let format;
   const onGetSumAssetValue = async () => {
     try {
@@ -282,13 +285,12 @@ export const Dashboard = () => {
     setViewDetailUnit(false);
   };
 
-  const navigate = useNavigate()
-  const onClickViewAssetDep = ()=>{
-    navigate('/main/tableassetdeprecated', {replace: false})
+  const navigate = useNavigate();
+  const onClickViewAssetDep = () => {
+    navigate("/main/tableassetdeprecated", { replace: false });
+  };
 
-  }
-
-  const fileName =  'total-asset-spending-by-cluster'
+  const fileName = "total-asset-spending-by-cluster";
 
   document.querySelector("body").style.overflow = "auto";
   return (
@@ -330,7 +332,7 @@ export const Dashboard = () => {
               >
                 <a className="count-number">{countAssetDeprecated}</a>
                 <a style={{ color: "white", fontSize: "20px" }}>
-                  Total Asset Deprecated
+                  Asset Deprecated
                 </a>
               </div>
             </div>
@@ -342,12 +344,12 @@ export const Dashboard = () => {
               }}
             >
               <div className="content-icon">
-                <i class="fa fa-shopping-bag" style={{ color: "white" }}></i>
+                <i class="fa fa-exclamation-triangle" style={{ color: "white" }}></i>
               </div>
               <div className="content-non-icon">
-                <a className="count-number">{totalPO} </a>
+                <a className="count-number">{assetBroken} </a>
                 <a style={{ color: "white", fontSize: "20px" }}>
-                  Total Purchase Order
+                  Asset Broken 
                 </a>
               </div>
             </div>
@@ -363,7 +365,9 @@ export const Dashboard = () => {
               </div>
               <div className="content-non-icon">
                 <a className="count-number">{sumAssetValue} </a>
-                <a style={{ color: "white", fontSize: "20px" }}>
+                <a
+                  style={{ color: "white", fontSize: "20px", marginTop: "8px" }}
+                >
                   Sum Asset Value
                 </a>
               </div>
@@ -371,12 +375,7 @@ export const Dashboard = () => {
           </div>
           <div className="content-dashboard-center">
             <div className="piechart">
-              <div className="title-piechart">
-                <p>Status Purchase Request</p>
-              </div>
-              <div>
                 <PieChart chartData={POData} />
-              </div>
             </div>
             <div className="linechart">
               <div className="table-subproduct ">
@@ -412,15 +411,18 @@ export const Dashboard = () => {
 
               <div className="eventlog-box">
                 {event.length === 0 ? (
-                  <p></p>
+                  <p>No Recent Activity</p>
                 ) : (
                   event.map((data) => (
                     <div className="eventlog-box-content">
-                      <a>{data.user}</a>
-                      <a> : </a>
-                      <a>{data.event}</a>
-                      <br />
-                      <a style={{ color: "green" }}>{data.CreatedAt}</a>
+                      <div className="name-eventlog">
+                      <a>{data.user} : {data.event}</a>
+                     </div>
+                      <div className="date-activity">
+                       <a>
+                        {data.CreatedAt}
+                      </a>
+                      </div>
                     </div>
                   ))
                 )}
@@ -428,10 +430,18 @@ export const Dashboard = () => {
             </div>
           </div>
           <div className="content-dashboard-bottom">
-            <div title="Click to View Detail"  className="grafik-box" onClick={onClickViewSpending}>
+            <div
+              title="Click to View Detail"
+              className="grafik-box"
+              onClick={onClickViewSpending}
+            >
               <BarChart index={"x"} chartData={chartData} />
             </div>
-            <div title="Click to View Detail"  className="grafik-box" onClick={onClickViewUnit}>
+            <div
+              title="Click to View Detail"
+              className="grafik-box"
+              onClick={onClickViewUnit}
+            >
               <BarChart index={"x"} chartData={unitClusterData2} />
             </div>
           </div>
@@ -442,17 +452,17 @@ export const Dashboard = () => {
         <div className="view-spending-container">
           <div className="box-spending-cluster-detail">
             <div className="box-spending-header">
-            <div className="download-excel">
-              <ExportToExcel apiData={dataCluster} fileName={fileName} />
+              <div className="download-excel">
+                <ExportToExcel apiData={dataCluster} fileName={fileName} />
+              </div>
+              <div className="close-spending">
+                <CgIcons.CgClose
+                  size={"2em"}
+                  onClick={onClickCloseViewSpending}
+                />
+              </div>
             </div>
-            <div className="close-spending">
-              <CgIcons.CgClose
-                size={"2em"}
-                onClick={onClickCloseViewSpending}
-              />
-            </div>
-            </div>
-            <div>
+            <div className='bar-chart'>
               <BarChart index={"y"} chartData={chartData2} />
             </div>
           </div>
@@ -464,7 +474,7 @@ export const Dashboard = () => {
             <div className="close-spending">
               <CgIcons.CgClose size={"2em"} onClick={onClickCloseViewUnit} />
             </div>
-            <div>
+            <div className="bar-chart">
               <BarChart index={"y"} chartData={unitClusterData} />
             </div>
           </div>

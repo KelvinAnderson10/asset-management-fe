@@ -73,7 +73,7 @@ export const ImportData = () => {
         const sheetName = workbook.SheetNames[0]; 
         const worksheet = workbook.Sheets[sheetName];
         let json = XLSX.utils.sheet_to_json(worksheet);
-        console.log(json);
+       
         setExcelData(json);
 
         setUploadBackendData(json);
@@ -156,12 +156,12 @@ export const ImportData = () => {
                   <span id="file-chosen">{fileName}</span>
                 </div>
 
-                <button className="download-excel">
+                <button className="download-excel-temp">
                   <a href={guidelines} download="Upload Guidelines.xlsx">
                     Download Guidelines
                   </a>
                 </button>
-                <button className="download-excel">
+                <button className="download-excel-temp">
                   <a href={template} download="Template.xlsx">
                     Download Template
                   </a>

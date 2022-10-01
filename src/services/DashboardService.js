@@ -77,5 +77,26 @@ export const dashboardService = ({ doGet }) => {
     }
   };
 
-  return {getTotalUnitAssetCluster, getTotalPOByStatus, getTotalAssetBySubProduct, getAllCountAsset, getTotalSpendingCluster, getTotalPO,getAssetAlmostDeprecated,getSumAssetValue };
+  const getAllDeprecated = async () => {
+    try {
+      return await doGet({
+        url: "api/asset/deprecated",
+      });
+    } catch (e) {
+      throw e;
+    }
+  };
+
+  const getAssetBrokenBeforeLifetime = async () => {
+    try {
+      return await doGet({
+        url: "api/asset/dashboard/broken",
+      });
+    } catch (e) {
+      throw e;
+    }
+  };
+
+
+  return {getAssetBrokenBeforeLifetime, getAllDeprecated, getTotalUnitAssetCluster, getTotalPOByStatus, getTotalAssetBySubProduct, getAllCountAsset, getTotalSpendingCluster, getTotalPO,getAssetAlmostDeprecated,getSumAssetValue };
 };

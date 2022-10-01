@@ -35,8 +35,16 @@ export const AuthProvider = ({children}) => {
     const eraseCookie =() =>{
         // document.cookie = name + '=; Max-Age=0'
         // document.cookie = "OTP= ; expires = Thu, 01 Jan 1970 00:00:00 GMT" 
-        document.cookie = "user= ; expires = Thu, 01 Jan 1970 00:00:00 GMT"
-        } 
+        // let currentCookie = getCookie("user")
+        try {
+            document.cookie = "user= ; Path = /; expires = Thu, 01 Jan 1970 00:00:00 GMT"
+        } catch (e) {
+            console.log(e);
+        } finally{
+            navigate("/");
+        }
+    }
+
     return (
         <AuthContext.Provider value={{userOTP,setCookie,eraseCookie,getCookie}}>
             {children}

@@ -4,6 +4,10 @@ import { useDeps } from "../../../shared/context/DependencyContext";
 import "./FormPOMaintenance.css";
 import swal from "sweetalert";
 import { NOTIF, PUSHNOTIF, STATUS } from "../../../shared/constants";
+import { Failed } from "../../../shared/components/Notification/Failed";
+import { firebaseConfig } from "../../../shared/firebaseClient";
+import { initializeApp } from "firebase/app";
+import { getFirestore, setDoc, doc } from "firebase/firestore";
 
 export const FormPOMaintenance = () => {
   const [POdata, setPOData] = useState([
@@ -34,6 +38,7 @@ export const FormPOMaintenance = () => {
     vendorService,
     notificationService,
     purchaseOrderService,
+    userService,
   } = useDeps();
 
   useEffect(() => {
@@ -61,7 +66,6 @@ export const FormPOMaintenance = () => {
       setNotifData(response.data);
     } catch (e) {
       console.log(e);
-    } finally {
     }
   };
 
@@ -71,7 +75,6 @@ export const FormPOMaintenance = () => {
       setNotifData(response.data);
     } catch (e) {
       console.log(e);
-    } finally {
     }
   };
 
@@ -94,6 +97,8 @@ export const FormPOMaintenance = () => {
       POHeader.PurchaseOrderDetail = [...POdata];
       const response = await purchaseOrderService.createPO(POHeader);
       handleClearForm();
+      let myApp = initializeApp(firebaseConfig);
+      const firestore = getFirestore(myApp);
       if (response.status === "SUCCESS") {
         swal({
           title: "Success!",
@@ -102,12 +107,23 @@ export const FormPOMaintenance = () => {
           button: "OK!",
         });
       }
+      const userMobile = await userService.getUserByName(
+        response.data.approver_level1
+      );
+      
       let pushNotifObj = {
-        to: response.data.approver_level1,
+        to: userMobile.data.token,
         title: `${PUSHNOTIF.REQUEST.TITLE} ${response.data.approver_level1}`,
         body: `${PUSHNOTIF.REQUEST.BODY} ${user.name}`,
       };
       createPushNotification(pushNotifObj);
+
+      await setDoc(doc(firestore, "notifications", String(Date.now())), {
+        to: userMobile.data.name,
+        user_token: userMobile.data.token,
+        title: PUSHNOTIF.REQUEST.TITLE + userMobile.data.name,
+        body: PUSHNOTIF.REQUEST.BODY + user.name,
+      });
 
       let notifObj = {
         to: response.data.approver_level1,
@@ -115,10 +131,10 @@ export const FormPOMaintenance = () => {
         body: `${NOTIF.REQUEST.BODY} ${user.name}`,
       };
       createNotification(notifObj);
+      e.target.reset();
     } catch (error) {
       console.log(error);
-    } finally {
-      e.target.reset();
+      Failed("Your data failed to save");
     }
   };
 
@@ -129,7 +145,6 @@ export const FormPOMaintenance = () => {
       setSubProductName(response.data);
     } catch (e) {
       console.log(e);
-    } finally {
     }
   };
 
@@ -142,7 +157,6 @@ export const FormPOMaintenance = () => {
       setVendor(response.data);
     } catch (e) {
       console.log(e);
-    } finally {
     }
   };
 
@@ -174,7 +188,7 @@ export const FormPOMaintenance = () => {
 
   const handleClearForm = () => {
     setPOHeader({});
-    setPOData([0]);
+    setPOData([{}]);
   };
 
   return (
@@ -458,10 +472,7 @@ export const FormPOMaintenance = () => {
                   >
                     Submit
                   </button>
-                  <button
-                    type="reset"
-                    className="btn btn-warning float-end"
-                  >
+                  <button type="reset" className="btn btn-warning float-end">
                     Cancel
                   </button>
                 </div>

@@ -9,6 +9,9 @@ import Swal from "sweetalert2";
 import { Failed } from "../../../shared/components/Notification/Failed";
 import { NOTIF, PUSHNOTIF, STATUS } from "../../../shared/constants";
 import { Row } from "antd";
+import { firebaseConfig } from "../../../shared/firebaseClient";
+import { initializeApp } from "firebase/app";
+import { getFirestore, setDoc, doc } from "firebase/firestore";
 
 export const FormApprovalInventory = () => {
   const { user, setpoDetail, setPOHeader } = UseApprovalInventory();
@@ -17,6 +20,7 @@ export const FormApprovalInventory = () => {
     notificationService,
     purchaseOrderService,
     generalSettingService,
+    userService,
   } = useDeps();
 
   const handleFormChange = (event, index) => {
@@ -60,7 +64,6 @@ export const FormApprovalInventory = () => {
       setVendor(response.data);
     } catch (e) {
       console.log(e);
-    } finally {
     }
   };
   const location = useLocation();
@@ -88,23 +91,40 @@ export const FormApprovalInventory = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         try {
-          const response = purchaseOrderService.deletePO(id);
-          Swal.fire("Reject!", "This request has been rejected.", "success");
-          navigate("/approval-data/inventory", { replace: true });
+          const reject = async () => {
+            const response = await purchaseOrderService.deletePO(id);
+            const userMobile = await userService.getUserByName(
+              location.state.header.requester
+            );
+            
+            let pushNotifObj = {
+              to: userMobile.data.token,
+              title: `${PUSHNOTIF.REJECTED.TITLE} ${location.state.header.requester}`,
+              body: PUSHNOTIF.REJECTED.BODY,
+            };
+            createPushNotification(pushNotifObj);
 
-          let pushNotifObj = {
-            to: location.state.header.requester,
-            title: `${PUSHNOTIF.REJECTED.TITLE} ${location.state.header.requester}`,
-            body: PUSHNOTIF.REJECTED.BODY,
-          };
-          createPushNotification(pushNotifObj);
 
-          let notifObj = {
-            to: location.state.header.requester,
-            title: NOTIF.REJECTED.TITLE,
-            body: NOTIF.REJECTED.BODY,
+            let myApp = initializeApp(firebaseConfig);
+            const firestore = getFirestore(myApp);
+            await setDoc(doc(firestore, "notifications", String(Date.now())), {
+              to: userMobile.data.name,
+              user_token: userMobile.data.token,
+              title: PUSHNOTIF.REJECTED.TITLE + userMobile.data.name,
+              body: PUSHNOTIF.REJECTED.BODY + user.name,
+            });
+
+            let notifObj = {
+              to: location.state.header.requester,
+              title: NOTIF.REJECTED.TITLE,
+              body: NOTIF.REJECTED.BODY,
+            };
+            createNotification(notifObj);
+
+            Swal.fire("Reject!", "This request has been rejected.", "success");
+            navigate("/approval-data/inventory", { replace: true });
           };
-          createNotification(notifObj);
+          reject();
         } catch (e) {
           console.log(e.response);
           Failed("Failed to reject");
@@ -136,8 +156,7 @@ export const FormApprovalInventory = () => {
       setNotifData(response.data);
     } catch (e) {
       console.log(e);
-    } finally {
-    }
+    } 
   };
 
   const createPushNotification = async (notifPO) => {
@@ -146,8 +165,7 @@ export const FormApprovalInventory = () => {
       setNotifData(response.data);
     } catch (e) {
       console.log(e);
-    } finally {
-    }
+    } 
   };
 
   //Approval
@@ -183,48 +201,32 @@ export const FormApprovalInventory = () => {
     } catch (e) {
       console.log(e);
     } finally {
+      let myApp = initializeApp(firebaseConfig);
+      const firestore = getFirestore(myApp);
+
       if (location.state.header.approverLevel3 == "-") {
         try {
           const response = await purchaseOrderService.approvedByLevel2(id);
           setPOHeader(location.state.header);
-          Swal.fire("Success!", "This request has been approved.", "success");
-          navigate("/approval-data/inventory", { replace: true });
-        } catch (e) {
-          console.log(e.response);
-          Failed("Failed to approved");
-        } finally {
           updateStatus(id, { status: STATUS.APPROVE_GA_IT });
+
+          const userMobile = await userService.getUserByName(
+            location.state.header.requester
+          );
+
           let pushNotifObj = {
-            to: location.state.header.requester,
+            to: userMobile.data.token,
             title: `${PUSHNOTIF.APPROVED.TITLE} ${location.state.header.requester}`,
             body: PUSHNOTIF.APPROVED.BODY,
           };
           createPushNotification(pushNotifObj);
 
-          let notifObj = {
-            to: location.state.header.requester,
-            title: NOTIF.APPROVED.TITLE,
-            body: NOTIF.APPROVED.BODY,
-          };
-          createNotification(notifObj);
-        }
-      } else {
-        try {
-          const response = await purchaseOrderService.approvedByLevel3(id);
-          Swal.fire("Success!", "This request has been approved.", "success");
-          navigate("/approval-data/inventory", { replace: true });
-        } catch (e) {
-          console.log(e.response);
-          Failed("Failed to approved");
-        } finally {
-          updateStatus(id, { status: STATUS.APPROVE_GA_IT });
-          let pushNotifObj = {
-            to: location.state.header.requester,
-            title:
-              PUSHNOTIF.APPROVED.TITLE + `${location.state.header.requester}`,
-            body: PUSHNOTIF.APPROVED.BODY,
-          };
-          createPushNotification(pushNotifObj);
+          await setDoc(doc(firestore, "notifications", String(Date.now())), {
+            to: userMobile.data.name,
+            user_token: userMobile.data.token,
+            title: PUSHNOTIF.APPROVED.TITLE + userMobile.data.name,
+            body: PUSHNOTIF.APPROVED.BODY + user.name,
+          });
 
           let notifObj = {
             to: location.state.header.requester,
@@ -232,6 +234,46 @@ export const FormApprovalInventory = () => {
             body: NOTIF.APPROVED.BODY,
           };
           createNotification(notifObj);
+          
+          Swal.fire("Success!", "This request has been approved.", "success");
+          navigate("/approval-data/inventory", { replace: true });
+        } catch (e) {
+          console.log(e.response);
+          Failed("Failed to approved");
+        }
+      } else {
+        try {
+          const response = await purchaseOrderService.approvedByLevel3(id);
+          updateStatus(id, { status: STATUS.APPROVE_GA_IT });
+          const userMobile = await userService.getUserByName(
+            location.state.header.requester
+          );
+          let pushNotifObj = {
+            to: userMobile.data.token,
+            title: PUSHNOTIF.APPROVED.TITLE + `${location.state.header.requester}`,
+            body: PUSHNOTIF.APPROVED.BODY,
+          };
+          createPushNotification(pushNotifObj);
+
+          await setDoc(doc(firestore, "notifications", String(Date.now())), {
+            to: userMobile.data.name,
+            user_token: userMobile.data.token,
+            title: PUSHNOTIF.APPROVED.TITLE + userMobile.data.name,
+            body: PUSHNOTIF.APPROVED.BODY + user.name,
+          });
+
+          let notifObj = {
+            to: location.state.header.requester,
+            title: NOTIF.APPROVED.TITLE,
+            body: NOTIF.APPROVED.BODY,
+          };
+          createNotification(notifObj);
+
+          Swal.fire("Success!", "This request has been approved.", "success");
+          navigate("/approval-data/inventory", { replace: true });
+        } catch (e) {
+          console.log(e.response);
+          Failed("Failed to approved");
         }
       }
     }
