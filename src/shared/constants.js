@@ -19,7 +19,8 @@ export const EVENT = {
   IMPORT_DATA: "imported excel data",
   CREATE_USER: "inserted new user data",
   UPDATE_USER: "updated user data",
-  DELETE_USER: "deleted asset data",
+  DELETE_USER: "deleted user data",
+  UPDATE_SETTING: "updated variable setting"
 };
 
 export const STATUS = {

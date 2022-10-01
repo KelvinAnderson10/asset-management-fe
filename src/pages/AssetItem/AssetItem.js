@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Success } from "../../shared/components/Notification/Success";
 import Sidebar from "../../shared/components/Sidebar/Sidebar";
 import { useDeps } from "../../shared/context/DependencyContext";
 import { Failed } from "../../shared/components/Notification/Failed";
@@ -10,6 +9,7 @@ import { EVENT } from "../../shared/constants";
 import { useAuth } from "../../services/UseAuth";
 import imageCompression from "browser-image-compression";
 import AssetItemLoading from "../../shared/components/Loading/AssetItemLoad";
+import swal from "sweetalert";
 
 export const AssetItem = () => {
   const [data, setData] = useState({});
@@ -119,7 +119,13 @@ export const AssetItem = () => {
       const response = await assetItemService.createAsset(data);
       setData(response.data);
 
-      Success("added");
+      swal({
+        title: "Success!",
+        text: "Your data has been saved!",
+        icon: "success",
+        button: "OK!",
+      });
+
       let event = {
         event: EVENT.CREATE_ASSET,
         user: user.name,

@@ -179,7 +179,7 @@ input.form-control:focus{
   width: 200px;
   height: 200px;
   background-image: url('../../assets/images/No-image-available.png');
-  margin-left: 30%;
+  margin-left: 35%;
   border-radius: 20px;
   box-shadow: 5px 5px 3px #3e4041;
   background-repeat: no-repeat;
@@ -189,7 +189,7 @@ input.form-control:focus{
 
 
 .view-modal{
-  max-width: 30% !important;
+  max-width: 50% !important;
 }
 
 .overview-card .asset-pagination{

@@ -1165,6 +1165,7 @@ export const Overview = () => {
           onHide={handleViewClose}
           backdrop="static"
           keyboard={false}
+          size='lg'
         >
           <Modal.Header closeButton>
             <Modal.Title>View Data</Modal.Title>

@@ -90,20 +90,19 @@ export const FormApprovalInventory = () => {
       confirmButtonText: "Yes, decline it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        try {
-          const reject = async () => {
+        const reject = async () => {
+          try {
             const response = await purchaseOrderService.deletePO(id);
             const userMobile = await userService.getUserByName(
               location.state.header.requester
             );
-            
+
             let pushNotifObj = {
               to: userMobile.data.token,
               title: `${PUSHNOTIF.REJECTED.TITLE} ${location.state.header.requester}`,
               body: PUSHNOTIF.REJECTED.BODY,
             };
             createPushNotification(pushNotifObj);
-
 
             let myApp = initializeApp(firebaseConfig);
             const firestore = getFirestore(myApp);
@@ -123,12 +122,12 @@ export const FormApprovalInventory = () => {
 
             Swal.fire("Reject!", "This request has been rejected.", "success");
             navigate("/approval-data/inventory", { replace: true });
-          };
-          reject();
-        } catch (e) {
-          console.log(e.response);
-          Failed("Failed to reject");
-        }
+          } catch (e) {
+            console.log(e.response);
+            Failed("Failed to reject");
+          }
+        };
+        reject();
       }
     });
   };
@@ -156,7 +155,7 @@ export const FormApprovalInventory = () => {
       setNotifData(response.data);
     } catch (e) {
       console.log(e);
-    } 
+    }
   };
 
   const createPushNotification = async (notifPO) => {
@@ -165,7 +164,7 @@ export const FormApprovalInventory = () => {
       setNotifData(response.data);
     } catch (e) {
       console.log(e);
-    } 
+    }
   };
 
   //Approval
@@ -234,7 +233,7 @@ export const FormApprovalInventory = () => {
             body: NOTIF.APPROVED.BODY,
           };
           createNotification(notifObj);
-          
+
           Swal.fire("Success!", "This request has been approved.", "success");
           navigate("/approval-data/inventory", { replace: true });
         } catch (e) {
@@ -250,7 +249,8 @@ export const FormApprovalInventory = () => {
           );
           let pushNotifObj = {
             to: userMobile.data.token,
-            title: PUSHNOTIF.APPROVED.TITLE + `${location.state.header.requester}`,
+            title:
+              PUSHNOTIF.APPROVED.TITLE + `${location.state.header.requester}`,
             body: PUSHNOTIF.APPROVED.BODY,
           };
           createPushNotification(pushNotifObj);

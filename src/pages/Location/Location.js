@@ -146,22 +146,22 @@ export const Location = () => {
       confirmButtonText: "Yes!",
     }).then((result) => {
       if (result.isConfirmed) {
-        try {
-          const response = locationService.deleteLocation(id);
-          console.log(response)
-          onGetAllLocation();
-          let event = {
-            event: EVENT.DELETE_LOCATION,
-            user: user.name,
-          };
-          createEventLogLocation(event);
-          Swal.fire("Deleted!", "Your data has been deleted.", "success");
-        } catch (e) {
-          console.log(e);
-          Failed("Your data failed to delete");
-        } finally {
-          setLoading(false);
-        }
+          const deleteLoc = async () => {
+            try {
+              await locationService.deleteLocation(id);
+              onGetAllLocation();
+              let event = {
+                event: EVENT.DELETE_LOCATION,
+                user: user.name,
+              };
+              createEventLogLocation(event);
+              Swal.fire("Deleted!", "Your data has been deleted.", "success");
+            } catch (e) {
+            console.log(e);
+            Failed("Your data failed to delete");
+            }
+          }
+          deleteLoc()
       }
     });
   };
@@ -291,10 +291,6 @@ export const Location = () => {
     pageDecrementBtn = <li onClick={handlePrevbtn}> &hellip; </li>;
   }
 
-  const handleLoadMore = () => {
-    setitemsPerPage(itemsPerPage + 5);
-  };
-
   //================== SORTING ===============================
 
   const sorting = (col) => {
@@ -354,8 +350,8 @@ export const Location = () => {
       position: savedUser.position,
       role: savedUser.role,
     }));
-
   };
+  
   document.querySelector("body").style.overflow = "auto";
   return (
     <>

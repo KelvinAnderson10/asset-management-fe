@@ -145,24 +145,26 @@ export const VendorManage = () => {
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.isConfirmed) {
-        try {
-          const response = vendorService.deleteVendor(name);
-          onGetAllVendor();
-          let event = {
-            event: EVENT.DELETE_VENDOR,
-            user: user.name
-          }
-          createEventLogVendor(event)
-        } catch (e) {
-          console.log(e);
-        } finally {
-          setLoading(false);
+        const deleteVen = async () => {
+          try {
+            await vendorService.deleteVendor(name);
+            onGetAllVendor();
+            let event = {
+              event: EVENT.DELETE_VENDOR,
+              user: user.name
+            }
+            createEventLogVendor(event)
+            Swal.fire(
+              'Deleted!',
+              'Your file has been deleted.',
+              'success'
+            )
+          } catch (e) {
+            console.log(e);
+            Failed("Your data failed to delete");
+          } 
         }
-        Swal.fire(
-          'Deleted!',
-          'Your file has been deleted.',
-          'success'
-        )
+        deleteVen()
       }
     })
 
