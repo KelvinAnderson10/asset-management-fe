@@ -20,6 +20,7 @@ export const EVENT = {
   CREATE_USER: "inserted new user data",
   UPDATE_USER: "updated user data",
   DELETE_USER: "deleted asset data",
+  UPDATE_SETTING: "updated variable setting"
 };
 
 export const STATUS = {

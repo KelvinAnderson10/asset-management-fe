@@ -77,43 +77,43 @@ export const FormApprovalMaintence = () => {
       confirmButtonText: "Yes, decline it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        try {
           const reject = async () => {
-            const response = await purchaseOrderService.deletePO(id);
+            try {
+              await purchaseOrderService.deletePO(id);
+              
+              const userMobile = await userService.getUserByName(
+                location.state.header.requester
+              );
+              let pushNotifObj = {
+                to: userMobile.data.token,
+                title: `${PUSHNOTIF.REJECTED.TITLE} ${location.state.header.requester}`,
+                body: PUSHNOTIF.REJECTED.BODY,
+              };
+              createPushNotification(pushNotifObj);
 
-            const userMobile = await userService.getUserByName(
-              location.state.header.requester
-            );
-            let pushNotifObj = {
-              to: userMobile.data.token,
-              title: `${PUSHNOTIF.REJECTED.TITLE} ${location.state.header.requester}`,
-              body: PUSHNOTIF.REJECTED.BODY,
-            };
-            createPushNotification(pushNotifObj);
+              let myApp = initializeApp(firebaseConfig);
+              const firestore = getFirestore(myApp);
+              await setDoc(doc(firestore, "notifications", String(Date.now())), {
+                to: userMobile.data.name,
+                user_token: userMobile.data.token,
+                title: PUSHNOTIF.REJECTED.TITLE + userMobile.data.name,
+                body: PUSHNOTIF.REJECTED.BODY + user.name,
+              });
 
-            let myApp = initializeApp(firebaseConfig);
-            const firestore = getFirestore(myApp);
-            await setDoc(doc(firestore, "notifications", String(Date.now())), {
-              to: userMobile.data.name,
-              user_token: userMobile.data.token,
-              title: PUSHNOTIF.REJECTED.TITLE + userMobile.data.name,
-              body: PUSHNOTIF.REJECTED.BODY + user.name,
-            });
-
-            let notifObj = {
-              to: location.state.header.requester,
-              title: NOTIF.REJECTED.TITLE,
-              body: NOTIF.REJECTED.BODY,
-            };
-            createNotification(notifObj);
-            Swal.fire("Reject!", "This request has been rejected.", "success");
-            navigate("/approval-data/maintenance", { replace: true });
-          };
-          reject();
-        } catch (e) {
-          console.log(e.response);
-          Failed("Failed to reject");
+              let notifObj = {
+                to: location.state.header.requester,
+                title: NOTIF.REJECTED.TITLE,
+                body: NOTIF.REJECTED.BODY,
+              };
+              createNotification(notifObj);
+              Swal.fire("Reject!", "This request has been rejected.", "success");
+              navigate("/approval-data/maintenance", { replace: true });
+            } catch (e) {
+              console.log(e.response);
+              Failed("Failed to reject");;
+          } 
         }
+        reject(); 
       }
     });
   };

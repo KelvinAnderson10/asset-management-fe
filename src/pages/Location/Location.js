@@ -291,10 +291,6 @@ export const Location = () => {
     pageDecrementBtn = <li onClick={handlePrevbtn}> &hellip; </li>;
   }
 
-  const handleLoadMore = () => {
-    setitemsPerPage(itemsPerPage + 5);
-  };
-
   //================== SORTING ===============================
 
   const sorting = (col) => {
@@ -354,8 +350,8 @@ export const Location = () => {
       position: savedUser.position,
       role: savedUser.role,
     }));
-
   };
+  
   document.querySelector("body").style.overflow = "auto";
   return (
     <>
