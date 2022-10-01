@@ -146,22 +146,22 @@ export const Location = () => {
       confirmButtonText: "Yes!",
     }).then((result) => {
       if (result.isConfirmed) {
-        try {
-          const response = locationService.deleteLocation(id);
-          console.log(response)
-          onGetAllLocation();
-          let event = {
-            event: EVENT.DELETE_LOCATION,
-            user: user.name,
-          };
-          createEventLogLocation(event);
-          Swal.fire("Deleted!", "Your data has been deleted.", "success");
-        } catch (e) {
-          console.log(e);
-          Failed("Your data failed to delete");
-        } finally {
-          setLoading(false);
-        }
+          const deleteLoc = async () => {
+            try {
+              await locationService.deleteLocation(id);
+              onGetAllLocation();
+              let event = {
+                event: EVENT.DELETE_LOCATION,
+                user: user.name,
+              };
+              createEventLogLocation(event);
+              Swal.fire("Deleted!", "Your data has been deleted.", "success");
+            } catch (e) {
+            console.log(e);
+            Failed("Your data failed to delete");
+            }
+          }
+          deleteLoc()
       }
     });
   };
