@@ -1,0 +1,29 @@
+{
+  "files": {
+    "main.css": "/static/css/main.ae9121aa.css",
+    "main.js": "/static/js/main.e20617ea.js",
+    "static/js/787.cda612ba.chunk.js": "/static/js/787.cda612ba.chunk.js",
+    "static/media/loadinggif.gif": "/static/media/loadinggif.1471cefe05c5285cfa24.gif",
+    "static/media/6333070.jpg": "/static/media/6333070.b2d5794035a3dcf526a8.jpg",
+    "static/media/login_bg.svg": "/static/media/login_bg.bfc70bbd35cdc033d0d0.svg",
+    "static/media/no-data.png": "/static/media/no-data.272f634e0b1857399b1b.png",
+    "static/media/mulish-all-400-normal.woff": "/static/media/mulish-all-400-normal.8137bb02e4b86ac2772d.woff",
+    "static/media/narindo_logo_black.svg": "/static/media/narindo_logo_black.9f95b22dc43e4578ae70ae1acedc271a.svg",
+    "static/media/default.png": "/static/media/default.98e94449812ac255411f.png",
+    "static/media/template.xlsx": "/static/media/template.8fd1a6ed5eb575d9ffb3.xlsx",
+    "static/media/guidelines.xlsx": "/static/media/guidelines.10e0411932ad74c4e575.xlsx",
+    "static/media/mulish-latin-400-normal.woff2": "/static/media/mulish-latin-400-normal.545bb0738f864da88621.woff2",
+    "static/media/mulish-latin-ext-400-normal.woff2": "/static/media/mulish-latin-ext-400-normal.3d7b0215e7e0cf84b970.woff2",
+    "static/media/mulish-cyrillic-ext-400-normal.woff2": "/static/media/mulish-cyrillic-ext-400-normal.4cb0158123b8265f18bf.woff2",
+    "static/media/mulish-cyrillic-400-normal.woff2": "/static/media/mulish-cyrillic-400-normal.7113ed56c14381d81a8d.woff2",
+    "static/media/mulish-vietnamese-400-normal.woff2": "/static/media/mulish-vietnamese-400-normal.3f578d4097408361dc6a.woff2",
+    "index.html": "/index.html",
+    "main.ae9121aa.css.map": "/static/css/main.ae9121aa.css.map",
+    "main.e20617ea.js.map": "/static/js/main.e20617ea.js.map",
+    "787.cda612ba.chunk.js.map": "/static/js/787.cda612ba.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.ae9121aa.css",
+    "static/js/main.e20617ea.js"
+  ]
+}
