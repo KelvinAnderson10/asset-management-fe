@@ -159,30 +159,30 @@ export const overviewService = ({doGet, doPut}) => {
         }
     }
 
-    const filterAssetMultipleConditionByIT = async (condition, vendor, location, product, subproduct, category, page) => {
+    const filterAssetMultipleConditionByIT = async (condition, vendor, location, product, subproduct, category,assetNumber, page) => {
         try {
             return await doGet({
-                url: `/api/asset/it/search?condition=${condition}&vendor=${vendor}&location=${location}&product=${product}&subproduct=${subproduct}&category=${category}&page=${page}`
+                url: `/api/asset/it/search?condition=${condition}&vendor=${vendor}&location=${location}&product=${product}&subproduct=${subproduct}&category=${category}&asset_numbe=${assetNumber}&page=${page}`
             })
         } catch (e) {
             throw e
         }
     }
 
-    const filterAssetMultipleConditionByAdmin = async (condition, vendor, location, product, subproduct, category, page) => {
+    const filterAssetMultipleConditionByAdmin = async (condition, vendor, location, product, subproduct, category, assetNumber, page) => {
         try {
             return await doGet({
-                url: `/api/asset/admin/search?condition=${condition}&vendor=${vendor}&location=${location}&product=${product}&subproduct=${subproduct}&category=${category}&page=${page}`
+                url: `/api/asset/admin/search?condition=${condition}&vendor=${vendor}&location=${location}&product=${product}&subproduct=${subproduct}&category=${category}&asset_number=${assetNumber}&page=${page}`
             })
         } catch (e) {
             throw e
         }
     }
 
-    const filterAssetMultipleConditionByUser = async (condition, vendor, location, product, subproduct, category, page) => {
+    const filterAssetMultipleConditionByUser = async (condition, vendor, location, product, subproduct, category, assetNumber, page) => {
         try {
             return await doGet({
-                url: `/api/asset/user/search?condition=${condition}&vendor=${vendor}&location=${location}&product=${product}&subproduct=${subproduct}&category=${category}&page=${page}`
+                url: `/api/asset/user/search?condition=${condition}&vendor=${vendor}&location=${location}&product=${product}&subproduct=${subproduct}&category=${category}&assetNumber=${assetNumber}&page=${page}`
             })
         } catch (e) {
             throw e

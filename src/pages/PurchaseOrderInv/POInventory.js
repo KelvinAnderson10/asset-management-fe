@@ -40,9 +40,7 @@ export const POInventory = () => {
                         </div> 
                         </div>
                         <div className='title-right'>
-                        <div className='title-box'>
                         <a>Inventory</a>
-                        </div>
                         </div>
                     </div>
                </div>

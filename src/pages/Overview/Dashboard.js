@@ -103,9 +103,9 @@ export const Dashboard = () => {
           labels: response.data.slice(0, 5).map((data) => data.Cluster),
           datasets: [
             {
-              label: "Total Asset Spending By Cluster",
+              label: "Total Inventory Spending By Cluster",
               data: response.data.map((data) => data.Total),
-              backgroundColor: ["#B70621", "#ff7b7b"],
+              backgroundColor: ["#B70621"],
             },
           ],
         };
@@ -124,9 +124,9 @@ export const Dashboard = () => {
           labels: response.data.map((data) => data.Cluster),
           datasets: [
             {
-              label: "Total Asset Spending By Cluster",
+              label: "Total Inventory Spending By Cluster",
               data: response.data.map((data) => data.Total),
-              backgroundColor: ["#B70621", "#ff7b7b"],
+              backgroundColor: ["#B70621"],
             },
           ],
         };
@@ -179,9 +179,9 @@ export const Dashboard = () => {
           labels: response.data.map((data) => data.Cluster),
           datasets: [
             {
-              label: "Total Asset Units By Cluster",
+              label: "Total Inventory Units By Cluster",
               data: response.data.map((data) => data.Total),
-              backgroundColor: ["#2d85c5", "#a5d3eb "],
+              backgroundColor: ["#2d85c5"],
             },
           ],
         };
@@ -199,9 +199,9 @@ export const Dashboard = () => {
           labels: response.data.slice(0, 5).map((data) => data.Cluster),
           datasets: [
             {
-              label: "Total Asset Units By Cluster",
+              label: "Total Inventory Units By Cluster",
               data: response.data.map((data) => data.Total),
-              backgroundColor: ["#2d85c5", "#a5d3eb "],
+              backgroundColor: ["#2d85c5"],
             },
           ],
         };
@@ -310,7 +310,7 @@ export const Dashboard = () => {
               </div>
               <div className="content-non-icon">
                 <a className="count-number">{countAsset} </a>
-                <a style={{ color: "white", fontSize: "20px" }}>Total Asset</a>
+                <a style={{ color: "white", fontSize: "20px" }}>Total Inventory</a>
               </div>
             </div>
             <div
@@ -332,7 +332,7 @@ export const Dashboard = () => {
               >
                 <a className="count-number">{countAssetDeprecated}</a>
                 <a style={{ color: "white", fontSize: "20px" }}>
-                  Asset Deprecated
+                 Inventory Deprecated
                 </a>
               </div>
             </div>
@@ -349,7 +349,7 @@ export const Dashboard = () => {
               <div className="content-non-icon">
                 <a className="count-number">{assetBroken} </a>
                 <a style={{ color: "white", fontSize: "20px" }}>
-                  Asset Broken 
+                Inventory Broken 
                 </a>
               </div>
             </div>
@@ -368,7 +368,7 @@ export const Dashboard = () => {
                 <a
                   style={{ color: "white", fontSize: "20px", marginTop: "8px" }}
                 >
-                  Sum Asset Value
+                  Sum Inventory Value
                 </a>
               </div>
             </div>

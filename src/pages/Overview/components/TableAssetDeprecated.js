@@ -130,7 +130,7 @@ export const TableAssetDeprecated = () => {
                 onClick={onClickBack}
                 style={{ cursor: "pointer", marginRight: "5px" }}
               />
-              List Asset Almost Deprecated
+              List Inventory Almost Deprecated
               <div className="download-excel">
                 <CSVLink
                   data={allAsset}

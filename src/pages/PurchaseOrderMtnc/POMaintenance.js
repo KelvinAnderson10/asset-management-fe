@@ -38,10 +38,8 @@ export const POMaintenance = () => {
                         </div>
                       </div>
                       <div className='title-right'>
-                        <div className='title-box'>
                         <a>Maintenance</a>
                         </div>
-                      </div>
                     </div>
                 </div>
                 {requestList && <ListPOMaintenance/>}

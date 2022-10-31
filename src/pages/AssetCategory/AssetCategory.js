@@ -664,6 +664,7 @@ export const AssetCategory = () => {
                           style={{ maxWidth: "500px" }}
                           required
                           type="number"
+                          min="0"
                           className="form-control"
                           onChange={handleChange}
                           name="useful_life"
@@ -778,6 +779,7 @@ export const AssetCategory = () => {
                         <input
                           style={{ maxWidth: "500px" }}
                           type="number"
+                          min="0"
                           className="form-control"
                           onChange={handleChange}
                           placeholder="Please enter useful life"
