@@ -42,11 +42,22 @@ export const FormPOInventory = () => {
     userService,
   } = useDeps();
 
+  const [enabled, setEnabled] = useState(false)
+  const [formIsValid,setFormIsValid] = useState(false)
+
   useEffect(() => {
     onGetAllSubProduct();
     onGetAllVendor();
     onGetCookie();
   }, []);
+
+  useEffect(()=>{
+    if (formIsValid) {
+      setEnabled(false)
+     } else{
+      setEnabled(true)
+     }
+  },[formIsValid])
 
   const handleChange = (e) => {
     const newData = { ...POHeader };
@@ -57,11 +68,31 @@ export const FormPOInventory = () => {
   const handleFormChange = (event, index) => {
     let data = [...POdata];
     data[index][event.target.name] = event.target.value;
+
+    for (let i in data){
+      if (data[index]["Nama Barang"].length >0 &&
+      data[index].quantity.length >0 && 
+      data[index].vendor_1.length >0 && 
+      data[index].item_price_1.length >0 && 
+      data[index].vendor_2.length >0 && 
+      data[index].item_price_2.length >0 &&
+      data[index].ppn.length >0){
+        setFormIsValid(true)
+      }
+    }
+    if (formIsValid == true) {
+      setEnabled(false)
+     } else{
+      setEnabled(true)
+     }
+    console.log('perubahan data',data)
+    console.log('ini formIsValid',formIsValid)
     setPOData(data);
   };
 
   const addFields = (e) => {
     e.preventDefault();
+    setFormIsValid(false)
     let object = {
       ["Nama Barang"]: "",
       vendor_1: "",
@@ -508,6 +539,7 @@ export const FormPOInventory = () => {
                 })}
                 <div className="col-md-12">
                   <button
+                  disabled={enabled}
                     className="btn btn-success float-start"
                     onClick={addFields}
                   >
