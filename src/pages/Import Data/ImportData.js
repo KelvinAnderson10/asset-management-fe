@@ -292,7 +292,7 @@ export const ImportData = () => {
                       className="btn btn-primary"
                       onClick={handleSubmit}
                     >
-                      Save
+                      Submit
                     </button>
                   </div>
                 </div>
