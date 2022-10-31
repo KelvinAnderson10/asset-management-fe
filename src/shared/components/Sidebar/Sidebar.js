@@ -206,7 +206,7 @@ const Sidebar = ({ children }) => {
   });
 
   const [viewNotif, setViewNotif] = useState([]);
-  const [countNotif, setCountNotif] = useState('');
+  const [countNotif, setCountNotif] = useState('0');
   const { notificationService } = useDeps();
   const [notif, setNotif] = useState(false);
 
