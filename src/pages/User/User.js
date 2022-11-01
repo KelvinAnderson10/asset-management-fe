@@ -495,7 +495,7 @@ export const UserManage = () => {
                     <tbody>
                       {data.length === 0 ? (
                         <tr>
-                          <th colspan="9">Data is not found</th>
+                          <th colspan="11">Data is not found</th>
                         </tr>
                       ) : (
                         currentItems.map((item, index) => (

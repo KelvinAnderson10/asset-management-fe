@@ -432,7 +432,7 @@ export const Location = () => {
                   <tbody>
                     {data.length === 0 ? (
                       <tr>
-                        <th colspan="4">Data is not found</th>
+                        <th colspan="5">Data is not found</th>
                       </tr>
                     ) : (
                       currentItems.map((item, index) => (

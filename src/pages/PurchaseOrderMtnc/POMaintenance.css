@@ -23,21 +23,13 @@
 
 .navbar-po-container .title-right{
     width: 30%;
-    display: flex;
-    justify-content: flex-end;
+  display: flex;
+  justify-content: flex-end;
+  color: #B70621;
+  font-size: 3vh; 
+  font-weight: 600;
 }
 
-.title-right .title-box{
-    width: 10vw;
-    height: 4.5vh;
-    background-color: rgb(29, 161, 242);
-    border-radius: 15px;
-    font-size: 2vh;
-    color: #ffffff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
   
 .navbar-po-container .navbar-po-box{
     width: 15vw;
