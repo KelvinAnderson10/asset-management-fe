@@ -28,6 +28,7 @@ export const Overview = () => {
   const [isLoading, setLoading] = useState(false);
   const [isLoading2, setLoading2] = useState(false)
   const [fileName, setFileName] = useState("No file chosen");
+  const [moreActionShow, setMoreActionShow] = useState([]);
 
   const handleViewShow = () => {
     setViewShow(true);
@@ -126,6 +127,7 @@ export const Overview = () => {
       setEditShowRegular(true);
     }
     handleEditAssetById(id);
+    setMoreActionShow(Array(moreActionShow.length).fill(false))
   };
 
   // UPLOAD IMAGE
@@ -375,6 +377,7 @@ export const Overview = () => {
       }
       onCountAsset();
       setDatas(response.data);
+      setMoreActionShow(Array(response.data.length).fill(false))
     } catch (e) {
       console.log(e);
     } finally {
@@ -411,6 +414,7 @@ export const Overview = () => {
       }
       onCountAsset();
       setDatas(response.data);
+      setMoreActionShow(Array(response.data.length).fill(false))
     } catch (e) {
       console.log(e);
     } finally {
@@ -447,6 +451,7 @@ export const Overview = () => {
       }
       onCountAsset();
       setDatas(response.data);
+      setMoreActionShow(Array(response.data.length).fill(false))
     } catch (e) {
       console.log(e);
     } finally {
@@ -484,6 +489,7 @@ export const Overview = () => {
       setDatas(response.data);
       setPageCount(Math.ceil(response.count / 10));
       setTotalAsset(response.count)
+      setMoreActionShow(Array(response.data.length).fill(false))
     } catch (e) {
       console.log(e);
     } finally {
@@ -741,6 +747,51 @@ export const Overview = () => {
   const [searchProduct, setSearchProduct] = useState("");
   const [searchSubproduct, setSearchSubproduct] = useState("");
   const [searchCategory, setSearchCategory] = useState("");
+
+  // Request Transfer Asset
+
+  const [modalTransferShow, setModalTransferShow] = useState(false);
+  const [assetTransfer, setAssetTransfer] = useState({});
+  const [originalLocation, setOriginalLocation] = useState("");
+  const [disableSubmit, setDisableSubmit] = useState(true);
+  const handleToggleTransfer = async (name) => {
+    setLoading(true);
+    try {
+      const response = await overviewService.getAssetByAssetName(name);
+      if (response.data["Nomor Asset"]) {
+        setAssetTransfer(response.data)
+        setOriginalLocation(response.data["Kode Wilayah"])
+        setModalTransferShow(true)
+      }
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleChangeTransfer = (e) => {
+    if (e.target.value === "") {
+      setDisableSubmit(true);
+      return;
+    }
+    const newData = { ...assetTransfer};
+    newData[e.target.name] = e.target.value;
+    setDisableSubmit(newData["Kode Wilayah"] == originalLocation);
+    setAssetTransfer(newData);
+  };
+
+  const handleSubmitTrasfer = async () => {
+    try {
+      setModalTransferShow(false)
+      setLoading(true)
+      console.log("hit api");
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <>
@@ -1065,57 +1116,141 @@ export const Overview = () => {
                     datas.map((data, index) => (
                       <tr key={data["Nomor Asset"]}>
                         <th>{index + 1}</th>
-                        <th style={{ fontSize: "30px" }}>
-                          <a
-                            onClick={() => {
-                              handleViewShow(setRowData(data));
-                            }}
-                            className="view"
-                            data-toggle="modal"
-                            style={{ cursor: "pointer", width: "50%" }}
-                          >
-                            <i
-                              className="material-icons"
-                              data-toggle="tooltip"
-                              title="View"
-                              style={{ fontSize: "25px", color: "darkblue" }}
+                        <th style={{ fontSize: "14px", fontWeight : "normal" }}>
+                          <div style={{display : "flex", justifyContent : "space-between", marginTop : "4px" }}>
+                            <a
+                              onClick={() => {
+                                handleViewShow(setRowData(data));
+                              }}
+                              className="view"
+                              data-toggle="modal"
+                              style={{ cursor: "pointer", width: "50%", textDecoration : "none", display : 'flex', marginTop : "3px" }}
                             >
-                              &#xe8f4;
-                            </i>
-                          </a>
-                          <a
-                            target="_blank"
-                            href={`http://api.qrserver.com/v1/create-qr-code/?data= Asset Number: ${data["Nomor Asset"]}%0A Purchase Date: ${data["Tanggal Output"]}%0A Asset Name: ${data["Nama Barang"]}%0A Asset Category: ${data["Kategori Jenis Produk"]}%0A Product Name: ${data["Jenis Produk"]}%0A Location: ${data["Lokasi"]}%0A PO Number: ${data["No. PO / Dokumenen Pendukung"]}%0A Lifetime: ${data["Masa Manfaat (Bulan)"]}%0A Value: ${data["Nilai Asset saat ini"]}%0A Vendor: ${data["Vendor"]}&size=${size}x${size}&bgcolor=${bgColor}`}
-                            download="QRCode"
-                          >
-                            <i
-                              className="material-icons"
-                              data-toggle="tooltip"
-                              title="View"
-                              style={{ fontSize: "25px", color: "black" }}
+                              <i
+                                className="material-icons"
+                                data-toggle="tooltip"
+                                title="View"
+                                style={{ fontSize: "20px", color: "darkblue"  }}
+                              >
+                                &#xe8f4;
+                              </i>
+                              <p>Detail</p> 
+                            </a>
+                            
+                            { moreActionShow[index] ?
+                              <i
+                                className="material-icons"
+                                data-toggle="tooltip"
+                                title="View"
+                                style={{ fontSize: "25px", color: "black", cursor : "pointer"  }}
+                                onClick={() => {
+                                  setMoreActionShow(Array(moreActionShow.length).fill(false));
+                                }}
+                              >
+                                &#xe5ce;
+                              </i> :
+                              <i
+                                className="material-icons"
+                                data-toggle="tooltip"
+                                title="View"
+                                style={{ fontSize: "25px", color: "black", cursor : "pointer"  }}
+                                onClick={() => {
+                                  setMoreActionShow(Array.apply(null, Array(moreActionShow.length)).map(function (x, i) { 
+                                    if (i === index) {
+                                      return true;
+                                    }
+                                    return false;
+                                   }));
+                                }}
+                              >
+                                &#xe5cf;
+                              </i>
+                            }
+                          </div>
+                          { moreActionShow[index] &&
+                            <div
+                              style={{position : "absolute", backgroundColor : "whitesmoke", display : "flex", flexDirection : "column", padding : "4px", paddingRight: "10px", borderRadius : "4px"}}
                             >
-                              &#xe00a;
-                            </i>
-                          </a>
-                          {(user.level_approval == 'Regular' || user.level_approval == 'GA' || user.level_approval== 'IT' || user.role == 'Admin') &&
-                          <a
-                          onClick={() => {
-                            handleEditShow(data["Nomor Asset"]);
-                          }}
-                          className="edit"
-                          data-toggle="modal"
-                          style={{ cursor: "pointer" }}
-                        >
-                          <i
-                            className="material-icons"
-                            data-toggle="tooltip"
-                            title="Edit"
-                            style={{ fontSize: "25px" }}
-                          >
-                            &#xe3c9;
-                          </i>
-                        </a>
-                        }
+                              <a
+                                target="_blank"
+                                href={`http://api.qrserver.com/v1/create-qr-code/?data= Asset Number: ${data["Nomor Asset"]}%0A Purchase Date: ${data["Tanggal Output"]}%0A Asset Name: ${data["Nama Barang"]}%0A Asset Category: ${data["Kategori Jenis Produk"]}%0A Product Name: ${data["Jenis Produk"]}%0A Location: ${data["Lokasi"]}%0A PO Number: ${data["No. PO / Dokumenen Pendukung"]}%0A Lifetime: ${data["Masa Manfaat (Bulan)"]}%0A Value: ${data["Nilai Asset saat ini"]}%0A Vendor: ${data["Vendor"]}&size=${size}x${size}&bgcolor=${bgColor}`}
+                                download="QRCode"
+                                style={{cursor : "pointer",textDecoration : "none", display : 'flex', marginTop : "3px"}}
+                                onClick={() => {
+                                  setMoreActionShow(Array(moreActionShow.length).fill(false))
+                                }}
+                              >
+                                <i
+                                  className="material-icons"
+                                  data-toggle="tooltip"
+                                  title="View"
+                                  style={{ fontSize: "25px", color: "black" }}
+                                >
+                                  &#xe00a;
+                                </i>
+                                <p style={{color : "black"}}>QR Code</p>
+                              </a>
+                              {(user.level_approval == 'Regular' || user.level_approval == 'GA' || user.level_approval== 'IT' || user.role == 'Admin') &&
+                                <a
+                                  onClick={() => {
+                                    handleEditShow(data["Nomor Asset"]);
+                                  }}
+                                  className="edit"
+                                  data-toggle="modal"
+                                  style={{cursor : "pointer",textDecoration : "none", display : 'flex', marginTop : "3px"}}
+                                >
+                                  <i
+                                    className="material-icons"
+                                    data-toggle="tooltip"
+                                    title="Edit"
+                                    style={{ fontSize: "25px" }}
+                                  >
+                                    &#xe3c9;
+                                  </i>
+                                  <p style={{color : "black"}}>Edit</p>
+                                </a>
+                              }
+                              {(user.level_approval == 'Regular') &&
+                                <a
+                                  onClick={() => {
+                                    handleToggleTransfer(data["Nomor Asset"]);
+                                    setMoreActionShow(Array(moreActionShow.length).fill(false));
+                                  }}
+                                  className="edit"
+                                  data-toggle="modal"
+                                  style={{cursor : "pointer",textDecoration : "none", display : 'flex', marginTop : "3px", color : "darkred"}}
+                                >
+                                  <i
+                                    className="material-icons"
+                                    data-toggle="tooltip"
+                                    title="Edit"
+                                    style={{ fontSize: "25px" }}
+                                  >
+                                    &#xeb61;
+                                  </i>
+                                  <p style={{color : "black"}}>Transfer Request</p>
+                                </a>
+                              }
+                              {(user.level_approval == 'GA') &&
+                                <a
+                                  onClick={() => {}}
+                                  className="edit"
+                                  data-toggle="modal"
+                                  style={{cursor : "pointer",textDecoration : "none", display : 'flex', marginTop : "3px", color : "gray"}}
+                                >
+                                  <i
+                                    className="material-icons"
+                                    data-toggle="tooltip"
+                                    title="Edit"
+                                    style={{ fontSize: "25px" }}
+                                  >
+                                    &#xe889;
+                                  </i>
+                                  <p style={{color : "black"}}>History</p>
+                                </a>
+                              }
+                            </div>
+                          }
                           
                         </th>
                         <td>{data["Tanggal Output"]}</td>
@@ -1584,6 +1719,113 @@ export const Overview = () => {
           </div>
         </div>
       )}
+
+      { modalTransferShow &&
+        <div className="model-box-view">
+          <Modal
+            dialogClassName="view-modal"
+            show={modalTransferShow}
+            onHide={() => {
+              setModalTransferShow(false)
+            }}
+            backdrop="static"
+            keyboard={false}
+            size='lg'
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Transfer Asset Request</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <div>
+                <div className="form-group">
+                <div className="image-view">
+                  <img src={assetTransfer["Asset Image"]}></img>
+                </div>
+                  <div className="row">
+                    <div className="col-md-6 mb-3 mt-3">
+                      <label>No Asset</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        value={assetTransfer["Nomor Asset"]}
+                        readOnly
+                      />
+                    </div>
+                    <div className="col-md-6 mb-3 mt-3">
+                      <label>Asset Name</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        value={assetTransfer["Nama Barang"]}
+                        readOnly
+                      />
+                    </div>
+                    <div className="col-md-6 mb-3">
+                      <label>Asset Category</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        value={assetTransfer["Kategori Aset Tetap"]}
+                        readOnly
+                      />
+                    </div>
+                    <div className="col-md-6 mb-3">
+                      <label>Original Location</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        value={assetTransfer["Lokasi"]}
+                        readOnly
+                      />
+                    </div>
+                    <div className="col-md-12 mb-3">
+                      <label>Target Location :</label>
+                      <select
+                        required
+                        name="Kode Wilayah"
+                        value={assetTransfer["Kode Wilayah"]}
+                        onChange={handleChangeTransfer}
+                        className="form-select"
+                      >
+                        <option value="">Select Location</option>
+                        {locations.map((item, index) => (
+                          <option
+                            key={item["kode wilayah"]}
+                            value={item["kode wilayah"]}
+                          >
+                            {item.location}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Modal.Body>
+            <Modal.Footer>
+              <div className="button-asset">
+                <button
+                  className="btn btn-danger button-cancel"
+                  onClick={() => {
+                    setModalTransferShow(false)
+                  }}
+                  style={{marginRight : "8px"}}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="btn btn-primary button-submit"
+                  onClick={handleSubmitTrasfer}
+                  disabled={disableSubmit}
+                >
+                  Submit
+                </button>
+              </div>
+            </Modal.Footer>
+          </Modal>
+        </div>
+      }
+
       {isLoading && <Loading />}
       {isLoading2 && <AssetLoading/>}
     </>
