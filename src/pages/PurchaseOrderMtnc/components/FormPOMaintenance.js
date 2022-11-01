@@ -196,7 +196,7 @@ export const FormPOMaintenance = () => {
       <div className="po-mtnc-form-container">
         <div className="po-mtnc-form-card">
           <form onSubmit={onSubmitPO}>
-            <h4 className="mb-5 text-danger">Purchase Order Request Form</h4>
+            <h4 className="mb-4 text-danger">Purchase Order Request Form</h4>
             <div className="formPOInput">
               <div className="row">
                 <div className="mb-3 col-md-4">
@@ -329,7 +329,7 @@ export const FormPOMaintenance = () => {
                             type="number"
                             min="0"
                             name="item_price_1"
-                            placeholder="item_price_1"
+                            placeholder="Item Price 1"
                             onChange={(event) => handleFormChange(event, index)}
                             value={form.item_price_1}
                           />
@@ -374,7 +374,7 @@ export const FormPOMaintenance = () => {
                             type="number"
                             min="0"
                             name="item_price_2"
-                            placeholder="item_price_2"
+                            placeholder="Item Price 2"
                             onChange={(event) => handleFormChange(event, index)}
                             value={form.item_price_2}
                           />
@@ -415,7 +415,7 @@ export const FormPOMaintenance = () => {
                             type="number"
                             min="0"
                             name="item_price_3"
-                            placeholder="item_price_3"
+                            placeholder="Item Price 3"
                             onChange={(event) => handleFormChange(event, index)}
                             value={form.item_price_3}
                           />

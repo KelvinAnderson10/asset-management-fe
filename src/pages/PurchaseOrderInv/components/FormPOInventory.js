@@ -399,7 +399,7 @@ export const FormPOInventory = () => {
                             type="number"
                             min="0"
                             name="item_price_1"
-                            placeholder="item_price_1"
+                            placeholder="Item Price 1"
                             onChange={(event) => handleFormChange(event, index)}
                             value={form.item_price_1}
                           />
@@ -444,7 +444,7 @@ export const FormPOInventory = () => {
                             type="number"
                             min="0"
                             name="item_price_2"
-                            placeholder="item_price_2"
+                            placeholder="Item Price 2"
                             onChange={(event) => handleFormChange(event, index)}
                             value={form.item_price_2}
                           />
@@ -485,7 +485,7 @@ export const FormPOInventory = () => {
                             type="number"
                             min="0"
                             name="item_price_3"
-                            placeholder="item_price_3"
+                            placeholder="Item Price 3"
                             onChange={(event) => handleFormChange(event, index)}
                             value={form.item_price_3}
                           />
