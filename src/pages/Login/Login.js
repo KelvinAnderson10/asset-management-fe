@@ -14,7 +14,7 @@ import Loading from "../../shared/components/Loading/Loading";
 export const Login = () => {
   const [email, setEmail] = useState("");
   const [showOTPForm, setShowOTPForm] = useState();
-  const [counter, setCounter] = useState(59);
+  const [counter, setCounter] = useState(0);
   const [isDisabled, SetIsDisabled] = useState(true)
   const [buttonDisabled, setButttonDisabled] = useState(false)
   const [OTP, setOTP] = useState();
@@ -42,6 +42,7 @@ export const Login = () => {
       setUser(prevObj=>({...prevObj,name:(response.data.name), role:(response.data.role), level_approval:(response.data.level_approval), location_id:(response.data.location_id), tap:(response.data.TAP), cluster:(response.data.Cluster), department:(response.data.department)}))
       setOTP(response.otp);
       console.log(response.otp)
+      setCounter(59);
       setShowOTPForm(true);
     } catch (error) {
       Failed("Email not registered yet, Please input a valid email");

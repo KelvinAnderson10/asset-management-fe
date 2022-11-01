@@ -386,17 +386,17 @@ document.querySelector("body").style.overflow = "auto";
               Add New Vendor
             </Button>
           </div>
-            <div className="table-responsive">
-              <div className="table-wrapper">
-                <div className="table-title">
+            <div className="table-title">
                   <div className="row">
                     <div className="col-xs-6">
-                      <h2>
+                      <h2 style={{fontSize: "24px"}}>
                         Manage <b>Vendors</b>
                       </h2>
                     </div>
                   </div>
-                </div>
+            </div>
+            <div className="table-responsive">
+              <div className="table-wrapper">
 
                 <table className="table table-striped table-hover">
                   <thead>
