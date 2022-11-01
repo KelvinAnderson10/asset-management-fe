@@ -310,7 +310,7 @@ export const Dashboard = () => {
               </div>
               <div className="content-non-icon">
                 <a className="count-number">{countAsset} </a>
-                <a style={{ color: "white", fontSize: "20px" }}>Total Inventory</a>
+                <a style={{ color: "white", fontSize: "18px", marginTop: '12px', textAlign: "left" }}>Total Inventory</a>
               </div>
             </div>
             <div
@@ -331,7 +331,7 @@ export const Dashboard = () => {
                 style={{ cursor: "pointer" }}
               >
                 <a className="count-number">{countAssetDeprecated}</a>
-                <a style={{ color: "white", fontSize: "20px" }}>
+                <a style={{ color: "white", fontSize: "18px", marginTop: '12px', textAlign: "left" }}>
                  Inventory Deprecated
                 </a>
               </div>
@@ -348,7 +348,7 @@ export const Dashboard = () => {
               </div>
               <div className="content-non-icon">
                 <a className="count-number">{assetBroken} </a>
-                <a style={{ color: "white", fontSize: "20px" }}>
+                <a style={{ color: "white", fontSize: "18px", marginTop: '12px', textAlign: "left" }}>
                 Inventory Broken 
                 </a>
               </div>
@@ -366,7 +366,7 @@ export const Dashboard = () => {
               <div className="content-non-icon">
                 <a className="count-number">{sumAssetValue} </a>
                 <a
-                  style={{ color: "white", fontSize: "20px", marginTop: "8px" }}
+                  style={{ color: "white", fontSize: "18px", marginTop: "16px", textAlign: "left" }}
                 >
                   Sum Inventory Value
                 </a>
