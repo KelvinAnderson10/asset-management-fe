@@ -20,6 +20,7 @@ export const Overview = () => {
     locationService,
     assetCategoryService,
     eventLogService,
+    transferRequestService,
   } = useDeps();
   const [datas, setDatas] = useState([]);
   const [order, setOrder] = useState("ASC");
@@ -753,6 +754,8 @@ export const Overview = () => {
   const [modalTransferShow, setModalTransferShow] = useState(false);
   const [assetTransfer, setAssetTransfer] = useState({});
   const [originalLocation, setOriginalLocation] = useState("");
+  const [targetUser, setTargetUser] = useState("");
+  const [targetUserPost, setTargetUserPost] = useState("");
   const [disableSubmit, setDisableSubmit] = useState(true);
   const handleToggleTransfer = async (name) => {
     setLoading(true);
@@ -777,15 +780,26 @@ export const Overview = () => {
     }
     const newData = { ...assetTransfer};
     newData[e.target.name] = e.target.value;
-    setDisableSubmit(newData["Kode Wilayah"] == originalLocation);
+    setDisableSubmit(newData["Kode Wilayah"] == originalLocation && targetUser == "" && targetUserPost == "");
     setAssetTransfer(newData);
   };
 
   const handleSubmitTrasfer = async () => {
+    const transferReqForm = {
+      "Nomor Asset": assetTransfer["Nomor Asset"],
+      "requester":user.name,
+      "Kode Wilayah": parseInt(assetTransfer["Kode Wilayah"]),
+      "ToUser":targetUser,
+      "Jabatan":targetUserPost,
+      "is_approved_level1":false,
+      "is_approved_level2":false,
+  }
+
     try {
       setModalTransferShow(false)
       setLoading(true)
-      console.log("hit api");
+      const response = transferRequestService.createTransferRequest(transferReqForm);
+      console.log(response);
     } catch (e) {
       console.log(e);
     } finally {
@@ -1738,9 +1752,9 @@ export const Overview = () => {
             <Modal.Body>
               <div>
                 <div className="form-group">
-                <div className="image-view">
-                  <img src={assetTransfer["Asset Image"]}></img>
-                </div>
+                  <div className="image-view">
+                    <img src={assetTransfer["Asset Image"]}></img>
+                  </div>
                   <div className="row">
                     <div className="col-md-6 mb-3 mt-3">
                       <label>No Asset</label>
@@ -1778,8 +1792,26 @@ export const Overview = () => {
                         readOnly
                       />
                     </div>
+                    <div className="col-md-6 mb-3">
+                      <label>Target User<span style={{color : "red"}}>*</span> </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        value={targetUser}
+                        onChange={e => {setTargetUser(e.target.value)}}
+                      />
+                    </div>
+                    <div className="col-md-6 mb-3">
+                      <label>Target User Position<span style={{color : "red"}}>*</span></label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        value={targetUserPost}
+                        onChange={e => {setTargetUserPost(e.target.value)}}
+                      />
+                    </div>
                     <div className="col-md-12 mb-3">
-                      <label>Target Location :</label>
+                      <label>Target Location<span style={{color : "red"}}>*</span></label>
                       <select
                         required
                         name="Kode Wilayah"
