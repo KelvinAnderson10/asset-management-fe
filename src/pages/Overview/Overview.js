@@ -760,16 +760,22 @@ export const Overview = () => {
   const handleToggleTransfer = async (name) => {
     setLoading(true);
     try {
+      const existedRequest = await transferRequestService.getByAssetNumber(name);
+      if(existedRequest.data[0]["status"] === "Pending"){
+        setAssetTransfer({});
+        return;
+      }
+
       const response = await overviewService.getAssetByAssetName(name);
       if (response.data["Nomor Asset"]) {
         setAssetTransfer(response.data)
         setOriginalLocation(response.data["Kode Wilayah"])
-        setModalTransferShow(true)
       }
     } catch (e) {
       console.log(e);
     } finally {
       setLoading(false);
+      setModalTransferShow(true)
     }
   };
 
@@ -1751,109 +1757,124 @@ export const Overview = () => {
             </Modal.Header>
             <Modal.Body>
               <div>
-                <div className="form-group">
-                  <div className="image-view">
-                    <img src={assetTransfer["Asset Image"]}></img>
-                  </div>
-                  <div className="row">
-                    <div className="col-md-6 mb-3 mt-3">
-                      <label>No Asset</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        value={assetTransfer["Nomor Asset"]}
-                        readOnly
-                      />
+                { assetTransfer["Nomor Asset"] ?
+                  <div className="form-group">
+                    <div className="image-view">
+                      <img src={assetTransfer["Asset Image"]}></img>
                     </div>
-                    <div className="col-md-6 mb-3 mt-3">
-                      <label>Asset Name</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        value={assetTransfer["Nama Barang"]}
-                        readOnly
-                      />
+                    <div className="row">
+                      <div className="col-md-6 mb-3 mt-3">
+                        <label>No Asset</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          value={assetTransfer["Nomor Asset"]}
+                          readOnly
+                        />
+                      </div>
+                      <div className="col-md-6 mb-3 mt-3">
+                        <label>Asset Name</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          value={assetTransfer["Nama Barang"]}
+                          readOnly
+                        />
+                      </div>
+                      <div className="col-md-6 mb-3">
+                        <label>Asset Category</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          value={assetTransfer["Kategori Aset Tetap"]}
+                          readOnly
+                        />
+                      </div>
+                      <div className="col-md-6 mb-3">
+                        <label>Original Location</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          value={assetTransfer["Lokasi"]}
+                          readOnly
+                        />
+                      </div>
+                      <div className="col-md-6 mb-3">
+                        <label>Target User<span style={{color : "red"}}>*</span> </label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          value={targetUser}
+                          onChange={e => {setTargetUser(e.target.value)}}
+                        />
+                      </div>
+                      <div className="col-md-6 mb-3">
+                        <label>Target User Position<span style={{color : "red"}}>*</span></label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          value={targetUserPost}
+                          onChange={e => {setTargetUserPost(e.target.value)}}
+                        />
+                      </div>
+                      <div className="col-md-12 mb-3">
+                        <label>Target Location<span style={{color : "red"}}>*</span></label>
+                        <select
+                          required
+                          name="Kode Wilayah"
+                          value={assetTransfer["Kode Wilayah"]}
+                          onChange={handleChangeTransfer}
+                          className="form-select"
+                        >
+                          <option value="">Select Location</option>
+                          {locations.map((item, index) => (
+                            <option
+                              key={item["kode wilayah"]}
+                              value={item["kode wilayah"]}
+                            >
+                              {item.location}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
                     </div>
-                    <div className="col-md-6 mb-3">
-                      <label>Asset Category</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        value={assetTransfer["Kategori Aset Tetap"]}
-                        readOnly
-                      />
-                    </div>
-                    <div className="col-md-6 mb-3">
-                      <label>Original Location</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        value={assetTransfer["Lokasi"]}
-                        readOnly
-                      />
-                    </div>
-                    <div className="col-md-6 mb-3">
-                      <label>Target User<span style={{color : "red"}}>*</span> </label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        value={targetUser}
-                        onChange={e => {setTargetUser(e.target.value)}}
-                      />
-                    </div>
-                    <div className="col-md-6 mb-3">
-                      <label>Target User Position<span style={{color : "red"}}>*</span></label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        value={targetUserPost}
-                        onChange={e => {setTargetUserPost(e.target.value)}}
-                      />
-                    </div>
-                    <div className="col-md-12 mb-3">
-                      <label>Target Location<span style={{color : "red"}}>*</span></label>
-                      <select
-                        required
-                        name="Kode Wilayah"
-                        value={assetTransfer["Kode Wilayah"]}
-                        onChange={handleChangeTransfer}
-                        className="form-select"
+                  </div> :
+                  <div style={{display : "flex", flexDirection : "column",justifyContent : "center", alignItems : "center"}}>
+                    <i
+                        className="material-icons"
+                        data-toggle="tooltip"
+                        title="View"
+                        style={{ fontSize: "60px", color: "gray"  }}
                       >
-                        <option value="">Select Location</option>
-                        {locations.map((item, index) => (
-                          <option
-                            key={item["kode wilayah"]}
-                            value={item["kode wilayah"]}
-                          >
-                            {item.location}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
+                        &#xea5b;
+                      </i>
+                      This asset is in the process of being transferred
                   </div>
-                </div>
+                }
               </div>
             </Modal.Body>
-            <Modal.Footer>
-              <div className="button-asset">
-                <button
-                  className="btn btn-danger button-cancel"
-                  onClick={() => {
-                    setModalTransferShow(false)
-                  }}
-                  style={{marginRight : "8px"}}
-                >
-                  Cancel
-                </button>
-                <button
-                  className="btn btn-primary button-submit"
-                  onClick={handleSubmitTrasfer}
-                  disabled={disableSubmit}
-                >
-                  Submit
-                </button>
-              </div>
-            </Modal.Footer>
+            { assetTransfer["Nomor Asset"] &&
+              <Modal.Footer>
+                <div className="button-asset">
+                  <button
+                    className="btn btn-danger button-cancel"
+                    onClick={() => {
+                      setModalTransferShow(false)
+                    }}
+                    style={{marginRight : "8px"}}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    className="btn btn-primary button-submit"
+                    onClick={handleSubmitTrasfer}
+                    disabled={disableSubmit}
+                  >
+                    Submit
+                  </button>
+                </div>
+              </Modal.Footer>
+            }
           </Modal>
         </div>
       }

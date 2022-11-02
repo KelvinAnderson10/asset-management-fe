@@ -8,9 +8,9 @@ export const apiClientFactory = (client) => {
     }
   };
 
-  const doGet = async ({ url = "" }) => {
+  const doGet = async ({ url = "" , params = {}}) => {
     try {
-      const response = await client.get(url);
+      const response = await client.get(url, {params : params});
       return response.data;
     } catch (error) {
       throw error;
@@ -18,6 +18,7 @@ export const apiClientFactory = (client) => {
   };
 
   const doPut = async ({ url = "", data = null }) => {
+    console.log(data);
     try {
       const response = await client.put(url, data);
       return response.data;

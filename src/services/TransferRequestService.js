@@ -1,7 +1,6 @@
 export const transferRequestService = ({doPost, doGet, doDelete, doPut}) => {
   
     const createTransferRequest = async (newRequest) => {
-        console.log(newRequest);
         try {
             return await doPost({
                 url: '/api/to', data: newRequest
@@ -11,5 +10,17 @@ export const transferRequestService = ({doPost, doGet, doDelete, doPut}) => {
         }
     }
 
-    return {createTransferRequest}
+    const getByAssetNumber = async (assetNumber) => {
+        try {
+            return await doGet({
+                url: '/api/to/search/orders/' + String(assetNumber)
+            })
+        } catch (e) {
+            throw e
+        }
+    }
+
+
+
+    return {createTransferRequest, getByAssetNumber}
 }
