@@ -30,5 +30,29 @@ export const transferRequestService = ({doPost, doGet, doDelete, doPut}) => {
         }
     }
 
-    return {createTransferRequest, getByAssetNumber, getIncomingRequest}
+    const updateApprovalToLevel1 = async (id) => {
+        try {
+            return await doPut({url: `api/to/level1/${id}`})
+        } catch (e) {
+            throw e
+        }
+    }
+
+    const updateApprovalToLevel2 = async (id) => {
+        try {
+            return await doPut({url: `api/to/level2/${id}`})
+        } catch (e) {
+            throw e
+        }
+    }
+
+    const rejectApprovalTo = async (id) => {
+        try {
+            return await doDelete({url: `api/to/${id}`})
+        } catch (e) {
+            throw e
+        }
+    }
+
+    return {createTransferRequest, getByAssetNumber, getIncomingRequest, updateApprovalToLevel1, updateApprovalToLevel2, rejectApprovalTo}
 }

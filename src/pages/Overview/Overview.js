@@ -1214,24 +1214,22 @@ export const Overview = () => {
                                   <p style={{color : "black"}}>Transfer Request</p>
                                 </a>
                               }
-                              {(user.level_approval == 'GA') &&
-                                <a
-                                  onClick={() => {}}
-                                  className="edit"
-                                  data-toggle="modal"
-                                  style={{cursor : "pointer",textDecoration : "none", display : 'flex', marginTop : "3px", color : "gray"}}
+                              <a
+                                onClick={() => {}}
+                                className="edit"
+                                data-toggle="modal"
+                                style={{cursor : "pointer",textDecoration : "none", display : 'flex', marginTop : "3px", color : "gray"}}
+                              >
+                                <i
+                                  className="material-icons"
+                                  data-toggle="tooltip"
+                                  title="Edit"
+                                  style={{ fontSize: "25px" }}
                                 >
-                                  <i
-                                    className="material-icons"
-                                    data-toggle="tooltip"
-                                    title="Edit"
-                                    style={{ fontSize: "25px" }}
-                                  >
-                                    &#xe889;
-                                  </i>
-                                  <p style={{color : "black"}}>History</p>
-                                </a>
-                              }
+                                  &#xe889;
+                                </i>
+                                <p style={{color : "black"}}>History</p>
+                              </a>
                             </div>
                           }
                         </th>
@@ -1702,7 +1700,7 @@ export const Overview = () => {
         </div>
       )}
 
-{ modalTransferShow &&
+      { modalTransferShow &&
         <div className="model-box-view">
           <Modal
             dialogClassName="view-modal"
@@ -1840,7 +1838,7 @@ export const Overview = () => {
           </Modal>
         </div>
       }
-      
+
       {isLoading && <Loading />}
       {isLoading2 && <AssetLoading/>}
     </>
