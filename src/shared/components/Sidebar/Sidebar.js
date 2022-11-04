@@ -121,6 +121,11 @@ const routesGA = [
         name: "Maintenance",
         icon: <BiIcons.BiCategoryAlt />,
       },
+      {
+        path: "/approval-data/transfer",
+        name: "Transfer",
+        icon: <BiIcons.BiTransferAlt />,
+      },
       // {
       //   path: "/approval-data/rent",
       //   name: "Rent",

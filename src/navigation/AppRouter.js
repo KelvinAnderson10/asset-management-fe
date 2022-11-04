@@ -23,6 +23,7 @@ import { AppInv } from "../pages/ApprovalInventory/AppInv";
 import { AppMaintenance } from "../pages/ApprovalMaintenance/AppMaintenance";
 import { FormApprovalMaintence } from "../pages/ApprovalMaintenance/components/FormApprovalMaintence";
 import { TableAssetDeprecated } from "../pages/Overview/components/TableAssetDeprecated";
+import { AppTrans } from "../pages/ApprovalTransfer/AppTrans";
 
 export const AppRouter = () => {
   return (
@@ -44,6 +45,7 @@ export const AppRouter = () => {
         <Route path="/approval-data/inventory/form" element={<FormApprovalInventory/>} />
         <Route path="/approval-data/maintenance" element={<AppMaintenance/>} />
         <Route path="/approval-data/maintenance/form" element={<FormApprovalMaintence/>} />
+        <Route path="/approval-data/transfer" element={<AppTrans />} />
         
         <Route path="/settings" element={<Settings/>} />
         <Route path="*" element={<PageNotFound />} />
