@@ -13,6 +13,7 @@
     height: 13vh;
     flex-direction: row;
     align-items: center;
+    background-color: whitesmoke;
 }
 
 .navbar-po-container .navbar-po-left{

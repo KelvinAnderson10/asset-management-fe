@@ -832,7 +832,7 @@ export const AssetCategory = () => {
                   </form>
                 </Modal.Body>
                 <Modal.Footer>
-                  <Button variant="secondary" onClick={handleViewClose}>
+                  <Button variant="secondary" onClick={handleEditClose}>
                     Close
                   </Button>
                 </Modal.Footer>

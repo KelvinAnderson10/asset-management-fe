@@ -298,7 +298,7 @@ export const Dashboard = () => {
       <div className="dashboard-container">
         <div className="dashboard-card">
           <div className="content-dashboard-top">
-            <div
+          <div
               className="count-dashboard"
               style={{
                 backgroundImage:
@@ -306,13 +306,14 @@ export const Dashboard = () => {
               }}
             >
               <div className="content-icon">
-                <i className="fa fa-building-o" style={{ color: "white" }} />
+                <i className="fa fa-building-o icon-card" />
               </div>
               <div className="content-non-icon">
                 <a className="count-number">{countAsset} </a>
-                <a style={{ color: "white", fontSize: "18px", marginTop: '12px', textAlign: "left" }}>Total Inventory</a>
+                <a className="text-card" >Total Inventory</a>
               </div>
             </div>
+            <br/>
             <div
               className="count-dashboard"
               style={{
@@ -321,7 +322,7 @@ export const Dashboard = () => {
               }}
             >
               <div className="content-icon">
-                <i class="fa fa-archive" style={{ color: "white" }}></i>
+                <i class="fa fa-archive icon-card" style={{ color: "white" }}></i>
               </div>
 
               <div
@@ -331,11 +332,12 @@ export const Dashboard = () => {
                 style={{ cursor: "pointer" }}
               >
                 <a className="count-number">{countAssetDeprecated}</a>
-                <a style={{ color: "white", fontSize: "18px", marginTop: '12px', textAlign: "left" }}>
+                <a className="text-card" >
                  Inventory Deprecated
                 </a>
               </div>
             </div>
+            <br/>
             <div
               className="count-dashboard"
               style={{
@@ -344,15 +346,16 @@ export const Dashboard = () => {
               }}
             >
               <div className="content-icon">
-                <i class="fa fa-exclamation-triangle" style={{ color: "white" }}></i>
+                <i class="fa fa-exclamation-triangle icon-card" style={{ color: "white" }}></i>
               </div>
               <div className="content-non-icon">
                 <a className="count-number">{assetBroken} </a>
-                <a style={{ color: "white", fontSize: "18px", marginTop: '12px', textAlign: "left" }}>
+                <a className="text-card" >
                 Inventory Broken 
                 </a>
               </div>
             </div>
+            <br/>
             <div
               className="count-dashboard"
               style={{
@@ -366,7 +369,7 @@ export const Dashboard = () => {
               <div className="content-non-icon">
                 <a className="count-number">{sumAssetValue} </a>
                 <a
-                  style={{ color: "white", fontSize: "18px", marginTop: "16px", textAlign: "left" }}
+                  className="text-card"
                 >
                   Sum Inventory Value
                 </a>
@@ -377,6 +380,7 @@ export const Dashboard = () => {
             <div className="piechart">
                 <PieChart chartData={POData} />
             </div>
+            <br/>
             <div className="linechart">
               <div className="table-subproduct ">
                 <table className="styled-table">
@@ -403,6 +407,7 @@ export const Dashboard = () => {
                 </table>
               </div>
             </div>
+            <br/>
 
             <div className="eventlog-container">
               <div className="title-recent">
@@ -416,10 +421,10 @@ export const Dashboard = () => {
                   event.map((data) => (
                     <div className="eventlog-box-content">
                       <div className="name-eventlog">
-                      <a>{data.user} : {data.event}</a>
+                      <a className="text-eventlog">{data.user} : {data.event}</a>
                      </div>
                       <div className="date-activity">
-                       <a>
+                       <a className="text-eventlog">
                         {data.CreatedAt}
                       </a>
                       </div>
@@ -429,6 +434,7 @@ export const Dashboard = () => {
               </div>
             </div>
           </div>
+          <br/>
           <div className="content-dashboard-bottom">
             <div
               title="Click to View Detail"
@@ -437,6 +443,7 @@ export const Dashboard = () => {
             >
               <BarChart index={"x"} chartData={chartData} />
             </div>
+            <br/>
             <div
               title="Click to View Detail"
               className="grafik-box"

@@ -195,4 +195,18 @@ input[type="file"]:hover::-webkit-file-upload-button{
   background-color: #1b3ed8;
 } */
 
+/* For mobile phones: */
+@media only screen and (max-width: 520px) {
+  .asset-container form .row .col .image-box {
+    width: 200px;
+    height: 80px;
+    /* background-color: #b65656; */
+    background-image: url('../../assets/images/No-image-available.png');
+    background-size: cover;
+  }
+  .asset-container form .row .col .asset-image-container{
+    margin: 8px;
+  }
+}
+
 

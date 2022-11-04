@@ -320,6 +320,7 @@ const Sidebar = ({ children }) => {
   return (
     <>
       <div className="main-container">
+        
         <motion.div
           animate={{
             width: isOpen ? "300px" : "50px",
@@ -571,8 +572,9 @@ const Sidebar = ({ children }) => {
         </motion.div>
 
         <main>
+          <div className="">
           <nav className="navbar navbar-expand-lg header-main">
-            <img src={logo} style={{ width: "7.8vw", height: "4.5vh" }}></img>
+            <img src={logo} className="logo-nav"></img>
             <div className="nav-right">
               <div style={{cursor:'pointer'}} onClick={onClickViewNotif}>
                 <Noty width={"30px"} color={"#122C34"} count={countNotif} />
@@ -622,6 +624,8 @@ const Sidebar = ({ children }) => {
               </div>
             </div>
           </nav>
+          </div>
+         
           {children}
         </main>
       </div>

@@ -206,7 +206,7 @@ input.form-control:focus{
 }
 .table-title {
   padding-bottom: 15px;
-  background: #757a81;
+  background: #B70621;
   color: rgb(255, 255, 255);
   padding: 16px 20px;
   margin: -20px -25px 10px;
@@ -302,4 +302,20 @@ text-transform: none;
 align-items: flex-start;
 display: flex;
 border-radius:8px;
+}
+
+/* For mobile phones: */
+@media only screen and (max-width: 520px) {
+  .feature{
+    display: flex;
+    gap: 0px;
+    margin-top: 2em;
+    margin-bottom: 2em;
+    justify-content: flex-start;
+    flex-direction: column;
+  }
+  .feature > Button {
+    width: 60%;
+    height: 100%;
+  }
 }

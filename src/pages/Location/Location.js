@@ -560,7 +560,7 @@ export const Location = () => {
                       type="text"
                       className="form-control"
                       name="cluster"
-                      placeholder="Location Name"
+                      placeholder="Cluster Name"
                       required
                       onChange={handleLocation}
                     />

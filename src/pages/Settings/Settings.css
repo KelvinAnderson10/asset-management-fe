@@ -4,7 +4,6 @@
     align-items: center;
     padding:25px 30px;
     min-height: 90vh;
-    min-width: 97vw;
     background-color: whitesmoke;
     font-family: "Poppins";
     text-align: left !important;
@@ -52,4 +51,15 @@
 .setting-card .button-setting .btn-primary{
     margin-left: 20px;
     margin-bottom: 2vh;    
+}
+
+@media only screen and (max-width: 520px) {
+    .setting-container{
+        padding:16px 12px;
+        min-height: 70vh;
+    }
+    .setting-container .setting-card{
+        width: 80vw;
+    }
+    
 }

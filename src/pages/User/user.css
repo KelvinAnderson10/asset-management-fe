@@ -78,17 +78,30 @@
     margin-top: 10px;
     font-size: 13px;
   }
+
+  .body-user{
+    display: flex;
+    width: 100%;
+    background-color: whitesmoke;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+  }
+
   .body {
     color: #6478a0;
     height: auto;
     overflow: hidden;
     font-family: "Varela Round", sans-serif;
+    
+  }
+  .card-table-user {
+    background-color: #0397d6;
   }
   .table-responsive {
     margin: 0px 0;
   }
   .table-wrapper {
-    min-width: 110vw;
     max-height: 98vh;
     background: rgb(255, 255, 255);
     padding: 20px 25px;
