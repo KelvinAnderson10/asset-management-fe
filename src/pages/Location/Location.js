@@ -398,17 +398,18 @@ export const Location = () => {
               </Button>
             </div>
 
-            <div className="table-responsive">
-              <div className="table-wrapper">
-                <div className="table-title">
+            <div className="table-title">
                   <div className="row">
                     <div className="col-xs-6">
-                      <h2>
+                      <h2 style={{fontSize: "24px"}}>
                         Manage <b>Locations</b>
                       </h2>
                     </div>
                   </div>
-                </div>
+              </div>
+              
+            <div className="table-responsive">
+              <div className="table-wrapper">
 
                 <table className="table table-striped table-hover">
                   <thead>
@@ -432,7 +433,7 @@ export const Location = () => {
                   <tbody>
                     {data.length === 0 ? (
                       <tr>
-                        <th colspan="4">Data is not found</th>
+                        <th colspan="5">Data is not found</th>
                       </tr>
                     ) : (
                       currentItems.map((item, index) => (

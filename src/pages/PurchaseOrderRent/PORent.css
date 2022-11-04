@@ -1,37 +1,39 @@
-.po-maintenance-container{
+.po-rent-container{
     display: flex;
     justify-content: center;
     align-items: center;
     align-content: center;
     margin-top: 0.5vh;
-    flex-direction: column
+    flex-direction: column;
+    font-family: 'Poppins';
   }
   
-.po-maintenance-container .navbar-po-container{
+  .po-rent-container .navbar-po-container{
     width: 90vw;
     display: flex;
     height: 13vh;
     flex-direction: row;
     align-items: center;
-}
-
-.navbar-po-container .navbar-po-left{
+  }
+  
+  .navbar-po-container .navbar-po-left{
     width: 70%;
     display: flex;
     flex-direction: row;
-}
-
-.navbar-po-container .title-right{
-    width: 30%;
-  display: flex;
-  justify-content: flex-end;
-  color: #B70621;
-  font-size: 3vh; 
-  font-weight: 600;
-}
-
+  }
   
-.navbar-po-container .navbar-po-box{
+  .navbar-po-container .title-right{
+    width: 30%;
+    display: flex;
+    justify-content: flex-end;
+    color: #B70621;
+    font-size: 3vh; 
+    font-weight: 600;
+  }
+  
+  
+  
+  .navbar-po-container .navbar-po-box{
     width: 15vw;
     height: 4.5vh;
     background-color: #B70621;
@@ -42,9 +44,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-}
+  }
   
-.navbar-po-container .navbar-po-box2{
+  .navbar-po-container .navbar-po-box2{
     width: 15vw;
     height: 5vh;
     background-color:white;
@@ -55,14 +57,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
-}
+  }
   
-.navbar-po-box:hover{
+  .navbar-po-box:hover{
     background-color:rgb(208, 208, 208);
     cursor: pointer;
-}
+  }
   
-.navbar-po-box2:hover{
+  .navbar-po-box2:hover{
     background-color:rgb(208, 208, 208);
     cursor: pointer;
-}
+  }

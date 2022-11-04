@@ -63,13 +63,14 @@
   flex-direction: column;
   /* align-content: flex-start; */
   align-items: flex-start;
+  justify-content: center;
 }
 
 .note .content-note {
   display: flex;
   flex-direction: column;
   text-align: left;
-  font-size: 1.5vh;
+  font-size: 1.6vh;
 }
 
 .form-upload-container {

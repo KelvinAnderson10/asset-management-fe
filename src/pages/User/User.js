@@ -439,16 +439,15 @@ export const UserManage = () => {
                   Add New User
                 </Button>
               </div>
-              <div className="table-responsive">
-                <div className="table-wrapper">
-                  <div className="table-title">
+              <div className="table-title">
                     <div className="row">
                       <div className="col-xs-6">
-                        <h2>Manage Users</h2>
+                        <h2 style={{fontSize: "24px"}}>Manage Users</h2>
                       </div>
                     </div>
                   </div>
-
+              <div className="table-responsive">
+                <div className="table-wrapper">
                   <table className="table table-striped table-hover">
                     <thead>
                       <tr>
@@ -495,7 +494,7 @@ export const UserManage = () => {
                     <tbody>
                       {data.length === 0 ? (
                         <tr>
-                          <th colspan="9">Data is not found</th>
+                          <th colspan="11">Data is not found</th>
                         </tr>
                       ) : (
                         currentItems.map((item, index) => (

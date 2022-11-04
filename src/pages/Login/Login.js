@@ -9,11 +9,14 @@ import AuthCode from "react-auth-code-input";
 import { Card } from "react-bootstrap";
 import { useAuth } from "../../services/UseAuth";
 import Loading from "../../shared/components/Loading/Loading";
-import { responsiveProperty } from "@mui/material/styles/cssUtils";
+
 
 export const Login = () => {
   const [email, setEmail] = useState("");
   const [showOTPForm, setShowOTPForm] = useState();
+  const [counter, setCounter] = useState(0);
+  const [isDisabled, SetIsDisabled] = useState(true)
+  const [buttonDisabled, setButttonDisabled] = useState(false)
   const [OTP, setOTP] = useState();
   const [OTPInput, setOTPInput] = useState('');
   const { userService } = useDeps();
@@ -38,6 +41,8 @@ export const Login = () => {
       setEmail(response.data.email);
       setUser(prevObj=>({...prevObj,name:(response.data.name), role:(response.data.role), level_approval:(response.data.level_approval), location_id:(response.data.location_id), tap:(response.data.TAP), cluster:(response.data.Cluster), department:(response.data.department)}))
       setOTP(response.otp);
+      console.log(response.otp)
+      setCounter(59);
       setShowOTPForm(true);
     } catch (error) {
       Failed("Email not registered yet, Please input a valid email");
@@ -46,7 +51,31 @@ export const Login = () => {
     }
   };
 
- 
+  useEffect(() => {
+      const timer = counter > 0 && setInterval(() => setCounter(counter - 1), 1000);
+      if (counter === 0 ) {
+        SetIsDisabled(false)
+      } 
+      return () => clearInterval(timer);
+  }, [counter])
+
+  const resendOtp = async () => {
+    // setLoading(true)
+    setButttonDisabled(true)
+    try {
+      const response = await userService.getUserByEmail(email); 
+      setEmail(response.data.email);
+      setUser(prevObj=>({...prevObj,name:(response.data.name), role:(response.data.role), level_approval:(response.data.level_approval), location_id:(response.data.location_id), tap:(response.data.TAP), cluster:(response.data.Cluster), department:(response.data.department)}))
+      setOTP(response.otp);
+      setCounter(59);
+      setShowOTPForm(true);
+      SetIsDisabled(true)
+    } catch (e) {
+      Failed("Email not registered yet, Please input a valid email");
+    } finally{
+      setButttonDisabled(false)
+    }
+  }
 
   const getCookie = (cName) => {
     const name = cName + "=";
@@ -158,6 +187,17 @@ export const Login = () => {
                   allowedCharacters="numeric"
                 ></AuthCode>
                 <h6 className="message">If you cant'find the OTP in your inbox, please check your spam folder</h6>
+                <div className="counter">
+                  00:{counter}
+                </div>
+                {!isDisabled && 
+                <>
+                  <div className="text-otp">OTP not received? 
+                    <button className="btn btn-link" disabled={buttonDisabled} onClick={resendOtp}>Resend</button>
+                  </div>
+                  
+                </>
+                }
               </Card.Body>
             </Card>
           </div>

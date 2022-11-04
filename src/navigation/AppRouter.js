@@ -24,6 +24,7 @@ import { AppMaintenance } from "../pages/ApprovalMaintenance/AppMaintenance";
 import { FormApprovalMaintence } from "../pages/ApprovalMaintenance/components/FormApprovalMaintence";
 import { TableAssetDeprecated } from "../pages/Overview/components/TableAssetDeprecated";
 import { AppTrans } from "../pages/ApprovalTransfer/AppTrans";
+import { PORent } from "../pages/PurchaseOrderRent/PORent";
 
 export const AppRouter = () => {
   return (
@@ -41,6 +42,7 @@ export const AppRouter = () => {
         <Route path="/upload-data" element={<ImportData />} />
         <Route path="/purchase-request/inventory" element={<POInventory/>} />
         <Route path="/purchase-request/maintenance" element={<POMaintenance/>}/>
+        <Route path="/purchase-request/rent" element={<PORent/>}/>
         <Route path="/approval-data/inventory" element={<AppInv/>} />
         <Route path="/approval-data/inventory/form" element={<FormApprovalInventory/>} />
         <Route path="/approval-data/maintenance" element={<AppMaintenance/>} />

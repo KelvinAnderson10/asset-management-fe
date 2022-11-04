@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import Sidebar from '../../shared/components/Sidebar/Sidebar'
-import { FormPOInventory } from './components/FormPOInventory'
-import { ListPOInventory } from './components/ListPOInventory'
-import './POInventory.css'
 
-export const POInventory = () => {
+import { FormPORent } from './components/FormPORent'
+import './PORent.css'
+
+export const PORent = () => {
     //Navbar
     const [requestForm, setRequestForm] = useState(true)
     const [requestList, setRequestList] = useState(false)
@@ -29,7 +29,7 @@ export const POInventory = () => {
     return (
         <>
             <Sidebar>
-               <div className='po-inventory-container'>
+               <div className='po-rent-container'>
                     <div className='navbar-po-container'>
                         <div className='navbar-po-left'>
                         <div className={classNavbarForm} onClick={() => handleClickForm()}>
@@ -40,12 +40,12 @@ export const POInventory = () => {
                         </div> 
                         </div>
                         <div className='title-right'>
-                        <a>Inventory</a>
+                        <a>Rent</a>
                         </div>
                     </div>
                </div>
-               {requestList && <ListPOInventory/>}
-               {requestForm && <FormPOInventory/>}
+               {/* {requestList && <ListPOInventory/>} */}
+               {requestForm && <FormPORent/>}
             </Sidebar>
         </>
     )

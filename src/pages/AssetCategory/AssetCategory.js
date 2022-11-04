@@ -477,19 +477,20 @@ export const AssetCategory = () => {
                 }}
               >
                 <FiPlus />
-                Add New Asset Category
+                Add New Category
               </Button>
             </div>
-            <div className="body container table-wrapper table-responsive">
               <div className="table-title">
                 <div className="row">
                   <div className="col-xs-6">
-                    <h2>
+                    <h2 style={{fontSize: "24px"}}>
                       Manage <b>Asset Category</b>
                     </h2>
                   </div>
                 </div>
               </div>
+            <div className="table-responsive">
+            <div className="table-wrapper">
 
               <table id="myTable" className="table table-striped table-hover">
                 <thead>
@@ -622,6 +623,8 @@ export const AssetCategory = () => {
                 </ul>
               </div>
             </div>
+            </div>
+           
 
             {/* ADD MODAL FOR SUBMIT DATABASE */}
 
@@ -664,6 +667,7 @@ export const AssetCategory = () => {
                           style={{ maxWidth: "500px" }}
                           required
                           type="number"
+                          min="0"
                           className="form-control"
                           onChange={handleChange}
                           name="useful_life"
@@ -778,6 +782,7 @@ export const AssetCategory = () => {
                         <input
                           style={{ maxWidth: "500px" }}
                           type="number"
+                          min="0"
                           className="form-control"
                           onChange={handleChange}
                           placeholder="Please enter useful life"

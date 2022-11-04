@@ -20,7 +20,6 @@ export const Overview = () => {
     locationService,
     assetCategoryService,
     eventLogService,
-    transferRequestService,
   } = useDeps();
   const [datas, setDatas] = useState([]);
   const [order, setOrder] = useState("ASC");
@@ -29,7 +28,6 @@ export const Overview = () => {
   const [isLoading, setLoading] = useState(false);
   const [isLoading2, setLoading2] = useState(false)
   const [fileName, setFileName] = useState("No file chosen");
-  const [moreActionShow, setMoreActionShow] = useState([]);
 
   const handleViewShow = () => {
     setViewShow(true);
@@ -128,7 +126,6 @@ export const Overview = () => {
       setEditShowRegular(true);
     }
     handleEditAssetById(id);
-    setMoreActionShow(Array(moreActionShow.length).fill(false))
   };
 
   // UPLOAD IMAGE
@@ -215,15 +212,13 @@ export const Overview = () => {
         setEditShowRegular(false);
       }
 
-      if (user.role == "Admin") {
+      if (user.role == "Admin" || user.role == "GA") {
         getAssetsPagination(1);
       } else if (user.role == "IT") {
         getAssetsByIT(1);
       } else if (user.role == "Regular") {
         getAssetsByLocation(user.location_id, 1);
-      } else if (user.role == "GA") {
-        getAssetsByGA(1);
-      }
+      } 
 
       let event = {
         event: EVENT.UPDATE_ASSET,
@@ -287,14 +282,13 @@ export const Overview = () => {
     setSearchProduct("");
     setSearchSubproduct("");
     setSearchCategory("");
-    if (user.role == "Admin") {
+    setSearchAssetNumber("");
+    if (user.role == "Admin" || user.role == "GA") {
       getAssetsPagination(1);
     } else if (user.role == "IT") {
       getAssetsByIT(1);
     } else if (user.role == "Regular") {
       getAssetsByLocation(user.location_id, 1);
-    } else if (user.role == "GA") {
-      getAssetsByGA(1);
     }
     setCurrentPage(0)
   };
@@ -304,15 +298,13 @@ export const Overview = () => {
   const [totalAsset, setTotalAsset] = useState(0);
 
   useEffect(() => {
-    if (user.role == "Admin") {
+    if (user.role == "Admin"  || user.role == "GA" ) {
       getAssetsPagination(1);
     } else if (user.role == "IT") {
       getAssetsByIT(1);
     } else if (user.role == "Regular") {
       getAssetsByLocation(user.location_id, 1);
-    } else if (user.role == "GA") {
-      getAssetsByGA(1);
-    }
+    } 
   }, [user.role]);
 
   const thousands_separators = (num) => {
@@ -322,7 +314,7 @@ export const Overview = () => {
   };
 
   const onCountAsset = async () => {
-    if (user.role == "Admin") {
+    if (user.role == "Admin" || user.role == "GA") {
       try {
         const response = await overviewService.getCountAllAsset();
         setPageCount(Math.ceil(response.data / 10));
@@ -338,15 +330,7 @@ export const Overview = () => {
       } catch (e) {
         console.log(e);
       }
-    } else if (user.role == "GA") {
-      try {
-        const response = await overviewService.getCountAssetByGA();
-        setPageCount(Math.ceil(response.data / 10));
-        setTotalAsset(response.data);
-      } catch (e) {
-        console.log(e);
-      }
-    }
+    } 
   };
 
   const getAssetsPagination = async (currentPage) => {
@@ -378,7 +362,6 @@ export const Overview = () => {
       }
       onCountAsset();
       setDatas(response.data);
-      setMoreActionShow(Array(response.data.length).fill(false))
     } catch (e) {
       console.log(e);
     } finally {
@@ -386,42 +369,41 @@ export const Overview = () => {
     }
   };
 
-  const getAssetsByGA = async (currentPage) => {
-    setLoading2(true);
-    try {
-      const response = await overviewService.getAssetByGA(currentPage);
-      for (let i in response.data) {
-        response.data[i]["Harga Perolehan"] =
-          "Rp" + thousands_separators(response.data[i]["Harga Perolehan"]);
-        response.data[i]["Biaya Lain-Lain"] =
-          "Rp" + thousands_separators(response.data[i]["Biaya Lain-Lain"]);
-        response.data[i]["PPN"] =
-          "Rp" + thousands_separators(response.data[i]["PPN"]);
-        response.data[i]["Penyusutan Perbulan"] =
-          "Rp" + thousands_separators(response.data[i]["Penyusutan Perbulan"]);
-        response.data[i]["Total Harga Perolehan"] =
-          "Rp" +
-          thousands_separators(response.data[i]["Total Harga Perolehan"]);
-        response.data[i]["Total Penyusutan"] =
-          "Rp" + thousands_separators(response.data[i]["Total Penyusutan"]);
-        response.data[i]["Nilai Asset saat ini"] =
-          "Rp" + thousands_separators(response.data[i]["Nilai Asset saat ini"]);
-        response.data[i]["Tanggal Output"] = moment(
-          response.data[i]["Tanggal Output"]
-        ).format("YYYY-MM-DDTHH:MM");
-        response.data[i]["BAST Output"] = moment(
-          response.data[i]["BAST Output"]
-        ).format("YYYY-MM-DDTHH:MM");
-      }
-      onCountAsset();
-      setDatas(response.data);
-      setMoreActionShow(Array(response.data.length).fill(false))
-    } catch (e) {
-      console.log(e);
-    } finally {
-      setLoading2(false);
-    }
-  };
+  // const getAssetsByGA = async (currentPage) => {
+  //   setLoading2(true);
+  //   try {
+  //     const response = await overviewService.getAssetByGA(currentPage);
+  //     for (let i in response.data) {
+  //       response.data[i]["Harga Perolehan"] =
+  //         "Rp" + thousands_separators(response.data[i]["Harga Perolehan"]);
+  //       response.data[i]["Biaya Lain-Lain"] =
+  //         "Rp" + thousands_separators(response.data[i]["Biaya Lain-Lain"]);
+  //       response.data[i]["PPN"] =
+  //         "Rp" + thousands_separators(response.data[i]["PPN"]);
+  //       response.data[i]["Penyusutan Perbulan"] =
+  //         "Rp" + thousands_separators(response.data[i]["Penyusutan Perbulan"]);
+  //       response.data[i]["Total Harga Perolehan"] =
+  //         "Rp" +
+  //         thousands_separators(response.data[i]["Total Harga Perolehan"]);
+  //       response.data[i]["Total Penyusutan"] =
+  //         "Rp" + thousands_separators(response.data[i]["Total Penyusutan"]);
+  //       response.data[i]["Nilai Asset saat ini"] =
+  //         "Rp" + thousands_separators(response.data[i]["Nilai Asset saat ini"]);
+  //       response.data[i]["Tanggal Output"] = moment(
+  //         response.data[i]["Tanggal Output"]
+  //       ).format("YYYY-MM-DDTHH:MM");
+  //       response.data[i]["BAST Output"] = moment(
+  //         response.data[i]["BAST Output"]
+  //       ).format("YYYY-MM-DDTHH:MM");
+  //     }
+  //     onCountAsset();
+  //     setDatas(response.data);
+  //   } catch (e) {
+  //     console.log(e);
+  //   } finally {
+  //     setLoading2(false);
+  //   }
+  // };
 
   const getAssetsByIT = async (currentPage) => {
     setLoading2(true);
@@ -452,7 +434,6 @@ export const Overview = () => {
       }
       onCountAsset();
       setDatas(response.data);
-      setMoreActionShow(Array(response.data.length).fill(false))
     } catch (e) {
       console.log(e);
     } finally {
@@ -490,7 +471,6 @@ export const Overview = () => {
       setDatas(response.data);
       setPageCount(Math.ceil(response.count / 10));
       setTotalAsset(response.count)
-      setMoreActionShow(Array(response.data.length).fill(false))
     } catch (e) {
       console.log(e);
     } finally {
@@ -511,16 +491,15 @@ export const Overview = () => {
       searchLocation == "" &&
       searchProduct == "" &&
       searchCategory == "" &&
-      searchSubproduct == ""
+      searchSubproduct == "" &&
+      searchAssetNumber == ""
     ) {
-      if (user.role == "Admin") {
+      if (user.role == "Admin" || user.role == "GA") {
         getAssetsPagination(currentPage+1);
       } else if (user.role == "IT") {
         getAssetsByIT(currentPage+1);
       } else if (user.role == "Regular") {
         getAssetsByLocation(user.location_id, currentPage+1);
-      } else if (user.role == "GA") {
-        getAssetsByGA(currentPage+1);
       }
     } else {
       if (user.role == "Regular") {
@@ -541,6 +520,7 @@ export const Overview = () => {
           searchProduct,
           searchSubproduct,
           searchCategory,
+          searchAssetNumber,
           currentPage+1
         );
       }
@@ -567,51 +547,10 @@ export const Overview = () => {
     product,
     subproduct,
     category,
+    assetNumber,
     page
   ) => {
-    if (user.role == "GA") {
-      try {
-        const response = await overviewService.filterAssetMultipleConditionByGA(
-          condition,
-          vendor,
-          location,
-          product,
-          subproduct,
-          category,
-          page
-        );
-        for (let i in response.data) {
-          response.data[i]["Harga Perolehan"] =
-            "Rp" + thousands_separators(response.data[i]["Harga Perolehan"]);
-          response.data[i]["Biaya Lain-Lain"] =
-            "Rp" + thousands_separators(response.data[i]["Biaya Lain-Lain"]);
-          response.data[i]["PPN"] =
-            "Rp" + thousands_separators(response.data[i]["PPN"]);
-          response.data[i]["Penyusutan Perbulan"] =
-            "Rp" +
-            thousands_separators(response.data[i]["Penyusutan Perbulan"]);
-          response.data[i]["Total Harga Perolehan"] =
-            "Rp" +
-            thousands_separators(response.data[i]["Total Harga Perolehan"]);
-          response.data[i]["Total Penyusutan"] =
-            "Rp" + thousands_separators(response.data[i]["Total Penyusutan"]);
-          response.data[i]["Nilai Asset saat ini"] =
-            "Rp" +
-            thousands_separators(response.data[i]["Nilai Asset saat ini"]);
-          response.data[i]["Tanggal Output"] = moment(
-            response.data[i]["Tanggal Output"]
-          ).format("YYYY-MM-DDTHH:MM");
-          response.data[i]["BAST Output"] = moment(
-            response.data[i]["BAST Output"]
-          ).format("YYYY-MM-DDTHH:MM");
-        }
-        setDatas(response.data);
-        setTotalAsset(response.count)
-        setPageCount(Math.ceil(response.count / 10));
-      } catch (e) {
-        console.log(e.response);
-      }
-    } else if (user.role == "IT") {
+     if (user.role == "IT") {
       try {
         const response = await overviewService.filterAssetMultipleConditionByIT(
           condition,
@@ -620,6 +559,7 @@ export const Overview = () => {
           product,
           subproduct,
           category,
+          assetNumber,
           page
         );
         for (let i in response.data) {
@@ -653,7 +593,7 @@ export const Overview = () => {
       } catch (e) {
         console.log(e.response);
       }
-    } else if (user.role == "Admin") {
+    } else if (user.role == "Admin" || user.role == "GA") {
       try {
         const response =
           await overviewService.filterAssetMultipleConditionByAdmin(
@@ -663,6 +603,7 @@ export const Overview = () => {
             product,
             subproduct,
             category,
+            assetNumber,
             page
           );
         for (let i in response.data) {
@@ -706,6 +647,7 @@ export const Overview = () => {
             product,
             subproduct,
             category,
+            assetNumber,
             page
           );
         for (let i in response.data) {
@@ -748,70 +690,8 @@ export const Overview = () => {
   const [searchProduct, setSearchProduct] = useState("");
   const [searchSubproduct, setSearchSubproduct] = useState("");
   const [searchCategory, setSearchCategory] = useState("");
+  const [searchAssetNumber, setSearchAssetNumber] = useState("");
 
-  // Request Transfer Asset
-
-  const [modalTransferShow, setModalTransferShow] = useState(false);
-  const [assetTransfer, setAssetTransfer] = useState({});
-  const [originalLocation, setOriginalLocation] = useState("");
-  const [targetUser, setTargetUser] = useState("");
-  const [targetUserPost, setTargetUserPost] = useState("");
-  const [disableSubmit, setDisableSubmit] = useState(true);
-  const handleToggleTransfer = async (name) => {
-    setLoading(true);
-    try {
-      const existedRequest = await transferRequestService.getByAssetNumber(name);
-      if(existedRequest.data[0]["status"] === "Pending"){
-        setAssetTransfer({});
-        return;
-      }
-
-      const response = await overviewService.getAssetByAssetName(name);
-      if (response.data["Nomor Asset"]) {
-        setAssetTransfer(response.data)
-        setOriginalLocation(response.data["Kode Wilayah"])
-      }
-    } catch (e) {
-      console.log(e);
-    } finally {
-      setLoading(false);
-      setModalTransferShow(true)
-    }
-  };
-
-  const handleChangeTransfer = (e) => {
-    if (e.target.value === "") {
-      setDisableSubmit(true);
-      return;
-    }
-    const newData = { ...assetTransfer};
-    newData[e.target.name] = e.target.value;
-    setDisableSubmit(newData["Kode Wilayah"] == originalLocation && targetUser == "" && targetUserPost == "");
-    setAssetTransfer(newData);
-  };
-
-  const handleSubmitTrasfer = async () => {
-    const transferReqForm = {
-      "Nomor Asset": assetTransfer["Nomor Asset"],
-      "requester":user.name,
-      "Kode Wilayah": parseInt(assetTransfer["Kode Wilayah"]),
-      "ToUser":targetUser,
-      "Jabatan":targetUserPost,
-      "is_approved_level1":false,
-      "is_approved_level2":false,
-  }
-
-    try {
-      setModalTransferShow(false)
-      setLoading(true)
-      const response = transferRequestService.createTransferRequest(transferReqForm);
-      console.log(response);
-    } catch (e) {
-      console.log(e);
-    } finally {
-      setLoading(false);
-    }
-  }
 
   return (
     <>
@@ -853,6 +733,18 @@ export const Overview = () => {
                   className="input-search"
                   placeholder="Category"
                   onChange={(e) => setSearchCategory(e.target.value)}
+                />
+              </div>
+              <div className="search-box-item">
+                <div className="title-search">
+                  <a>Asset Number:</a>
+                </div>
+                <input
+                  value={searchAssetNumber}
+                  type="text"
+                  className="input-search"
+                  placeholder="Asset Number"
+                  onChange={(e) => setSearchAssetNumber(e.target.value)}
                 />
               </div>
             </div>
@@ -900,7 +792,8 @@ export const Overview = () => {
           <div className="button-search-container">
             <button
               value="submit"
-              className="button-box"
+              className="btn btn-primary btn-sm"
+              style={{marginRight: "15px" }}
               onClick={() => {
                 setCurrentPage(0)
                 user.role == "Regular"
@@ -911,6 +804,7 @@ export const Overview = () => {
                       searchProduct,
                       searchSubproduct,
                       searchCategory,
+                      searchAssetNumber,
                       1
                     )
                   : onFilterMultiple(
@@ -920,6 +814,7 @@ export const Overview = () => {
                       searchProduct,
                       searchSubproduct,
                       searchCategory,
+                      searchAssetNumber,
                       1
                     );
               }}
@@ -928,7 +823,7 @@ export const Overview = () => {
             </button>
             <button
               value="submit"
-              className="button-box"
+              className="btn btn-warning btn-sm"
               style={{ backgroundColor: "rgb(255, 178, 0)" }}
               onClick={onClearForm}
             >
@@ -1136,141 +1031,57 @@ export const Overview = () => {
                     datas.map((data, index) => (
                       <tr key={data["Nomor Asset"]}>
                         <th>{index + 1}</th>
-                        <th style={{ fontSize: "14px", fontWeight : "normal" }}>
-                          <div style={{display : "flex", justifyContent : "space-between", marginTop : "4px" }}>
-                            <a
-                              onClick={() => {
-                                handleViewShow(setRowData(data));
-                              }}
-                              className="view"
-                              data-toggle="modal"
-                              style={{ cursor: "pointer", width: "50%", textDecoration : "none", display : 'flex', marginTop : "3px" }}
+                        <th style={{ fontSize: "30px" }}>
+                          <a
+                            onClick={() => {
+                              handleViewShow(setRowData(data));
+                            }}
+                            className="view"
+                            data-toggle="modal"
+                            style={{ cursor: "pointer", width: "50%" }}
+                          >
+                            <i
+                              className="material-icons"
+                              data-toggle="tooltip"
+                              title="View"
+                              style={{ fontSize: "25px", color: "darkblue" }}
                             >
-                              <i
-                                className="material-icons"
-                                data-toggle="tooltip"
-                                title="View"
-                                style={{ fontSize: "20px", color: "darkblue"  }}
-                              >
-                                &#xe8f4;
-                              </i>
-                              <p>Detail</p> 
-                            </a>
-                            
-                            { moreActionShow[index] ?
-                              <i
-                                className="material-icons"
-                                data-toggle="tooltip"
-                                title="View"
-                                style={{ fontSize: "25px", color: "black", cursor : "pointer"  }}
-                                onClick={() => {
-                                  setMoreActionShow(Array(moreActionShow.length).fill(false));
-                                }}
-                              >
-                                &#xe5ce;
-                              </i> :
-                              <i
-                                className="material-icons"
-                                data-toggle="tooltip"
-                                title="View"
-                                style={{ fontSize: "25px", color: "black", cursor : "pointer"  }}
-                                onClick={() => {
-                                  setMoreActionShow(Array.apply(null, Array(moreActionShow.length)).map(function (x, i) { 
-                                    if (i === index) {
-                                      return true;
-                                    }
-                                    return false;
-                                   }));
-                                }}
-                              >
-                                &#xe5cf;
-                              </i>
-                            }
-                          </div>
-                          { moreActionShow[index] &&
-                            <div
-                              style={{position : "absolute", backgroundColor : "whitesmoke", display : "flex", flexDirection : "column", padding : "4px", paddingRight: "10px", borderRadius : "4px"}}
+                              &#xe8f4;
+                            </i>
+                          </a>
+                          <a
+                            target="_blank"
+                            href={`http://api.qrserver.com/v1/create-qr-code/?data= Asset Number: ${data["Nomor Asset"]}%0A Purchase Date: ${data["Tanggal Output"]}%0A Asset Name: ${data["Nama Barang"]}%0A Asset Category: ${data["Kategori Jenis Produk"]}%0A Product Name: ${data["Jenis Produk"]}%0A Location: ${data["Lokasi"]}%0A PO Number: ${data["No. PO / Dokumenen Pendukung"]}%0A Lifetime: ${data["Masa Manfaat (Bulan)"]}%0A Current Value: ${data["Nilai Asset saat ini"]}%0A Vendor: ${data["Vendor"]}&size=${size}x${size}&bgcolor=${bgColor}`}
+                            download="QRCode"
+                          >
+                            <i
+                              className="material-icons"
+                              data-toggle="tooltip"
+                              title="View"
+                              style={{ fontSize: "25px", color: "black" }}
                             >
-                              <a
-                                target="_blank"
-                                href={`http://api.qrserver.com/v1/create-qr-code/?data= Asset Number: ${data["Nomor Asset"]}%0A Purchase Date: ${data["Tanggal Output"]}%0A Asset Name: ${data["Nama Barang"]}%0A Asset Category: ${data["Kategori Jenis Produk"]}%0A Product Name: ${data["Jenis Produk"]}%0A Location: ${data["Lokasi"]}%0A PO Number: ${data["No. PO / Dokumenen Pendukung"]}%0A Lifetime: ${data["Masa Manfaat (Bulan)"]}%0A Value: ${data["Nilai Asset saat ini"]}%0A Vendor: ${data["Vendor"]}&size=${size}x${size}&bgcolor=${bgColor}`}
-                                download="QRCode"
-                                style={{cursor : "pointer",textDecoration : "none", display : 'flex', marginTop : "3px"}}
-                                onClick={() => {
-                                  setMoreActionShow(Array(moreActionShow.length).fill(false))
-                                }}
-                              >
-                                <i
-                                  className="material-icons"
-                                  data-toggle="tooltip"
-                                  title="View"
-                                  style={{ fontSize: "25px", color: "black" }}
-                                >
-                                  &#xe00a;
-                                </i>
-                                <p style={{color : "black"}}>QR Code</p>
-                              </a>
-                              {(user.level_approval == 'Regular' || user.level_approval == 'GA' || user.level_approval== 'IT' || user.role == 'Admin') &&
-                                <a
-                                  onClick={() => {
-                                    handleEditShow(data["Nomor Asset"]);
-                                  }}
-                                  className="edit"
-                                  data-toggle="modal"
-                                  style={{cursor : "pointer",textDecoration : "none", display : 'flex', marginTop : "3px"}}
-                                >
-                                  <i
-                                    className="material-icons"
-                                    data-toggle="tooltip"
-                                    title="Edit"
-                                    style={{ fontSize: "25px" }}
-                                  >
-                                    &#xe3c9;
-                                  </i>
-                                  <p style={{color : "black"}}>Edit</p>
-                                </a>
-                              }
-                              {(user.level_approval == 'Regular') &&
-                                <a
-                                  onClick={() => {
-                                    handleToggleTransfer(data["Nomor Asset"]);
-                                    setMoreActionShow(Array(moreActionShow.length).fill(false));
-                                  }}
-                                  className="edit"
-                                  data-toggle="modal"
-                                  style={{cursor : "pointer",textDecoration : "none", display : 'flex', marginTop : "3px", color : "darkred"}}
-                                >
-                                  <i
-                                    className="material-icons"
-                                    data-toggle="tooltip"
-                                    title="Edit"
-                                    style={{ fontSize: "25px" }}
-                                  >
-                                    &#xeb61;
-                                  </i>
-                                  <p style={{color : "black"}}>Transfer Request</p>
-                                </a>
-                              }
-                              {(user.level_approval == 'GA') &&
-                                <a
-                                  onClick={() => {}}
-                                  className="edit"
-                                  data-toggle="modal"
-                                  style={{cursor : "pointer",textDecoration : "none", display : 'flex', marginTop : "3px", color : "gray"}}
-                                >
-                                  <i
-                                    className="material-icons"
-                                    data-toggle="tooltip"
-                                    title="Edit"
-                                    style={{ fontSize: "25px" }}
-                                  >
-                                    &#xe889;
-                                  </i>
-                                  <p style={{color : "black"}}>History</p>
-                                </a>
-                              }
-                            </div>
-                          }
+                              &#xe00a;
+                            </i>
+                          </a>
+                          {(user.level_approval == 'Regular' || user.level_approval == 'GA' || user.level_approval== 'IT' || user.role == 'Admin') &&
+                          <a
+                          onClick={() => {
+                            handleEditShow(data["Nomor Asset"]);
+                          }}
+                          className="edit"
+                          data-toggle="modal"
+                          style={{ cursor: "pointer" }}
+                        >
+                          <i
+                            className="material-icons"
+                            data-toggle="tooltip"
+                            title="Edit"
+                            style={{ fontSize: "25px" }}
+                          >
+                            &#xe3c9;
+                          </i>
+                        </a>
+                        }
                           
                         </th>
                         <td>{data["Tanggal Output"]}</td>
@@ -1739,146 +1550,6 @@ export const Overview = () => {
           </div>
         </div>
       )}
-
-      { modalTransferShow &&
-        <div className="model-box-view">
-          <Modal
-            dialogClassName="view-modal"
-            show={modalTransferShow}
-            onHide={() => {
-              setModalTransferShow(false)
-            }}
-            backdrop="static"
-            keyboard={false}
-            size='lg'
-          >
-            <Modal.Header closeButton>
-              <Modal.Title>Transfer Asset Request</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <div>
-                { assetTransfer["Nomor Asset"] ?
-                  <div className="form-group">
-                    <div className="image-view">
-                      <img src={assetTransfer["Asset Image"]}></img>
-                    </div>
-                    <div className="row">
-                      <div className="col-md-6 mb-3 mt-3">
-                        <label>No Asset</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          value={assetTransfer["Nomor Asset"]}
-                          readOnly
-                        />
-                      </div>
-                      <div className="col-md-6 mb-3 mt-3">
-                        <label>Asset Name</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          value={assetTransfer["Nama Barang"]}
-                          readOnly
-                        />
-                      </div>
-                      <div className="col-md-6 mb-3">
-                        <label>Asset Category</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          value={assetTransfer["Kategori Aset Tetap"]}
-                          readOnly
-                        />
-                      </div>
-                      <div className="col-md-6 mb-3">
-                        <label>Original Location</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          value={assetTransfer["Lokasi"]}
-                          readOnly
-                        />
-                      </div>
-                      <div className="col-md-6 mb-3">
-                        <label>Target User<span style={{color : "red"}}>*</span> </label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          value={targetUser}
-                          onChange={e => {setTargetUser(e.target.value)}}
-                        />
-                      </div>
-                      <div className="col-md-6 mb-3">
-                        <label>Target User Position<span style={{color : "red"}}>*</span></label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          value={targetUserPost}
-                          onChange={e => {setTargetUserPost(e.target.value)}}
-                        />
-                      </div>
-                      <div className="col-md-12 mb-3">
-                        <label>Target Location<span style={{color : "red"}}>*</span></label>
-                        <select
-                          required
-                          name="Kode Wilayah"
-                          value={assetTransfer["Kode Wilayah"]}
-                          onChange={handleChangeTransfer}
-                          className="form-select"
-                        >
-                          <option value="">Select Location</option>
-                          {locations.map((item, index) => (
-                            <option
-                              key={item["kode wilayah"]}
-                              value={item["kode wilayah"]}
-                            >
-                              {item.location}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-                  </div> :
-                  <div style={{display : "flex", flexDirection : "column",justifyContent : "center", alignItems : "center"}}>
-                    <i
-                        className="material-icons"
-                        data-toggle="tooltip"
-                        title="View"
-                        style={{ fontSize: "60px", color: "gray"  }}
-                      >
-                        &#xea5b;
-                      </i>
-                      This asset is in the process of being transferred
-                  </div>
-                }
-              </div>
-            </Modal.Body>
-            { assetTransfer["Nomor Asset"] &&
-              <Modal.Footer>
-                <div className="button-asset">
-                  <button
-                    className="btn btn-danger button-cancel"
-                    onClick={() => {
-                      setModalTransferShow(false)
-                    }}
-                    style={{marginRight : "8px"}}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    className="btn btn-primary button-submit"
-                    onClick={handleSubmitTrasfer}
-                    disabled={disableSubmit}
-                  >
-                    Submit
-                  </button>
-                </div>
-              </Modal.Footer>
-            }
-          </Modal>
-        </div>
-      }
-
       {isLoading && <Loading />}
       {isLoading2 && <AssetLoading/>}
     </>

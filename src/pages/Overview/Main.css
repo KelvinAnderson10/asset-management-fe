@@ -21,8 +21,8 @@
 }
 
 .main-navbar-container .main-navbar-asset{
-    width: 8vw;
-    height: 60%;
+    width: 10vw;
+    height: 68%;
     background-color: white;
     border-radius:  0px 1vh 1vh 0px;
     align-items: center;
@@ -34,8 +34,8 @@
 }
 
 .main-navbar-container .main-navbar-asset2{
-    width: 8vw;
-    height: 60%;
+    width: 10vw;
+    height: 68%;
     background-color: #0A2495;
     border-radius:  0px 1vh 1vh 0px;
     align-items: center;
@@ -58,8 +58,8 @@
 }
 
 .main-navbar-container .main-navbar-dashboard{
-    width: 8vw;
-    height: 60%;
+    width: 10vw;
+    height: 68%;
     background-color: white;
     border-radius:  1vh 0px 0px 1vh;
     align-items: center;
@@ -71,8 +71,8 @@
 }
 
 .main-navbar-container .main-navbar-dashboard2{
-    width: 8vw;
-    height: 60%;
+    width: 10vw;
+    height: 68%;
     background-color: #0A2495;
     border-radius:  1vh 0px 0px 1vh;
     align-items: center;

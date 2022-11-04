@@ -181,11 +181,11 @@ const routesUserRegular = [
         name: "Maintenance",
         icon: <BiIcons.BiCategoryAlt />,
       },
-      // {
-      //   path: "/purchase-request/rent",
-      //   name: "Rent",
-      //   icon: <FaIcons.FaStore />,
-      // },
+      {
+        path: "/purchase-request/rent",
+        name: "Rent",
+        icon: <FaIcons.FaStore />,
+      },
     ],
   },
 ];
@@ -211,7 +211,7 @@ const Sidebar = ({ children }) => {
   });
 
   const [viewNotif, setViewNotif] = useState([]);
-  const [countNotif, setCountNotif] = useState('');
+  const [countNotif, setCountNotif] = useState('0');
   const { notificationService } = useDeps();
   const [notif, setNotif] = useState(false);
 
@@ -577,7 +577,7 @@ const Sidebar = ({ children }) => {
 
         <main>
           <nav className="navbar navbar-expand-lg header-main">
-            <img src={logo} style={{ width: "7.8vw", height: "4vh" }}></img>
+            <img src={logo} style={{ width: "7.8vw", height: "4.5vh" }}></img>
             <div className="nav-right">
               <div style={{cursor:'pointer'}} onClick={onClickViewNotif}>
                 <Noty width={"30px"} color={"#122C34"} count={countNotif} />

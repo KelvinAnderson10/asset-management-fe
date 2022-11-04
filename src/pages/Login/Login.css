@@ -35,6 +35,17 @@
 
 }
 
+.counter {
+  color: #cc2103;
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+
+.text-otp {
+  font-family: "Poppins";
+  color: #8b8d97;
+  font-size: 14px;
+}
 .form-box {
   display: flex;
   flex-direction: column;
