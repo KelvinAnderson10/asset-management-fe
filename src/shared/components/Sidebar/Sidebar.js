@@ -176,11 +176,11 @@ const routesUserRegular = [
         name: "Maintenance",
         icon: <BiIcons.BiCategoryAlt />,
       },
-      // {
-      //   path: "/purchase-request/rent",
-      //   name: "Rent",
-      //   icon: <FaIcons.FaStore />,
-      // },
+      {
+        path: "/purchase-request/rent",
+        name: "Rent",
+        icon: <FaIcons.FaStore />,
+      },
     ],
   },
 ];
