@@ -139,42 +139,42 @@ export const ListApprovedMaintenance = () => {
                     <div className="box-content-approval">
                       <div className="row-content-approval">
                         <div className="sub-title-content">
-                          <a>Requester</a>
+                          <a className="text">Requester</a>
                         </div>
                         <div className="sub-title-content">
-                          <a>: {data.requester}</a>
+                          <a className="text">: {data.requester}</a>
                         </div>
                       </div>
                       <div className="row-content-approval">
                         <div className="sub-title-content">
-                          <a>To</a>
+                          <a className="text">To</a>
                         </div>
                         <div className="sub-title-content">
-                          <a>: {data.ToUser}</a>
+                          <a className="text">: {data.ToUser}</a>
                         </div>
                       </div>
                     </div>
                     <div className="box-content-approval">
                       <div className="row-content-approval">
                         <div className="sub-title-content">
-                          <a>Location</a>
+                          <a className="text">Location</a>
                         </div>
                         <div className="sub-title-content">
-                          <a>: {data.TAP}</a>
+                          <a className="text">: {data.TAP}</a>
                         </div>
                       </div>
                       <div className="row-content-approval">
                         <div className="sub-title-content">
-                          <a>Product Type</a>
+                          <a className="text">Product Type</a>
                         </div>
                         <div className="sub-title-content">
-                          <a>: {data["Jenis Produk"]}</a>
+                          <a className="text">: {data["Jenis Produk"]}</a>
                         </div>
                       </div>
                     </div>
                   </div>
                   <div className="date-approval">
-                    <a>{data.CreatedAt}</a>
+                    <a className="text">{data.CreatedAt}</a>
                   </div>
                 </div>
               ))

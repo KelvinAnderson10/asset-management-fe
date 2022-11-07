@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import Sidebar from '../../shared/components/Sidebar/Sidebar'
 import { ListApprovedMaintenance } from './components/ListApprovedMaintenance'
 import { ListPRMaintenance } from './components/ListPRMaintenance'
+import  "../ApprovalInventory/AppInv.css"
 
 export const AppMaintenance = () => {
     const [requestForm, setRequestForm] = useState(true)
@@ -29,15 +30,15 @@ export const AppMaintenance = () => {
             <div className='navbar-po-container'>
                 <div className='navbar-po-left'>
                 <div className={classNavbarForm} onClick={() => handleClickForm()}>
-                <a>List Purchase Request</a>
+                <div className='text-inv'>List Purchase Request</div>
                 </div>
                 <div className={classNavbarList} onClick={() => handleClickList()}>
-                    <a>Approved</a>
+                    <div className='text-inv2'>Approved</div>
                 </div> 
                 </div>
                 <div className='title-right'>
                 <div className='title-box'>
-                    <a>Maintenance</a>
+                    Maintenance
                 </div>
                 </div>
             </div>

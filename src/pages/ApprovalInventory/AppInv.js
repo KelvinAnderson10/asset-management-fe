@@ -39,7 +39,7 @@ export const AppInv = () => {
                 </div>
                 <div className='title-right'>
                 <div className='title-box'>
-                    <a>Inventory</a>
+                    Inventory
                 </div>
                 </div>
             </div>
