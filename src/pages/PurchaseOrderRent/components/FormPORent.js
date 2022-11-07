@@ -1,168 +1,109 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useAuth } from "../../../services/UseAuth";
-import { useDeps } from "../../../shared/context/DependencyContext";
 import "./FormPORent.css";
-import swal from "sweetalert";
-import { NOTIF, PUSHNOTIF, STATUS } from "../../../shared/constants";
-import { Failed } from "../../../shared/components/Notification/Failed";
-import { firebaseConfig } from "../../../shared/firebaseClient";
-import { initializeApp } from "firebase/app";
-import { getFirestore, setDoc, doc } from "firebase/firestore";
+import imageCompression from "browser-image-compression";
+import { useDeps } from "../../../shared/context/DependencyContext";
+import moment from "moment";
+import { async } from "@firebase/util";
 
 export const FormPORent = () => {
-  const [POdata, setPOData] = useState([
+  const {purchaseOrderRentService} = useDeps();
+  const [attachmentRent, setAttachmentRent ] = useState([
     {
-      ["Nama Barang"]: "",
-      vendor_1: "",
-      vendor_2: "",
-      vendor_3: "",
-      item_price_1: "",
-      item_price_2: "",
-      item_price_3: "",
-      quantity: 1,
-      ppn: "",
-
-      ["Biaya Lain-Lain"]: "",
-    },
-  ]);
+      category:'',
+      picture:''
+    }
+  ])
 
   const [POHeader, setPOHeader] = useState({
-    PurchaseOrderDetail: [],
-    tipe: "Maintenance",
-  });
+    attachment:[]
+  })
 
-  const [data, setData] = useState([]);
-  const [subProductName, setSubProductName] = useState([]);
-  const {
-    assetItemService,
-    vendorService,
-    notificationService,
-    purchaseOrderService,
-    userService,
-  } = useDeps();
+  const [selectedImage, setSelectedImage] = useState();
+  const [imageBase64, setImageBase64] = useState("");
+  let reader = new FileReader();
+  const ref = useRef(null);
+  const [fileName, setFileName] = useState("No file chosen");
+  const [file,setFile] = useState([])
 
-  useEffect(() => {
-    onGetAllSubProduct();
-    onGetAllVendor();
-    onGetCookie();
-  }, []);
 
-  const handleChange = (e) => {
+   const handleChange = (e)=>{
     const newData = { ...POHeader };
     newData[e.target.name] = e.target.value;
+    console.log(newData)
     setPOHeader(newData);
-  };
+   }
 
-  const handleFormChange = (event, index) => {
-    let data = [...POdata];
-    data[index][event.target.name] = event.target.value;
-    setPOData(data);
-  };
-  const [notifData, setNotifData] = useState({});
+   const handleAttachmentChange = async (e,index)=>{
+    let data = [...attachmentRent];
+    data[index][e.target.name]=e.target.value
+    if (e.target.files && e.target.files.length > 0) {
+      console.log('ini file', typeof e.target.files)
+      console.log('ini file', e.target.files)
+      const options = {
+        maxSizeMB: 0.5,
+        // maxWidthOrHeight: 200,
+        useWebWorker: true,
+      };
+      let allFiles = []
+      for (let i = 0; i<e.target.files.length; i++){
+      allFiles.push( e.target.files[i]);
+      console.log('ini imagefile',allFiles)
+      if (allFiles.length>0){
+        setFile(allFiles)
+      }
 
-  const createNotification = async (notifPO) => {
-    try {
-      const response = await notificationService.createNotif(notifPO);
-      setNotifData(response.data);
-    } catch (e) {
-      console.log(e);
+      try{
+        const compressedImage = await imageCompression(file, options);
+        setSelectedImage(compressedImage);
+        reader.readAsDataURL(compressedImage);
+        reader.onload = () => {
+          data[index]['picture'] =(reader.result)
+        };
+      } catch (error) {
+        console.log(error);
+      }
+      }
+      
     }
-  };
+    console.log('ini attachment',data)
+    setAttachmentRent(data)
+    
+   }
 
-  const createPushNotification = async (notifPO) => {
-    try {
-      const response = await notificationService.createPushNotif(notifPO);
-      setNotifData(response.data);
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  const onSubmitPO = async (e) => {
+   const onSubmitPO = async (e)=>{
     e.preventDefault();
     try {
-      POHeader["Kode Wilayah"] = user.location_id;
-      POHeader["requester"] = user.name;
-      POHeader["tipe"] = "Maintenance";
-      POHeader.status = STATUS.CREATE_PO;
-      for (let i in POdata) {
-        POdata[i].item_price_1 = Number(POdata[i].item_price_1);
-        POdata[i].item_price_2 = Number(POdata[i].item_price_2);
-        POdata[i].item_price_3 = Number(POdata[i].item_price_3);
-        POdata[i].quantity = Number(POdata[i].quantity);
-        POdata[i].ppn = Number(POdata[i].ppn);
-        POdata[i].ppn = Boolean(POdata[i].ppn);
-        POdata[i]["Biaya Lain-Lain"] = Number(POdata[i]["Biaya Lain-Lain"]);
-      }
-      POHeader.PurchaseOrderDetail = [...POdata];
-      const response = await purchaseOrderService.createPO(POHeader);
-      handleClearForm();
-      let myApp = initializeApp(firebaseConfig);
-      const firestore = getFirestore(myApp);
-      if (response.status === "SUCCESS") {
-        swal({
-          title: "Success!",
-          text: "Your request has been made!",
-          icon: "success",
-          button: "OK!",
-        });
-      }
-      const userMobile = await userService.getUserByName(
-        response.data.approver_level1
-      );
-
-      let pushNotifObj = {
-        to: userMobile.data.token,
-        title: `${PUSHNOTIF.REQUEST.TITLE} ${response.data.approver_level1}`,
-        body: `${PUSHNOTIF.REQUEST.BODY} ${user.name}`,
-      };
-      createPushNotification(pushNotifObj);
-
-      await setDoc(doc(firestore, "notifications", String(Date.now())), {
-        to: userMobile.data.name,
-        user_token: userMobile.data.token,
-        title: PUSHNOTIF.REQUEST.TITLE + userMobile.data.name,
-        body: PUSHNOTIF.REQUEST.BODY + user.name,
-      });
-
-      let notifObj = {
-        to: response.data.approver_level1,
-        title: NOTIF.REQUEST.TITLE,
-        body: `${NOTIF.REQUEST.BODY} ${user.name}`,
-      };
-      createNotification(notifObj);
-      e.target.reset();
-    } catch (error) {
-      console.log(error);
-      Failed("Your request failed to made");
-    }
-  };
-
-  // GET ALL SUBPRODUCT NAME
-  const onGetAllSubProduct = async () => {
-    try {
-      const response = await assetItemService.getAllAsset();
-      setSubProductName(response.data);
+      POHeader['Kode Wilayah'] = user.location_id;
+      POHeader.Cluster = user.cluster;
+      POHeader.TAP = user.tap
+      POHeader.periode_sewa_awal = moment(POHeader.periode_sewa_awal)
+      POHeader.periode_sewa_akhir = moment(POHeader.periode_sewa_akhir)
+      POHeader.attachment = [...attachmentRent]
+      const response = await purchaseOrderRentService.createPO(POHeader)
+      console.log(response)
     } catch (e) {
-      console.log(e);
+      console.log(e)
     }
-  };
+   }
 
-  // GET ALL VENDOR
-  const [vendor, setVendor] = useState([]);
+   useEffect(()=>{
+    onGetCookie();
+   },[]);
 
-  const onGetAllVendor = async () => {
-    try {
-      const response = await vendorService.getAllVendor();
-      setVendor(response.data);
-    } catch (e) {
-      console.log(e);
+
+  const addFields = (e)=>{
+    e.preventDefault();
+    let object = {
+      category:'',
+      picture:''
     }
-  };
+    setAttachmentRent([...attachmentRent,object])
+  }
 
-  //Get User
-  const { getCookie } = useAuth();
-  const [user, setUser] = useState({
+
+   const {getCookie} = useAuth()
+   const [user, setUser] = useState({
     name: "",
     role: "",
     level_approval: "",
@@ -171,6 +112,7 @@ export const FormPORent = () => {
     cluster: "",
     department: "",
   });
+
   const onGetCookie = () => {
     let savedUserJsonString = getCookie("user");
     let savedUser = JSON.parse(savedUserJsonString);
@@ -186,10 +128,6 @@ export const FormPORent = () => {
     }));
   };
 
-  const handleClearForm = () => {
-    setPOHeader({});
-    setPOData([{}]);
-  };
 
   return (
     <>
@@ -204,22 +142,26 @@ export const FormPORent = () => {
                     Area Code<span className="text-danger">*</span>
                   </label>
                   <input
+                    readOnly
                     type="text"
                     name="Kode Wilayah"
                     className="form-control"
+                    defaultValue={user.location_id}
                   />
                 </div>
                 <div className="mb-3 col-md-4">
                   <label>
                     Cluster<span className="text-danger">*</span>
                   </label>
-                  <input type="text" name="Cluster" className="form-control" />
+                  <input readOnly defaultValue={user.cluster} type="text" name="Cluster" className="form-control" />
                 </div>
                 <div className="mb-3 col-md-4">
                   <label>
                     TAP<span className="text-danger">*</span>
                   </label>
                   <input
+                    readOnly
+                    defaultValue={user.tap}
                     required
                     type="text"
                     name="TAP"
@@ -255,7 +197,7 @@ export const FormPORent = () => {
                   <label>
                     Address<span className="text-danger">*</span>
                   </label>
-                  <textarea className="form-control" rows="3"></textarea>
+                  <textarea name="alamat_lokasi" onChange={handleChange} required className="form-control" rows="3"></textarea>
                 </div>
                 <div className="mb-3 col-md-6">
                   <label>
@@ -322,10 +264,10 @@ export const FormPORent = () => {
                 </div>
                 <div className="mb-3 col-md-6">
                   <label>
-                    Additional Info<span className="text-danger">*</span>
+                    Additional Info
                   </label>
                   <input
-                    required
+                    
                     type="text"
                     name="lain_lain"
                     className="form-control"
@@ -356,7 +298,7 @@ export const FormPORent = () => {
                   <input
                     required
                     type="date"
-                    name="periode_sewa"
+                    name="periode_sewa_awal"
                     className="form-control"
                     onChange={handleChange}
                   />
@@ -368,7 +310,7 @@ export const FormPORent = () => {
                   <input
                     required
                     type="date"
-                    name="periode_sewa"
+                    name="periode_sewa_akhir"
                     className="form-control"
                     onChange={handleChange}
                   />
@@ -402,6 +344,7 @@ export const FormPORent = () => {
                     Owner's Address<span className="text-danger">*</span>
                   </label>
                   <textarea
+                    onChange={handleChange}
                     className="form-control"
                     rows="3"
                     name="alamat_pemilik"
@@ -553,7 +496,7 @@ export const FormPORent = () => {
                 </div>
                 <div className="mb-3 col-md-6">
                   <label>
-                Payment Method<span className="text-danger">*</span>
+                  Payment Method<span className="text-danger">*</span>
                   </label>
                   <input
                     required
@@ -565,17 +508,75 @@ export const FormPORent = () => {
                 </div>
                 <div className="mb-3 col-md-6">
                   <label>
-               Due Date<span className="text-danger">*</span>
+                  Due Date<span className="text-danger">*</span>
                   </label>
                   <input
                     required
                     type="date"
-                    name="cara_pembayaran"
+                    name="tanggal_jatuh_tempo"
                     className="form-control"
                     onChange={handleChange}
                   />
                 </div>
+                <label>Attachment File</label>
+                
+                {attachmentRent.map((form,index)=>{
+                  return(
+                    <>
+                    
+                    {/* <div className="col-md-6 mb-2">
+                      <label>File Category</label>
+                      <select
+                            className="form-select"
+                            required
+                            name="category"
+                            value={form.category}
+                            onChange={(event) => handleAttachmentChange(event, index)}
+                            style={{ width: "95%" }}
+                          >
+                            <option value="">Select Category</option>
+                            <option value="KTP">KTP</option>
+                            <option value="NPWP">NPWP</option>
+                            <option value="SAVINGS ACCOUNT">Savings Account</option>
+                          </select>
+                    </div> */}
+                    <div className="col-md-6 mb-2">
+                    <label>File Category</label>
+                    <input 
+                    className="form-control"
+                    name="category"
+                    value="KTP"
+                    readOnly >
+                    </input>
+                    </div>
+                    <div className="col-md-6 mt-4">
+                      <input type="file" name='picture' multiple onChange={(event) => handleAttachmentChange(event, index)} ></input>
+                    </div>
+                    <div className="col-md-6 mb-2">
+                    <label>File Category</label>
+                    <input 
+                    className="form-control"
+                    name="category"
+                    value="Location"
+                    readOnly >
+                    </input>
+                    </div>
+                    <div className="col-md-6 mt-4">
+                      <input type="file" name='picture' multiple onChange={(event) => handleAttachmentChange(event, index)} ></input>
+                    </div>
+                    </>
 
+                  )
+                })}
+                {/* <div className="col-md-12">
+                  <button
+                    className="btn btn-success float-start"
+                    onClick={addFields}
+                  >
+                    Add More..
+                  </button>
+                </div> */}
+        
 
                 <div className="col-md-12">
                   <button

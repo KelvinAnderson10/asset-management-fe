@@ -8,6 +8,7 @@ import * as AiIcons from 'react-icons/ai'
 import Loading from '../../../shared/components/Loading/Loading'
 import { NoData } from '../../../shared/components/NoData/NoData'
 import moment from "moment";
+import { Modal } from 'react-bootstrap'
 
 export const ListPOInventory = () => {
     const [poData, setPOData] = useState([])
@@ -363,17 +364,22 @@ export const ListPOInventory = () => {
                   </div>
                   </div>
             </div>
-            {viewDetail &&
-            <div className='view-po-inv-container'>
-                <div className='box-po-inv-detail'>
-                    <div className='close'>
-                        <CgIcons.CgClose size={'2em'} onClick={onClickClocePODetail}/>
-                    </div>
-                    <form>
-                <div className="formPOInput">
-                  <div className="row" style={{textAlign:'left'}}>
-                  <h4 style={{textAlign:'left', color:'#B70621'}}>PO Number {POById.po_id} </h4>
-            <div className="mb-3 col-md-4">
+            <div className="model-box-view">
+              <Modal
+              dialogClassName="modal-90w"
+              show={viewDetail}
+              onHide={onClickClocePODetail}
+              backdrop="static"
+              keyboard={false}
+              size='lg'
+              >
+            <Modal.Header closeButton>
+            <Modal.Title style={{textAlign:'left', color:'#B70621'}} >PO Number {POById.po_id}</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <div className='form-group'>
+                <div className='row'>
+                <div className="mb-3 col-md-4">
                     <label>
                       Area Code
                     </label>
@@ -409,7 +415,7 @@ export const ListPOInventory = () => {
                       readOnly
                     />
                   </div>
-                  <div className="inputBoxPO mb-3 col-md-6 ">
+                  <div className="mb-3 col-md-6 ">
                     <label>
                       Subproduct Name
                     </label>
@@ -433,7 +439,7 @@ export const ListPOInventory = () => {
                       value={POById['tipe']}
                     />
                   </div>
-                    { poDetailData.length === 0 ? (
+                  { poDetailData.length === 0 ? (
                             <p>Not request</p>
                         ): (
                     currentItemsDetail.map((data, index) => {
@@ -559,10 +565,9 @@ export const ListPOInventory = () => {
                         </div>
                       );
                     }))}
-                  </div>
+
                 </div>
-              </form>
-              <div className='pagination-modal'>
+                <div className='pagination-modal'>
               <ul className="modalNumbers">
                     <li style={{ borderRadius:  '1vh 0vh 0vh 1vh'}}>
                       <button
@@ -588,8 +593,13 @@ export const ListPOInventory = () => {
                     </li>
                   </ul>
                   </div>
-                </div>
-            </div>}
+              </div>
+            </Modal.Body>
+              </Modal>
+            </div>
+
+
+
             {isLoading && <Loading/>}
         </>
     )

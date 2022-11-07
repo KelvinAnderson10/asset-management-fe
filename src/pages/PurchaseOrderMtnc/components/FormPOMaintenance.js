@@ -217,6 +217,7 @@ export const FormPOMaintenance = () => {
                   </label>
                   <input
                     required
+                    placeholder="To User"
                     type="text"
                     name="ToUser"
                     className="form-control"
@@ -229,6 +230,7 @@ export const FormPOMaintenance = () => {
                   </label>
                   <input
                     required
+                    placeholder="Position"
                     type="text"
                     name="Jabatan"
                     className="form-control"

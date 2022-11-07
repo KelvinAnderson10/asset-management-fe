@@ -184,7 +184,7 @@
   background-size: 100% 100%; 
 
 }
-.asset-edit-container form .row .col .image-box {
+.image-box {
   width: 200px;
   height: 140px;
   background-image: url('../../assets/images/No-image-available.png');
@@ -213,7 +213,7 @@
 
 }
 
-.asset-edit-container form .row .col .asset-image-container{
+.asset-image-container{
   display: flex;
   flex-direction: row;
   margin: 20px;
@@ -226,7 +226,7 @@
   margin-right: 20px;
   
 }
-.asset-edit-container form .row .col .button-submit{
+.button-submit{
  
   width: 120px;
   height: 45px;

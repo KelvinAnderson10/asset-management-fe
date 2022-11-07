@@ -37,6 +37,8 @@ export const Overview = () => {
     setViewShow(false);
   };
 
+  
+
   //Get User
   const { getCookie } = useAuth();
   const [user, setUser] = useState({
@@ -1076,7 +1078,7 @@ export const Overview = () => {
                             className="material-icons"
                             data-toggle="tooltip"
                             title="Edit"
-                            style={{ fontSize: "25px" }}
+                            style={{ fontSize: "25px",color: "#FFC107"}}
                           >
                             &#xe3c9;
                           </i>
@@ -1124,6 +1126,8 @@ export const Overview = () => {
           </div>
         </div>
       </div>
+
+      {/* VIEW MODAL */}
       <div className="model-box-view">
         <Modal
           dialogClassName="view-modal"
@@ -1240,28 +1244,38 @@ export const Overview = () => {
           <Modal.Footer></Modal.Footer>
         </Modal>
       </div>
-
-      {editShow && (
-        <div className="edit-container">
-          <div className="asset-edit-container">
-            <form onSubmit={onSubmitEditAsset}>
-              <div className="row">
-                <div className="col">
-                  <h3 className="title">Edit Asset Item</h3>
-
-                  <div className="inputBox">
-                    <span>Asset Name :</span>
-                    <input
+      {/* EDIT SHOW */}
+      <div className="model-box-view">
+        <Modal
+        dialogClassName="modal-90w"
+        show={editShow}
+        onHide={handleEditClose}
+        backdrop="static"
+        keyboard={false}
+        size='lg'>
+          <Modal.Header closeButton>
+            <Modal.Title>Edit Inventory Data</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div>
+            <div className="form-group">
+              <form onSubmit={onSubmitEditAsset}> 
+                  <div className="row">
+                    <div className="col-md-6 mb-3">
+                      <label>Asset Name</label>
+                      <input
+                      className="form-control"
                       type="text"
                       required
                       name="Nama Barang"
                       value={assetEdit["Nama Barang"]}
                       onChange={handleChange}
                     />
-                  </div>
-                  <div className="inputBox">
-                    <span>Subproduct Name :</span>
+                    </div>
+                    <div className="col-md-6 mb-3">
+                      <label>Subproduct Name</label>
                     <select
+                    className="form-select"
                       required
                       name="Jenis Produk"
                       value={assetEdit["Jenis Produk"]}
@@ -1277,10 +1291,25 @@ export const Overview = () => {
                         </option>
                       ))}
                     </select>
-                  </div>
-                  <div className="inputBox">
-                    <span>Vendor :</span>
-                    <select
+
+
+                    </div>
+                    <div className="col-md-6 mb-3" >
+                      <label>Purchase Price</label>
+                      <input
+                      className="form-control"
+                      type="number"
+                      required
+                      name="Harga Perolehan"
+                      value={assetEdit["Harga Perolehan"]}
+                      onChange={handleChange}
+                    />
+
+                    </div>
+                    <div className="col-md-6 mb-3">
+                      <label>Vendor</label>
+                      <select
+                      className="form-select"
                       required
                       name="Vendor"
                       value={assetEdit.Vendor}
@@ -1294,10 +1323,24 @@ export const Overview = () => {
                         </option>
                       ))}
                     </select>
-                  </div>
-                  <div className="inputBox">
-                    <span>Location :</span>
-                    <select
+
+
+                    </div>
+                    <div className="col-md-6 mb-3">
+                      <label>Additional Cost</label>
+                      <input
+                      className="form-control"
+                      type="number"
+                      required
+                      name="Biaya Lain-Lain"
+                      value={assetEdit["Biaya Lain-Lain"]}
+                      onChange={handleChange}
+                    />
+                    </div>
+                    <div className="col-md-6 mb-3">
+                        <label>Location</label>
+                        <select
+                        className="form-select"
                       required
                       name="Kode Wilayah"
                       value={assetEdit["Kode Wilayah"]}
@@ -1313,10 +1356,28 @@ export const Overview = () => {
                         </option>
                       ))}
                     </select>
-                  </div>
-                  <div className="inputBox">
-                    <span>Condition :</span>
-                    <select
+
+                    </div>
+                    <div className="col-md-6 mb-3">
+                      <label>Insurance</label>
+                      <select
+                      className="form-select"
+                      required
+                      name="Insurance"
+                      value={assetEdit.Insurance}
+                      onChange={handleChange}
+                    >
+                      <option value="">Select</option>
+                      <option>Sudah</option>
+                      <option>Belum</option>
+                    </select>
+
+
+                    </div>
+                    <div className="col-md-6 mb-3">
+                      <label>Condition</label>
+                      <select
+                      className="form-select"
                       required
                       name="Kondisi"
                       value={assetEdit.Kondisi}
@@ -1327,40 +1388,76 @@ export const Overview = () => {
                       <option>Rusak</option>
                       <option>Other</option>
                     </select>
-                  </div>
-                  <div className="inputBox">
-                    <span>PO Number :</span>
-                    <input
+
+
+                    </div>
+                    <div className="col-md-6 mb-3">
+                      <label>User</label>
+                      <input
+                      className="form-control"
+                      type="text"
+                      required
+                      name="User"
+                      value={assetEdit.User}
+                      onChange={handleChange}
+                    />
+                    </div>
+                    <div className="col-md-6 mb-3">
+                      <label>PO Number</label>
+                      <input
+                      className="form-control"
                       type="text"
                       required
                       name="No. PO / Dokumenen Pendukung"
                       value={assetEdit["No. PO / Dokumenen Pendukung"]}
                       onChange={handleChange}
                     />
-                  </div>
-                  <div className="inputBox">
-                    <span>Purchase Date :</span>
-                    <input
+                    </div>
+                    <div className="col-md-6 mb-3">
+                      <label>Position</label>
+                      <input
+                      className="form-control"
+                      type="text"
+                      required
+                      name="Jabatan"
+                      value={assetEdit.Jabatan}
+                      onChange={handleChange}
+                    />
+                    </div>
+                    <div className="col-md-6 mb-3">
+                      <label>Purchase Date</label>
+                      <input
+                      className="form-control"
                       type="datetime-local"
                       required
                       name="Tanggal Output"
                       value={assetEdit["Tanggal Output"]}
                       onChange={handleChange}
                     />
-                  </div>
-                  <div className="inputBox">
-                    <span>BAST :</span>
+                    </div>
+                    <div className="col-md-6 mb-3">
+                      <label>Tracking Number</label>
+                      <input
+                      className="form-control"
+                      type="text"
+                      required
+                      name="Nomor Resi"
+                      value={assetEdit["Nomor Resi"]}
+                      onChange={handleChange}
+                    />
+                    </div>
+                    <div className="col-md-6 mb-3">
+                        <label>BAST</label>
                     <input
+                      className="form-control"
                       type="datetime-local"
                       required
                       name="BAST Output"
                       value={assetEdit["BAST Output"]}
                       onChange={handleChange}
                     />
-                  </div>
-                </div>
-                <div className="col">
-                  <div className="asset-image-container">
+                    </div>
+                    <div className="asset-image-container">
                     <div className="image-box">
                       {imageBase64 && (
                         <div className="image">
@@ -1392,90 +1489,30 @@ export const Overview = () => {
                       <span id="file-chosen">{fileName}</span>
                     </div>
                   </div>
-                  <div className="inputBox" style={{ marginTop: "1vh" }}>
-                    <span>Purchase Price :</span>
-                    <input
-                      type="number"
-                      required
-                      name="Harga Perolehan"
-                      value={assetEdit["Harga Perolehan"]}
-                      onChange={handleChange}
-                    />
                   </div>
-                  <div className="inputBox">
-                    <span>Additional Cost :</span>
-                    <input
-                      type="number"
-                      required
-                      name="Biaya Lain-Lain"
-                      value={assetEdit["Biaya Lain-Lain"]}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div className="inputBox">
-                    <span>Insurance</span>
-                    <select
-                      required
-                      name="Insurance"
-                      value={assetEdit.Insurance}
-                      onChange={handleChange}
-                    >
-                      <option value="">Select</option>
-                      <option>Sudah</option>
-                      <option>Belum</option>
-                    </select>
-                  </div>
-                  <div className="inputBox">
-                    <span>User :</span>
-                    <input
-                      type="text"
-                      required
-                      name="User"
-                      value={assetEdit.User}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div className="inputBox">
-                    <span>Position :</span>
-                    <input
-                      type="text"
-                      required
-                      name="Jabatan"
-                      value={assetEdit.Jabatan}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div className="inputBox">
-                    <span>Tracking Number :</span>
-                    <input
-                      type="text"
-                      required
-                      name="Nomor Resi"
-                      value={assetEdit["Nomor Resi"]}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div className="button-asset">
+                  <div className="col-md-12 mt-3">
                     <button
+                    style={{ marginLeft: "20px"}}
                       type="submit"
-                      className="btn btn-danger button-cancel"
-                      onClick={handleEditClose}
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      type="submit"
-                      className="btn btn-primary button-submit"
+                      className="btn btn-primary float-end "
                     >
                       Submit
                     </button>
                   </div>
-                </div>
+              </form>
+              <button
+              className="btn btn-danger button-cancel float-end"
+              onClick={handleEditClose}
+              >
+              Cancel
+              </button>
+               
               </div>
-            </form>
-          </div>
-        </div>
-      )}
+             
+              </div>
+          </Modal.Body>
+        </Modal>
+      </div>
 
       {editShowRegular && (
         <div className="edit-container-reg">
