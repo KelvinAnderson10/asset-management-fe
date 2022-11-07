@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../services/UseAuth';
+import { STATUS } from '../../shared/constants';
 import { useDeps } from '../../shared/context/DependencyContext';
 
 export const UseAppTrans = () => {
@@ -68,6 +69,7 @@ export const UseAppTrans = () => {
         try {
             const response = await transferRequestService.getHistoryRequest(user.name, page);
             if (response.data.length !== 0) {
+                let approvedList = response.data.filter(data => data.status === STATUS.TRANSFERRED)
                 setReqApprovedList(response.data)
             }
         } catch (e) {

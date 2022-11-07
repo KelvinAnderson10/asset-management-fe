@@ -28,6 +28,7 @@ export const STATUS = {
   APPROVE_GA_IT: "Approved",
   ACCEPT: "Delivered",
   REJECT: "Denied",
+  TRANSFERRED : "Transferred",
 };
 
 export const NOTIF = {

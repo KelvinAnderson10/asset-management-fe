@@ -3,6 +3,7 @@ import Loading from '../../../shared/components/Loading/Loading'
 import { UseAppTrans } from '../UseAppTrans'
 import { NoData } from "../../../shared/components/NoData/NoData";
 import { Modal} from "react-bootstrap";
+import { STATUS } from '../../../shared/constants';
 
 export const ListTransReq = ({listData = [], showButton = true}) => {
     const {
@@ -23,7 +24,7 @@ export const ListTransReq = ({listData = [], showButton = true}) => {
             ) : (
                 listData.map((data) => (
                     <div
-                      className="container-fluid bg-light shadow-sm rounded-2 p-2"
+                      className="container-fluid bg-light shadow-sm rounded-2 p-2 mb-3"
                       style={{cursor : "pointer"}}
                       key={data.to_id}
                       onClick={() => {handleShowModalRequest(data)}}
@@ -32,7 +33,7 @@ export const ListTransReq = ({listData = [], showButton = true}) => {
                         <div className="text-white rounded-2 mb-2 fw-bold" style={{backgroundColor : "rgb(183, 6, 33)", width: "2.5vw"}}>{data.to_id}</div>
                         <div
                           className="text-white rounded-2 mb-2 fw-bold"
-                          style={{backgroundColor:"rgb(255, 178, 0)", width: "8vw" }}
+                          style={{backgroundColor: data.status === STATUS.CREATE_PO ? "rgb(255, 178, 0)" : data.status === STATUS.TRANSFERRED ? 'rgb(92, 184, 92)' :  'rgb(183, 6, 33)', width: "8vw" }}
                         >
                           {data.status}
                         </div>
@@ -61,7 +62,7 @@ export const ListTransReq = ({listData = [], showButton = true}) => {
                         <div className="row">
                             <div className="col">
                               <a>Request Date</a>
-                              <a>: {new Date(data.CreatedAt).toLocaleDateString()}</a>
+                              <a>: {new Date(data.CreatedAt).toLocaleDateString('in-ID')}</a>
                             </div>
                             <div className="col">
                             </div>

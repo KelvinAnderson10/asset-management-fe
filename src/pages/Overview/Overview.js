@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Button, Modal, Table } from "react-bootstrap";
+import { Button, Modal, Table, ButtonGroup, Dropdown   } from "react-bootstrap";
 import { useDeps } from "../../shared/context/DependencyContext";
 import "./Overview.css";
 import moment from "moment";
@@ -709,7 +709,7 @@ export const Overview = () => {
      setLoading(true);
      try {
        const existedRequest = await transferRequestService.getByAssetNumber(name);
-       if(existedRequest.data[0]["status"] === "Pending"){
+       if(existedRequest.data.length > 0 && existedRequest.data[0]["status"] === "Pending"){
          setAssetTransfer({});
          return;
        }
@@ -936,22 +936,7 @@ export const Overview = () => {
                     <th
                       style={{ minWidth: "200px" }}
                     >
-                      Purchase Date
-                    </th>
-                    <th
-                      style={{ minWidth: "200px" }}
-                    >
-                      Year
-                     </th>
-                    <th
-                      style={{ minWidth: "200px" }}
-                    >
-                      PO Number
-                    </th>
-                    <th
-                      style={{ minWidth: "200px" }}
-                    >
-                      Vendor Name
+                      Asset Number
                     </th>
                     <th
                       style={{ minWidth: "300px" }}
@@ -959,32 +944,7 @@ export const Overview = () => {
                       Item Name
                     </th>
                     <th
-                      style={{ minWidth: "230px" }}
-                    >
-                      Acquisition Cost{" "}
-                    </th>
-                    <th
-                      style={{ minWidth: "200px" }}
-                    >
-                      PPN
-                    </th>
-                    <th
-                      style={{ minWidth: "200px" }}
-                    >
-                      Additional Cost{" "}
-                    </th>
-                    <th
-                      style={{ minWidth: "270px" }}
-                    >
-                      Total Acquisition Cost{" "}
-                    </th>
-                    <th
-                      style={{ minWidth: "220px" }}
-                    >
-                      Subproduct Name{" "}
-                    </th>
-                    <th
-                      style={{ minWidth: "200px" }}
+                      style={{ minWidth: "150px" }}
                     >
                       Product Name
                     </th>
@@ -994,99 +954,14 @@ export const Overview = () => {
                       Asset Category{" "}
                     </th>
                     <th
-                      style={{ minWidth: "200px" }}
-                    >
-                      BAST
-                    </th>
-                    <th
-                      style={{ minWidth: "200px" }}
-                    >
-                      Condition
-                    </th>
-                    <th
-                      style={{ minWidth: "200px" }}
-                    >
-                      Insurance
-                    </th>
-                    <th
-                      style={{ minWidth: "200px" }}
+                      style={{ minWidth: "150px" }}
                     >
                       Location
                     </th>
                     <th
                       style={{ minWidth: "200px" }}
                     >
-                      User
-                    </th>
-                    <th
-                      style={{ minWidth: "200px" }}
-                    >
-                      Position
-                    </th>
-                    <th
-                      style={{ minWidth: "200px" }}
-                    >
-                      Initial
-                    </th>
-                    <th
-                      style={{ minWidth: "200px" }}
-                    >
-                      Location ID
-                    </th>
-                    <th
-                      style={{ minWidth: "200px" }}
-                    >
-                      Product Code
-                    </th>
-                    <th
-                      style={{ minWidth: "200px" }}
-                    >
-                      Purchase Year{" "}
-                    </th>
-                    <th
-                      style={{ minWidth: "220px" }}
-                    >
-                      Item Order Code{" "}
-                    </th>
-                    <th
-                      style={{ minWidth: "200px" }}
-                    >
-                      Asset Number
-                    </th>
-                    <th
-                      style={{ minWidth: "200px" }}
-                    >
-                      Useful Life
-                    </th>
-                    <th
-                      style={{ minWidth: "250px" }}
-                    >
-                      Monthly Depreciation{" "}
-                    </th>
-                    <th
-                      style={{ minWidth: "240px" }}
-                    >
-                      Depreciation Month{" "}
-                    </th>
-                    <th
-                      style={{ minWidth: "230px" }}
-                    >
-                      Total Depreciation{" "}
-                    </th>
-                    <th
-                      style={{ minWidth: "240px" }}
-                    >
                       Current Asset Value{" "}
-                    </th>
-                    <th
-                      style={{ minWidth: "240px" }}
-                    >
-                      Tracking Number{" "}
-                    </th>
-                    <th
-                      style={{ minWidth: "240px" }}
-                    >
-                      Type
                     </th>
                   </tr>
                 </thead>
@@ -1100,7 +975,8 @@ export const Overview = () => {
                       <tr key={data["Nomor Asset"]}>
                         <th>{index + 1}</th>
                         <th style={{ fontSize: "14px", fontWeight : "normal" }}>
-                          <div style={{display : "flex", justifyContent : "space-between", marginTop : "4px" }}>
+                          <Dropdown as={ButtonGroup}>
+                            <Button variant="light">
                             <a
                               onClick={() => {
                                 handleViewShow(setRowData(data));
@@ -1113,47 +989,16 @@ export const Overview = () => {
                                 className="material-icons"
                                 data-toggle="tooltip"
                                 title="View"
-                                style={{ fontSize: "20px", color: "darkblue"  }}
+                                style={{ fontSize: "24px", color: "darkblue"  }}
                               >
                                 &#xe8f4;
                               </i>
                               <p>Detail</p> 
                             </a>
-
-                            { moreActionShow[index] ?
-                              <i
-                                className="material-icons"
-                                data-toggle="tooltip"
-                                title="View"
-                                style={{ fontSize: "25px", color: "black", cursor : "pointer"  }}
-                                onClick={() => {
-                                  setMoreActionShow(Array(moreActionShow.length).fill(false));
-                                }}
-                              >
-                                &#xe5ce;
-                              </i> :
-                              <i
-                                className="material-icons"
-                                data-toggle="tooltip"
-                                title="View"
-                                style={{ fontSize: "25px", color: "black", cursor : "pointer"  }}
-                                onClick={() => {
-                                  setMoreActionShow(Array.apply(null, Array(moreActionShow.length)).map(function (x, i) { 
-                                    if (i === index) {
-                                      return true;
-                                    }
-                                    return false;
-                                   }));
-                                }}
-                              >
-                                &#xe5cf;
-                              </i>
-                            }
-                          </div>
-                          { moreActionShow[index] &&
-                            <div
-                              style={{position : "absolute", backgroundColor : "whitesmoke", display : "flex", flexDirection : "column", padding : "4px", paddingRight: "10px", borderRadius : "4px"}}
-                              >
+                            </Button>
+                            <Dropdown.Toggle split variant="light" id="dropdown-split-basic" />
+                            <Dropdown.Menu style={{minHeight : "200px"}}>
+                              <Dropdown.Item >
                               <a
                                 target="_blank"
                                 href={`http://api.qrserver.com/v1/create-qr-code/?data= Asset Number: ${data["Nomor Asset"]}%0A Purchase Date: ${data["Tanggal Output"]}%0A Asset Name: ${data["Nama Barang"]}%0A Asset Category: ${data["Kategori Jenis Produk"]}%0A Product Name: ${data["Jenis Produk"]}%0A Location: ${data["Lokasi"]}%0A PO Number: ${data["No. PO / Dokumenen Pendukung"]}%0A Lifetime: ${data["Masa Manfaat (Bulan)"]}%0A Value: ${data["Nilai Asset saat ini"]}%0A Vendor: ${data["Vendor"]}&size=${size}x${size}&bgcolor=${bgColor}`}
@@ -1173,8 +1018,10 @@ export const Overview = () => {
                                 </i>
                                 <p style={{color : "black"}}>QR Code</p>
                               </a>
-                              {(user.level_approval == 'Regular' || user.level_approval == 'GA' || user.level_approval== 'IT' || user.role == 'Admin') &&
-                                <a
+                              </Dropdown.Item>
+                              { (user.level_approval == 'Regular' || user.level_approval == 'GA' || user.level_approval== 'IT' || user.role == 'Admin') &&
+                                <Dropdown.Item >
+                              <a
                                   onClick={() => {
                                     handleEditShow(data["Nomor Asset"]);
                                   }}
@@ -1192,8 +1039,9 @@ export const Overview = () => {
                                   </i>
                                   <p style={{color : "black"}}>Edit</p>
                                 </a>
-                              }
-                              {(user.level_approval == 'Regular') &&
+                              </Dropdown.Item>}
+                              { (user.level_approval == 'Regular') &&
+                                <Dropdown.Item >
                                 <a
                                   onClick={() => {
                                     handleToggleTransfer(data["Nomor Asset"]);
@@ -1213,57 +1061,34 @@ export const Overview = () => {
                                   </i>
                                   <p style={{color : "black"}}>Transfer Request</p>
                                 </a>
-                              }
-                              <a
-                                onClick={() => {}}
-                                className="edit"
-                                data-toggle="modal"
-                                style={{cursor : "pointer",textDecoration : "none", display : 'flex', marginTop : "3px", color : "gray"}}
-                              >
-                                <i
-                                  className="material-icons"
-                                  data-toggle="tooltip"
-                                  title="Edit"
-                                  style={{ fontSize: "25px" }}
+                                </Dropdown.Item>}
+                              <Dropdown.Item >
+                                <a
+                                  onClick={() => {}}
+                                  className="edit"
+                                  data-toggle="modal"
+                                  style={{cursor : "pointer",textDecoration : "none", display : 'flex', marginTop : "3px", color : "gray"}}
                                 >
-                                  &#xe889;
-                                </i>
-                                <p style={{color : "black"}}>History</p>
-                              </a>
-                            </div>
-                          }
+                                  <i
+                                    className="material-icons"
+                                    data-toggle="tooltip"
+                                    title="Edit"
+                                    style={{ fontSize: "25px" }}
+                                  >
+                                    &#xe889;
+                                  </i>
+                                  <p style={{color : "black"}}>History</p>
+                                </a>
+                              </Dropdown.Item>
+                            </Dropdown.Menu>
+                          </Dropdown>
                         </th>
-                        <td>{data["Tanggal Output"]}</td>
-                        <td>{data["Tahun"]}</td>
-                        <td>{data["No. PO / Dokumenen Pendukung"]}</td>
-                        <td>{data["Vendor"]}</td>
+                        <td>{data["Nomor Asset"]}</td>
                         <td>{data["Nama Barang"]}</td>
-                        <td>{data["Harga Perolehan"]}</td>
-                        <td>{data["PPN"]}</td>
-                        <td>{data["Biaya Lain-Lain"]}</td>
-                        <td>{data["Total Harga Perolehan"]}</td>
-                        <td>{data["Jenis Produk"]}</td>
                         <td>{data["Kategori Jenis Produk"]}</td>
                         <td>{data["Kategori Aset Tetap"]}</td>
-                        <td>{data["BAST Output"]}</td>
-                        <td>{data["Kondisi"]}</td>
-                        <td>{data["Insurance"]}</td>
                         <td>{data["Lokasi"]}</td>
-                        <td>{data["User"]}</td>
-                        <td>{data["Jabatan"]}</td>
-                        <td>{data["Initisal"]}</td>
-                        <td>{data["Kode Wilayah"]}</td>
-                        <td>{data["Kode Asset"]}</td>
-                        <td>{data["Tahun Pembelian"]}</td>
-                        <td>{data["Kode Urut barang"]}</td>
-                        <td>{data["Nomor Asset"]}</td>
-                        <td>{data["Masa Manfaat (Bulan)"]}</td>
-                        <td>{data["Penyusutan Perbulan"]}</td>
-                        <td>{data["Total Bulan Penyusutan"]}</td>
-                        <td>{data["Total Penyusutan"]}</td>
                         <td>{data["Nilai Asset saat ini"]}</td>
-                        <td>{data["Nomor Resi"]}</td>
-                        <td>{data.Tipe}</td>
                       </tr>
                     ))
                   )}
