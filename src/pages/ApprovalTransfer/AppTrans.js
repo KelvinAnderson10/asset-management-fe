@@ -1,23 +1,25 @@
 import React, { useState } from 'react'
 import Sidebar from '../../shared/components/Sidebar/Sidebar'
 import { ListTransReq } from './component/ListTransReq';
+import { UseAppTrans } from './UseAppTrans';
 
 export const AppTrans = () => {
-    const [requestForm, setRequestForm] = useState(true);
-    const [requestList, setRequestList] = useState(false)
-    const [classNavbarForm, setClassNavbarForm] = useState('navbar-po-box')
-    const [classNavbarList, setClassNavbarList] = useState('navbar-po-box2')
+    const [requestList, setRequestList] = useState(true);
+    const [requestApproved, setRequestApproved] = useState(false);
+    const [classNavbarForm, setClassNavbarForm] = useState('navbar-po-box');
+    const [classNavbarList, setClassNavbarList] = useState('navbar-po-box2');
+    const {reqList, reqApprovedList} = UseAppTrans();
 
-    const handleClickForm = () => {
-        setRequestForm(true)
-        setRequestList(false)
+    const handleClickList = () => {
+        setRequestList(true)
+        setRequestApproved(false)
         setClassNavbarForm('navbar-po-box')
         setClassNavbarList('navbar-po-box2')
     }
 
-    const handleClickList = () => {
-        setRequestList(true)
-        setRequestForm(false)
+    const handleClickApproved = () => {
+        setRequestList(false)
+        setRequestApproved(true)
         setClassNavbarForm('navbar-po-box2')
         setClassNavbarList('navbar-po-box')
     }
@@ -28,16 +30,19 @@ export const AppTrans = () => {
             <div className='po-inventory-container'>
                 <div className='navbar-po-container'>
                     <div className='navbar-po-left'>
-                    <div className={classNavbarForm} onClick={() => handleClickForm()}>
+                    <div className={classNavbarForm} onClick={() => handleClickList()}>
                     <a>List Transfer Request</a>
                     </div>
-                    <div className={classNavbarList} onClick={() => handleClickList()}>
+                    <div className={classNavbarList} onClick={() => handleClickApproved()}>
                         <a>Approved</a>
                     </div> 
                     </div>
                 </div>
             </div>
-            <ListTransReq />
+            <div className='container-fluid bg-secondary bg-opacity-10 rounded-2 mx-5 p-5 h-75'>
+                {requestList && <ListTransReq listData={reqList}/>}
+                {requestApproved && <ListTransReq listData={reqApprovedList} showButton={false}/>}
+            </div>
         </Sidebar>
     </>
   )

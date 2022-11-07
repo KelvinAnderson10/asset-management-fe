@@ -4,9 +4,8 @@ import { UseAppTrans } from '../UseAppTrans'
 import { NoData } from "../../../shared/components/NoData/NoData";
 import { Modal} from "react-bootstrap";
 
-export const ListTransReq = () => {
+export const ListTransReq = ({listData = [], showButton = true}) => {
     const {
-        reqList, 
         loading,
         approveRequest,
         rejectRequest,
@@ -19,11 +18,10 @@ export const ListTransReq = () => {
 
   return (
     <>
-        <div className='container-fluid bg-secondary bg-opacity-10 rounded-2 mx-5 p-5 h-75'>
-            { reqList.length === 0 ?(
+            { listData.length === 0 ?(
                 <NoData />
             ) : (
-                reqList.map((data) => (
+                listData.map((data) => (
                     <div
                       className="container-fluid bg-light shadow-sm rounded-2 p-2"
                       style={{cursor : "pointer"}}
@@ -72,7 +70,6 @@ export const ListTransReq = () => {
                     </div>
                 ))
             )}
-        </div>
 
         {
             <div className="model-box-view">
@@ -150,7 +147,7 @@ export const ListTransReq = () => {
                             readOnly
                           />
                         </div>
-                        <div className="col-md-12 mb-3">
+                        <div className="col-md-6 mb-3">
                           <label>Target Location<span style={{color : "red"}}>*</span></label>
                           <input
                             type="text"
@@ -163,7 +160,7 @@ export const ListTransReq = () => {
                     </div>
                 </div>
             </Modal.Body>
-            { detailAsset["Nomor Asset"] &&
+            { (detailAsset["Nomor Asset"] && showButton) &&
               <Modal.Footer>
                 <div className="">
                   <button

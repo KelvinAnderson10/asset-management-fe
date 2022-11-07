@@ -39,6 +39,7 @@ export const UseAppTrans = () => {
 
     // DATA
     const [reqList, setReqList] = useState([]);
+    const [reqApprovedList, setReqApprovedList] = useState([]);
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(false);
     const [detailAsset, setDetailAsset] = useState({});
@@ -53,6 +54,21 @@ export const UseAppTrans = () => {
             const response = await transferRequestService.getIncomingRequest(user.name, page);
             if (response.data.length !== 0) {
                 setReqList(response.data)
+            }
+        } catch (e) {
+            console.log(e);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    const getListRequestApproved = async () => {
+        setLoading(true);
+        console.log(user.name);
+        try {
+            const response = await transferRequestService.getHistoryRequest(user.name, page);
+            if (response.data.length !== 0) {
+                setReqApprovedList(response.data)
             }
         } catch (e) {
             console.log(e);
@@ -128,6 +144,7 @@ export const UseAppTrans = () => {
 
     useEffect(() => {
         getListRequest();
+        getListRequestApproved();
     }, [user.name]);
 
     return {
@@ -139,6 +156,7 @@ export const UseAppTrans = () => {
         detailAsset,
         handleShowModalRequest,
         setShowModalReq,
-        showModalReq
+        showModalReq,
+        reqApprovedList
     }
 }
