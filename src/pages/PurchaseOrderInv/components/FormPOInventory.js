@@ -160,12 +160,6 @@ export const FormPOInventory = () => {
 
 
       if (response.status === "SUCCESS") {
-        swal({
-          title: "Success!",
-          text: "Your request has been made!",
-          icon: "success",
-          button: "OK!",
-        });
 
         const userMobile = await userService.getUserByName(
           response.data.approver_level1
@@ -192,6 +186,13 @@ export const FormPOInventory = () => {
           body: `${NOTIF.REQUEST.BODY} ${user.name}`,
         };
         createNotification(notifObj);
+        
+        swal({
+          title: "Success!",
+          text: "Your request has been made!",
+          icon: "success",
+          button: "OK!",
+        });
       }
       e.target.reset();
     } catch (error) {
