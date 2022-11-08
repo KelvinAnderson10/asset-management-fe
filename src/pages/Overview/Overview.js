@@ -1730,11 +1730,11 @@ export const Overview = () => {
           size='lg'
         >
           <Modal.Header closeButton>
-            <Modal.Title className="fs-5">{`History Transfer ${historyAsset[0].AssetNumber}`}</Modal.Title>
+            <Modal.Title className="fs-5">{`History Transfer ${historyAsset.length > 0 ? historyAsset[0].AssetNumber : ""}`}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <div>
-              { historyAsset.length > 0 &&
+              { historyAsset.length > 0 ?
                 <div>
                   {historyAsset.map(data => {
                     return(
@@ -1756,6 +1756,19 @@ export const Overview = () => {
                         </div>
                     )
                   })}
+                </div> :
+                <div>
+                  <div style={{display : "flex", flexDirection : "column",justifyContent : "center", alignItems : "center"}}>
+                    <i
+                        className="material-icons"
+                        data-toggle="tooltip"
+                        title="View"
+                        style={{ fontSize: "60px", color: "gray"  }}
+                      >
+                        &#xea5b;
+                      </i>
+                      This asset does not have transfer history
+                  </div>
                 </div>
               }
             </div>
