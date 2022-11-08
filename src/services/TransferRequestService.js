@@ -39,6 +39,15 @@ export const transferRequestService = ({doPost, doGet, doDelete, doPut}) => {
             throw e
         }
     }
+    const getHistoryTransferAsset = async (assetNumber) => {
+        try {
+            return await doGet({
+                url: `/api/to/history?assetNumber=${assetNumber}`
+            })
+        } catch (e) {
+            throw e
+        }
+    }
 
     const updateApprovalToLevel1 = async (id) => {
         try {
@@ -64,5 +73,5 @@ export const transferRequestService = ({doPost, doGet, doDelete, doPut}) => {
         }
     }
 
-    return {createTransferRequest, getByAssetNumber, getIncomingRequest, updateApprovalToLevel1, updateApprovalToLevel2, rejectApprovalTo, getHistoryRequest}
+    return {createTransferRequest, getByAssetNumber, getIncomingRequest, updateApprovalToLevel1, updateApprovalToLevel2, rejectApprovalTo, getHistoryRequest, getHistoryTransferAsset}
 }

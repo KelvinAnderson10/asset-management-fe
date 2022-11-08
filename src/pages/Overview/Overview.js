@@ -7,11 +7,12 @@ import "./EditAsset.css";
 import swal from "sweetalert";
 import Loading from "../../shared/components/Loading/Loading";
 import ReactPaginate from "react-paginate";
-import { EVENT } from "../../shared/constants";
+import { EVENT, STATUS } from "../../shared/constants";
 import { useAuth } from "../../services/UseAuth";
 import imageCompression from "browser-image-compression";
 import AssetLoading from "../../shared/components/Loading/AssetLoading";
 import { current } from "@reduxjs/toolkit";
+import Swal from "sweetalert2";
 
 export const Overview = () => {
   const {
@@ -700,16 +701,20 @@ export const Overview = () => {
    // Request Transfer Asset
 
    const [modalTransferShow, setModalTransferShow] = useState(false);
+   const [modalTransHistoryShow, setModalTransHistoryShow] = useState(false);
+   const [historyAsset, setHistoryAsset] = useState([]);
    const [assetTransfer, setAssetTransfer] = useState({});
    const [originalLocation, setOriginalLocation] = useState("");
    const [targetUser, setTargetUser] = useState("");
    const [targetUserPost, setTargetUserPost] = useState("");
    const [disableSubmit, setDisableSubmit] = useState(true);
+
    const handleToggleTransfer = async (name) => {
      setLoading(true);
      try {
-       const existedRequest = await transferRequestService.getByAssetNumber(name);
-       if(existedRequest.data.length > 0 && existedRequest.data[0]["status"] === "Pending"){
+        let existedRequest = await transferRequestService.getByAssetNumber(name);
+        let pendingRequest = existedRequest.data.filter(item => item.status === STATUS.CREATE_PO);
+       if(pendingRequest.length > 0){
          setAssetTransfer({});
          return;
        }
@@ -734,11 +739,11 @@ export const Overview = () => {
      }
      const newData = { ...assetTransfer};
      newData[e.target.name] = e.target.value;
-     setDisableSubmit(newData["Kode Wilayah"] == originalLocation && targetUser == "" && targetUserPost == "");
+     setDisableSubmit(String(newData["Kode Wilayah"]) === String(originalLocation) || (targetUser === "" && targetUserPost === ""));
      setAssetTransfer(newData);
    };
  
-   const handleSubmitTrasfer = async () => {
+   const onSubmitTrasfer = async () => {
      const transferReqForm = {
        "Nomor Asset": assetTransfer["Nomor Asset"],
        "requester":user.name,
@@ -752,13 +757,58 @@ export const Overview = () => {
      try {
        setModalTransferShow(false)
        setLoading(true)
-       const response = transferRequestService.createTransferRequest(transferReqForm);
-       console.log(response);
+       const response = await transferRequestService.createTransferRequest(transferReqForm);
+       if (response.status === "SUCCESS") {
+        setLoading(false);
+        Swal.fire("Success!", "This transfer request has been created.", "success");
+       }
      } catch (e) {
        console.log(e);
+       Swal.fire("Failed!", "There is something went wrong", "failed");
      } finally {
        setLoading(false);
+       clearFormTransfer();
      }
+   }
+
+   const handleSubmitTransfer = async () => {
+    setModalTransferShow(false)
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Do you want to transfer this asset",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        onSubmitTrasfer();
+      } else {
+        clearFormTransfer();
+      }
+    });
+   }
+
+   const handleGetHistoryTransfer = async (assetNumber) => {
+     try {
+       const response = await transferRequestService.getHistoryTransferAsset(assetNumber);
+       console.log(response);
+       if (response.data.length > 0) {
+        setHistoryAsset(response.data)
+       }
+       setModalTransHistoryShow(true)
+    } catch (e) {
+      console.log(e);
+    }
+   }
+
+   const clearFormTransfer = () => {
+    setAssetTransfer({});
+    setOriginalLocation("");
+    setTargetUser("");
+    setTargetUserPost("");
+    setDisableSubmit(true);
    }
 
   return (
@@ -1064,7 +1114,9 @@ export const Overview = () => {
                                 </Dropdown.Item>}
                               <Dropdown.Item >
                                 <a
-                                  onClick={() => {}}
+                                  onClick={() => {
+                                    handleGetHistoryTransfer(data["Nomor Asset"]);
+                                  }}
                                   className="edit"
                                   data-toggle="modal"
                                   style={{cursor : "pointer",textDecoration : "none", display : 'flex', marginTop : "3px", color : "gray"}}
@@ -1652,7 +1704,7 @@ export const Overview = () => {
                   </button>
                   <button
                     className="btn btn-primary button-submit"
-                    onClick={handleSubmitTrasfer}
+                    onClick={handleSubmitTransfer}
                     disabled={disableSubmit}
                   >
                     Submit
@@ -1662,6 +1714,54 @@ export const Overview = () => {
             }
           </Modal>
         </div>
+      }
+
+      {modalTransHistoryShow && 
+        <div className="model-box-view">
+        <Modal
+          dialogClassName="view-modal"
+          show={modalTransHistoryShow}
+          onHide={() => {
+            setHistoryAsset([]);
+            setModalTransHistoryShow(false);
+          }}
+          backdrop="static"
+          keyboard={false}
+          size='lg'
+        >
+          <Modal.Header closeButton>
+            <Modal.Title className="fs-5">{`History Transfer ${historyAsset[0].AssetNumber}`}</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div>
+              { historyAsset.length > 0 &&
+                <div>
+                  {historyAsset.map(data => {
+                    return(
+                        <div className="d-flex flex-row m-2 ps-2">
+                          <div className="me-3">
+                            <i
+                              className="material-icons"
+                              data-toggle="tooltip"
+                              title="Edit"
+                              style={{ fontSize: "25px" }}
+                            >
+                              &#xeaf5;
+                            </i>
+                          </div>
+                          <div className="d-flex flex-row">
+                            <div className="fw-semibold">{new Date(data.ApprovalDate).toLocaleDateString('in-ID')}</div>
+                            &nbsp;{`- from ${data.InitialLocation} to ${data.CurrentLocation} [Requester : ${data.Requester}]`}
+                          </div>
+                        </div>
+                    )
+                  })}
+                </div>
+              }
+            </div>
+          </Modal.Body>
+        </Modal>
+      </div>
       }
 
       {isLoading && <Loading />}
