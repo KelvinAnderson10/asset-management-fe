@@ -8,8 +8,8 @@ import { STATUS } from '../../../shared/constants';
 export const ListTransReq = ({listData = [], showButton = true}) => {
     const {
         loading,
-        approveRequest,
-        rejectRequest,
+        handleApproveRequest,
+        handleRejectRequest,
         detailRequest,
         detailAsset,
         handleShowModalRequest,
@@ -167,7 +167,7 @@ export const ListTransReq = ({listData = [], showButton = true}) => {
                   <button
                     className="btn btn-danger button-cancel"
                     onClick={() => {
-                      rejectRequest(detailRequest["to_id"]);
+                      handleRejectRequest(detailRequest["to_id"]);
                     }}
                     style={{marginRight : "8px"}}
                   >
@@ -176,7 +176,7 @@ export const ListTransReq = ({listData = [], showButton = true}) => {
                   <button
                     className="btn btn-primary button-submit"
                     onClick={() => {
-                        approveRequest(detailRequest["to_id"]);
+                      handleApproveRequest(detailRequest["to_id"]);
                     }}
                   >
                     Approve

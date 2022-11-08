@@ -1,4 +1,5 @@
 import React from 'react'
+import Swal from "sweetalert2";
 import { useEffect } from 'react';
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
@@ -83,18 +84,44 @@ export const UseAppTrans = () => {
         setShowModalReq(false)
         setLoading(true);
         try {
+            let response;
             if (user.level_approval === 'GA') {
-                const response = await transferRequestService.updateApprovalToLevel2(id);
+                response = await transferRequestService.updateApprovalToLevel2(id);
             } else {
-                const response = await transferRequestService.updateApprovalToLevel1(id);
+                response = await transferRequestService.updateApprovalToLevel1(id);
+            }
+
+            if (response.status === "SUCCESS") {
+                setLoading(false);
+                Swal.fire("Success!", "This transfer request has been approved.", "success").then((result) => {
+                    if (result.isConfirmed) {
+                        navigate(0);
+                    }
+                })
             }
         } catch (e) {
             console.log(e);
         } finally {
             reset();
             setLoading(false);
-            navigate(0);
         }
+    }
+
+    const handleApproveRequest = async (id) => {
+        setShowModalReq(false);
+        Swal.fire({
+            title: "Are you sure?",
+            text: "Do you want to approve this transfer request",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, Approve",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              approveRequest(id);
+            } 
+          });
     }
 
     const rejectRequest = async (id) => {
@@ -102,13 +129,37 @@ export const UseAppTrans = () => {
         setLoading(true);
         try {
             const response = await transferRequestService.rejectApprovalTo(id);
+            if (response.status === "SUCCESS") {
+                setLoading(false);
+                Swal.fire("Success!", "This transfer request has been rejected.", "success").then((result) => {
+                    if (result.isConfirmed) {
+                        navigate(0);
+                    }
+                })
+            }
         } catch (e) {
             console.log(e);
         } finally {
             reset();
             setLoading(false);
-            navigate(0);
         }
+    }
+
+    const handleRejectRequest = async (id) => {
+        setShowModalReq(false);
+        Swal.fire({
+            title: "Are you sure?",
+            text: "Do you want to reject this transfer request",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, Reject",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              rejectRequest(id);
+            } 
+          });
     }
 
     const getAssetDetail = async (assetNumber) => {
@@ -159,6 +210,8 @@ export const UseAppTrans = () => {
         handleShowModalRequest,
         setShowModalReq,
         showModalReq,
-        reqApprovedList
+        reqApprovedList,
+        handleApproveRequest,
+        handleRejectRequest
     }
 }
