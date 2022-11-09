@@ -59,6 +59,7 @@ export const Login = () => {
       const timer = counter > 0 && setInterval(() => setCounter(counter - 1), 1000);
       if (counter === 0 ) {
         SetIsDisabled(false)
+        setOTP()
       } 
       return () => clearInterval(timer);
   }, [counter])
@@ -74,6 +75,7 @@ export const Login = () => {
       setCounter(59);
       setShowOTPForm(true);
       SetIsDisabled(true)
+      setErrMsg('')
     } catch (e) {
       Failed("Email not registered yet, Please input a valid email");
     } finally{
