@@ -95,7 +95,7 @@ export const Overview = () => {
     } catch (e) {
       console.log(e);
     } finally {
-      setLoading(true)
+      setLoading(false)
     }
   }
 
