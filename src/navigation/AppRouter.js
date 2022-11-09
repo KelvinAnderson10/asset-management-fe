@@ -24,6 +24,8 @@ import { AppMaintenance } from "../pages/ApprovalMaintenance/AppMaintenance";
 import { FormApprovalMaintence } from "../pages/ApprovalMaintenance/components/FormApprovalMaintence";
 import { TableAssetDeprecated } from "../pages/Overview/components/TableAssetDeprecated";
 import { PORent } from "../pages/PurchaseOrderRent/PORent";
+import { FormApprovalRent } from "../pages/ApprovalRent/components/FormApprovalRent"
+import { AppRent } from "../pages/ApprovalRent/AppRent";
 
 export const AppRouter = () => {
   return (
@@ -46,6 +48,8 @@ export const AppRouter = () => {
         <Route path="/approval-data/inventory/form" element={<FormApprovalInventory/>} />
         <Route path="/approval-data/maintenance" element={<AppMaintenance/>} />
         <Route path="/approval-data/maintenance/form" element={<FormApprovalMaintence/>} />
+        <Route path="/approval-data/rent" element={<AppRent/>}/>
+        <Route path="/approval-data/rent/form" element={<FormApprovalRent/>}/>
         
         <Route path="/settings" element={<Settings/>} />
         <Route path="*" element={<PageNotFound />} />

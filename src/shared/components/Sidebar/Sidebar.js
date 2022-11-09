@@ -121,11 +121,11 @@ const routesGA = [
         name: "Maintenance",
         icon: <BiIcons.BiCategoryAlt />,
       },
-      // {
-      //   path: "/approval-data/rent",
-      //   name: "Rent",
-      //   icon: <FaIcons.FaStore />,
-      // },
+      {
+        path: "/approval-data/rent",
+        name: "Rent",
+        icon: <FaIcons.FaStore />,
+      },
     ],
   },
 ];
@@ -190,6 +190,11 @@ const routesUserGMSPVVP = [
     path: "/main",
     name: "Overview",
     icon: <FaHome />,
+  },
+  {
+    path: "/approval-data/rent",
+    name: "Rent",
+    icon: <FaIcons.FaStore />,
   },
 ];
 
