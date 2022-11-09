@@ -3,32 +3,71 @@ import { MdImportContacts } from "react-icons/md";
 import Sidebar from "../../../shared/components/Sidebar/Sidebar";
 import * as MdIcons from "react-icons/md";
 import { useLocation, useNavigate } from "react-router-dom";
-import { UseApprovalRent } from "../UseApprovalRent";
-import { useDeps } from "../../../shared/context/DependencyContext";
 import Swal from "sweetalert2";
+import { useDeps } from "../../../shared/context/DependencyContext";
 
 export const FormApprovalRent = () => {
-  const { user, rentDetail } = UseApprovalRent();
-  const { rentService } = useDeps();
   const navigate = useNavigate();
   const location = useLocation();
+  const [fileKtp,setFileKtp] = useState([])
+  const [fileNpwp,setFileNpwp] = useState([])
+  const [fileBukuTabungan, setFileBukuTabungan] = useState([])
+  const [fileSertifikat, setFileSertifikat] = useState([])
+  const [fileFotoLokasi, setFileFotoLokasi] = useState([])
+  const {rentService} = useDeps()
 
   const onClickBack = () => {
     navigate("/approval-data/rent", { replace: true });
   };
 
-  // const handleGetRentDetail = async (id) => {
-  //   try {
-  //     const response = await rentService.getRentById(id);
-  //     console.log("ini rent detail ya ges", response.data);
-  //     setrentDetail(response.data);
-  //   } catch (error) {
-  //     alert("Oops")
-  //   }
-  // };
+  const viewImg = async() => {
+    for (let i = 0; i <= location.state.detail.attachment.length ; i++) {
+      if (location.state.detail.attachment[i].category === "KTP") {
+        try {
+          const response = await rentService.getImgUrl(location.state.detail.po_id, location.state.detail.attachment[i].category);
+          console.log('ini ktp', response.message);
+          setFileKtp(response.message)
+        } catch (e) {
+          throw e;
+        }
+      } else if (location.state.detail.attachment[i].category === "NPWP") {
+        try {
+          const resp1 = await rentService.getImgUrl(location.state.detail.po_id, location.state.detail.attachment[i].category);
+          console.log('ini npwp', resp1.message);
+          setFileNpwp(resp1.message)
+        } catch (e) {
+          throw e;
+        }
+      } else if (location.state.detail.attachment[i].category === "Buku Tabungan") {
+        try {
+          const resp2 = await rentService.getImgUrl(location.state.detail.po_id, location.state.detail.attachment[i].category);
+          console.log('ini buku tabungan', resp2.message);
+          setFileBukuTabungan(resp2.message)
+        } catch (e) {
+          throw e;
+        }
+      } else if (location.state.detail.attachment[i].category === "Foto Lokasi") {
+        try {
+          const resp3 = await rentService.getImgUrl(location.state.detail.po_id, location.state.detail.attachment[i].category);
+          console.log('ini foto lokasi', resp3.message);
+          setFileFotoLokasi(resp3.message)
+        } catch (e) {
+          throw e;
+        }
+      } else if (location.state.detail.attachment[i].category === "Sertifikat") {
+        try {
+          const resp4 = await rentService.getImgUrl(location.state.detail.po_id, location.state.detail.attachment[i].category);
+          console.log('ini sertif', resp4.message);
+          setFileSertifikat(resp4.message)
+        } catch (e) {
+          throw e;
+        }
+      }
+    }
+  }
 
   useEffect(() => {
-    // handleGetRentDetail();
+    viewImg();
   }, []);
 
   const onRejectRent = async (e, id) => {
@@ -404,15 +443,129 @@ export const FormApprovalRent = () => {
                       className="form-control"
                     />
                   </div>
-
+                  <label style={{fontWeight:'500'}}>Attachment File</label>
+                <div style={{minHeight:'200px', marginTop:'3vh'}} className="card">
+                    <div className="card-header bg-transparent">
+                      KTP
+                    </div>
+                    <div class="card-body">
+                        
+                        <div className="form-group multi-preview"> 
+                        {
+                          Array.from(fileKtp).map(item => {
+                            return (
+                              <span>
+                                <img
+                                  style={{ padding: '10px' }}
+                                  width={150} height={100}
+                                  // src={item ? URL.createObjectURL(item) : null} 
+                                />
+                              </span>
+                            )
+                          })
+                        }
+                        </div>  
+                    </div>
+                  </div>
+                  <div style={{minHeight:'200px', marginTop:'5vh'}} className="card">
+                    <div className="card-header bg-transparent">
+                      NPWP
+                    </div>
+                    <div class="card-body">
+                        <div className="form-group multi-preview"> 
+                        {
+                          Array.from(fileNpwp).map(item => {
+                            return (
+                              <span>
+                                <img
+                                  style={{ padding: '10px' }}
+                                  width={150} height={100}
+                                  // src={item ? URL.createObjectURL(item) : null} 
+                                  />
+                              </span>
+                            )
+                          })
+                        }
+                        </div>  
+                    </div>
+                  </div>
+                  <div style={{minHeight:'200px', marginTop:'5vh'}} className="card">
+                    <div className="card-header bg-transparent">
+                      Savings Account
+                    </div>
+                    <div class="card-body">
+                        <div className="form-group multi-preview"> 
+                        {
+                          Array.from(fileBukuTabungan).map(item => {
+                            return (
+                              <span>
+                                <img
+                                  style={{ padding: '10px' }}
+                                  width={150} height={100}
+                                  // src={item ? URL.createObjectURL(item) : null} 
+                                />
+                              </span>
+                            )
+                          })
+                        }
+                        </div>  
+                    </div>
+                  </div>
+                  <div style={{minHeight:'200px', marginTop:'5vh'}} className="card">
+                    <div className="card-header bg-transparent">
+                      Location Photo
+                    </div>
+                    <div class="card-body">
+                        <div className="form-group multi-preview"> 
+                        {
+                          Array.from(fileFotoLokasi).map(item => {
+                            return (
+                              <span>
+                                <img
+                                  style={{ padding: '10px' }}
+                                  width={150} height={100}
+                                  // src={item ? URL.createObjectURL(item) : null} 
+                                />
+                              </span>
+                            )
+                          })
+                        }
+                        </div>  
+                    </div>
+                  </div>
+                  <div style={{minHeight:'200px', marginTop:'5vh'}} className="card">
+                    <div className="card-header bg-transparent">
+                      Certificate
+                    </div>
+                    <div class="card-body">
+                        <div className="form-group multi-preview"> 
+                        {
+                          Array.from(fileSertifikat).map(item => {
+                            return (
+                              <span>
+                                <img
+                                  style={{ padding: '10px' }}
+                                  width={150} height={100}
+                                  // src={item ? URL.createObjectURL(item) : null} 
+                                />
+                              </span>
+                            )
+                          })
+                        }
+                        </div>  
+                    </div>
+                  </div>
+                  <br/>
                   <div className="col-md-12">
                     <button
                       className="btn btn-primary float-end"
-                      style={{ marginLeft: "20px", marginRight: "20px" }}
+                      style={{ marginLeft: "20px", marginRight: "20px", marginTop: "20px" }}
                     >
                       Approved
                     </button>
-                    <button type="reset" className="btn btn-warning float-end">
+                    <button type="reset" className="btn btn-warning float-end"
+                      style={{ marginTop: "20px" }}
+                    >
                       Reject
                     </button>
                   </div>

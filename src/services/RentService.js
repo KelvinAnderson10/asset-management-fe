@@ -68,6 +68,14 @@ export const rentService = ({ doGet, doPost, doPut, doDelete }) => {
     }
   };
 
+  const getImgUrl = async (id, category) => {
+    try {
+      return await doGet({ url: `api/rent/attachment?rentId=${id}&category=${category}` });
+    } catch (error) {
+      throw error;
+    }
+  }
+
   const getRentListHistory = async (name='',page=1) => {
     try {
       return await doGet({ url: `api/rent/approver/history?name=${name}&page=${page}` });
@@ -131,6 +139,7 @@ export const rentService = ({ doGet, doPost, doPut, doDelete }) => {
     approvedByLevel2,
     approvedByLevel3,
     getRentListByApproval,
-    getRentListHistory
+    getRentListHistory,
+    getImgUrl
   };
 };
