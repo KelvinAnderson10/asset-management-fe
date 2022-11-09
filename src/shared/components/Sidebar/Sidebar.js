@@ -17,6 +17,7 @@ import logo from "../../../assets/images/default.png";
 import { Noty } from "../Noty/Noty";
 import { useDeps } from "../../context/DependencyContext";
 import moment from "moment";
+import { NOTIF, PATH } from "../../constants";
 
 const routesAdmin = [
   {
@@ -591,13 +592,16 @@ const Sidebar = ({ children }) => {
                               <li
                                 key={index}
                                 className="list-group-item list-group-item-action"
+                                onClick={() => {
+                                  if (d.type === NOTIF.TYPE.TRANSFER) {
+                                    navigate(PATH.APPROVAL_TRANSFER);
+                                  }
+                                }}
                               >
                                 Hi {d.to}, {d.body} 
                                 <div>
                                 <a style={{ color: "#B70621"}} >{d.CreatedAt} </a>
-                                </div>
-                                
-                                
+                                </div> 
                               </li>
                             );
                           })

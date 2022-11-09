@@ -71,7 +71,7 @@ export const UseAppTrans = () => {
             const response = await transferRequestService.getHistoryRequest(user.name, page);
             if (response.data.length !== 0) {
                 let approvedList = response.data.filter(data => data.status === STATUS.TRANSFERRED)
-                setReqApprovedList(response.data)
+                setReqApprovedList(approvedList)
             }
         } catch (e) {
             console.log(e);
