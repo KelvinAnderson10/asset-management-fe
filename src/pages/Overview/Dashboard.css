@@ -224,7 +224,7 @@
 }
  .view-spending-container{
   width: 100%;
-  min-height: 125.5vh;
+  min-height: 130.5vh;
    z-index: 100;
    background-color: rgba(126, 126, 126, 0.75);
    transition: all .2s linear;

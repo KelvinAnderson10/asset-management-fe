@@ -89,11 +89,11 @@ export const Overview = () => {
       const response = await overviewService.getAssetByAssetName(name);
       setRowData(response.data)
       console.log(response.data);
-      // handleViewShow(setRowData(response.data));
+      handleViewShow(setRowData(response.data));
     } catch (e) {
       console.log(e);
     } finally {
-      setLoading(false)
+      setLoading(true)
     }
   }
 
@@ -1047,7 +1047,6 @@ export const Overview = () => {
                             <a
                               onClick={() => {
                                 handleGetDetailItem(data["Nomor Asset"])
-                                handleViewShow(rowData);
                               }}
                               className="view"
                               data-toggle="modal"

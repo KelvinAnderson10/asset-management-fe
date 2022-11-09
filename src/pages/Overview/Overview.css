@@ -6,7 +6,7 @@
     justify-content: center;
     align-items: center;
     align-content: center;
-    height: 93vh;
+    height: 80vh;
     margin-top: 0.5vh;
     font-family: "Poppins";
 }
@@ -16,7 +16,7 @@
     width: 90vw;
     display: flex;
     justify-content: center;
-    height: 88vh;
+    height: 75vh;
     align-items: flex-end;
     flex-direction: column;
     border-radius: 10px;
