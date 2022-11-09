@@ -14,55 +14,42 @@ export const FormApprovalRent = () => {
   const [fileBukuTabungan, setFileBukuTabungan] = useState([])
   const [fileSertifikat, setFileSertifikat] = useState([])
   const [fileFotoLokasi, setFileFotoLokasi] = useState([])
-  const {rentService} = useDeps()
+  const {rentService} = useDeps();
 
   const onClickBack = () => {
     navigate("/approval-data/rent", { replace: true });
   };
 
   const viewImg = async() => {
-    for (let i = 0; i <= location.state.detail.attachment.length ; i++) {
-      if (location.state.detail.attachment[i].category === "KTP") {
-        try {
-          const response = await rentService.getImgUrl(location.state.detail.po_id, location.state.detail.attachment[i].category);
-          console.log('ini ktp', response.message);
-          setFileKtp(response.message)
-        } catch (e) {
-          throw e;
+    try {
+      for (let i = 0; i <= location.state.detail.attachment.length ; i++) {
+        switch (location.state.detail.attachment[i].category) {
+          case "KTP":
+            const resp = await rentService.getImgUrl(location.state.detail.po_id, "KTP")
+            setFileKtp(resp.message)
+            break;
+          case "NPWP" :
+            const resp1 = await rentService.getImgUrl(location.state.detail.po_id, "NPWP")
+            setFileNpwp(resp1.message)
+            break;
+          case "Buku Tabungan" :
+            const resp2 = await rentService.getImgUrl(location.state.detail.po_id, "Buku Tabungan")
+            setFileBukuTabungan(resp2.message)
+            break;
+          case "Foto Lokasi" :
+            const resp3 = await rentService.getImgUrl(location.state.detail.po_id, "Foto Lokasi" )
+            setFileFotoLokasi(resp3.message)
+            break;
+          case "Sertifikat":
+            const resp4 = await rentService.getImgUrl(location.state.detail.po_id, "Sertifikat")
+            setFileSertifikat(resp4.message)
+          default:
+            break;
         }
-      } else if (location.state.detail.attachment[i].category === "NPWP") {
-        try {
-          const resp1 = await rentService.getImgUrl(location.state.detail.po_id, location.state.detail.attachment[i].category);
-          console.log('ini npwp', resp1.message);
-          setFileNpwp(resp1.message)
-        } catch (e) {
-          throw e;
-        }
-      } else if (location.state.detail.attachment[i].category === "Buku Tabungan") {
-        try {
-          const resp2 = await rentService.getImgUrl(location.state.detail.po_id, location.state.detail.attachment[i].category);
-          console.log('ini buku tabungan', resp2.message);
-          setFileBukuTabungan(resp2.message)
-        } catch (e) {
-          throw e;
-        }
-      } else if (location.state.detail.attachment[i].category === "Foto Lokasi") {
-        try {
-          const resp3 = await rentService.getImgUrl(location.state.detail.po_id, location.state.detail.attachment[i].category);
-          console.log('ini foto lokasi', resp3.message);
-          setFileFotoLokasi(resp3.message)
-        } catch (e) {
-          throw e;
-        }
-      } else if (location.state.detail.attachment[i].category === "Sertifikat") {
-        try {
-          const resp4 = await rentService.getImgUrl(location.state.detail.po_id, location.state.detail.attachment[i].category);
-          console.log('ini sertif', resp4.message);
-          setFileSertifikat(resp4.message)
-        } catch (e) {
-          throw e;
-        }
+        
       }
+    } catch (e) {
+      throw e;
     }
   }
 
@@ -458,7 +445,7 @@ export const FormApprovalRent = () => {
                                 <img
                                   style={{ padding: '10px' }}
                                   width={150} height={100}
-                                  // src={item ? URL.createObjectURL(item) : null} 
+                                  src={item} 
                                 />
                               </span>
                             )
@@ -480,7 +467,7 @@ export const FormApprovalRent = () => {
                                 <img
                                   style={{ padding: '10px' }}
                                   width={150} height={100}
-                                  // src={item ? URL.createObjectURL(item) : null} 
+                                  src={item} 
                                   />
                               </span>
                             )
@@ -502,7 +489,7 @@ export const FormApprovalRent = () => {
                                 <img
                                   style={{ padding: '10px' }}
                                   width={150} height={100}
-                                  // src={item ? URL.createObjectURL(item) : null} 
+                                  src={item} 
                                 />
                               </span>
                             )
@@ -524,7 +511,7 @@ export const FormApprovalRent = () => {
                                 <img
                                   style={{ padding: '10px' }}
                                   width={150} height={100}
-                                  // src={item ? URL.createObjectURL(item) : null} 
+                                  src={item} 
                                 />
                               </span>
                             )
@@ -546,7 +533,7 @@ export const FormApprovalRent = () => {
                                 <img
                                   style={{ padding: '10px' }}
                                   width={150} height={100}
-                                  // src={item ? URL.createObjectURL(item) : null} 
+                                  src={item} 
                                 />
                               </span>
                             )
