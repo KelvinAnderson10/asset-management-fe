@@ -49,41 +49,6 @@ export const FormPORent = () => {
 
    const onSubmitPO = async (e)=>{
     e.preventDefault();
-    // const newRent = {
-    //   "Kode Wilayah": user.location_id,
-    //   "requester": user.name,
-    //   "User": toUser,
-    //   "Jabatan": position,
-    //   "alamat_lokasi": alamatLokasi,
-    //   "Nama Barang": namaBarang,
-    //   "status": status,
-    //   "jenis_tempat": jenisTempat,
-    //   "TLP": tlp,
-    //   "PLN":pln,
-    //   "PAM":pam,
-    //   "lain_lain":lainLain,
-    //   "masa_sewa_bulan_tahun": masaSewa,
-    //   "periode_sewa_awal": periodeSewaAwal,
-    //   "periode_sewa_akhir": periodeSewaAkhir,
-    //   "nama_pemilik": namaPemilik,
-    //   "NPWP": NPWP,
-    //   "alamat_pemilik":alamatPemilik,
-    //   "no_telepon_pemilik": tlpPemilik,
-    //   "harga_sewa_per_tahun_harga_lama":sewaHargaLama,
-    //   "harga_sewa_per_tahun_harga_baru": sewaHargaBaru,
-    //   "pajak":pajak,
-    //   "nominal_transfer_ke_pemilik":nominalTransfer,
-    //   "notaris": notaris,
-    //   "jasa_notaris": jasaNotaris,
-    //   "NPWP_notaris": NPWPNotaris,
-    //   "nama_rekening_tujuan": namaRekeningTujuan,
-    //   "nomor_rekening_tujuan": norekTujuan,
-    //   "bank":bank,
-    //   "cabang_bank": cabangBank,
-    //   "cara_pembayaran": caraPembayaran,
-    //   "tanggal_jatuh_tempo": jatuhTempo,
-    //   "ktp": fileKtp
-    // }
     const rentFormData = new FormData();
     rentFormData.append("Kode Wilayah", user.location_id)
     rentFormData.append("requester", user.name)
@@ -122,27 +87,27 @@ export const FormPORent = () => {
         rentFormData.append("ktp", fileKtp[i])
     }
     
+    for (let i = 0; i < fileNpwp.length; i++) {
+      rentFormData.append("npwp", fileNpwp[i])
+    }
 
-    // for (let i = 0; i < fileNpwp.length; i++) {
-    //   rentFormData.append("npwp", fileNpwp[i])
-    // }
+    for (let i = 0; i < fileBukuTabungan.length; i++) {
+      rentFormData.append("bukuTabungan", fileBukuTabungan[i])
+    }
 
-    // for (let i = 0; i < fileBukuTabungan.length; i++) {
-    //   rentFormData.append("bukuTabungan", fileBukuTabungan[i])
-    // }
+    for (let i = 0; i < fileFotoLokasi.length; i++) {
+      rentFormData.append("fotoLokasi", fileFotoLokasi[i])
+    }
 
-    // for (let i = 0; i < fileFotoLokasi.length; i++) {
-    //   rentFormData.append("fotoLokasi", fileFotoLokasi[i])
-    // }
-
-    // for (let i = 0; i < fileSertifikat.length; i++) {
-    //   rentFormData.append("sertifikat", fileSertifikat[i])
-    // }
+    for (let i = 0; i < fileSertifikat.length; i++) {
+      rentFormData.append("sertifikat", fileSertifikat[i])
+    }
 
     console.log(rentFormData);
     try {
       const response = await purchaseOrderRentService.createPO(rentFormData)
       console.log(response)
+      clearForm()
     } catch (e) {
       console.log(e)
     }
@@ -151,6 +116,39 @@ export const FormPORent = () => {
    useEffect(()=>{
     onGetCookie();
    },[]);
+
+   const clearForm = () => {
+    setToUser('');
+    setPosition('')
+    setAlamatLokasi('')
+    setNamaBarang('')
+    setJenisTempat('')
+    setTlp('')
+    setPln('')
+    setPam('')
+    setLainlain('')
+    setMasaSewa('')
+    setPeriodeSewaAwal()
+    setPeriodeSewaAkhir()
+    setNamaPemilik('')
+    setNPWP('')
+    setAlamatPemilik('')
+    setTlpPemilik('')
+    setSewaHargaLama('')
+    setSewaHargaBaru('')
+    setPajak('')
+    setNominalTransfer('')
+    setNotaris('')
+    setJasaNotaris('')
+    setNPWPNotaris('')
+    setNamaRekeningTujuan('')
+    setNorekTujuan('')
+    setBank('')
+    setCabangBank('')
+    setCaraPembayaran('')
+    setJatuhTempo('')
+}
+
 
    const {getCookie} = useAuth()
    const [user, setUser] = useState({
@@ -181,14 +179,14 @@ export const FormPORent = () => {
 
   return (
     <>
-      <div className="po-mtnc-form-container">
-        <div className="po-mtnc-form-card">
+      <div className="po-rent-form-container">
+        <div className="po-rent-form-card">
           <form onSubmit={onSubmitPO}>
             <h4 className="mb-4 text-danger">Purchase Order Request Form</h4>
             <div className="formPOInput">
               <div className="row">
                 <div className="mb-3 col-md-4">
-                  <label>
+                  <label style={{fontWeight:'500'}}>
                     Area Code<span className="text-danger">*</span>
                   </label>
                   <input
@@ -200,13 +198,13 @@ export const FormPORent = () => {
                   />
                 </div>
                 <div className="mb-3 col-md-4">
-                  <label>
+                  <label style={{fontWeight:'500'}}>
                     Cluster<span className="text-danger">*</span>
                   </label>
                   <input readOnly defaultValue={user.cluster} type="text" name="Cluster" className="form-control" />
                 </div>
                 <div className="mb-3 col-md-4">
-                  <label>
+                  <label style={{fontWeight:'500'}}>
                     TAP<span className="text-danger">*</span>
                   </label>
                   <input
@@ -219,7 +217,7 @@ export const FormPORent = () => {
                   />
                 </div>
                 <div className="mb-3 col-md-6">
-                  <label>
+                  <label style={{fontWeight:'500'}}>
                     User<span className="text-danger">*</span>
                   </label>
                   <input
@@ -232,7 +230,7 @@ export const FormPORent = () => {
                   />
                 </div>
                 <div className="mb-3 col-md-6">
-                  <label>
+                  <label style={{fontWeight:'500'}}>
                     Position<span className="text-danger">*</span>
                   </label>
                   <input
@@ -245,13 +243,13 @@ export const FormPORent = () => {
                   />
                 </div>
                 <div className="mb-3 col-md-12">
-                  <label>
+                  <label style={{fontWeight:'500'}}>
                     Address<span className="text-danger">*</span>
                   </label>
                   <textarea value={alamatLokasi}  name="alamat_lokasi" onChange={(e)=>setAlamatLokasi(e.target.value)} required className="form-control" rows="3"></textarea>
                 </div>
                 <div className="mb-3 col-md-6">
-                  <label>
+                  <label style={{fontWeight:'500'}}>
                     Item Name<span className="text-danger">*</span>
                   </label>
                   <input
@@ -264,7 +262,7 @@ export const FormPORent = () => {
                   />
                 </div>
                 <div className="mb-3 col-md-6">
-                  <label>
+                  <label style={{fontWeight:'500'}}>
                     Type of Place<span className="text-danger">*</span>
                   </label>
                   <input
@@ -277,7 +275,7 @@ export const FormPORent = () => {
                   />
                 </div>
                 <div className="mb-3 col-md-12">
-                  <label> Existing Facilities : </label>
+                  <label style={{fontWeight:'500'}}> Existing Facilities : </label>
                 </div>
                 <div className="mb-3 col-md-4">
                   <label>
@@ -319,7 +317,7 @@ export const FormPORent = () => {
                   />
                 </div>
                 <div className="mb-3 col-md-6">
-                  <label>
+                  <label style={{fontWeight:'500'}}>
                     Additional Info
                   </label>
                   <input
@@ -331,7 +329,7 @@ export const FormPORent = () => {
                   />
                 </div>
                 <div className="mb-3 col-md-6">
-                  <label>
+                  <label style={{fontWeight:'500'}}>
                     Rent Period (Month/Year)
                     <span className="text-danger">*</span>
                   </label>
@@ -346,7 +344,7 @@ export const FormPORent = () => {
                 </div>
                 <div></div>
                 <div className="mb-1 col-md-12">
-                  <label> Rent Period: </label>
+                  <label style={{fontWeight:'500'}}> Rent Period: </label>
                 </div>
                 <div className="mb-3 col-md-6">
                   <label>
@@ -375,7 +373,7 @@ export const FormPORent = () => {
                   />
                 </div>
                 <div className="mb-3 col-md-6">
-                  <label>
+                  <label style={{fontWeight:'500'}}>
                     Owner's Name<span className="text-danger">*</span>
                   </label>
                   <input
@@ -388,7 +386,7 @@ export const FormPORent = () => {
                   />
                 </div>
                 <div className="mb-3 col-md-6">
-                  <label>
+                  <label style={{fontWeight:'500'}}>
                     NPWP<span className="text-danger">*</span>
                   </label>
                   <input
@@ -401,7 +399,7 @@ export const FormPORent = () => {
                   />
                 </div>
                 <div className="mb-3 col-md-12">
-                  <label>
+                  <label style={{fontWeight:'500'}}>
                     Owner's Address<span className="text-danger">*</span>
                   </label>
                   <textarea
@@ -413,7 +411,7 @@ export const FormPORent = () => {
                   ></textarea>
                 </div>
                 <div className="mb-3 col-md-6">
-                  <label>
+                  <label style={{fontWeight:'500'}}>
                     Owner's Phone<span className="text-danger">*</span>
                   </label>
                   <input
@@ -426,7 +424,7 @@ export const FormPORent = () => {
                   />
                 </div>
                 <div className="mb-3 col-md-6">
-                  <label>
+                  <label style={{fontWeight:'500'}}>
                     Rent Price/Year (Old Price if Extend)<span className="text-danger">*</span>
                   </label>
                   <input
@@ -439,7 +437,7 @@ export const FormPORent = () => {
                   />
                 </div>
                 <div className="mb-3 col-md-4">
-                  <label>
+                  <label style={{fontWeight:'500'}}>
                     Rent Price/Year (New Price)<span className="text-danger">*</span>
                   </label>
                   <input
@@ -452,7 +450,7 @@ export const FormPORent = () => {
                   />
                 </div>
                 <div className="mb-3 col-md-4">
-                  <label>
+                  <label style={{fontWeight:'500'}}>
                     Tax (10%)<span className="text-danger">*</span>
                   </label>
                   <input
@@ -465,7 +463,7 @@ export const FormPORent = () => {
                   />
                 </div>
                 <div className="mb-3 col-md-4">
-                  <label>
+                  <label style={{fontWeight:'500'}}>
                   Amount transferred to Owner<span className="text-danger">*</span>
                   </label>
                   <input
@@ -478,7 +476,7 @@ export const FormPORent = () => {
                   />
                 </div>
                 <div className="mb-3 col-md-4">
-                  <label>
+                  <label style={{fontWeight:'500'}}>
                     Notary<span className="text-danger">*</span>
                   </label>
                   <input
@@ -491,7 +489,7 @@ export const FormPORent = () => {
                   />
                 </div>
                 <div className="mb-3 col-md-4">
-                  <label>
+                  <label style={{fontWeight:'500'}}>
                     Notary Services<span className="text-danger">*</span>
                   </label>
                   <input
@@ -504,7 +502,7 @@ export const FormPORent = () => {
                   />
                 </div>
                 <div className="mb-3 col-md-4">
-                  <label>
+                  <label style={{fontWeight:'500'}}>
                  NPWP Notary<span className="text-danger">*</span>
                   </label>
                   <input
@@ -517,7 +515,7 @@ export const FormPORent = () => {
                   />
                 </div>
                 <div className="mb-3 col-md-6">
-                  <label>
+                  <label style={{fontWeight:'500'}}>
                  Destination Account Name<span className="text-danger">*</span>
                   </label>
                   <input
@@ -530,7 +528,7 @@ export const FormPORent = () => {
                   />
                 </div>
                 <div className="mb-3 col-md-6">
-                  <label>
+                  <label style={{fontWeight:'500'}}>
                  Destination Account Number<span className="text-danger">*</span>
                   </label>
                   <input
@@ -543,7 +541,7 @@ export const FormPORent = () => {
                   />
                 </div>
                 <div className="mb-3 col-md-6">
-                  <label>
+                  <label style={{fontWeight:'500'}}>
                  Bank Name<span className="text-danger">*</span>
                   </label>
                   <input
@@ -556,7 +554,7 @@ export const FormPORent = () => {
                   />
                 </div>
                 <div className="mb-3 col-md-6">
-                  <label>
+                  <label style={{fontWeight:'500'}}>
                  Branch Name<span className="text-danger">*</span>
                   </label>
                   <input
@@ -569,7 +567,7 @@ export const FormPORent = () => {
                   />
                 </div>
                 <div className="mb-3 col-md-6">
-                  <label>
+                  <label style={{fontWeight:'500'}}>
                   Payment Method<span className="text-danger">*</span>
                   </label>
                   <input
@@ -582,7 +580,7 @@ export const FormPORent = () => {
                   />
                 </div>
                 <div className="mb-3 col-md-6">
-                  <label>
+                  <label style={{fontWeight:'500'}}>
                   Due Date<span className="text-danger">*</span>
                   </label>
                   <input
@@ -594,32 +592,163 @@ export const FormPORent = () => {
                     onChange={(e)=>setJatuhTempo(e.target.value)}
                   />
                 </div>
-                <label>Attachment File</label>
-                <div>
-                  <input
-                    onChange={(e) => {
-                    setFileKtp(e.target.files)
-                    }}
-                    multiple
-                    type="file"
-                    accept='.png, .jpeg, .jpg'
-                    />
-                </div>
-                {
-        Array.from(fileKtp).map(item => {
-          return (
-            <span>
-              <img
-                style={{ padding: '10px' }}
-                width={150} height={100}
-                src={item ? URL.createObjectURL(item) : null} />
-            </span>
-          )
-        })
-      }
-                
-
-                <div className="col-md-12">
+                <label style={{fontWeight:'500'}}>Attachment File</label>
+                <div style={{minHeight:'200px', marginTop:'3vh'}} className="card">
+                    <div className="card-header bg-transparent">
+                      KTP
+                    </div>
+                    <div class="card-body">
+                        
+                          <input
+                            onChange={(e) => {
+                            setFileKtp(e.target.files)
+                            }}
+                            multiple
+                            type="file"
+                            accept='.png, .jpeg, .jpg'
+                            />
+                        
+                        <div className="form-group multi-preview"> 
+                        {
+                          Array.from(fileKtp).map(item => {
+                            return (
+                              <span>
+                                <img
+                                  style={{ padding: '10px' }}
+                                  width={150} height={100}
+                                  src={item ? URL.createObjectURL(item) : null} />
+                              </span>
+                            )
+                          })
+                        }
+                        </div>  
+                    </div>
+                  </div>
+                  <div style={{minHeight:'200px', marginTop:'5vh'}} className="card">
+                    <div className="card-header bg-transparent">
+                      NPWP
+                    </div>
+                    <div class="card-body">
+                        <div>
+                          <input
+                            onChange={(e) => {
+                            setFileNpwp(e.target.files)
+                            }}
+                            multiple
+                            type="file"
+                            accept='.png, .jpeg, .jpg'
+                            />
+                        </div>
+                        <div className="form-group multi-preview"> 
+                        {
+                          Array.from(fileNpwp).map(item => {
+                            return (
+                              <span>
+                                <img
+                                  style={{ padding: '10px' }}
+                                  width={150} height={100}
+                                  src={item ? URL.createObjectURL(item) : null} />
+                              </span>
+                            )
+                          })
+                        }
+                        </div>  
+                    </div>
+                  </div>
+                  <div style={{minHeight:'200px', marginTop:'5vh'}} className="card">
+                    <div className="card-header bg-transparent">
+                      Savings Account
+                    </div>
+                    <div class="card-body">
+                        <div>
+                          <input
+                            onChange={(e) => {
+                            setFileBukuTabungan(e.target.files)
+                            }}
+                            multiple
+                            type="file"
+                            accept='.png, .jpeg, .jpg'
+                            />
+                        </div>
+                        <div className="form-group multi-preview"> 
+                        {
+                          Array.from(fileBukuTabungan).map(item => {
+                            return (
+                              <span>
+                                <img
+                                  style={{ padding: '10px' }}
+                                  width={150} height={100}
+                                  src={item ? URL.createObjectURL(item) : null} />
+                              </span>
+                            )
+                          })
+                        }
+                        </div>  
+                    </div>
+                  </div>
+                  <div style={{minHeight:'200px', marginTop:'5vh'}} className="card">
+                    <div className="card-header bg-transparent">
+                      Location Photo
+                    </div>
+                    <div class="card-body">
+                        <div>
+                          <input
+                            onChange={(e) => {
+                            setFileFotoLokasi(e.target.files)
+                            }}
+                            multiple
+                            type="file"
+                            accept='.png, .jpeg, .jpg'
+                            />
+                        </div>
+                        <div className="form-group multi-preview"> 
+                        {
+                          Array.from(fileFotoLokasi).map(item => {
+                            return (
+                              <span>
+                                <img
+                                  style={{ padding: '10px' }}
+                                  width={150} height={100}
+                                  src={item ? URL.createObjectURL(item) : null} />
+                              </span>
+                            )
+                          })
+                        }
+                        </div>  
+                    </div>
+                  </div>
+                  <div style={{minHeight:'200px', marginTop:'5vh'}} className="card">
+                    <div className="card-header bg-transparent">
+                      Certificate
+                    </div>
+                    <div class="card-body">
+                        <div>
+                          <input
+                            onChange={(e) => {
+                            setFileSertifikat(e.target.files)
+                            }}
+                            multiple
+                            type="file"
+                            accept='.png, .jpeg, .jpg'
+                            />
+                        </div>
+                        <div className="form-group multi-preview"> 
+                        {
+                          Array.from(fileSertifikat).map(item => {
+                            return (
+                              <span>
+                                <img
+                                  style={{ padding: '10px' }}
+                                  width={150} height={100}
+                                  src={item ? URL.createObjectURL(item) : null} />
+                              </span>
+                            )
+                          })
+                        }
+                        </div>  
+                    </div>
+                  </div>
+                <div className="col-md-12 mt-4">
                   <button
                     className="btn btn-primary float-end"
                     style={{ marginLeft: "20px", marginRight: "20px" }}
