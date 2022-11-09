@@ -5,10 +5,10 @@ import * as MdIcons from "react-icons/md";
 import { useLocation, useNavigate } from "react-router-dom";
 import { UseApprovalRent } from "../UseApprovalRent";
 import { useDeps } from "../../../shared/context/DependencyContext";
+import Swal from "sweetalert2";
 
 export const FormApprovalRent = () => {
   const { user, rentDetail } = UseApprovalRent();
-  // const [rentDetail, setrentDetail] = useState([])
   const { rentService } = useDeps();
   const navigate = useNavigate();
   const location = useLocation();
@@ -28,9 +28,23 @@ export const FormApprovalRent = () => {
   // };
 
   useEffect(() => {
-    console.log("ini rent detail", rentDetail);
     // handleGetRentDetail();
   }, []);
+
+  const onRejectRent = async (e, id) => {
+    e.preventDefault(e)
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Do you really want to reject this request",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, decline it!",
+    }).then((result) => {
+      
+    })
+  }
 
   return (
     <>
@@ -57,8 +71,6 @@ export const FormApprovalRent = () => {
                     <input
                       value={location.state.detail["Kode Wilayah"]}
                       readOnly
-                      type="text"
-                      name="Kode Wilayah"
                       className="form-control"
                     />
                   </div>
@@ -70,8 +82,6 @@ export const FormApprovalRent = () => {
                     <input
                       value={location.state.detail.Cluster}
                       readOnly
-                      type="text"
-                      name="Cluster"
                       className="form-control"
                     />
                   </div>
@@ -82,8 +92,6 @@ export const FormApprovalRent = () => {
                     <input
                       value={location.state.detail.TAP}
                       readOnly
-                      type="text"
-                      name="TAP"
                       className="form-control"
                     />
                   </div>
@@ -94,8 +102,6 @@ export const FormApprovalRent = () => {
                     <input
                       value={location.state.detail.User}
                       readOnly
-                      type="text"
-                      name="User"
                       className="form-control"
                     />
                   </div>
@@ -106,8 +112,6 @@ export const FormApprovalRent = () => {
                     <input
                       value={location.state.detail.Jabatan}
                       readOnly
-                      type="text"
-                      name="Jabatan"
                       className="form-control"
                     />
                   </div>
@@ -129,10 +133,8 @@ export const FormApprovalRent = () => {
                     <input
                       value={location.state.detail["Nama Barang"]}
                       readOnly
-                      type="text"
-                      name="Nama Barang"
                       className="form-control"
-                      />
+                    />
                   </div>
                   <div className="mb-3 col-md-6">
                     <label>
@@ -141,10 +143,8 @@ export const FormApprovalRent = () => {
                     <input
                       value={location.state.detail.jenis_tempat}
                       readOnly
-                      type="text"
-                      name="jenis_tempat"
                       className="form-control"
-                      />
+                    />
                   </div>
                   <div className="mb-3 col-md-12">
                     <label> Existing Facilities : </label>
@@ -156,10 +156,8 @@ export const FormApprovalRent = () => {
                     <input
                       value={location.state.detail.TLP}
                       readOnly
-                      type="text"
-                      name="TLP"
                       className="form-control"
-                      />
+                    />
                   </div>
                   <div className="mb-3 col-md-4">
                     <label>
@@ -168,10 +166,8 @@ export const FormApprovalRent = () => {
                     <input
                       value={location.state.detail.PLN}
                       readOnly
-                      type="text"
-                      name="PLN"
                       className="form-control"
-                      />
+                    />
                   </div>
                   <div className="mb-3 col-md-4">
                     <label>
@@ -180,10 +176,8 @@ export const FormApprovalRent = () => {
                     <input
                       value={location.state.detail.PAM}
                       readOnly
-                      type="text"
-                      name="PAM"
                       className="form-control"
-                      />
+                    />
                   </div>
                   <div className="mb-3 col-md-6">
                     <label>
@@ -192,10 +186,8 @@ export const FormApprovalRent = () => {
                     <input
                       value={location.state.detail.lain_lain}
                       readOnly
-                      type="text"
-                      name="lain_lain"
                       className="form-control"
-                      />
+                    />
                   </div>
                   <div className="mb-3 col-md-6">
                     <label>
@@ -205,10 +197,8 @@ export const FormApprovalRent = () => {
                     <input
                       value={location.state.detail.masa_sewa_bulan_tahun}
                       readOnly
-                      type="text"
-                      name="masa_sewa_bulan_tahun"
                       className="form-control"
-                      />
+                    />
                   </div>
                   <div></div>
                   <div className="mb-1 col-md-12">
@@ -221,10 +211,8 @@ export const FormApprovalRent = () => {
                     <input
                       value={location.state.detail.periode_sewa_awal}
                       readOnly
-                      // type="date"
-                      name="periode_sewa"
                       className="form-control"
-                      />
+                    />
                   </div>
                   <div className="mb-3 col-md-6">
                     <label>
@@ -233,10 +221,8 @@ export const FormApprovalRent = () => {
                     <input
                       value={location.state.detail.periode_sewa_akhir}
                       readOnly
-                      // type="date"
-                      name="periode_sewa"
                       className="form-control"
-                      />
+                    />
                   </div>
                   <div className="mb-3 col-md-6">
                     <label>
@@ -245,10 +231,8 @@ export const FormApprovalRent = () => {
                     <input
                       value={location.state.detail.nama_pemilik}
                       readOnly
-                      type="text"
-                      name="nama_pemilik"
                       className="form-control"
-                      />
+                    />
                   </div>
                   <div className="mb-3 col-md-6">
                     <label>
@@ -257,17 +241,15 @@ export const FormApprovalRent = () => {
                     <input
                       value={location.state.detail.NPWP}
                       readOnly
-                      type="text"
-                      name="NPWP"
                       className="form-control"
-                      />
+                    />
                   </div>
                   <div className="mb-3 col-md-12">
                     <label>
                       Owner's Address<span className="text-danger">*</span>
                     </label>
                     <textarea
-                    value={location.state.detail.alamat_pemilik}
+                      value={location.state.detail.alamat_pemilik}
                       className="form-control"
                       rows="3"
                       name="alamat_pemilik"
@@ -280,10 +262,8 @@ export const FormApprovalRent = () => {
                     <input
                       value={location.state.detail.no_telepon_pemilik}
                       readOnly
-                      // type="number"
-                      name="no_telepon_pemilik"
                       className="form-control"
-                      />
+                    />
                   </div>
                   <div className="mb-3 col-md-6">
                     <label>
@@ -291,12 +271,12 @@ export const FormApprovalRent = () => {
                       <span className="text-danger">*</span>
                     </label>
                     <input
-                      value={location.state.detail.harga_sewa_per_tahun_harga_lama}
+                      value={
+                        location.state.detail.harga_sewa_per_tahun_harga_lama
+                      }
                       readOnly
-                      // type="number"
-                      name="harga_sewa_per_tahun_harga_lama"
                       className="form-control"
-                      />
+                    />
                   </div>
                   <div className="mb-3 col-md-4">
                     <label>
@@ -304,24 +284,22 @@ export const FormApprovalRent = () => {
                       <span className="text-danger">*</span>
                     </label>
                     <input
-                      value={location.state.detail.harga_sewa_per_tahun_harga_baru}
+                      value={
+                        location.state.detail.harga_sewa_per_tahun_harga_baru
+                      }
                       readOnly
-                      // type="number"
-                      name="harga_sewa_per_tahun_harga_baru"
                       className="form-control"
-                      />
+                    />
                   </div>
                   <div className="mb-3 col-md-4">
                     <label>
                       Tax (10%)<span className="text-danger">*</span>
                     </label>
                     <input
-                      // value={location.state.detail.pajak}
+                      value={location.state.detail.pajak}
                       readOnly
-                      // type="number"
-                      name="pajak"
                       className="form-control"
-                      />
+                    />
                   </div>
                   <div className="mb-3 col-md-4">
                     <label>
@@ -329,36 +307,29 @@ export const FormApprovalRent = () => {
                       <span className="text-danger">*</span>
                     </label>
                     <input
-                      // value={location.state.detail.}
+                      value={location.state.detail.nominal_transfer_ke_pemilik}
                       readOnly
-                      type="number"
-                      name="nominal_transfer_ke_pemilik"
                       className="form-control"
-                      />
+                    />
                   </div>
                   <div className="mb-3 col-md-4">
                     <label>
                       Notary<span className="text-danger">*</span>
                     </label>
                     <input
-                      // value={location.state.detail.}
+                      value={location.state.detail.notaris}
                       readOnly
-                      type="text"
-                      name="notaris"
                       className="form-control"
-                      />
+                    />
                   </div>
                   <div className="mb-3 col-md-4">
                     <label>
                       Notary Services<span className="text-danger">*</span>
                     </label>
                     <input
-                      // value={location.state.detail.}
+                      value={location.state.detail.jasa_notaris}
                       readOnly
-                      type="text"
-                      name="jasa_notaris"
                       className="form-control"
-                      // onChange={handleChange}
                     />
                   </div>
                   <div className="mb-3 col-md-4">
@@ -366,12 +337,9 @@ export const FormApprovalRent = () => {
                       NPWP Notary<span className="text-danger">*</span>
                     </label>
                     <input
-                      // value={location.state.detail.}
+                      value={location.state.detail.NPWP_notaris}
                       readOnly
-                      type="text"
-                      name="NPWP_notaris"
                       className="form-control"
-                      // onChange={handleChange}
                     />
                   </div>
                   <div className="mb-3 col-md-6">
@@ -380,12 +348,9 @@ export const FormApprovalRent = () => {
                       <span className="text-danger">*</span>
                     </label>
                     <input
-                      // value={location.state.detail.}
+                      value={location.state.detail.nama_rekening_tujuan}
                       readOnly
-                      type="text"
-                      name="nama_rekening_tujuan"
                       className="form-control"
-                      // onChange={handleChange}
                     />
                   </div>
                   <div className="mb-3 col-md-6">
@@ -394,12 +359,9 @@ export const FormApprovalRent = () => {
                       <span className="text-danger">*</span>
                     </label>
                     <input
-                      // value={location.state.detail.}
+                      value={location.state.detail.nomor_rekening_tujuan}
                       readOnly
-                      type="text"
-                      name="nomor_rekening_tujuan"
                       className="form-control"
-                      // onChange={handleChange}
                     />
                   </div>
                   <div className="mb-3 col-md-6">
@@ -407,12 +369,9 @@ export const FormApprovalRent = () => {
                       Bank Name<span className="text-danger">*</span>
                     </label>
                     <input
-                      // value={location.state.detail.}
+                      value={location.state.detail.bank}
                       readOnly
-                      type="text"
-                      name="bank"
                       className="form-control"
-                      // onChange={handleChange}
                     />
                   </div>
                   <div className="mb-3 col-md-6">
@@ -420,12 +379,9 @@ export const FormApprovalRent = () => {
                       Branch Name<span className="text-danger">*</span>
                     </label>
                     <input
-                      // value={location.state.detail.}
+                      value={location.state.detail.cabang_bank}
                       readOnly
-                      type="text"
-                      name="cabang_bank"
                       className="form-control"
-                      // onChange={handleChange}
                     />
                   </div>
                   <div className="mb-3 col-md-6">
@@ -433,12 +389,9 @@ export const FormApprovalRent = () => {
                       Payment Method<span className="text-danger">*</span>
                     </label>
                     <input
-                      // value={location.state.detail.}
+                      value={location.state.detail.cara_pembayaran}
                       readOnly
-                      type="text"
-                      name="cara_pembayaran"
                       className="form-control"
-                      // onChange={handleChange}
                     />
                   </div>
                   <div className="mb-3 col-md-6">
@@ -446,12 +399,9 @@ export const FormApprovalRent = () => {
                       Due Date<span className="text-danger">*</span>
                     </label>
                     <input
-                      // value={location.state.detail.}
+                      value={location.state.detail.cara_pembayaran}
                       readOnly
-                      type="date"
-                      name="cara_pembayaran"
                       className="form-control"
-                      // onChange={handleChange}
                     />
                   </div>
 
