@@ -7,7 +7,7 @@ import "./EditAsset.css";
 import swal from "sweetalert";
 import Loading from "../../shared/components/Loading/Loading";
 import ReactPaginate from "react-paginate";
-import { EVENT, STATUS } from "../../shared/constants";
+import { EVENT, NOTIF, PUSHNOTIF, STATUS } from "../../shared/constants";
 import { useAuth } from "../../services/UseAuth";
 import imageCompression from "browser-image-compression";
 import AssetLoading from "../../shared/components/Loading/AssetLoading";
@@ -21,7 +21,9 @@ export const Overview = () => {
     locationService,
     assetCategoryService,
     eventLogService,
-    transferRequestService
+    transferRequestService,
+    notificationService,
+    userService
   } = useDeps();
   const [datas, setDatas] = useState([]);
   const [order, setOrder] = useState("ASC");
@@ -734,7 +736,6 @@ export const Overview = () => {
  
    const handleChangeTransfer = (e) => {
      if (e.target.value === "") {
-       setDisableSubmit(true);
        return;
      }
      const newData = { ...assetTransfer};
@@ -760,6 +761,27 @@ export const Overview = () => {
        const response = await transferRequestService.createTransferRequest(transferReqForm);
        if (response.status === "SUCCESS") {
         setLoading(false);
+
+        const userInfo = await userService.getUserByName(response.data.approver_level1);
+
+        //pushnotif
+        let pushNotifObj = {
+          to: userInfo.data.token,
+          title: `${PUSHNOTIF.REQUEST.TITLE} ${response.data.approver_level1}`,
+          body: `${PUSHNOTIF.REQUEST.TRANSFER.BODY} ${user.name}`,
+        };
+        createPushNotification(pushNotifObj);
+
+        //notif
+        let notifObj = {
+          to: response.data.approver_level1,
+          title: NOTIF.REQUEST.TRANSFER.TITLE,
+          body: `${NOTIF.REQUEST.TRANSFER.BODY} ${user.name}`,
+          type: NOTIF.TYPE.TRANSFER,
+          resource_id : String(response.data["to_id"])
+        };
+        createNotification(notifObj);
+
         Swal.fire("Success!", "This transfer request has been created.", "success");
        }
      } catch (e) {
@@ -810,6 +832,22 @@ export const Overview = () => {
     setTargetUserPost("");
     setDisableSubmit(true);
    }
+
+   const createNotification = async (newNotif) => {
+    try {
+      const response = await notificationService.createNotif(newNotif);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const createPushNotification = async (newNotif) => {
+    try {
+      const response = await notificationService.createPushNotif(newNotif);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   return (
     <>
