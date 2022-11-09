@@ -15,7 +15,7 @@ import { useRef } from "react";
 export const Login = () => {
   const [email, setEmail] = useState("");
   const [showOTPForm, setShowOTPForm] = useState();
-  const [counter, setCounter] = useState(0);
+  const [counter, setCounter] = useState(59);
   const [isDisabled, SetIsDisabled] = useState(true)
   const [buttonDisabled, setButttonDisabled] = useState(false)
   const [OTP, setOTP] = useState();
@@ -59,7 +59,7 @@ export const Login = () => {
       const timer = counter > 0 && setInterval(() => setCounter(counter - 1), 1000);
       if (counter === 0 ) {
         SetIsDisabled(false)
-        setOTP()
+        // setOTP()
       } 
       return () => clearInterval(timer);
   }, [counter])
@@ -72,6 +72,7 @@ export const Login = () => {
       setEmail(response.data.email);
       setUser(prevObj=>({...prevObj,name:(response.data.name), role:(response.data.role), level_approval:(response.data.level_approval), location_id:(response.data.location_id), tap:(response.data.TAP), cluster:(response.data.Cluster), department:(response.data.department)}))
       setOTP(response.otp);
+      console.log('resend otp', response.otp);
       setCounter(59);
       setShowOTPForm(true);
       SetIsDisabled(true)
@@ -100,15 +101,20 @@ export const Login = () => {
 
   const validateOTP = () => {
     if(OTPInput.length === 6){
-      if (OTPInput == OTP) {
-        setCookie("user",user,200)
+      if (counter === 0) {
+        setOTP()
+        SetIsDisabled(true)
       } else {
-        // Failed("Wrong OTP");
-        setOTPInput('')
-        const resetKey = Math.random().toString().slice(0.8)
-        setClearOtp(resetKey)
-        setErrDisabled(true);
-        setErrMsg('Wrong OTP! Please input valid OTP.')
+        if (OTPInput == OTP) {
+          setCookie("user",user,200)
+        } else {
+          // Failed("Wrong OTP");
+          setOTPInput('')
+          const resetKey = Math.random().toString().slice(0.8)
+          setClearOtp(resetKey)
+          setErrDisabled(true);
+          setErrMsg('Wrong OTP! Please input valid OTP.')
+        }
       }
       // setShowOTPForm(false);
     }
