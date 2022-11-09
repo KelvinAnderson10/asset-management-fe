@@ -85,7 +85,22 @@ export const Overview = () => {
   // GET ID FOR EDIT SHOW
   const [showEdit, setShowEdit] = useState(false);
 
+  const handleGetDetailItem = async (name) =>{
+    setLoading(true);
+    try {
+      const response = await overviewService.getAssetByAssetName(name);
+      setRowData(response.data)
+      console.log(response.data);
+      // handleViewShow(setRowData(response.data));
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const handleEditAssetById = async (name) => {
+    setLoading(true);
     try {
       const response = await overviewService.getAssetByAssetName(name);
       if (user.role != "Regular") {
@@ -105,6 +120,8 @@ export const Overview = () => {
       setShowEdit(!showEdit);
     } catch (e) {
       console.log(e);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -1067,7 +1084,8 @@ export const Overview = () => {
                             <Button variant="light">
                             <a
                               onClick={() => {
-                                handleViewShow(setRowData(data));
+                                handleGetDetailItem(data["Nomor Asset"])
+                                handleViewShow(rowData);
                               }}
                               className="view"
                               data-toggle="modal"
@@ -1111,6 +1129,7 @@ export const Overview = () => {
                                 <Dropdown.Item >
                               <a
                                   onClick={() => {
+                                    
                                     handleEditShow(data["Nomor Asset"]);
                                   }}
                                   className="edit"
@@ -1207,8 +1226,31 @@ export const Overview = () => {
                   <img src={rowData["Asset Image"]}></img>
                 </div>
                 <div className="row">
+                  
                   <div className="col-md-6 mb-3 mt-3">
-                    <label>No Asset</label>
+                    <label>Request Date</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={moment(
+                        rowData["Tanggal Pembelian"]
+                      ).format("YYYY-MM-DD HH:MM")}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-md-6 mb-3 mt-3">
+                    <label>BAST Date</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={moment(
+                        rowData["BAST Output"]
+                      ).format("YYYY-MM-DD HH:MM")}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-md-6 mb-3">
+                    <label>Asset Number</label>
                     <input
                       type="text"
                       className="form-control"
@@ -1216,7 +1258,7 @@ export const Overview = () => {
                       readOnly
                     />
                   </div>
-                  <div className="col-md-6 mb-3 mt-3">
+                  <div className="col-md-6 mb-3">
                     <label>Asset Name</label>
                     <input
                       type="text"
@@ -1253,7 +1295,7 @@ export const Overview = () => {
                     />
                   </div>
                   <div className="col-md-6 mb-3">
-                    <label>No PO</label>
+                    <label>PO Number</label>
                     <input
                       type="text"
                       className="form-control"
@@ -1280,7 +1322,7 @@ export const Overview = () => {
                     />
                   </div>
                   <div className="col-md-6 mb-3">
-                    <label>Lifetime</label>
+                    <label>Lifetime in Month</label>
                     <input
                       type="text"
                       className="form-control"
@@ -1294,6 +1336,24 @@ export const Overview = () => {
                       type="text"
                       className="form-control"
                       value={rowData["Nilai Asset saat ini"]}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-md-6 mb-3">
+                    <label>Tracking Number</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={rowData["Nomor Resi"]}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-md-6 mb-3">
+                    <label>Condition</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={rowData["Kondisi"]}
                       readOnly
                     />
                   </div>
