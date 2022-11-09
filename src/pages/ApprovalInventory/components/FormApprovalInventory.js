@@ -325,6 +325,7 @@ export const FormApprovalInventory = () => {
                       To User<span className="text-danger">*</span>
                     </label>
                     <input
+                      readOnly
                       type="text"
                       name="ToUser"
                       className="form-control"
@@ -336,6 +337,7 @@ export const FormApprovalInventory = () => {
                       Position<span className="text-danger">*</span>
                     </label>
                     <input
+                      readOnly
                       type="text"
                       name="Jabatan"
                       className="form-control"
@@ -345,6 +347,7 @@ export const FormApprovalInventory = () => {
                   <div className="inputBoxPO mb-3 col-md-6 ">
                     <label>Subproduct Name</label>
                     <input
+                      readOnly
                       value={location.state.header.jenisProduk}
                       type="text"
                       name="Jenis Produk"
@@ -373,6 +376,7 @@ export const FormApprovalInventory = () => {
                           <div className="inputBoxPO mb-3">
                             <label>Item Name</label>
                             <input
+                              readOnly
                               name="Nama Barang"
                               placeholder="Item Name"
                               value={form["Nama Barang"]}
@@ -381,6 +385,7 @@ export const FormApprovalInventory = () => {
                           <div className="inputBoxPO mb-3">
                             <label>PO ID Detail</label>
                             <input
+                              readOnly
                               name="po_id_detail"
                               placeholder="PO ID Detail"
                               value={form.po_id_detail}
@@ -393,6 +398,7 @@ export const FormApprovalInventory = () => {
                           </label>
                           <div className="checkBox col-md-1">
                             <input
+                              
                               required
                               type="radio"
                               name={`vendor_selected${index}`}
@@ -402,13 +408,14 @@ export const FormApprovalInventory = () => {
                               value={1}
                             />
                           </div>
-                          <div className="inputBoxPO mb-3 col-md-6 ">
+                          <div className=" inputBoxPO mb-3 col-md-6 ">
                             <label>
                               1<span className="subscript">st</span> Vendor
                               <span className="text-danger">*</span>
                             </label>
 
                             <input
+                              readOnly
                               defaultValue={form.vendor_1}
                               type="text"
                               name="vendor_1"
@@ -423,6 +430,7 @@ export const FormApprovalInventory = () => {
                             </label>
 
                             <input
+                              readOnly
                               type="number"
                               name="item_price_1"
                               placeholder="item_price_1"
@@ -447,6 +455,7 @@ export const FormApprovalInventory = () => {
                             </label>
 
                             <input
+                              readOnly
                               defaultValue={form.vendor_2}
                               type="text"
                               name="vendor_2"
@@ -460,6 +469,7 @@ export const FormApprovalInventory = () => {
                             </label>
 
                             <input
+                              readOnly
                               type="number"
                               name="item_price_2"
                               placeholder="item_price_2"

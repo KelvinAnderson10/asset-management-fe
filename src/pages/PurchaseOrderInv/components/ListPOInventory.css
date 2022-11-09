@@ -144,7 +144,7 @@
     cursor: pointer;
 }
 
-.box-po-inv-detail .pagination-modal{
+.pagination-modal{
     width: 100%;
     display: flex;
     justify-content: flex-end;

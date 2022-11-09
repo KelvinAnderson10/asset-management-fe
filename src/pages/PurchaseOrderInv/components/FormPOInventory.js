@@ -152,10 +152,12 @@ export const FormPOInventory = () => {
       POHeader.PurchaseOrderDetail = [...POdata];
       const response = await purchaseOrderService.createPO(POHeader);
       handleClearForm();
+      console.log('response poinv',response)
 
       // PUSH NOTIF
       let myApp = initializeApp(firebaseConfig);
       const firestore = getFirestore(myApp);
+
 
       if (response.status === "SUCCESS") {
         swal({
@@ -277,6 +279,7 @@ export const FormPOInventory = () => {
                   </label>
                   <input
                     required
+                    placeholder="To User"
                     type="text"
                     name="ToUser"
                     className="form-control"
@@ -289,6 +292,7 @@ export const FormPOInventory = () => {
                   </label>
                   <input
                     required
+                    placeholder="Position"
                     type="text"
                     name="Jabatan"
                     className="form-control"
