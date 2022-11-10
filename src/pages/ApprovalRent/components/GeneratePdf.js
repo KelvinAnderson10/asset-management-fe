@@ -1,5 +1,4 @@
 import React from 'react'
-import { UseApprovalRent } from '../UseApprovalRent'
 import "./GeneratePdf.css"
 import Header from "../../../assets/images/Header.png"
 import Footer from "../../../assets/images/Footer.png"
