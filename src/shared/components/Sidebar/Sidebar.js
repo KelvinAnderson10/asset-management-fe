@@ -295,7 +295,7 @@ const Sidebar = ({ children }) => {
 
   const onReadNotification = async (name) => {
     try {
-      const response = await notificationService.readNotif(name);
+      const response = await notificationService.getNotif(name);
       for (let i in response.data){
         response.data[i].CreatedAt = moment(response.data[i].CreatedAt).format("LL")
       }
@@ -305,6 +305,17 @@ const Sidebar = ({ children }) => {
       console.log(e);
     }
   };
+
+  const onClickNotification = async (id, type) => {
+    try {
+      const response = await notificationService.readNotif(id);
+      if (type === NOTIF.TYPE.TRANSFER) {
+        navigate(PATH.APPROVAL_TRANSFER);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   const { eraseCookie } = useAuth();
 
@@ -593,9 +604,7 @@ const Sidebar = ({ children }) => {
                                 key={index}
                                 className="list-group-item list-group-item-action"
                                 onClick={() => {
-                                  if (d.type === NOTIF.TYPE.TRANSFER) {
-                                    navigate(PATH.APPROVAL_TRANSFER);
-                                  }
+                                  onClickNotification(d.ID, d.type);
                                 }}
                               >
                                 Hi {d.to}, {d.body} 
