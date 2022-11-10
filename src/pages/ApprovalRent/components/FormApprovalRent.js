@@ -1,24 +1,23 @@
-import React from 'react'
-import { useEffect } from 'react';
-import { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { useDeps } from '../../../shared/context/DependencyContext';
+import React, { useEffect, useState } from "react";
+import { MdImportContacts } from "react-icons/md";
+import Sidebar from "../../../shared/components/Sidebar/Sidebar";
 import * as MdIcons from "react-icons/md";
-import "./FormViewRent.css"
-import Sidebar from '../../../shared/components/Sidebar/Sidebar';
+import { useLocation, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+import { useDeps } from "../../../shared/context/DependencyContext";
 
-export const FormViewRent = () => {
-  const location = useLocation();
-  const {rentService} = useDeps();
+export const FormApprovalRent = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [fileKtp,setFileKtp] = useState([])
   const [fileNpwp,setFileNpwp] = useState([])
   const [fileBukuTabungan, setFileBukuTabungan] = useState([])
   const [fileSertifikat, setFileSertifikat] = useState([])
   const [fileFotoLokasi, setFileFotoLokasi] = useState([])
+  const {rentService} = useDeps();
 
   const onClickBack = () => {
-    navigate("/purchase-request/rent", { replace: true });
+    navigate("/approval-data/rent", { replace: true });
   };
 
   const viewImg = async() => {
@@ -57,15 +56,31 @@ export const FormViewRent = () => {
   useEffect(() => {
     viewImg();
   }, []);
-    return (    
-    <>
-    <Sidebar>
 
-    
-        <div className="po-rent-view-form-container">
-          <div className="po-rent-view-form-card">
-            <form >
-            <h4 className="mb-5 text-danger">
+  const onRejectRent = async (e, id) => {
+    e.preventDefault(e)
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Do you really want to reject this request",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, decline it!",
+    }).then((result) => {
+      
+    })
+  }
+
+  return (
+    <>
+      <Sidebar>
+        <div className="po-mtnc-form-container">
+          <div className="po-mtnc-form-card">
+            <form
+            // onSubmit={}
+            >
+              <h4 className="mb-5 text-danger">
                 <MdIcons.MdOutlineArrowBackIosNew
                   color="black"
                   onClick={onClickBack}
@@ -76,26 +91,28 @@ export const FormViewRent = () => {
               <div className="formPOInput">
                 <div className="row">
                   <div className="mb-3 col-md-4">
-                    <label style={{fontWeight:'500'}}>
+                    <label>
                       Area Code<span className="text-danger">*</span>
                     </label>
                     <input
-                     value={location.state.detail["Kode Wilayah"]}
-                     readOnly
-                     className="form-control"
-                      
+                      value={location.state.detail["Kode Wilayah"]}
+                      readOnly
+                      className="form-control"
+                    />
+                  </div>
+
+                  <div className="mb-3 col-md-4">
+                    <label>
+                      Cluster<span className="text-danger">*</span>
+                    </label>
+                    <input
+                      value={location.state.detail.Cluster}
+                      readOnly
+                      className="form-control"
                     />
                   </div>
                   <div className="mb-3 col-md-4">
-                    <label style={{fontWeight:'500'}}>
-                      Cluster<span className="text-danger">*</span>
-                    </label>
-                    <input  value={location.state.detail.Cluster}
-                      readOnly
-                      className="form-control" />
-                  </div>
-                  <div className="mb-3 col-md-4">
-                    <label style={{fontWeight:'500'}}>
+                    <label>
                       TAP<span className="text-danger">*</span>
                     </label>
                     <input
@@ -105,69 +122,67 @@ export const FormViewRent = () => {
                     />
                   </div>
                   <div className="mb-3 col-md-6">
-                    <label style={{fontWeight:'500'}}>
+                    <label>
                       User<span className="text-danger">*</span>
                     </label>
                     <input
                       value={location.state.detail.User}
                       readOnly
                       className="form-control"
-                      
                     />
                   </div>
                   <div className="mb-3 col-md-6">
-                    <label style={{fontWeight:'500'}}>
+                    <label>
                       Position<span className="text-danger">*</span>
                     </label>
                     <input
                       value={location.state.detail.Jabatan}
                       readOnly
                       className="form-control"
-                     
                     />
                   </div>
                   <div className="mb-3 col-md-12">
-                    <label style={{fontWeight:'500'}}>
+                    <label>
                       Address<span className="text-danger">*</span>
                     </label>
-                    <textarea   
-                    value={location.state.detail.alamat_lokasi}
+                    <textarea
+                      value={location.state.detail.alamat_lokasi}
                       className="form-control"
                       rows="3"
-                      readOnly></textarea>
+                      readOnly
+                    ></textarea>
                   </div>
                   <div className="mb-3 col-md-6">
-                    <label style={{fontWeight:'500'}}>
+                    <label>
                       Item Name<span className="text-danger">*</span>
                     </label>
                     <input
-                     value={location.state.detail["Nama Barang"]}
-                     readOnly
-                     className="form-control"
-                     
+                      value={location.state.detail["Nama Barang"]}
+                      readOnly
+                      className="form-control"
                     />
                   </div>
                   <div className="mb-3 col-md-6">
-                    <label style={{fontWeight:'500'}}>
+                    <label>
                       Type of Place<span className="text-danger">*</span>
                     </label>
                     <input
-                     value={location.state.detail.jenis_tempat}
-                     readOnly
-                     className="form-control"
+                      value={location.state.detail.jenis_tempat}
+                      readOnly
+                      className="form-control"
                     />
                   </div>
                   <div className="mb-3 col-md-12">
-                    <label style={{fontWeight:'500'}}> Existing Facilities : </label>
+                    <label> Existing Facilities : </label>
                   </div>
                   <div className="mb-3 col-md-4">
                     <label>
                       TLP<span className="text-danger">*</span>
                     </label>
                     <input
-                     value={location.state.detail.TLP}
-                     readOnly
-                     className="form-control"
+                      value={location.state.detail.TLP}
+                      readOnly
+                      className="form-control"
                     />
                   </div>
                   <div className="mb-3 col-md-4">
@@ -185,23 +200,23 @@ export const FormViewRent = () => {
                       PAM<span className="text-danger">*</span>
                     </label>
                     <input
-                     value={location.state.detail.PAM}
-                     readOnly
-                     className="form-control"                      
+                      value={location.state.detail.PAM}
+                      readOnly
+                      className="form-control"
                     />
                   </div>
                   <div className="mb-3 col-md-6">
-                    <label style={{fontWeight:'500'}}>
-                      Additional Info
+                    <label>
+                      Additional Info<span className="text-danger">*</span>
                     </label>
                     <input
-                     value={location.state.detail.lain_lain}
-                     readOnly
-                     className="form-control"
+                      value={location.state.detail.lain_lain}
+                      readOnly
+                      className="form-control"
                     />
                   </div>
                   <div className="mb-3 col-md-6">
-                    <label style={{fontWeight:'500'}}>
+                    <label>
                       Rent Period (Month/Year)
                       <span className="text-danger">*</span>
                     </label>
@@ -213,7 +228,7 @@ export const FormViewRent = () => {
                   </div>
                   <div></div>
                   <div className="mb-1 col-md-12">
-                    <label style={{fontWeight:'500'}}> Rent Period: </label>
+                    <label> Rent Period: </label>
                   </div>
                   <div className="mb-3 col-md-6">
                     <label>
@@ -230,13 +245,13 @@ export const FormViewRent = () => {
                       Until<span className="text-danger">*</span>
                     </label>
                     <input
-                     value={location.state.detail.periode_sewa_akhir}
-                     readOnly
-                     className="form-control"
+                      value={location.state.detail.periode_sewa_akhir}
+                      readOnly
+                      className="form-control"
                     />
                   </div>
                   <div className="mb-3 col-md-6">
-                    <label style={{fontWeight:'500'}}>
+                    <label>
                       Owner's Name<span className="text-danger">*</span>
                     </label>
                     <input
@@ -246,7 +261,7 @@ export const FormViewRent = () => {
                     />
                   </div>
                   <div className="mb-3 col-md-6">
-                    <label style={{fontWeight:'500'}}>
+                    <label>
                       NPWP<span className="text-danger">*</span>
                     </label>
                     <input
@@ -256,18 +271,18 @@ export const FormViewRent = () => {
                     />
                   </div>
                   <div className="mb-3 col-md-12">
-                    <label style={{fontWeight:'500'}}>
+                    <label>
                       Owner's Address<span className="text-danger">*</span>
                     </label>
                     <textarea
                       value={location.state.detail.alamat_pemilik}
                       className="form-control"
                       rows="3"
-                      readOnly
+                      name="alamat_pemilik"
                     ></textarea>
                   </div>
                   <div className="mb-3 col-md-6">
-                    <label style={{fontWeight:'500'}}>
+                    <label>
                       Owner's Phone<span className="text-danger">*</span>
                     </label>
                     <input
@@ -277,8 +292,9 @@ export const FormViewRent = () => {
                     />
                   </div>
                   <div className="mb-3 col-md-6">
-                    <label style={{fontWeight:'500'}}>
-                      Rent Price/Year (Old Price if Extend)<span className="text-danger">*</span>
+                    <label>
+                      Rent Price/Year (Old Price if Extend)
+                      <span className="text-danger">*</span>
                     </label>
                     <input
                       value={
@@ -289,8 +305,9 @@ export const FormViewRent = () => {
                     />
                   </div>
                   <div className="mb-3 col-md-4">
-                    <label style={{fontWeight:'500'}}>
-                      Rent Price/Year (New Price)<span className="text-danger">*</span>
+                    <label>
+                      Rent Price/Year (New Price)
+                      <span className="text-danger">*</span>
                     </label>
                     <input
                       value={
@@ -301,18 +318,19 @@ export const FormViewRent = () => {
                     />
                   </div>
                   <div className="mb-3 col-md-4">
-                    <label style={{fontWeight:'500'}}>
+                    <label>
                       Tax (10%)<span className="text-danger">*</span>
                     </label>
                     <input
-                     value={location.state.detail.pajak}
-                     readOnly
-                     className="form-control"
+                      value={location.state.detail.pajak}
+                      readOnly
+                      className="form-control"
                     />
                   </div>
                   <div className="mb-3 col-md-4">
-                    <label style={{fontWeight:'500'}}>
-                    Amount transferred to Owner<span className="text-danger">*</span>
+                    <label>
+                      Amount transferred to Owner
+                      <span className="text-danger">*</span>
                     </label>
                     <input
                       value={location.state.detail.nominal_transfer_ke_pemilik}
@@ -321,7 +339,7 @@ export const FormViewRent = () => {
                     />
                   </div>
                   <div className="mb-3 col-md-4">
-                    <label style={{fontWeight:'500'}}>
+                    <label>
                       Notary<span className="text-danger">*</span>
                     </label>
                     <input
@@ -331,19 +349,18 @@ export const FormViewRent = () => {
                     />
                   </div>
                   <div className="mb-3 col-md-4">
-                    <label style={{fontWeight:'500'}}>
+                    <label>
                       Notary Services<span className="text-danger">*</span>
                     </label>
                     <input
                       value={location.state.detail.jasa_notaris}
                       readOnly
                       className="form-control"
-                    
                     />
                   </div>
                   <div className="mb-3 col-md-4">
-                    <label style={{fontWeight:'500'}}>
-                   NPWP Notary<span className="text-danger">*</span>
+                    <label>
+                      NPWP Notary<span className="text-danger">*</span>
                     </label>
                     <input
                       value={location.state.detail.NPWP_notaris}
@@ -352,29 +369,30 @@ export const FormViewRent = () => {
                     />
                   </div>
                   <div className="mb-3 col-md-6">
-                    <label style={{fontWeight:'500'}}>
-                   Destination Account Name<span className="text-danger">*</span>
+                    <label>
+                      Destination Account Name
+                      <span className="text-danger">*</span>
                     </label>
                     <input
                       value={location.state.detail.nama_rekening_tujuan}
                       readOnly
                       className="form-control"
-                     
                     />
                   </div>
                   <div className="mb-3 col-md-6">
-                    <label style={{fontWeight:'500'}}>
-                   Destination Account Number<span className="text-danger">*</span>
+                    <label>
+                      Destination Account Number
+                      <span className="text-danger">*</span>
                     </label>
                     <input
-                     value={location.state.detail.nomor_rekening_tujuan}
-                     readOnly
-                     className="form-control"
+                      value={location.state.detail.nomor_rekening_tujuan}
+                      readOnly
+                      className="form-control"
                     />
                   </div>
                   <div className="mb-3 col-md-6">
-                    <label style={{fontWeight:'500'}}>
-                   Bank Name<span className="text-danger">*</span>
+                    <label>
+                      Bank Name<span className="text-danger">*</span>
                     </label>
                     <input
                       value={location.state.detail.bank}
@@ -383,161 +401,167 @@ export const FormViewRent = () => {
                     />
                   </div>
                   <div className="mb-3 col-md-6">
-                    <label style={{fontWeight:'500'}}>
-                   Branch Name<span className="text-danger">*</span>
+                    <label>
+                      Branch Name<span className="text-danger">*</span>
                     </label>
                     <input
-                     value={location.state.detail.cabang_bank}
-                     readOnly
-                     className="form-control"
+                      value={location.state.detail.cabang_bank}
+                      readOnly
+                      className="form-control"
                     />
                   </div>
                   <div className="mb-3 col-md-6">
-                    <label style={{fontWeight:'500'}}>
-                    Payment Method<span className="text-danger">*</span>
+                    <label>
+                      Payment Method<span className="text-danger">*</span>
                     </label>
                     <input
-                       value={location.state.detail.cara_pembayaran}
-                       readOnly
-                       className="form-control"
+                      value={location.state.detail.cara_pembayaran}
+                      readOnly
+                      className="form-control"
                     />
                   </div>
                   <div className="mb-3 col-md-6">
-                    <label style={{fontWeight:'500'}}>
-                    Due Date<span className="text-danger">*</span>
+                    <label>
+                      Due Date<span className="text-danger">*</span>
                     </label>
                     <input
-                      value={location.state.detail.tanggal_jatuh_tempo}
+                      value={location.state.detail.cara_pembayaran}
                       readOnly
                       className="form-control"
                     />
                   </div>
                   <label style={{fontWeight:'500'}}>Attachment File</label>
-                  <div className="file-extension">
-                      <p  style={{fontSize:'15px', color:'rgb(255, 178, 0)'}}>Allowed file types : <b>png, jpg, jpeg</b><br></br> Maximum size of each attachment is 2MB</p>
+                <div style={{minHeight:'200px', marginTop:'3vh'}} className="card">
+                    <div className="card-header bg-transparent">
+                      KTP
+                    </div>
+                    <div class="card-body">
+                        
+                        <div className="form-group multi-preview"> 
+                        {
+                          Array.from(fileKtp).map(item => {
+                            return (
+                              <span>
+                                <img
+                                  style={{ padding: '10px' }}
+                                  width={150} height={100}
+                                  src={item} 
+                                />
+                              </span>
+                            )
+                          })
+                        }
+                        </div>  
+                    </div>
                   </div>
-                  <div style={{minHeight:'200px'}} className="card">
-                      <div className="card-header bg-transparent">
-                        KTP <span className="text-danger">*</span>
-                      </div>
-                      <div class="card-body">
-                          <div className="form-group multi-preview"> 
-                          {
-                            Array.from(fileKtp).map(item => {
-                              return (
-                                <span>
-                                  <img
-                                    style={{ padding: '10px' }}
-                                    width={150} height={100}
-                                    src={item} />
-                                </span>
-                              )
-                            })
-                          }
-                          </div>
-                      </div>
+                  <div style={{minHeight:'200px', marginTop:'5vh'}} className="card">
+                    <div className="card-header bg-transparent">
+                      NPWP
                     </div>
-                    <div style={{minHeight:'200px', marginTop:'5vh'}} className="card">
-                      <div className="card-header bg-transparent">
-                        NPWP <span className="text-danger">*</span>
-                      </div>
-                      <div class="card-body">
-                          <div>
-                          </div>
-                          <div className="form-group multi-preview"> 
-                          {
-                            Array.from(fileNpwp).map(item => {
-                              return (
-                                <span>
-                                  <img
-                                    style={{ padding: '10px' }}
-                                    width={150} height={100}
-                                    src={item} />
-                                </span>
-                              )
-                            })
-                          }
-                          </div>  
-                      </div>
+                    <div class="card-body">
+                        <div className="form-group multi-preview"> 
+                        {
+                          Array.from(fileNpwp).map(item => {
+                            return (
+                              <span>
+                                <img
+                                  style={{ padding: '10px' }}
+                                  width={150} height={100}
+                                  src={item} 
+                                  />
+                              </span>
+                            )
+                          })
+                        }
+                        </div>  
                     </div>
-                    <div style={{minHeight:'200px', marginTop:'5vh'}} className="card">
-                      <div className="card-header bg-transparent">
-                        Savings Account <span className="text-danger">*</span>
-                      </div>
-                      <div class="card-body">
-                          <div>
-                          </div>
-                          <div className="form-group multi-preview"> 
-                          {
-                            Array.from(fileBukuTabungan).map(item => {
-                              return (
-                                <span>
-                                  <img
-                                    style={{ padding: '10px' }}
-                                    width={150} height={100}
-                                    src={item} />
-                                </span>
-                              )
-                            })
-                          }
-                          </div>  
-                         
-                      </div>
+                  </div>
+                  <div style={{minHeight:'200px', marginTop:'5vh'}} className="card">
+                    <div className="card-header bg-transparent">
+                      Savings Account
                     </div>
-                    <div style={{minHeight:'200px', marginTop:'5vh'}} className="card">
-                      <div className="card-header bg-transparent">
-                        Location Photo <span className="text-danger">*</span>
-                      </div>
-                      <div class="card-body">
-                          <div>
-                          </div>
-                          <div className="form-group multi-preview"> 
-                          {
-                            Array.from(fileFotoLokasi).map(item => {
-                              return (
-                                <span>
-                                  <img
-                                    style={{ padding: '10px' }}
-                                    width={150} height={100}
-                                    src={item} />
-                                </span>
-                              )
-                            })
-                          }
-                          </div>  
-                         
-                      </div>
+                    <div class="card-body">
+                        <div className="form-group multi-preview"> 
+                        {
+                          Array.from(fileBukuTabungan).map(item => {
+                            return (
+                              <span>
+                                <img
+                                  style={{ padding: '10px' }}
+                                  width={150} height={100}
+                                  src={item} 
+                                />
+                              </span>
+                            )
+                          })
+                        }
+                        </div>  
                     </div>
-                    <div style={{minHeight:'200px', marginTop:'5vh'}} className="card">
-                      <div className="card-header bg-transparent">
-                        Certificate <span className="text-danger">*</span>
-                      </div>
-                      <div class="card-body">
-                          <div>
-                          </div>
-                          <div className="form-group multi-preview"> 
-                          {
-                            Array.from(fileSertifikat).map(item => {
-                              return (
-                                <span>
-                                  <img
-                                    style={{ padding: '10px' }}
-                                    width={150} height={100}
-                                    src={item} />
-                                </span>
-                              )
-                            })
-                          }
-                          </div>  
-                         
-                      </div>
+                  </div>
+                  <div style={{minHeight:'200px', marginTop:'5vh'}} className="card">
+                    <div className="card-header bg-transparent">
+                      Location Photo
                     </div>
+                    <div class="card-body">
+                        <div className="form-group multi-preview"> 
+                        {
+                          Array.from(fileFotoLokasi).map(item => {
+                            return (
+                              <span>
+                                <img
+                                  style={{ padding: '10px' }}
+                                  width={150} height={100}
+                                  src={item} 
+                                />
+                              </span>
+                            )
+                          })
+                        }
+                        </div>  
+                    </div>
+                  </div>
+                  <div style={{minHeight:'200px', marginTop:'5vh'}} className="card">
+                    <div className="card-header bg-transparent">
+                      Certificate
+                    </div>
+                    <div class="card-body">
+                        <div className="form-group multi-preview"> 
+                        {
+                          Array.from(fileSertifikat).map(item => {
+                            return (
+                              <span>
+                                <img
+                                  style={{ padding: '10px' }}
+                                  width={150} height={100}
+                                  src={item} 
+                                />
+                              </span>
+                            )
+                          })
+                        }
+                        </div>  
+                    </div>
+                  </div>
+                  <br/>
+                  <div className="col-md-12">
+                    <button
+                      className="btn btn-primary float-end"
+                      style={{ marginLeft: "20px", marginRight: "20px", marginTop: "20px" }}
+                    >
+                      Approved
+                    </button>
+                    <button type="reset" className="btn btn-warning float-end"
+                      style={{ marginTop: "20px" }}
+                    >
+                      Reject
+                    </button>
+                  </div>
                 </div>
               </div>
             </form>
           </div>
         </div>
-        </Sidebar>
-      </>
-    );
-}
+      </Sidebar>
+    </>
+  );
+};

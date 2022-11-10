@@ -24,6 +24,7 @@ main {
   background: #b70621;
   color: white;
   min-height: 100vh;
+  position: sticky;
 }
 
 .top_section {
@@ -174,4 +175,17 @@ main {
 .title-menu-sidebar{
   font-size: 22px;
   margin-top: 1.2vh;
+}
+
+.logo-nav {
+  width: 7.8vw;
+  height: 4.5vh;
+}
+
+/* For mobile phones: */
+@media only screen and (max-width: 480px) {
+  .logo-nav {
+    width: 7.8vw;
+    height: 4.5vh;
+  }
 }

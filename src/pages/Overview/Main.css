@@ -94,3 +94,26 @@
     cursor: pointer;
 }
 
+/* For mobile phones: */
+@media only screen and (max-width: 520px) {
+    .main-navbar-container .main-navbar-asset{
+        width: 80px;
+        height: 68%;
+    }
+    
+    .main-navbar-container .main-navbar-dashboard2{
+        width: 80px;
+        height: 68%;
+        background-color: #0A2495;
+    }
+    .main-navbar-container .main-navbar-dashboard{
+        width: 80px;
+        height: 68%;
+        background-color: white;
+    }
+    .main-navbar-container .main-navbar-asset2{
+        width: 80px;
+        height: 68%;
+        background-color: #0A2495;
+    }
+  }

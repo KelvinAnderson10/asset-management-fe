@@ -1,7 +1,152 @@
 import React from 'react'
-
+import Loading from '../../../shared/components/Loading/Loading';
+import { NoData } from '../../../shared/components/NoData/NoData';
+import { UsePORent } from './UsePORent'
+import * as BsIcons from "react-icons/bs";
+import * as AiIcons from "react-icons/ai";
 export const ListPORent = () => {
+    const {handleClickDetailRent,rentData,user,isLoading} = UsePORent();
+
   return (
-    <div>ListPORent</div>
+    <div className="po-mtnc-list-container">
+        <div className="po-mtnc-box-container">
+          <div className="po-mtnc-list-card">
+            {rentData.length === 0 ? (
+              <NoData />
+            ) : (
+              rentData.map((data) => (
+                <div
+                  className="po-mtnc-list-box-item"
+                  key={data.po_id}
+                  onClick={() => handleClickDetailRent(data.po_id)}
+                >
+                  <div className="header-list-po">
+                    <a className="po-num">{data.po_id}</a>
+                    <a
+                      className="status-po"
+                      style={{
+                        backgroundColor:
+                          data.status == "Denied"
+                            ? "rgb(183, 6, 33)"
+                            : "rgb(255, 178, 0)" && data.status == "Approved"
+                            ? "rgb(92, 184, 92, 0.75)"
+                            : "rgb(255, 178, 0)" && data.status == "Delivered"
+                            ? "rgba(7, 124, 234, 0.714)"
+                            : "rgb(255, 178, 0)",
+                      }}
+                    >
+                      {data.status}
+                    </a>
+                  </div>
+                  <div className="po-content-container">
+                    <div className="box-content-po">
+                      <div className="row-content-po">
+                        <div className="sub-title-content">
+                          <a>To</a>
+                        </div>
+                        <div className="sub-title-content">
+                          <a>: {data.User}</a>
+                        </div>
+                      </div>
+                      <div className="row-content-po">
+                        <div className="sub-title-content">
+                          <a>Position</a>
+                        </div>
+                        <div className="sub-title-content">
+                          <a>: {data.Jabatan}</a>
+                        </div>
+                      </div>
+                      <div className="row-content-po">
+                        <div className="sub-title-content">
+                          <a>Item Name</a>
+                        </div>
+                        <div className="sub-title-content">
+                          <a>: {data["Nama Barang"]}</a>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="box-content-po">
+                      <div className="row-content-po">
+                        <div className="sub-title-content">
+                          {user.cluster != "HO" && <a>Approved By GM </a>}
+                          
+                        </div>
+                        <div className="sub-title-content">
+                          {data.approved_level1 == true && (
+                            <a>
+                              <BsIcons.BsCheckCircleFill
+                                color="rgb(92, 184, 92)"
+                                size="1.2em"
+                              />{" "}
+                            </a>
+                          )}
+                          {data.approved_level1 == false && (
+                            <a>
+                              <AiIcons.AiFillCloseCircle
+                                color="red"
+                                size="1.2em"
+                              />{" "}
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                      <div className="row-content-po">
+                        <div className="sub-title-content">
+                          {user.cluster != "HO" && <a>Approved By VP Trade</a>}
+                          
+                        </div>
+                        <div className="sub-title-content">
+                          {data.approved_level2 == true && (
+                            <a>
+                              <BsIcons.BsCheckCircleFill
+                                color="rgb(92, 184, 92)"
+                                size="1.2em"
+                              />{" "}
+                            </a>
+                          )}
+                          {data.approved_level2 == false && (
+                            <a>
+                              <AiIcons.AiFillCloseCircle
+                                color="red"
+                                size="1.2em"
+                              />{" "}
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                      <div className="row-content-po">
+                        <div className="sub-title-content">
+                          {user.cluster != "HO" && <a>Approved By GA/IT</a>}
+                        </div>
+                        <div className="sub-title-content">
+                          {data.approved_level3 == true && (
+                              <a>
+                                <BsIcons.BsCheckCircleFill
+                                  color="rgb(92, 184, 92)"
+                                  size="1.2em"
+                                />{" "}
+                              </a>
+                            )}
+                          {data.approved_level3 == false && (
+                              <a>
+                                <AiIcons.AiFillCloseCircle
+                                  color="red"
+                                  size="1.2em"
+                                />{" "}
+                              </a>
+                            )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="date-request">
+                      <a style={{ fontSize: "14px" }}>{data.CreatedAt}</a>
+                    </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      </div>
   )
 }

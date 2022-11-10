@@ -4,7 +4,7 @@ import Sidebar from "../../shared/components/Sidebar/Sidebar";
 import { useDeps } from "../../shared/context/DependencyContext";
 import { FiPlus } from "react-icons/fi";
 import { Link } from "react-router-dom";
-import "./style.css";
+import "./vendor.css";
 import Swal from 'sweetalert2'
 import {FaSort} from 'react-icons/fa'
 import Button from "react-bootstrap/Button";
@@ -353,7 +353,7 @@ document.querySelector("body").style.overflow = "auto";
   return (
     <>
       <Sidebar>
-      <div>
+      <div className="body-vendor">
       <div className="body">
           <div className="container">
           <div className="vendor-container-item" >  

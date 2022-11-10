@@ -46,6 +46,13 @@
   color: #8b8d97;
   font-size: 14px;
 }
+
+.text-err {
+  font-family: "Poppins";
+  color: #cc2103;
+  font-size: 14px;
+  font-weight: 600;
+}
 .form-box {
   display: flex;
   flex-direction: column;

@@ -6,9 +6,10 @@ import moment from "moment";
 import { async } from "@firebase/util";
 import { Failed } from "../../../shared/components/Notification/Failed";
 import swal from "sweetalert";
+import { NOTIF, STATUS } from "../../../shared/constants";
 
 export const FormPORent = () => {
-  const {purchaseOrderRentService} = useDeps();
+  const {purchaseOrderRentService, notificationService} = useDeps();
   const [toUser,setToUser] = useState('');
   const [position,setPosition] = useState('');
   const [alamatLokasi, setAlamatLokasi] = useState('');
@@ -49,6 +50,13 @@ export const FormPORent = () => {
   const [fileSertifikat, setFileSertifikat] = useState([])
   const [fileFotoLokasi, setFileFotoLokasi] = useState([])
 
+  const createNotification = async (notifPO) => {
+    try {
+      const response = await notificationService.createNotif(notifPO);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
    const onSubmitPO = async (e)=>{
     e.preventDefault();
@@ -60,7 +68,7 @@ export const FormPORent = () => {
     rentFormData.append("Jabatan", position)
     rentFormData.append("alamat_lokasi", alamatLokasi)
     rentFormData.append("Nama Barang", namaBarang)
-    rentFormData.append("status", status)
+    rentFormData.append("status", STATUS.CREATE_PO)
     rentFormData.append("jenis_tempat", jenisTempat)
     rentFormData.append("TLP", tlp)
     rentFormData.append("PLN",pln)
@@ -111,6 +119,24 @@ export const FormPORent = () => {
     try {
       const response = await purchaseOrderRentService.createPO(rentFormData)
       console.log(response)
+      let notifObjGM = {
+        to: response.data.approver_level1,
+        title: NOTIF.REQUEST.TITLE,
+        body: `${NOTIF.REQUEST.BODY} ${user.name}`,
+      };
+      let notifObjVpTrad = {
+        to: response.data.approver_level2,
+        title: NOTIF.REQUEST.TITLE,
+        body: `${NOTIF.REQUEST.BODY} ${user.name}`,
+      };
+      let notifObjGA = {
+        to: response.data.approver_level3,
+        title: NOTIF.REQUEST.TITLE,
+        body: `${NOTIF.REQUEST.BODY} ${user.name}`,
+      };
+      createNotification(notifObjGM);
+      createNotification(notifObjVpTrad);
+      createNotification(notifObjGA);
       clearForm()
       if (response.status === "SUCCESS"){
         swal({

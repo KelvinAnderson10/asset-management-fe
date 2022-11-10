@@ -279,3 +279,7 @@ input.form-control:focus{
   justify-content: center;
   align-items: center;
 }
+/* For mobile phones: */
+@media only screen and (max-width: 520px) {
+  
+}

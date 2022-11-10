@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { UseApprovalInventory } from "../UseApprovalInventory";
-import "./ListPurchaseRequest.css";
-import { NoData } from "../../../shared/components/NoData/NoData";
+import React, { useState } from "react";
 import Loading from "../../../shared/components/Loading/Loading";
+import { NoData } from "../../../shared/components/NoData/NoData";
+import { useDeps } from "../../../shared/context/DependencyContext";
+import { UseApprovalRent } from "../UseApprovalRent";
 
-export const ListPurchaseRequest = () => {
-  const { handleClickApproval, appData, isLoading } = UseApprovalInventory();
+export const ListApprovedRent = () => {
+  const { appData1, isLoading, handleClickApproval } = UseApprovalRent();
+  const { rentService } = useDeps();
 
-  //Pagination PR
   const [currentPage, setcurrentPage] = useState(1);
   const [itemsPerPage, setitemsPerPage] = useState(10);
   const [pageNumberLimit, setpageNumberLimit] = useState(5);
@@ -19,13 +19,13 @@ export const ListPurchaseRequest = () => {
   };
 
   const pages = [];
-  for (let i = 1; i <= Math.ceil(appData.length / itemsPerPage); i++) {
+  for (let i = 1; i <= Math.ceil(appData1.length / itemsPerPage); i++) {
     pages.push(i);
   }
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = appData.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = appData1.slice(indexOfFirstItem, indexOfLastItem);
 
   const renderPageNumbers = pages.map((number) => {
     if (number < maxPageNumberLimit + 1 && number > minPageNumberLimit) {
@@ -77,26 +77,14 @@ export const ListPurchaseRequest = () => {
       <div className="approval-inv-list-container">
         <div className="approval-inv-box-container">
           <div className="approval-inv-list-card">
-            {appData.length === 0 ? (
+            {appData1.length === 0 ? (
               <NoData />
             ) : (
-              appData.map((data) => (
+              currentItems.map((data) => (
                 <div
                   className="approval-inv-box-item"
                   key={data.po_id}
-                  onClick={() =>
-                    handleClickApproval(
-                      data.po_id,
-                      data.ToUser,
-                      data.Jabatan,
-                      data["Kode Wilayah"],
-                      data["Jenis Produk"],
-                      data.approver_level3,
-                      data.tipe,
-                      data.status,
-                      data.requester
-                    )
-                  }
+                  onClick={() => handleClickApproval(data.po_id)}
                 >
                   <div className="header-list-approval">
                     <a className="approval-num">{data.po_id}</a>
@@ -104,7 +92,7 @@ export const ListPurchaseRequest = () => {
                       className="status-approval"
                       style={{
                         backgroundColor:
-                          data.status == "Rejected"
+                          data.status == "Denied"
                             ? "rgb(183, 6, 33)"
                             : "rgb(255, 178, 0)" && data.status == "Approved"
                             ? "rgb(92, 184, 92, 0.75)"
@@ -120,42 +108,42 @@ export const ListPurchaseRequest = () => {
                     <div className="box-content-approval">
                       <div className="row-content-approval">
                         <div className="sub-title-content">
-                          <a className="text">Requester</a>
+                          <a>Requester</a>
                         </div>
                         <div className="sub-title-content">
-                          <a className="text">: {data.requester}</a>
+                          <a>: {data.requester}</a>
                         </div>
                       </div>
                       <div className="row-content-approval">
                         <div className="sub-title-content">
-                          <a className="text">To</a>
+                          <a>To</a>
                         </div>
                         <div className="sub-title-content">
-                          <a className="text">: {data.ToUser}</a>
+                          <a>: {data.User}</a>
                         </div>
                       </div>
                     </div>
                     <div className="box-content-approval">
                       <div className="row-content-approval">
                         <div className="sub-title-content">
-                          <a className="text">Location</a>
+                          <a>Location</a>
                         </div>
                         <div className="sub-title-content">
-                          <a className="text">: {data.TAP}</a>
+                          <a>: {data.TAP}</a>
                         </div>
                       </div>
                       <div className="row-content-approval">
                         <div className="sub-title-content">
-                          <a className="text">Product Type</a>
+                          <a>Item Name</a>
                         </div>
                         <div className="sub-title-content">
-                          <a className="text">: {data["Jenis Produk"]}</a>
+                          <a>: {data["Nama Barang"]}</a>
                         </div>
                       </div>
                     </div>
                   </div>
                   <div className="date-approval">
-                    <a className="text">{data.CreatedAt}</a>
+                    <a>{data.CreatedAt}</a>
                   </div>
                 </div>
               ))
