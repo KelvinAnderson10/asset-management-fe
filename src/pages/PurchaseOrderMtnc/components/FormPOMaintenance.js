@@ -130,7 +130,7 @@ export const FormPOMaintenance = () => {
         title: NOTIF.REQUEST.TITLE,
         body: `${NOTIF.REQUEST.BODY} ${user.name}`,
         type: NOTIF.TYPE.PURCHASE_MAINTENANCE,
-        resource_id : response.data.po_id
+        resource_id : String(response.data.po_id)
       };
       createNotification(notifObj);
       e.target.reset();
