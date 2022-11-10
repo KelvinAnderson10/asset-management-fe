@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Button, Modal, Table } from "react-bootstrap";
+import { Button, Modal, Table, ButtonGroup, Dropdown   } from "react-bootstrap";
 import { useDeps } from "../../shared/context/DependencyContext";
 import "./Overview.css";
 import moment from "moment";
@@ -7,11 +7,12 @@ import "./EditAsset.css";
 import swal from "sweetalert";
 import Loading from "../../shared/components/Loading/Loading";
 import ReactPaginate from "react-paginate";
-import { EVENT } from "../../shared/constants";
+import { EVENT, STATUS } from "../../shared/constants";
 import { useAuth } from "../../services/UseAuth";
 import imageCompression from "browser-image-compression";
 import AssetLoading from "../../shared/components/Loading/AssetLoading";
 import { current } from "@reduxjs/toolkit";
+import Swal from "sweetalert2";
 
 export const Overview = () => {
   const {
@@ -20,6 +21,7 @@ export const Overview = () => {
     locationService,
     assetCategoryService,
     eventLogService,
+    transferRequestService
   } = useDeps();
   const [datas, setDatas] = useState([]);
   const [order, setOrder] = useState("ASC");
@@ -28,6 +30,7 @@ export const Overview = () => {
   const [isLoading, setLoading] = useState(false);
   const [isLoading2, setLoading2] = useState(false)
   const [fileName, setFileName] = useState("No file chosen");
+  const [moreActionShow, setMoreActionShow] = useState([]);
 
   const handleViewShow = () => {
     setViewShow(true);
@@ -364,6 +367,7 @@ export const Overview = () => {
       }
       onCountAsset();
       setDatas(response.data);
+      setMoreActionShow(Array(response.data.length).fill(false))
     } catch (e) {
       console.log(e);
     } finally {
@@ -436,6 +440,7 @@ export const Overview = () => {
       }
       onCountAsset();
       setDatas(response.data);
+      setMoreActionShow(Array(response.data.length).fill(false))
     } catch (e) {
       console.log(e);
     } finally {
@@ -473,6 +478,7 @@ export const Overview = () => {
       setDatas(response.data);
       setPageCount(Math.ceil(response.count / 10));
       setTotalAsset(response.count)
+      setMoreActionShow(Array(response.data.length).fill(false))
     } catch (e) {
       console.log(e);
     } finally {
@@ -694,6 +700,118 @@ export const Overview = () => {
   const [searchCategory, setSearchCategory] = useState("");
   const [searchAssetNumber, setSearchAssetNumber] = useState("");
 
+   // Request Transfer Asset
+
+   const [modalTransferShow, setModalTransferShow] = useState(false);
+   const [modalTransHistoryShow, setModalTransHistoryShow] = useState(false);
+   const [historyAsset, setHistoryAsset] = useState([]);
+   const [assetTransfer, setAssetTransfer] = useState({});
+   const [originalLocation, setOriginalLocation] = useState("");
+   const [targetUser, setTargetUser] = useState("");
+   const [targetUserPost, setTargetUserPost] = useState("");
+   const [disableSubmit, setDisableSubmit] = useState(true);
+
+   const handleToggleTransfer = async (name) => {
+     setLoading(true);
+     try {
+        let existedRequest = await transferRequestService.getByAssetNumber(name);
+        let pendingRequest = existedRequest.data.filter(item => item.status === STATUS.CREATE_PO);
+       if(pendingRequest.length > 0){
+         setAssetTransfer({});
+         return;
+       }
+ 
+       const response = await overviewService.getAssetByAssetName(name);
+       if (response.data["Nomor Asset"]) {
+         setAssetTransfer(response.data)
+         setOriginalLocation(response.data["Kode Wilayah"])
+       }
+     } catch (e) {
+       console.log(e);
+     } finally {
+       setLoading(false);
+       setModalTransferShow(true)
+     }
+   };
+ 
+   const handleChangeTransfer = (e) => {
+     if (e.target.value === "") {
+       setDisableSubmit(true);
+       return;
+     }
+     const newData = { ...assetTransfer};
+     newData[e.target.name] = e.target.value;
+     setDisableSubmit(String(newData["Kode Wilayah"]) === String(originalLocation) || (targetUser === "" && targetUserPost === ""));
+     setAssetTransfer(newData);
+   };
+ 
+   const onSubmitTrasfer = async () => {
+     const transferReqForm = {
+       "Nomor Asset": assetTransfer["Nomor Asset"],
+       "requester":user.name,
+       "Kode Wilayah": parseInt(assetTransfer["Kode Wilayah"]),
+       "ToUser":targetUser,
+       "Jabatan":targetUserPost,
+       "is_approved_level1":false,
+       "is_approved_level2":false,
+   }
+ 
+     try {
+       setModalTransferShow(false)
+       setLoading(true)
+       const response = await transferRequestService.createTransferRequest(transferReqForm);
+       if (response.status === "SUCCESS") {
+        setLoading(false);
+        Swal.fire("Success!", "This transfer request has been created.", "success");
+       }
+     } catch (e) {
+       console.log(e);
+       Swal.fire("Failed!", "There is something went wrong", "failed");
+     } finally {
+       setLoading(false);
+       clearFormTransfer();
+     }
+   }
+
+   const handleSubmitTransfer = async () => {
+    setModalTransferShow(false)
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Do you want to transfer this asset",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        onSubmitTrasfer();
+      } else {
+        clearFormTransfer();
+      }
+    });
+   }
+
+   const handleGetHistoryTransfer = async (assetNumber) => {
+     try {
+       const response = await transferRequestService.getHistoryTransferAsset(assetNumber);
+       console.log(response);
+       if (response.data.length > 0) {
+        setHistoryAsset(response.data)
+       }
+       setModalTransHistoryShow(true)
+    } catch (e) {
+      console.log(e);
+    }
+   }
+
+   const clearFormTransfer = () => {
+    setAssetTransfer({});
+    setOriginalLocation("");
+    setTargetUser("");
+    setTargetUserPost("");
+    setDisableSubmit(true);
+   }
 
   return (
     <>
@@ -870,22 +988,7 @@ export const Overview = () => {
                     <th
                       style={{ minWidth: "200px" }}
                     >
-                      Purchase Date
-                    </th>
-                    <th
-                      style={{ minWidth: "200px" }}
-                    >
-                      Year
-                     </th>
-                    <th
-                      style={{ minWidth: "200px" }}
-                    >
-                      PO Number
-                    </th>
-                    <th
-                      style={{ minWidth: "200px" }}
-                    >
-                      Vendor Name
+                      Asset Number
                     </th>
                     <th
                       style={{ minWidth: "300px" }}
@@ -893,32 +996,7 @@ export const Overview = () => {
                       Item Name
                     </th>
                     <th
-                      style={{ minWidth: "230px" }}
-                    >
-                      Acquisition Cost{" "}
-                    </th>
-                    <th
-                      style={{ minWidth: "200px" }}
-                    >
-                      PPN
-                    </th>
-                    <th
-                      style={{ minWidth: "200px" }}
-                    >
-                      Additional Cost{" "}
-                    </th>
-                    <th
-                      style={{ minWidth: "270px" }}
-                    >
-                      Total Acquisition Cost{" "}
-                    </th>
-                    <th
-                      style={{ minWidth: "220px" }}
-                    >
-                      Subproduct Name{" "}
-                    </th>
-                    <th
-                      style={{ minWidth: "200px" }}
+                      style={{ minWidth: "150px" }}
                     >
                       Product Name
                     </th>
@@ -928,99 +1006,14 @@ export const Overview = () => {
                       Asset Category{" "}
                     </th>
                     <th
-                      style={{ minWidth: "200px" }}
-                    >
-                      BAST
-                    </th>
-                    <th
-                      style={{ minWidth: "200px" }}
-                    >
-                      Condition
-                    </th>
-                    <th
-                      style={{ minWidth: "200px" }}
-                    >
-                      Insurance
-                    </th>
-                    <th
-                      style={{ minWidth: "200px" }}
+                      style={{ minWidth: "150px" }}
                     >
                       Location
                     </th>
                     <th
                       style={{ minWidth: "200px" }}
                     >
-                      User
-                    </th>
-                    <th
-                      style={{ minWidth: "200px" }}
-                    >
-                      Position
-                    </th>
-                    <th
-                      style={{ minWidth: "200px" }}
-                    >
-                      Initial
-                    </th>
-                    <th
-                      style={{ minWidth: "200px" }}
-                    >
-                      Location ID
-                    </th>
-                    <th
-                      style={{ minWidth: "200px" }}
-                    >
-                      Product Code
-                    </th>
-                    <th
-                      style={{ minWidth: "200px" }}
-                    >
-                      Purchase Year{" "}
-                    </th>
-                    <th
-                      style={{ minWidth: "220px" }}
-                    >
-                      Item Order Code{" "}
-                    </th>
-                    <th
-                      style={{ minWidth: "200px" }}
-                    >
-                      Asset Number
-                    </th>
-                    <th
-                      style={{ minWidth: "200px" }}
-                    >
-                      Useful Life
-                    </th>
-                    <th
-                      style={{ minWidth: "250px" }}
-                    >
-                      Monthly Depreciation{" "}
-                    </th>
-                    <th
-                      style={{ minWidth: "240px" }}
-                    >
-                      Depreciation Month{" "}
-                    </th>
-                    <th
-                      style={{ minWidth: "230px" }}
-                    >
-                      Total Depreciation{" "}
-                    </th>
-                    <th
-                      style={{ minWidth: "240px" }}
-                    >
                       Current Asset Value{" "}
-                    </th>
-                    <th
-                      style={{ minWidth: "240px" }}
-                    >
-                      Tracking Number{" "}
-                    </th>
-                    <th
-                      style={{ minWidth: "240px" }}
-                    >
-                      Type
                     </th>
                   </tr>
                 </thead>
@@ -1033,90 +1026,123 @@ export const Overview = () => {
                     datas.map((data, index) => (
                       <tr key={data["Nomor Asset"]}>
                         <th>{index + 1}</th>
-                        <th style={{ fontSize: "30px" }}>
-                          <a
-                            onClick={() => {
-                              handleViewShow(setRowData(data));
-                            }}
-                            className="view"
-                            data-toggle="modal"
-                            style={{ cursor: "pointer", width: "50%" }}
-                          >
-                            <i
-                              className="material-icons"
-                              data-toggle="tooltip"
-                              title="View"
-                              style={{ fontSize: "25px", color: "darkblue" }}
-                            >
-                              &#xe8f4;
-                            </i>
-                          </a>
-                          <a
-                            target="_blank"
-                            href={`http://api.qrserver.com/v1/create-qr-code/?data= Asset Number: ${data["Nomor Asset"]}%0A Purchase Date: ${data["Tanggal Output"]}%0A Asset Name: ${data["Nama Barang"]}%0A Asset Category: ${data["Kategori Jenis Produk"]}%0A Product Name: ${data["Jenis Produk"]}%0A Location: ${data["Lokasi"]}%0A PO Number: ${data["No. PO / Dokumenen Pendukung"]}%0A Lifetime: ${data["Masa Manfaat (Bulan)"]}%0A Current Value: ${data["Nilai Asset saat ini"]}%0A Vendor: ${data["Vendor"]}&size=${size}x${size}&bgcolor=${bgColor}`}
-                            download="QRCode"
-                          >
-                            <i
-                              className="material-icons"
-                              data-toggle="tooltip"
-                              title="View"
-                              style={{ fontSize: "25px", color: "black" }}
-                            >
-                              &#xe00a;
-                            </i>
-                          </a>
-                          {(user.level_approval == 'Regular' || user.level_approval == 'GA' || user.level_approval== 'IT' || user.role == 'Admin') &&
-                          <a
-                          onClick={() => {
-                            handleEditShow(data["Nomor Asset"]);
-                          }}
-                          className="edit"
-                          data-toggle="modal"
-                          style={{ cursor: "pointer" }}
-                        >
-                          <i
-                            className="material-icons"
-                            data-toggle="tooltip"
-                            title="Edit"
-                            style={{ fontSize: "25px",color: "#FFC107"}}
-                          >
-                            &#xe3c9;
-                          </i>
-                        </a>
-                        }
-                          
+                        <th style={{ fontSize: "14px", fontWeight : "normal" }}>
+                          <Dropdown as={ButtonGroup}>
+                            <Button variant="light">
+                            <a
+                              onClick={() => {
+                                handleViewShow(setRowData(data));
+                              }}
+                              className="view"
+                              data-toggle="modal"
+                              style={{ cursor: "pointer", width: "50%", textDecoration : "none", display : 'flex', marginTop : "3px" }}
+                              >
+                              <i
+                                className="material-icons"
+                                data-toggle="tooltip"
+                                title="View"
+                                style={{ fontSize: "24px", color: "darkblue"  }}
+                              >
+                                &#xe8f4;
+                              </i>
+                              <p>Detail</p> 
+                            </a>
+                            </Button>
+                            <Dropdown.Toggle split variant="light" id="dropdown-split-basic" />
+                            <Dropdown.Menu style={{minHeight : "200px"}}>
+                              <Dropdown.Item >
+                              <a
+                                target="_blank"
+                                href={`http://api.qrserver.com/v1/create-qr-code/?data= Asset Number: ${data["Nomor Asset"]}%0A Purchase Date: ${data["Tanggal Output"]}%0A Asset Name: ${data["Nama Barang"]}%0A Asset Category: ${data["Kategori Jenis Produk"]}%0A Product Name: ${data["Jenis Produk"]}%0A Location: ${data["Lokasi"]}%0A PO Number: ${data["No. PO / Dokumenen Pendukung"]}%0A Lifetime: ${data["Masa Manfaat (Bulan)"]}%0A Value: ${data["Nilai Asset saat ini"]}%0A Vendor: ${data["Vendor"]}&size=${size}x${size}&bgcolor=${bgColor}`}
+                                download="QRCode"
+                                style={{cursor : "pointer",textDecoration : "none", display : 'flex', marginTop : "3px"}}
+                                onClick={() => {
+                                  setMoreActionShow(Array(moreActionShow.length).fill(false))
+                                }}
+                              >
+                                <i
+                                  className="material-icons"
+                                  data-toggle="tooltip"
+                                  title="View"
+                                  style={{ fontSize: "25px", color: "black" }}
+                                >
+                                  &#xe00a;
+                                </i>
+                                <p style={{color : "black"}}>QR Code</p>
+                              </a>
+                              </Dropdown.Item>
+                              { (user.level_approval == 'Regular' || user.level_approval == 'GA' || user.level_approval== 'IT' || user.role == 'Admin') &&
+                                <Dropdown.Item >
+                              <a
+                                  onClick={() => {
+                                    handleEditShow(data["Nomor Asset"]);
+                                  }}
+                                  className="edit"
+                                  data-toggle="modal"
+                                  style={{cursor : "pointer",textDecoration : "none", display : 'flex', marginTop : "3px"}}
+                                >
+                                  <i
+                                    className="material-icons"
+                                    data-toggle="tooltip"
+                                    title="Edit"
+                                    style={{ fontSize: "25px" }}
+                                  >
+                                    &#xe3c9;
+                                  </i>
+                                  <p style={{color : "black"}}>Edit</p>
+                                </a>
+                              </Dropdown.Item>}
+                              { (user.level_approval == 'Regular') &&
+                                <Dropdown.Item >
+                                <a
+                                  onClick={() => {
+                                    handleToggleTransfer(data["Nomor Asset"]);
+                                    setMoreActionShow(Array(moreActionShow.length).fill(false));
+                                  }}
+                                  className="edit"
+                                  data-toggle="modal"
+                                  style={{cursor : "pointer",textDecoration : "none", display : 'flex', marginTop : "3px", color : "darkred"}}
+                                >
+                                  <i
+                                    className="material-icons"
+                                    data-toggle="tooltip"
+                                    title="Edit"
+                                    style={{ fontSize: "25px" }}
+                                  >
+                                    &#xeb61;
+                                  </i>
+                                  <p style={{color : "black"}}>Transfer Request</p>
+                                </a>
+                                </Dropdown.Item>}
+                              <Dropdown.Item >
+                                <a
+                                  onClick={() => {
+                                    handleGetHistoryTransfer(data["Nomor Asset"]);
+                                  }}
+                                  className="edit"
+                                  data-toggle="modal"
+                                  style={{cursor : "pointer",textDecoration : "none", display : 'flex', marginTop : "3px", color : "gray"}}
+                                >
+                                  <i
+                                    className="material-icons"
+                                    data-toggle="tooltip"
+                                    title="Edit"
+                                    style={{ fontSize: "25px" }}
+                                  >
+                                    &#xe889;
+                                  </i>
+                                  <p style={{color : "black"}}>History</p>
+                                </a>
+                              </Dropdown.Item>
+                            </Dropdown.Menu>
+                          </Dropdown>
                         </th>
-                        <td>{data["Tanggal Output"]}</td>
-                        <td>{data["Tahun"]}</td>
-                        <td>{data["No. PO / Dokumenen Pendukung"]}</td>
-                        <td>{data["Vendor"]}</td>
+                        <td>{data["Nomor Asset"]}</td>
                         <td>{data["Nama Barang"]}</td>
-                        <td>{data["Harga Perolehan"]}</td>
-                        <td>{data["PPN"]}</td>
-                        <td>{data["Biaya Lain-Lain"]}</td>
-                        <td>{data["Total Harga Perolehan"]}</td>
-                        <td>{data["Jenis Produk"]}</td>
                         <td>{data["Kategori Jenis Produk"]}</td>
                         <td>{data["Kategori Aset Tetap"]}</td>
-                        <td>{data["BAST Output"]}</td>
-                        <td>{data["Kondisi"]}</td>
-                        <td>{data["Insurance"]}</td>
                         <td>{data["Lokasi"]}</td>
-                        <td>{data["User"]}</td>
-                        <td>{data["Jabatan"]}</td>
-                        <td>{data["Initisal"]}</td>
-                        <td>{data["Kode Wilayah"]}</td>
-                        <td>{data["Kode Asset"]}</td>
-                        <td>{data["Tahun Pembelian"]}</td>
-                        <td>{data["Kode Urut barang"]}</td>
-                        <td>{data["Nomor Asset"]}</td>
-                        <td>{data["Masa Manfaat (Bulan)"]}</td>
-                        <td>{data["Penyusutan Perbulan"]}</td>
-                        <td>{data["Total Bulan Penyusutan"]}</td>
-                        <td>{data["Total Penyusutan"]}</td>
                         <td>{data["Nilai Asset saat ini"]}</td>
-                        <td>{data["Nomor Resi"]}</td>
-                        <td>{data.Tipe}</td>
                       </tr>
                     ))
                   )}
@@ -1587,6 +1613,207 @@ export const Overview = () => {
           </div>
         </div>
       )}
+
+      { modalTransferShow &&
+        <div className="model-box-view">
+          <Modal
+            dialogClassName="view-modal"
+            show={modalTransferShow}
+            onHide={() => {
+              setModalTransferShow(false)
+            }}
+            backdrop="static"
+            keyboard={false}
+            size='lg'
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Transfer Asset Request</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <div>
+                { assetTransfer["Nomor Asset"] ?
+                  <div className="form-group">
+                    <div className="image-view">
+                      <img src={assetTransfer["Asset Image"]}></img>
+                    </div>
+                    <div className="row">
+                      <div className="col-md-6 mb-3 mt-3">
+                        <label>No Asset</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          value={assetTransfer["Nomor Asset"]}
+                          readOnly
+                        />
+                      </div>
+                      <div className="col-md-6 mb-3 mt-3">
+                        <label>Asset Name</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          value={assetTransfer["Nama Barang"]}
+                          readOnly
+                        />
+                      </div>
+                      <div className="col-md-6 mb-3">
+                        <label>Asset Category</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          value={assetTransfer["Kategori Aset Tetap"]}
+                          readOnly
+                        />
+                      </div>
+                      <div className="col-md-6 mb-3">
+                        <label>Original Location</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          value={assetTransfer["Lokasi"]}
+                          readOnly
+                        />
+                      </div>
+                      <div className="col-md-6 mb-3">
+                        <label>Target User<span style={{color : "red"}}>*</span> </label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          value={targetUser}
+                          onChange={e => {setTargetUser(e.target.value)}}
+                        />
+                      </div>
+                      <div className="col-md-6 mb-3">
+                        <label>Target User Position<span style={{color : "red"}}>*</span></label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          value={targetUserPost}
+                          onChange={e => {setTargetUserPost(e.target.value)}}
+                        />
+                      </div>
+                      <div className="col-md-12 mb-3">
+                        <label>Target Location<span style={{color : "red"}}>*</span></label>
+                        <select
+                          required
+                          name="Kode Wilayah"
+                          value={assetTransfer["Kode Wilayah"]}
+                          onChange={handleChangeTransfer}
+                          className="form-select"
+                        >
+                          <option value="">Select Location</option>
+                          {locations.map((item, index) => (
+                            <option
+                              key={item["kode wilayah"]}
+                              value={item["kode wilayah"]}
+                            >
+                              {item.location}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+                  </div> :
+                  <div style={{display : "flex", flexDirection : "column",justifyContent : "center", alignItems : "center"}}>
+                    <i
+                        className="material-icons"
+                        data-toggle="tooltip"
+                        title="View"
+                        style={{ fontSize: "60px", color: "gray"  }}
+                      >
+                        &#xea5b;
+                      </i>
+                      This asset is in the process of being transferred
+                  </div>
+                }
+              </div>
+            </Modal.Body>
+            { assetTransfer["Nomor Asset"] &&
+              <Modal.Footer>
+                <div className="button-asset">
+                  <button
+                    className="btn btn-danger button-cancel"
+                    onClick={() => {
+                      setModalTransferShow(false)
+                    }}
+                    style={{marginRight : "8px"}}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    className="btn btn-primary button-submit"
+                    onClick={handleSubmitTransfer}
+                    disabled={disableSubmit}
+                  >
+                    Submit
+                  </button>
+                </div>
+              </Modal.Footer>
+            }
+          </Modal>
+        </div>
+      }
+
+      {modalTransHistoryShow && 
+        <div className="model-box-view">
+        <Modal
+          dialogClassName="view-modal"
+          show={modalTransHistoryShow}
+          onHide={() => {
+            setHistoryAsset([]);
+            setModalTransHistoryShow(false);
+          }}
+          backdrop="static"
+          keyboard={false}
+          size='lg'
+        >
+          <Modal.Header closeButton>
+            <Modal.Title className="fs-5">{`History Transfer ${historyAsset.length > 0 ? historyAsset[0].AssetNumber : ""}`}</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div>
+              { historyAsset.length > 0 ?
+                <div>
+                  {historyAsset.map(data => {
+                    return(
+                        <div className="d-flex flex-row m-2 ps-2">
+                          <div className="me-3">
+                            <i
+                              className="material-icons"
+                              data-toggle="tooltip"
+                              title="Edit"
+                              style={{ fontSize: "25px" }}
+                            >
+                              &#xeaf5;
+                            </i>
+                          </div>
+                          <div className="d-flex flex-row">
+                            <div className="fw-semibold">{new Date(data.ApprovalDate).toLocaleDateString('in-ID')}</div>
+                            &nbsp;{`- from ${data.InitialLocation} to ${data.CurrentLocation} [Requester : ${data.Requester}]`}
+                          </div>
+                        </div>
+                    )
+                  })}
+                </div> :
+                <div>
+                  <div style={{display : "flex", flexDirection : "column",justifyContent : "center", alignItems : "center"}}>
+                    <i
+                        className="material-icons"
+                        data-toggle="tooltip"
+                        title="View"
+                        style={{ fontSize: "60px", color: "gray"  }}
+                      >
+                        &#xea5b;
+                      </i>
+                      This asset does not have transfer history
+                  </div>
+                </div>
+              }
+            </div>
+          </Modal.Body>
+        </Modal>
+      </div>
+      }
+
       {isLoading && <Loading />}
       {isLoading2 && <AssetLoading/>}
     </>
