@@ -5,6 +5,11 @@ import * as MdIcons from "react-icons/md";
 import { useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { useDeps } from "../../../shared/context/DependencyContext";
+import { initializeApp } from "firebase/app";
+import { getFirestore, setDoc, doc } from "firebase/firestore";
+import { firebaseConfig } from "../../../shared/firebaseClient";
+import { Failed } from "../../../shared/components/Notification/Failed";
+import { NOTIF, PUSHNOTIF, STATUS } from "../../../shared/constants";
 
 export const FormApprovalRent = () => {
   const navigate = useNavigate();
@@ -14,7 +19,7 @@ export const FormApprovalRent = () => {
   const [fileBukuTabungan, setFileBukuTabungan] = useState([])
   const [fileSertifikat, setFileSertifikat] = useState([])
   const [fileFotoLokasi, setFileFotoLokasi] = useState([])
-  const {rentService} = useDeps();
+  const {rentService, notificationService} = useDeps();
 
   const onClickBack = () => {
     navigate("/approval-data/rent", { replace: true });
@@ -57,6 +62,73 @@ export const FormApprovalRent = () => {
     viewImg();
   }, []);
 
+  const [notifData, setNotifData] = useState({});
+  const createNotification = async (notifPO) => {
+    try {
+      const response = await notificationService.createNotif(notifPO);
+      setNotifData(response.data);
+    } catch (e) {
+      console.log(e);
+    } 
+  };
+
+  // Approval
+  const onApprovalRent = async(e, id) => {
+    e.preventDefault(e);
+    let myApp = initializeApp(firebaseConfig);
+    const firestore = getFirestore(myApp);
+    if (location.state.detail.approved_level1 === false) {
+      try {
+        const resp = await rentService.approvedByLevel1(id)
+        let notifObj = {
+          to: location.state.detail.requester,
+          title: NOTIF.APPROVED.TITLE,
+          body: NOTIF.APPROVED.BODY,
+        };
+
+        createNotification(notifObj);
+        Swal.fire("Success!", "This request has been approved.", "success");
+        navigate("/approval-data/rent", { replace: true });
+      } catch (e) {
+        console.log(e.response);
+        Failed("Failed to approved");
+      }
+    } else if (location.state.detail.approved_level1 === true && location.state.detail.approved_level2 === false) {
+      try {
+        const resp = await rentService.approvedByLevel2(id)
+        let notifObj = {
+          to: location.state.detail.requester,
+          title: NOTIF.APPROVED.TITLE,
+          body: NOTIF.APPROVED.BODY,
+        };
+
+        createNotification(notifObj);
+        Swal.fire("Success!", "This request has been approved.", "success");
+        navigate("/approval-data/rent", { replace: true });
+      } catch (e) {
+        console.log(e.response);
+        Failed("Failed to approved");
+      }
+    } else if (location.state.detail.approved_level1 === true && location.state.detail.approved_level2 === true && location.state.detail.approved_level2 === false) {
+      try {
+        const resp = await rentService.approvedByLevel3(id)
+        let notifObj = {
+          to: location.state.detail.requester,
+          title: NOTIF.APPROVED.TITLE,
+          body: NOTIF.APPROVED.BODY,
+        };
+
+        createNotification(notifObj);
+        Swal.fire("Success!", "This request has been approved.", "success");
+        navigate("/approval-data/rent", { replace: true });
+      } catch (e) {
+        console.log(e.response);
+        Failed("Failed to approved");
+      }
+    }
+  }
+
+  // Reject
   const onRejectRent = async (e, id) => {
     e.preventDefault(e)
     Swal.fire({
@@ -68,8 +140,27 @@ export const FormApprovalRent = () => {
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, decline it!",
     }).then((result) => {
-      
-    })
+      if (result.isConfirmed) {
+        const reject = async () => {
+          try {
+            await rentService.deleteRent(id);
+
+            let notifObj = {
+              to: location.state.detail.requester,
+              title: NOTIF.REJECTED.TITLE,
+              body: NOTIF.REJECTED.BODY,
+            };
+            createNotification(notifObj);
+            Swal.fire("Reject!", "This request has been rejected.", "success");
+            navigate("/approval-data/rent", { replace: true });
+          } catch (e) {
+            console.log(e.response);
+            Failed("Failed to reject");;
+        } 
+      }
+      reject(); 
+    }
+    });
   }
 
   return (
@@ -78,7 +169,7 @@ export const FormApprovalRent = () => {
         <div className="po-mtnc-form-container">
           <div className="po-mtnc-form-card">
             <form
-            // onSubmit={}
+            onSubmit={(e)=>{onApprovalRent(e,location.state.detail.po_id)}}
             >
               <h4 className="mb-5 text-danger">
                 <MdIcons.MdOutlineArrowBackIosNew
@@ -543,19 +634,27 @@ export const FormApprovalRent = () => {
                     </div>
                   </div>
                   <br/>
-                  <div className="col-md-12">
-                    <button
-                      className="btn btn-primary float-end"
-                      style={{ marginLeft: "20px", marginRight: "20px", marginTop: "20px" }}
-                    >
-                      Approved
-                    </button>
-                    <button type="reset" className="btn btn-warning float-end"
-                      style={{ marginTop: "20px" }}
-                    >
-                      Reject
-                    </button>
-                  </div>
+                  {((location.state.detail.approved_level1 === false && location.state.detail.approved_level2 === false && location.state.detail.approved_level3 === false && location.state.userApprov === 'GM') 
+                    || (location.state.detail.approved_level1 === true && location.state.detail.approved_level2 === false && location.state.detail.approved_level3 === false && location.state.userApprov === 'VP_TRAD') 
+                    || (location.state.detail.approved_level1 === true && location.state.detail.approved_level2 === true && location.state.detail.approved_level3 === false && location.state.userApprov === 'GA')) ?
+                    (
+                      <div className="col-md-12">
+                        <button
+                          className="btn btn-primary float-end"
+                          style={{ marginLeft: "20px", marginRight: "20px", marginTop: "20px" }}
+                          
+                        >
+                          Approved
+                        </button>
+                        <button type="reset" className="btn btn-warning float-end"
+                          style={{ marginTop: "20px" }}
+                          onClick={(e) => onRejectRent(e, location.state.detail.po_id)}
+                        >
+                          Reject
+                        </button>
+                      </div>
+                    ) : (<div></div>)
+                  }
                 </div>
               </div>
             </form>

@@ -140,6 +140,6 @@ export const rentService = ({ doGet, doPost, doPut, doDelete }) => {
     approvedByLevel3,
     getRentListByApproval,
     getRentListHistory,
-    getImgUrl
+    getImgUrl,
   };
 };

@@ -24,16 +24,8 @@ export const UseApprovalRent = () => {
           response.data[i].CreatedAt = moment(response.data[i].CreatedAt).format(
             "LL"
             );
-            if (
-              response.data[i].is_approved_level1 == true &&
-              response.data[i].is_approved_level2 == true &&
-              response.data[i].is_approved_level3 == true
-              ) {
-                setAppData1((appData1) => [...appData1, response.data[i]]);
-              } else
-              {
-                setAppData((appData) => [...appData, response.data[i]]);
-              }
+              setAppData((appData) => [...appData, response.data[i]]);
+            
             }
             console.log('inirent',appData)
           }
@@ -43,6 +35,30 @@ export const UseApprovalRent = () => {
       setIsLoading(false);
     }
   };
+
+  const onGetListRentHistory = async(name) => {
+    setIsLoading(true)
+    try {
+      const response = await rentService.getRentListHistory(name, page);
+      console.log('ini response',response.data);
+      if (page===1){
+
+        
+        for (let i in response.data) {
+          response.data[i].CreatedAt = moment(response.data[i].CreatedAt).format(
+            "LL"
+            );
+              setAppData1((appData1) => [...appData1, response.data[i]]);
+            
+            }
+            console.log('INI app1', appData1);
+          }
+          } catch (e) {
+      console.log(e.response);
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   // Get User
   const { getCookie } = useAuth();
@@ -77,6 +93,7 @@ export const UseApprovalRent = () => {
 
   useEffect(() => {
     onGetPORentListByApproval(user.name);
+    onGetListRentHistory(user.name)
   }, [user.name]);
 
   const navigate = useNavigate();
@@ -85,7 +102,7 @@ export const UseApprovalRent = () => {
   const handleClickApproval = async (id) => {
     try {
       const response = await rentService.getRentById(id);
-      console.log("ini rent detail ya ges", response.data);
+      // console.log("ini rent detail ya ges", response.data);
       setrentDetail(response.data);
     } catch (error) {
       alert("Oops")
@@ -95,13 +112,14 @@ export const UseApprovalRent = () => {
   useEffect(() => {
     if (rentDetail.length != 0) {
       navigate("/approval-data/rent/form", {
-        state: { detail: rentDetail },
+        state: { detail: rentDetail, userApprov : user.level_approval },
       });
     }
   }, [rentDetail]);
 
   return {
     onGetPORentListByApproval,
+    onGetListRentHistory,
     user,
     isLoading,
     appData,

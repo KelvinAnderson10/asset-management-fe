@@ -5,9 +5,7 @@ import { useDeps } from "../../../shared/context/DependencyContext";
 import { UseApprovalRent } from "../UseApprovalRent";
 
 export const ListApprovedRent = () => {
-  const { appData1, isLoading, handleClickApproval } = UseApprovalRent();
-  const { rentService } = useDeps();
-
+  const { appData1, user, isLoading, handleClickApproval } = UseApprovalRent();
   const [currentPage, setcurrentPage] = useState(1);
   const [itemsPerPage, setitemsPerPage] = useState(10);
   const [pageNumberLimit, setpageNumberLimit] = useState(5);

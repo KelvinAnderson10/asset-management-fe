@@ -34,7 +34,7 @@ export const AppRent = () => {
                 className={classNavbarForm}
                 onClick={() => handleClickForm()}
               >
-                <a>List Purchase Request</a>
+                <a>List Rent Request</a>
               </div>
               <div
                 className={classNavbarList}
