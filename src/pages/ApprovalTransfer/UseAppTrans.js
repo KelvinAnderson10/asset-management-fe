@@ -47,7 +47,7 @@ export const UseAppTrans = () => {
     const [detailAsset, setDetailAsset] = useState({});
     const [detailRequest, setDetailRequest] = useState({});
     const [showModalReq, setShowModalReq] = useState(false);
-    const {transferRequestService, assetItemService, notificationService} = useDeps();
+    const {transferRequestService, assetItemService, notificationService, userService} = useDeps();
     const navigate = useNavigate()
 
     const getListRequest = async () => {

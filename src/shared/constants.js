@@ -76,4 +76,6 @@ export const PUSHNOTIF = {
 
 export const PATH = {
   APPROVAL_TRANSFER : "/approval-data/transfer",
+  APPROVAL_INVENTORY : "/approval-data/inventory",
+  APPROVAL_MAINTENANCE : "/approval-data/maintenance",
 };
