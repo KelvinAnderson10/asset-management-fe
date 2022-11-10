@@ -47,7 +47,7 @@ export const UseAppTrans = () => {
     const [detailAsset, setDetailAsset] = useState({});
     const [detailRequest, setDetailRequest] = useState({});
     const [showModalReq, setShowModalReq] = useState(false);
-    const {transferRequestService, assetItemService} = useDeps();
+    const {transferRequestService, assetItemService, notificationService} = useDeps();
     const navigate = useNavigate()
 
     const getListRequest = async () => {
@@ -93,6 +93,12 @@ export const UseAppTrans = () => {
 
             if (response.status === "SUCCESS") {
                 setLoading(false);
+
+                // SEND NOTIF TO GA IF APRROVED BY GM OR SPV
+                if(user.level_approval !== 'GA') {
+
+                }
+
                 Swal.fire("Success!", "This transfer request has been approved.", "success").then((result) => {
                     if (result.isConfirmed) {
                         navigate(0);
@@ -131,6 +137,9 @@ export const UseAppTrans = () => {
             const response = await transferRequestService.rejectApprovalTo(id);
             if (response.status === "SUCCESS") {
                 setLoading(false);
+
+                // NOTIF TO REQUESTER
+
                 Swal.fire("Success!", "This transfer request has been rejected.", "success").then((result) => {
                     if (result.isConfirmed) {
                         navigate(0);
@@ -194,6 +203,22 @@ export const UseAppTrans = () => {
         setDetailAsset({});
         setDetailRequest({});
     }
+
+    const createNotification = async (newNotif) => {
+        try {
+          const response = await notificationService.createNotif(newNotif);
+        } catch (e) {
+          console.log(e);
+        }
+      };
+    
+      const createPushNotification = async (newNotif) => {
+        try {
+          const response = await notificationService.createPushNotif(newNotif);
+        } catch (e) {
+          console.log(e);
+        }
+      };
 
     useEffect(() => {
         getListRequest();

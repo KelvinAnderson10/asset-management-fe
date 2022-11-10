@@ -104,6 +104,8 @@ export const FormApprovalMaintence = () => {
                 to: location.state.header.requester,
                 title: NOTIF.REJECTED.TITLE,
                 body: NOTIF.REJECTED.BODY,
+                type : NOTIF.TYPE.PURCHASE_MAINTENANCE,
+                resource_id : location.state.header.po_id,
               };
               createNotification(notifObj);
               Swal.fire("Reject!", "This request has been rejected.", "success");
@@ -218,6 +220,8 @@ export const FormApprovalMaintence = () => {
             to: location.state.header.requester,
             title: NOTIF.APPROVED.TITLE,
             body: NOTIF.APPROVED.BODY,
+            type : NOTIF.TYPE.PURCHASE_MAINTENANCE,
+            resource_id : location.state.header.po_id,
           };
 
           createNotification(notifObj);
@@ -248,13 +252,14 @@ export const FormApprovalMaintence = () => {
             user_token: userMobile.data.token,
             title: PUSHNOTIF.APPROVED.TITLE + userMobile.data.name,
             body: PUSHNOTIF.APPROVED.BODY + user.name,
-            
           });
 
           let notifObj = {
             to: location.state.header.requester,
             title: NOTIF.APPROVED.TITLE,
             body: NOTIF.APPROVED.BODY,
+            type : NOTIF.TYPE.PURCHASE_MAINTENANCE,
+            resource_id : location.state.header.po_id,
           };
           createNotification(notifObj);
 
