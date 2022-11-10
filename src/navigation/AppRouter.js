@@ -26,6 +26,7 @@ import { TableAssetDeprecated } from "../pages/Overview/components/TableAssetDep
 import { PORent } from "../pages/PurchaseOrderRent/PORent";
 import { FormApprovalRent } from "../pages/ApprovalRent/components/FormApprovalRent"
 import { AppRent } from "../pages/ApprovalRent/AppRent";
+import { GeneratePdf } from "../pages/ApprovalRent/components/GeneratePdf";
 
 export const AppRouter = () => {
   return (
@@ -50,6 +51,7 @@ export const AppRouter = () => {
         <Route path="/approval-data/maintenance/form" element={<FormApprovalMaintence/>} />
         <Route path="/approval-data/rent" element={<AppRent/>}/>
         <Route path="/approval-data/rent/form" element={<FormApprovalRent/>}/>
+        <Route path="/approval-data/rent/pdf" element={<GeneratePdf/>}/>
         
         <Route path="/settings" element={<Settings/>} />
         <Route path="*" element={<PageNotFound />} />

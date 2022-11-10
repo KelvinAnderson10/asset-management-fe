@@ -109,7 +109,7 @@ export const FormApprovalRent = () => {
         console.log(e.response);
         Failed("Failed to approved");
       }
-    } else if (location.state.detail.approved_level1 === true && location.state.detail.approved_level2 === true && location.state.detail.approved_level2 === false) {
+    } else if (location.state.detail.approved_level1 === true && location.state.detail.approved_level2 === true && location.state.detail.approved_level3 === false) {
       try {
         const resp = await rentService.approvedByLevel3(id)
         let notifObj = {
@@ -161,6 +161,10 @@ export const FormApprovalRent = () => {
       reject(); 
     }
     });
+  }
+
+  const moveToPDF = () => {
+    navigate("/approval-data/rent/pdf", { replace: true })
   }
 
   return (
@@ -655,6 +659,9 @@ export const FormApprovalRent = () => {
                       </div>
                     ) : (<div></div>)
                   }
+                  <button onClick={moveToPDF}>
+                    View PDF
+                  </button>
                 </div>
               </div>
             </form>

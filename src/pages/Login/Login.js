@@ -9,8 +9,7 @@ import AuthCode from 'react-auth-code-input';
 import { Card } from "react-bootstrap";
 import { useAuth } from "../../services/UseAuth";
 import Loading from "../../shared/components/Loading/Loading";
-import { responsiveProperty } from "@mui/material/styles/cssUtils";
-import { useRef } from "react";
+
 
 export const Login = () => {
   const [email, setEmail] = useState("");
