@@ -1718,6 +1718,7 @@ export const Overview = () => {
             show={modalTransferShow}
             onHide={() => {
               setModalTransferShow(false)
+              clearFormTransfer()
             }}
             backdrop="static"
             keyboard={false}
@@ -1776,7 +1777,14 @@ export const Overview = () => {
                           type="text"
                           className="form-control"
                           value={targetUser}
-                          onChange={e => {setTargetUser(e.target.value)}}
+                          onChange={e => {
+                            setTargetUser(e.target.value)
+                            if (e.target.value === "") {
+                              setDisableSubmit(true);
+                            } else {
+                              setDisableSubmit(String(assetTransfer["Kode Wilayah"]) === String(originalLocation) || (e.target.value !== "" && targetUserPost === ""));
+                            }
+                          }}
                         />
                       </div>
                       <div className="col-md-6 mb-3">
@@ -1785,7 +1793,14 @@ export const Overview = () => {
                           type="text"
                           className="form-control"
                           value={targetUserPost}
-                          onChange={e => {setTargetUserPost(e.target.value)}}
+                          onChange={e => {
+                            setTargetUserPost(e.target.value)
+                            if (e.target.value === "") {
+                              setDisableSubmit(true);
+                            } else {
+                              setDisableSubmit(String(assetTransfer["Kode Wilayah"]) === String(originalLocation) || (targetUser === "" && e.target.value !== ""));
+                            }
+                          }}
                         />
                       </div>
                       <div className="col-md-12 mb-3">
@@ -1831,6 +1846,7 @@ export const Overview = () => {
                     className="btn btn-danger button-cancel"
                     onClick={() => {
                       setModalTransferShow(false)
+                      clearFormTransfer()
                     }}
                     style={{marginRight : "8px"}}
                   >

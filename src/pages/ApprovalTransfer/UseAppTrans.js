@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../services/UseAuth';
-import { STATUS } from '../../shared/constants';
+import { NOTIF, PUSHNOTIF, STATUS } from '../../shared/constants';
 import { useDeps } from '../../shared/context/DependencyContext';
 
 export const UseAppTrans = () => {
@@ -47,7 +47,7 @@ export const UseAppTrans = () => {
     const [detailAsset, setDetailAsset] = useState({});
     const [detailRequest, setDetailRequest] = useState({});
     const [showModalReq, setShowModalReq] = useState(false);
-    const {transferRequestService, assetItemService} = useDeps();
+    const {transferRequestService, assetItemService, notificationService, userService} = useDeps();
     const navigate = useNavigate()
 
     const getListRequest = async () => {
@@ -93,6 +93,32 @@ export const UseAppTrans = () => {
 
             if (response.status === "SUCCESS") {
                 setLoading(false);
+
+                // SEND NOTIF TO GA IF APRROVED BY GM OR SPV
+                if(user.level_approval !== 'GA') {
+                    let existedRequest = await transferRequestService.getByReqeustId(id);
+                    if (existedRequest.status === "SUCCESS") {
+                        let notifObj = {
+                            to: existedRequest.data.approver_level1,
+                            title: NOTIF.REQUEST.TRANSFER.TITLE,
+                            body: `${NOTIF.REQUEST.TRANSFER.BODY} ${user.name}`,
+                            type: NOTIF.TYPE.TRANSFER,
+                            resource_id : String(existedRequest.data["to_id"])
+                        };
+                        createNotification(notifObj)
+
+                        const userInfo = await userService.getUserByName(existedRequest.data.approver_level2);
+
+                        //pushnotif
+                        let pushNotifObj = {
+                            to: userInfo.data.token,
+                            title: `${PUSHNOTIF.REQUEST.TITLE} ${existedRequest.data.approver_level2}`,
+                            body: `${PUSHNOTIF.REQUEST.TRANSFER.BODY} ${user.name}`,
+                        };
+                        createPushNotification(pushNotifObj);
+                    }
+                }
+
                 Swal.fire("Success!", "This transfer request has been approved.", "success").then((result) => {
                     if (result.isConfirmed) {
                         navigate(0);
@@ -131,6 +157,29 @@ export const UseAppTrans = () => {
             const response = await transferRequestService.rejectApprovalTo(id);
             if (response.status === "SUCCESS") {
                 setLoading(false);
+
+                // NOTIF TO REQUESTER
+                let existedRequest = await transferRequestService.getByReqeustId(id);
+                if (existedRequest.status === "SUCCESS") {
+                    let notifObj = {
+                        to: existedRequest.data.requester,
+                        title: NOTIF.REJECTED.TITLE,
+                        body: `${NOTIF.REJECTED.BODY}`,
+                        type: NOTIF.TYPE.TRANSFER,
+                        resource_id : String(existedRequest.data["to_id"])
+                    };
+                    createNotification(notifObj)
+
+                    const userInfo = await userService.getUserByName(existedRequest.data.requester);
+                    //pushnotif
+                    let pushNotifObj = {
+                        to: userInfo.data.token,
+                        title: `${PUSHNOTIF.REJECTED.TITLE} ${existedRequest.data.requester}`,
+                        body: `${PUSHNOTIF.REJECTED.BODY}`,
+                    };
+                    createPushNotification(pushNotifObj);
+                }
+
                 Swal.fire("Success!", "This transfer request has been rejected.", "success").then((result) => {
                     if (result.isConfirmed) {
                         navigate(0);
@@ -194,6 +243,22 @@ export const UseAppTrans = () => {
         setDetailAsset({});
         setDetailRequest({});
     }
+
+    const createNotification = async (newNotif) => {
+        try {
+          const response = await notificationService.createNotif(newNotif);
+        } catch (e) {
+          console.log(e);
+        }
+      };
+    
+      const createPushNotification = async (newNotif) => {
+        try {
+          const response = await notificationService.createPushNotif(newNotif);
+        } catch (e) {
+          console.log(e);
+        }
+      };
 
     useEffect(() => {
         getListRequest();

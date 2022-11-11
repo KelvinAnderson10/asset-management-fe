@@ -300,7 +300,7 @@ const Sidebar = ({ children }) => {
 
   const onReadNotification = async (name) => {
     try {
-      const response = await notificationService.readNotif(name);
+      const response = await notificationService.getNotif(name);
       for (let i in response.data){
         response.data[i].CreatedAt = moment(response.data[i].CreatedAt).format("LLL")
       }
@@ -310,6 +310,25 @@ const Sidebar = ({ children }) => {
       console.log(e);
     }
   };
+
+  const onClickNotification = async (id, type) => {
+    try {
+      const response = await notificationService.readNotif(id);
+      let destinationPath = PATH.OVERVIEW;
+      if (type === NOTIF.TYPE.TRANSFER) {
+        destinationPath = PATH.APPROVAL_TRANSFER
+      } else if (type === NOTIF.TYPE.PURCHASE_INVENTORY) {
+        destinationPath = PATH.APPROVAL_INVENTORY
+      } else if (type === NOTIF.TYPE.PURCHASE_MAINTENANCE) {
+        destinationPath = PATH.APPROVAL_MAINTENANCE
+      }
+
+      navigate(destinationPath);
+      
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   const { eraseCookie } = useAuth();
 
@@ -600,9 +619,7 @@ const Sidebar = ({ children }) => {
                                 key={index}
                                 className="list-group-item list-group-item-action"
                                 onClick={() => {
-                                  if (d.type === NOTIF.TYPE.TRANSFER) {
-                                    navigate(PATH.APPROVAL_TRANSFER);
-                                  }
+                                  onClickNotification(d.ID, d.type);
                                 }}
                               >
                                 Hi {d.to}, {d.body} 

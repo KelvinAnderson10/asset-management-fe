@@ -20,6 +20,16 @@ export const transferRequestService = ({doPost, doGet, doDelete, doPut}) => {
         }
     }
 
+    const getByReqeustId = async (id) => {
+        try {
+            return await doGet({
+                url: `/api/to/search/orders?id=${id}`
+            })
+        } catch (e) {
+            throw e
+        }
+    }
+
     const getIncomingRequest = async (name, page) => {
         try {
             return await doGet({
@@ -73,5 +83,7 @@ export const transferRequestService = ({doPost, doGet, doDelete, doPut}) => {
         }
     }
 
-    return {createTransferRequest, getByAssetNumber, getIncomingRequest, updateApprovalToLevel1, updateApprovalToLevel2, rejectApprovalTo, getHistoryRequest, getHistoryTransferAsset}
+   
+
+    return {createTransferRequest, getByAssetNumber, getIncomingRequest, updateApprovalToLevel1, updateApprovalToLevel2, rejectApprovalTo, getHistoryRequest, getHistoryTransferAsset, getByReqeustId}
 }

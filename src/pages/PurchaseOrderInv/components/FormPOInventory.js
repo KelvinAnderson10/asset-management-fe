@@ -190,6 +190,8 @@ export const FormPOInventory = () => {
           to: response.data.approver_level1,
           title: NOTIF.REQUEST.TITLE,
           body: `${NOTIF.REQUEST.BODY} ${user.name}`,
+          type: NOTIF.TYPE.PURCHASE_INVENTORY,
+          resource_id : String(response.data.po_id)
         };
         createNotification(notifObj);
       }
