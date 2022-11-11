@@ -4,8 +4,9 @@ import { NoData } from '../../../shared/components/NoData/NoData';
 import { UsePORent } from './UsePORent'
 import * as BsIcons from "react-icons/bs";
 import * as AiIcons from "react-icons/ai";
+import ReactPaginate from 'react-paginate';
 export const ListPORent = () => {
-    const {handleClickDetailRent,rentData,user,isLoading} = UsePORent();
+    const {handleClickDetailRent, currentPage, handlePageClick, rentData,user,totalPage} = UsePORent();
 
   return (
     <div className="po-mtnc-list-container">
@@ -145,6 +146,31 @@ export const ListPORent = () => {
                 </div>
               ))
             )}
+            <div
+              key={totalPage}
+              style={{ marginRight: "2vw", marginTop: "1vh" }}
+            >
+              <ReactPaginate
+                previousLabel={"prev"}
+                nextLabel={"next"}
+                breakLabel={"..."}
+                pageCount={totalPage}
+                marginPagesDisplayed={2}
+                pageRangeDisplayed={3}
+                onPageChange={handlePageClick}
+                containerClassName={"pagination justify-content-center"}
+                pageClassName={"page-item"}
+                pageLinkClassName={"page-link"}
+                previousClassName={"page-item"}
+                previousLinkClassName={"page-link"}
+                nextClassName={"page-item"}
+                nextLinkClassName={"page-link"}
+                breakClassName={"page-item"}
+                breakLinkClassName={"page-link"}
+                activeClassName={"active"}
+                // forcePage={currentPage}
+              />
+            </div>
           </div>
         </div>
       </div>

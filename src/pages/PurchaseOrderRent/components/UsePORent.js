@@ -22,6 +22,8 @@ export const UsePORent = () => {
     const [isLoading, setIsLoading] = useState(false);
     const { rentService } = useDeps();
     const [page,setPage] = useState(1)
+    const [totalPage, setTotalPage] = useState(0)
+    const [currentPage, setCurrentPage] = useState(0)
 
     const onGetUser = () => {
         let savedUserJsonString = getCookie("user");
@@ -44,15 +46,17 @@ export const UsePORent = () => {
 
 
     // LIST REQUEST DATA
-    const onGetPORentByRequester = async (name) =>{
+    const onGetPORentByRequester = async (name, page) =>{
         setIsLoading(true)
         try{
             const response = await rentService.getRentByRequester(name,page)
+            console.log('ini responsebyrequester', response);
             for (let i in response.data) {
-                  response.data[i].CreatedAt = moment(response.data[i].CreatedAt).format(
-                    "LL")
-                  setRentData((poData) => [...poData, response.data[i]]);
-              }
+              response.data[i].CreatedAt = moment(response.data[i].CreatedAt).format("LL")
+            }
+            setRentData(response.data)
+            setTotalPage(Math.ceil(response.count / 10))
+
         }catch(e){
            console.log(e.response);
         }finally{
@@ -62,8 +66,11 @@ export const UsePORent = () => {
     }
 
     useEffect(()=>{
-        onGetPORentByRequester(user.name)
-    },[user.name])
+      if (user.name){
+        onGetPORentByRequester(user.name, currentPage+1)
+      }
+        
+    },[user.name,currentPage])
 
     const navigate = useNavigate()
     const [rentDetail, setrentDetail] = useState([]);
@@ -81,6 +88,11 @@ export const UsePORent = () => {
       }
     };
 
+    const handlePageClick = async (data) => {
+      setCurrentPage(data.selected)
+      
+    };
+
     useEffect(() => {
         if (rentDetail.length != 0) {
           navigate("/purchase-request/rent/form", {
@@ -96,7 +108,11 @@ export const UsePORent = () => {
         handleClickDetailRent,
         rentData,
         rentDetail,
-        isLoading
+        isLoading,
+        totalPage,
+        handlePageClick,
+        setCurrentPage,
+        currentPage
       }
 
   
