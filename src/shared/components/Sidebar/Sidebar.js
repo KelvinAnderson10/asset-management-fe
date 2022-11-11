@@ -309,7 +309,7 @@ const Sidebar = ({ children }) => {
   const onClickNotification = async (id, type) => {
     try {
       const response = await notificationService.readNotif(id);
-      let destinationPath;
+      let destinationPath = PATH.OVERVIEW;
       if (type === NOTIF.TYPE.TRANSFER) {
         destinationPath = PATH.APPROVAL_TRANSFER
       } else if (type === NOTIF.TYPE.PURCHASE_INVENTORY) {
@@ -318,9 +318,8 @@ const Sidebar = ({ children }) => {
         destinationPath = PATH.APPROVAL_MAINTENANCE
       }
 
-      if (user.level_approval !== "Regular") {
-        navigate(destinationPath);
-      }
+      navigate(destinationPath);
+      
     } catch (e) {
       console.log(e);
     }
