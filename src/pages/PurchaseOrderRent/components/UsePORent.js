@@ -21,7 +21,6 @@ export const UsePORent = () => {
     const [rentData, setRentData] = useState([])
     const [isLoading, setIsLoading] = useState(false);
     const { rentService } = useDeps();
-    const [page,setPage] = useState(1)
     const [totalPage, setTotalPage] = useState(0)
     const [currentPage, setCurrentPage] = useState(0)
 

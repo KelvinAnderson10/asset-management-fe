@@ -210,5 +210,27 @@ export const overviewService = ({doGet, doPut}) => {
         }
     }
 
-    return {filterAssetMultipleConditionByAdmin,filterAssetMultipleConditionByUser, getAllAsset, getAssetByAssetName, updateAsset,getAssetByVendor,getAssetByCondition,getAssetByLocation, getAssetByPagination, getAssetBySubproduct, getAssetByItemName, getAssetByProduct, getAssetByCategory, getCountAllAsset, getAssetByIT, getCountAssetByIT, getAssetByIdLocation, filterAssetMultipleConditionByGA, filterAssetMultipleConditionByIT, getAssetByGA, getCountAssetByGA}
+
+    const getAssetRentPagination = async (page) => {
+        try {
+            return await doGet({
+                url: `/api/rent/approved/${page}`
+            })
+        } catch (e) {
+            throw e
+        }
+    }
+
+    const filterPORentByMultipleCondition = async (cluster, tap, statusActv, jnsTmpt, page) => {
+        try {
+            return await doGet({
+                url: `/api/rent/search?cluster=${cluster}&tap=${tap}&status=${statusActv}&jenis_tempat=${jnsTmpt}&page=${page}`
+            })
+        } catch (e) {
+            throw e
+        }
+    }
+
+
+    return {filterPORentByMultipleCondition, getAssetRentPagination,filterAssetMultipleConditionByAdmin,filterAssetMultipleConditionByUser, getAllAsset, getAssetByAssetName, updateAsset,getAssetByVendor,getAssetByCondition,getAssetByLocation, getAssetByPagination, getAssetBySubproduct, getAssetByItemName, getAssetByProduct, getAssetByCategory, getCountAllAsset, getAssetByIT, getCountAssetByIT, getAssetByIdLocation, filterAssetMultipleConditionByGA, filterAssetMultipleConditionByIT, getAssetByGA, getCountAssetByGA}
 }

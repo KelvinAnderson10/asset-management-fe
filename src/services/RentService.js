@@ -108,6 +108,17 @@ export const rentService = ({ doGet, doPost, doPut, doDelete }) => {
     }
   };
 
+  const updatePO = async (id, newData) => {
+    try {
+        return await doPut({
+            url: `/api/rent/status/${id}`, data: newData
+            
+        })
+    } catch (e) {
+        throw e;
+    }
+}
+
   return {
     createRent,
     deleteRent,
@@ -119,6 +130,7 @@ export const rentService = ({ doGet, doPost, doPut, doDelete }) => {
     getRentListByApproval,
     getRentListHistory,
     getImgUrl,
-    getRentByRequester
+    getRentByRequester,
+    updatePO,
   };
 };

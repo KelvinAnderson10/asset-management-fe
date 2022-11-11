@@ -72,6 +72,18 @@ export const FormApprovalRent = () => {
     } 
   };
 
+  // UPDATE Status PO 
+
+  const updateStatus = async (id,status)=>{
+    try {
+      const response = await rentService.updatePO(id,{status : status});
+    } catch (e) {
+      console.log(e.response);
+      Failed("Failed to approved");
+    }
+
+  }
+
   // Approval
   const onApprovalRent = async(e, id) => {
     e.preventDefault(e);
@@ -85,6 +97,7 @@ export const FormApprovalRent = () => {
           title: NOTIF.APPROVED.TITLE,
           body: NOTIF.APPROVED.BODY,
         };
+       
 
         createNotification(notifObj);
         Swal.fire("Success!", "This request has been approved.", "success");
@@ -95,6 +108,7 @@ export const FormApprovalRent = () => {
       }
     } else if (location.state.detail.approved_level1 === true && location.state.detail.approved_level2 === false) {
       try {
+
         const resp = await rentService.approvedByLevel2(id)
         let notifObj = {
           to: location.state.detail.requester,
@@ -117,6 +131,8 @@ export const FormApprovalRent = () => {
           title: NOTIF.APPROVED.TITLE,
           body: NOTIF.APPROVED.BODY,
         };
+        location.state.detail.status = STATUS.APPROVE_GA_IT
+        updateStatus(location.state.detail.po_id,location.state.detail.status)
 
         createNotification(notifObj);
         Swal.fire("Success!", "This request has been approved.", "success");

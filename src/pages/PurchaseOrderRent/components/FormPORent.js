@@ -539,6 +539,7 @@ export const FormPORent = () => {
                   <input
                     required
                     type="number"
+                    min="0"
                     name="no_telepon_pemilik"
                     className="form-control"
                     onChange={(e)=>setTlpPemilik(e.target.value)}
@@ -551,6 +552,7 @@ export const FormPORent = () => {
                   </label>
                   <input
                     required
+                    min="0"
                     type="number"
                     name="harga_sewa_per_tahun_harga_lama"
                     className="form-control"
@@ -565,6 +567,7 @@ export const FormPORent = () => {
                   <input
                     required
                     type="number"
+                    min="0"
                     name="harga_sewa_per_tahun_harga_baru"
                     className="form-control"
                     value={sewaHargaBaru}
@@ -578,6 +581,7 @@ export const FormPORent = () => {
                   <input
                     required
                     type="number"
+                    min="0"
                     name="pajak"
                     className="form-control"
                     value={pajak}
@@ -591,6 +595,7 @@ export const FormPORent = () => {
                   <input
                     required
                     type="number"
+                    min="0"
                     name="nominal_transfer_ke_pemilik"
                     className="form-control"
                     onChange={(e)=>setNominalTransfer(e.target.value)}
@@ -716,7 +721,7 @@ export const FormPORent = () => {
                 </div>
                 <label style={{fontWeight:'500'}}>Attachment File</label>
                 <div className="file-extension">
-                    <p  style={{fontSize:'15px', color:'rgb(255, 178, 0)'}}>Allowed file types : <b>png, jpg, jpeg</b><br></br> Maximum size of each attachment is 2MB</p>
+                    <p  style={{fontSize:'15px', color:'rgb(255, 178, 0)'}}>Allowed file types : <b>png, jpg, jpeg</b><br></br> Maximum size of each attachment is 2MB <br></br> You can choose more than 1 file</p>
                 </div>
                 <div style={{minHeight:'200px'}} className="card">
                     <div className="card-header bg-transparent">

@@ -10,25 +10,25 @@ export const UseApprovalRent = () => {
   const [appData1, setAppData1] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const { rentService } = useDeps();
-  const [page,setPage] = useState(1)
+  const [totalPage, setTotalPage] = useState(0)
+  const [totalPageApp, setTotalPageApp] = useState(0)
+  const [currentPage, setCurrentPage] = useState(0)
+  const [ currentPageApprove, setCurrentPageApprv]= useState(0)
+  
 
-  const onGetPORentListByApproval = async (name) => {
+  const onGetPORentListByApproval = async (name,page) => {
     setIsLoading(true);
     try {
       const response = await rentService.getRentListByApproval(name, page);
-      console.log('ini response',response.data);
-      if (page===1){
-
-        
+      console.log('ini response rent list',response.data);
+      
         for (let i in response.data) {
-          response.data[i].CreatedAt = moment(response.data[i].CreatedAt).format(
-            "LL"
-            );
-              setAppData((appData) => [...appData, response.data[i]]);
-            
-            }
-            console.log('inirent',appData)
-          }
+          response.data[i].CreatedAt = moment(response.data[i].CreatedAt).format("LL");
+        }
+          setAppData(response.data)
+          console.log('inirent',appData)
+          setTotalPage(Math.ceil(response.count / 10))
+
           } catch (e) {
       console.log(e.response);
     } finally {
@@ -36,21 +36,22 @@ export const UseApprovalRent = () => {
     }
   };
 
-  const onGetListRentHistory = async(name) => {
+  const onGetListRentHistory = async(name,page) => {
     setIsLoading(true)
     try {
       const response = await rentService.getRentListHistory(name, page);
       console.log('ini response',response.data);
-      if (page===1){
+      
         for (let i in response.data) {
           response.data[i].CreatedAt = moment(response.data[i].CreatedAt).format(
             "LL"
-            );
-              setAppData1((appData1) => [...appData1, response.data[i]]);
-            
+            );            
             }
+
+            setAppData1(response.data)
+            setTotalPageApp(Math.ceil(response.count / 10))
             console.log('INI app1', appData1);
-      }
+      
     } catch (e) {
       console.log(e.response);
     } finally {
@@ -89,10 +90,18 @@ export const UseApprovalRent = () => {
     onGetCookie();
   }, []);
 
+  
   useEffect(() => {
-    onGetPORentListByApproval(user.name);
-    onGetListRentHistory(user.name)
-  }, [user.name]);
+    if (user.name){
+      onGetPORentListByApproval(user.name,currentPageApprove+1);
+    }
+  }, [user.name, currentPageApprove]);
+
+  useEffect(() => {
+    if (user.name){
+      onGetListRentHistory(user.name, currentPage+1)
+    }
+  }, [user.name, currentPage]);
 
   const navigate = useNavigate();
   const [rentDetail, setrentDetail] = useState([]);
@@ -107,6 +116,16 @@ export const UseApprovalRent = () => {
       alert("Oops")
     }
   };
+
+  const handlePageClick = async (data) => {
+    setCurrentPage(data.selected)
+    
+  };
+  const handlePageClick2 = async (data) => {
+    setCurrentPageApprv(data.selected)
+    
+  };
+
 
   useEffect(() => {
     if (rentDetail.length != 0) {
@@ -125,5 +144,10 @@ export const UseApprovalRent = () => {
     appData1,
     handleClickApproval,
     rentDetail,
+    handlePageClick,
+    currentPage,
+    totalPage,
+    totalPageApp,
+    handlePageClick2
   };
 };
