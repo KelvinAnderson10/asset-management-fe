@@ -23,9 +23,12 @@ import { AppInv } from "../pages/ApprovalInventory/AppInv";
 import { AppMaintenance } from "../pages/ApprovalMaintenance/AppMaintenance";
 import { FormApprovalMaintence } from "../pages/ApprovalMaintenance/components/FormApprovalMaintence";
 import { TableAssetDeprecated } from "../pages/Overview/components/TableAssetDeprecated";
+import { AppTrans } from "../pages/ApprovalTransfer/AppTrans";
 import { PORent } from "../pages/PurchaseOrderRent/PORent";
 import { FormApprovalRent } from "../pages/ApprovalRent/components/FormApprovalRent"
 import { AppRent } from "../pages/ApprovalRent/AppRent";
+import { FormPORent } from "../pages/PurchaseOrderRent/components/FormPORent";
+import { FormViewRent } from "../pages/PurchaseOrderRent/components/FormViewRent";
 
 export const AppRouter = () => {
   return (
@@ -44,10 +47,12 @@ export const AppRouter = () => {
         <Route path="/purchase-request/inventory" element={<POInventory/>} />
         <Route path="/purchase-request/maintenance" element={<POMaintenance/>}/>
         <Route path="/purchase-request/rent" element={<PORent/>}/>
+        <Route path="/purchase-request/rent/form" element={<FormViewRent/>}/>
         <Route path="/approval-data/inventory" element={<AppInv/>} />
         <Route path="/approval-data/inventory/form" element={<FormApprovalInventory/>} />
         <Route path="/approval-data/maintenance" element={<AppMaintenance/>} />
         <Route path="/approval-data/maintenance/form" element={<FormApprovalMaintence/>} />
+        <Route path="/approval-data/transfer" element={<AppTrans />} />
         <Route path="/approval-data/rent" element={<AppRent/>}/>
         <Route path="/approval-data/rent/form" element={<FormApprovalRent/>}/>
         

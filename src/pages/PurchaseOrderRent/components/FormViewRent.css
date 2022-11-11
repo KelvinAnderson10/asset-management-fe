@@ -1,4 +1,4 @@
-.po-rent-form-container{
+.po-rent-view-form-container{
     display: flex;
     justify-content: center;
     align-items: center;
@@ -7,7 +7,7 @@
     font-family: "Poppins";
 }
 
-.po-rent-form-container .po-rent-form-card {
+.po-rent-view-form-container .po-rent-view-form-card {
     background-color:white;
     width: 90vw;
     display: flex;

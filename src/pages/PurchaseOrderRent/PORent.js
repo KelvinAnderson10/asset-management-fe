@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Sidebar from '../../shared/components/Sidebar/Sidebar'
 
 import { FormPORent } from './components/FormPORent'
+import { ListPORent } from './components/ListPORent'
 import './PORent.css'
 
 export const PORent = () => {
@@ -44,7 +45,7 @@ export const PORent = () => {
                         </div>
                     </div>
                </div>
-               {/* {requestList && <ListPOInventory/>} */}
+               {requestList && <ListPORent/>}
                {requestForm && <FormPORent/>}
             </Sidebar>
         </>

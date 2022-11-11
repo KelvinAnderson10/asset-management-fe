@@ -27,6 +27,7 @@ export const ServiceFactory = (apiClient) => {
     generalSettingService: generalSettingService(apiClient),
     dashboardService: dashboardService(apiClient),
     notificationService: notificationService(apiClient),
+    transferRequestService: transferRequestService(apiClient),
     purchaseOrderRentService : purchaseOrderRentService(apiClient),
  
     transferRequestService: transferRequestService(apiClient),

@@ -42,6 +42,24 @@ export const rentService = ({ doGet, doPost, doPut, doDelete }) => {
     }
   };
 
+    const getRentByRequester = async (name='',page=1) => {
+      try {
+        return await doGet({
+          url: `api/rent/requester/search?name=${name}&page=${page}`,
+        });
+      } catch (error) {
+        throw error;
+      }
+    };
+
+  // const getRentDetailById = async (id) => {
+  //   try {
+  //     return await doGet({ url: `api/rent/attachment/${id}` });
+  //   } catch (e) {
+  //     throw e;
+  //   }
+  // };
+
   const getRentListByApproval = async (name='',page=1) => {
     try {
       return await doGet({ url: `api/rent/approver/incoming?name=${name}&page=${page}` });
@@ -101,5 +119,6 @@ export const rentService = ({ doGet, doPost, doPut, doDelete }) => {
     getRentListByApproval,
     getRentListHistory,
     getImgUrl,
+    getRentByRequester
   };
 };

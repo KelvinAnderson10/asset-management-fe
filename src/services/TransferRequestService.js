@@ -20,7 +20,58 @@ export const transferRequestService = ({doPost, doGet, doDelete, doPut}) => {
         }
     }
 
+    const getIncomingRequest = async (name, page) => {
+        try {
+            return await doGet({
+                url: `/api/to/approver/incoming?name=${name}&page=${page}`
+            })
+        } catch (e) {
+            throw e
+        }
+    }
 
+    const getHistoryRequest = async (name, page) => {
+        try {
+            return await doGet({
+                url: `/api/to/approver/history?name=${name}&page=${page}`
+            })
+        } catch (e) {
+            throw e
+        }
+    }
+    const getHistoryTransferAsset = async (assetNumber) => {
+        try {
+            return await doGet({
+                url: `/api/to/history?assetNumber=${assetNumber}`
+            })
+        } catch (e) {
+            throw e
+        }
+    }
 
-    return {createTransferRequest, getByAssetNumber}
+    const updateApprovalToLevel1 = async (id) => {
+        try {
+            return await doPut({url: `api/to/level1/${id}`})
+        } catch (e) {
+            throw e
+        }
+    }
+
+    const updateApprovalToLevel2 = async (id) => {
+        try {
+            return await doPut({url: `api/to/level2/${id}`})
+        } catch (e) {
+            throw e
+        }
+    }
+
+    const rejectApprovalTo = async (id) => {
+        try {
+            return await doDelete({url: `api/to/${id}`})
+        } catch (e) {
+            throw e
+        }
+    }
+
+    return {createTransferRequest, getByAssetNumber, getIncomingRequest, updateApprovalToLevel1, updateApprovalToLevel2, rejectApprovalTo, getHistoryRequest, getHistoryTransferAsset}
 }
