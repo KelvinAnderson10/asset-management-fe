@@ -109,7 +109,7 @@ export const FormApprovalRent = () => {
         console.log(e.response);
         Failed("Failed to approved");
       }
-    } else if (location.state.detail.approved_level1 === true && location.state.detail.approved_level2 === true && location.state.detail.approved_level2 === false) {
+    } else if (location.state.detail.approved_level1 === true && location.state.detail.approved_level2 === true && location.state.detail.approved_level3 === false) {
       try {
         const resp = await rentService.approvedByLevel3(id)
         let notifObj = {
@@ -516,7 +516,7 @@ export const FormApprovalRent = () => {
                       Due Date<span className="text-danger">*</span>
                     </label>
                     <input
-                      value={location.state.detail.cara_pembayaran}
+                      value={location.state.detail.tanggal_jatuh_tempo}
                       readOnly
                       className="form-control"
                     />

@@ -46,7 +46,8 @@ export const Login = () => {
       setUser(prevObj=>({...prevObj,name:(response.data.name), role:(response.data.role), level_approval:(response.data.level_approval), location_id:(response.data.location_id), tap:(response.data.TAP), cluster:(response.data.Cluster), department:(response.data.department)}))
       setOTP(response.otp);
       console.log(response.otp)
-      // setCounter(59);
+      setCounter(59);
+      SetIsDisabled(true)
       setShowOTPForm(true);
     } catch (error) {
       Failed("Email not registered yet, Please input a valid email");
@@ -103,7 +104,14 @@ export const Login = () => {
     if(OTPInput.length === 6){
       if (counter === 0) {
         setOTP()
-        SetIsDisabled(true)
+        SetIsDisabled(false)
+        if (OTPInput !== OTP) {
+          setOTPInput('')
+          const resetKey = Math.random().toString().slice(0.8)
+          setClearOtp(resetKey)
+          setErrDisabled(true);
+          setErrMsg('Wrong OTP! Please input valid OTP.')
+        }
       } else {
         if (OTPInput == OTP) {
           setCookie("user",user,200)

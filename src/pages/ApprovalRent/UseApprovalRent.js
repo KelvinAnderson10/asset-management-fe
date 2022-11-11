@@ -42,8 +42,6 @@ export const UseApprovalRent = () => {
       const response = await rentService.getRentListHistory(name, page);
       console.log('ini response',response.data);
       if (page===1){
-
-        
         for (let i in response.data) {
           response.data[i].CreatedAt = moment(response.data[i].CreatedAt).format(
             "LL"
@@ -52,8 +50,8 @@ export const UseApprovalRent = () => {
             
             }
             console.log('INI app1', appData1);
-          }
-          } catch (e) {
+      }
+    } catch (e) {
       console.log(e.response);
     } finally {
       setIsLoading(false);
@@ -102,7 +100,8 @@ export const UseApprovalRent = () => {
   const handleClickApproval = async (id) => {
     try {
       const response = await rentService.getRentById(id);
-      // console.log("ini rent detail ya ges", response.data);
+      response.data.periode_sewa_awal = moment(response.data.periode_sewa_awal).format("YYYY-MM-DD")
+      response.data.periode_sewa_akhir = moment(response.data.periode_sewa_akhir).format("YYYY-MM-DD")
       setrentDetail(response.data);
     } catch (error) {
       alert("Oops")
