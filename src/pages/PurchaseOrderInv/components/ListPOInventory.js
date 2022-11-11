@@ -8,6 +8,7 @@ import * as AiIcons from 'react-icons/ai'
 import Loading from '../../../shared/components/Loading/Loading'
 import { NoData } from '../../../shared/components/NoData/NoData'
 import moment from "moment";
+import { Modal } from 'react-bootstrap'
 
 export const ListPOInventory = () => {
     const [poData, setPOData] = useState([])
@@ -252,26 +253,26 @@ export const ListPOInventory = () => {
                                         <div className='box-content-po'>
                                             <div className='row-content-po'>
                                                 <div className='sub-title-content'>
-                                                    <a>To</a>
+                                                    <a className="text">To</a>
                                                 </div>
                                                 <div className='sub-title-content'>
-                                                    <a>: {data.ToUser}</a>
+                                                    <a className="text">: {data.ToUser}</a>
                                                 </div>
                                             </div>
                                             <div className='row-content-po'>
                                                 <div className='sub-title-content'>
-                                                <a>Location</a>
+                                                <a className="text">Location</a>
                                                 </div>
                                                 <div className='sub-title-content'>
-                                                <a>: {data.TAP}</a>
+                                                <a className="text">: {data.TAP}</a>
                                                 </div>                             
                                             </div>
                                             <div className='row-content-po'>
                                                 <div className='sub-title-content'>
-                                                <a>Product Type</a>
+                                                <a className="text">Product Type</a>
                                                 </div>
                                                 <div className='sub-title-content'>
-                                                <a>: {data['Jenis Produk']}</a>
+                                                <a className="text">: {data['Jenis Produk']}</a>
                                                 </div>                             
                                             </div>
                                     </div>
@@ -279,58 +280,58 @@ export const ListPOInventory = () => {
                                             <div className='row-content-po'>
                                                 <div className='sub-title-content'>
                                                   {user.cluster != 'HO' &&
-                                                    <a>Approved By GM </a>
+                                                    <a className="text">Approved By GM </a>
                                                   }
                                                   {user.cluster == 'HO' &&
-                                                    <a>Approved By SPV</a>
+                                                    <a className="text">Approved By SPV</a>
                                                   }    
                                                 </div>
                                                 <div className='sub-title-content'>
                                                   {data.is_approved_level1 == true &&
-                                                    <a><BsIcons.BsCheckCircleFill color='rgb(92, 184, 92)' size='1.2em'/> </a> 
+                                                    <a className="text"><BsIcons.BsCheckCircleFill color='rgb(92, 184, 92)' size='1.2em'/> </a> 
                                                   }
                                                   {data.is_approved_level1 == false &&
-                                                    <a><AiIcons.AiFillCloseCircle color='red' size='1.2em'/> </a> 
+                                                    <a className="text"><AiIcons.AiFillCloseCircle color='red' size='1.2em'/> </a> 
                                                   }
                                                 </div>
                                             </div>
                                             <div className='row-content-po'>
                                                 <div className='sub-title-content'>
                                                   {user.cluster != 'HO' &&
-                                                    <a>Approved By VP Trade</a>
+                                                    <a className="text">Approved By VP Trade</a>
                                                   }
                                                   {user.cluster == 'HO' &&
-                                                    <a>Approved By GA/IT</a>
+                                                    <a className="text">Approved By GA/IT</a>
                                                   }    
                                                 </div>
                                                 <div className='sub-title-content'>
                                                   {data.is_approved_level2 == true &&
-                                                    <a><BsIcons.BsCheckCircleFill color='rgb(92, 184, 92)' size='1.2em'/> </a> 
+                                                    <a className="text"><BsIcons.BsCheckCircleFill color='rgb(92, 184, 92)' size='1.2em'/> </a> 
                                                   }
                                                   {data.is_approved_level2 == false &&
-                                                    <a><AiIcons.AiFillCloseCircle color='red' size='1.2em'/> </a> 
+                                                    <a className="text"><AiIcons.AiFillCloseCircle color='red' size='1.2em'/> </a> 
                                                   }
                                                 </div>                             
                                             </div>
                                             <div className='row-content-po'>
                                                 <div className='sub-title-content'>
                                                   {user.cluster != 'HO' &&
-                                                    <a>Approved By GA/IT</a>
+                                                    <a className="text">Approved By GA/IT</a>
                                                   }
                                                 </div>
                                                 <div className='sub-title-content'>
                                                   {data.is_approved_level3 == true && data.approver_level3 != '-' &&
-                                                    <a><BsIcons.BsCheckCircleFill color='rgb(92, 184, 92)' size='1.2em'/> </a> 
+                                                    <a className="text"><BsIcons.BsCheckCircleFill color='rgb(92, 184, 92)' size='1.2em'/> </a> 
                                                   }
                                                   {data.is_approved_level3 == false && data.approver_level3 != '-' &&
-                                                    <a><AiIcons.AiFillCloseCircle color='red' size='1.2em'/> </a> 
+                                                    <a className="text"><AiIcons.AiFillCloseCircle color='red' size='1.2em'/> </a> 
                                                   }
                                                 </div>                             
                                             </div>
                                     </div>
                                     </div>
                                     <div className='date-request'>
-                                      <a style={{fontSize:'12px'}} >{data.CreatedAt}</a> 
+                                      <a style={{fontSize:'14px'}} >{data.CreatedAt}</a> 
                                     </div>
                                 </div>
                             ))
@@ -363,17 +364,22 @@ export const ListPOInventory = () => {
                   </div>
                   </div>
             </div>
-            {viewDetail &&
-            <div className='view-po-inv-container'>
-                <div className='box-po-inv-detail'>
-                    <div className='close'>
-                        <CgIcons.CgClose size={'2em'} onClick={onClickClocePODetail}/>
-                    </div>
-                    <form>
-                <div className="formPOInput">
-                  <div className="row" style={{textAlign:'left'}}>
-                  <h4 style={{textAlign:'left', color:'#B70621'}}>PO Number {POById.po_id} </h4>
-            <div className="mb-3 col-md-4">
+            <div className="model-box-view">
+              <Modal
+              dialogClassName="modal-90w"
+              show={viewDetail}
+              onHide={onClickClocePODetail}
+              backdrop="static"
+              keyboard={false}
+              size='lg'
+              >
+            <Modal.Header closeButton>
+            <Modal.Title style={{textAlign:'left', color:'#B70621'}} >PO Number {POById.po_id}</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <div className='form-group'>
+                <div className='row'>
+                <div className="mb-3 col-md-4">
                     <label>
                       Area Code
                     </label>
@@ -409,7 +415,7 @@ export const ListPOInventory = () => {
                       readOnly
                     />
                   </div>
-                  <div className="inputBoxPO mb-3 col-md-6 ">
+                  <div className="mb-3 col-md-6 ">
                     <label>
                       Subproduct Name
                     </label>
@@ -433,7 +439,7 @@ export const ListPOInventory = () => {
                       value={POById['tipe']}
                     />
                   </div>
-                    { poDetailData.length === 0 ? (
+                  { poDetailData.length === 0 ? (
                             <p>Not request</p>
                         ): (
                     currentItemsDetail.map((data, index) => {
@@ -559,10 +565,9 @@ export const ListPOInventory = () => {
                         </div>
                       );
                     }))}
-                  </div>
+
                 </div>
-              </form>
-              <div className='pagination-modal'>
+                <div className='pagination-modal'>
               <ul className="modalNumbers">
                     <li style={{ borderRadius:  '1vh 0vh 0vh 1vh'}}>
                       <button
@@ -588,8 +593,13 @@ export const ListPOInventory = () => {
                     </li>
                   </ul>
                   </div>
-                </div>
-            </div>}
+              </div>
+            </Modal.Body>
+              </Modal>
+            </div>
+
+
+
             {isLoading && <Loading/>}
         </>
     )

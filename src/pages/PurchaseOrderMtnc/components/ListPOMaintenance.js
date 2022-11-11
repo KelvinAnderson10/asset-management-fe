@@ -8,6 +8,7 @@ import * as AiIcons from "react-icons/ai";
 import Loading from "../../../shared/components/Loading/Loading";
 import { NoData } from "../../../shared/components/NoData/NoData";
 import moment from "moment";
+import { Modal } from "react-bootstrap";
 
 export const ListPOMaintenance = () => {
   const [poData, setPOData] = useState([]);
@@ -307,7 +308,7 @@ export const ListPOMaintenance = () => {
                     </div>
                   </div>
                   <div className="date-request">
-                      <a style={{ fontSize: "12px" }}>{data.CreatedAt}</a>
+                      <a style={{ fontSize: "14px" }}>{data.CreatedAt}</a>
                     </div>
                 </div>
               ))
@@ -340,19 +341,22 @@ export const ListPOMaintenance = () => {
           </div>
         </div>
       </div>
-      {viewDetail && (
-        <div className="view-po-mtnc-container">
-          <div className="box-po-mtnc-detail">
-            <div className="close">
-              <CgIcons.CgClose size={"2em"} onClick={onClickClocePODetail} />
-            </div>
-            <form>
-              <div className="formPOInput">
-                <div className="row" style={{ textAlign: "left" }}>
-                  <h4 style={{ textAlign: "left", color: "#B70621" }}>
-                    PO Number {POById.po_id}{" "}
-                  </h4>
-                  <div className="mb-2 col-md-4">
+      <div className="model-box-view">
+        <Modal
+          dialogClassName="modal-90w"
+          show={viewDetail}
+          onHide={onClickClocePODetail}
+          backdrop="static"
+          keyboard={false}
+          size='lg'
+        >
+          <Modal.Header closeButton>
+          <Modal.Title style={{textAlign:'left', color:'#B70621'}} >PO Number {POById.po_id}</Modal.Title>
+         </Modal.Header>
+         <Modal.Body>
+          <div className="form-group">
+            <div className="row">
+            <div className="mb-2 col-md-4">
                     <label>Area Code</label>
                     <input
                       value={POById["Kode Wilayah"]}
@@ -520,12 +524,13 @@ export const ListPOMaintenance = () => {
                       );
                     })
                   )}
-                </div>
-              </div>
-            </form>
+            </div>
+
           </div>
-        </div>
-      )}
+         </Modal.Body>
+        </Modal>
+      </div>
+      
       {isLoading && <Loading />}
     </>
   );

@@ -1,168 +1,157 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useAuth } from "../../../services/UseAuth";
-import { useDeps } from "../../../shared/context/DependencyContext";
 import "./FormPORent.css";
-import swal from "sweetalert";
-import { NOTIF, PUSHNOTIF, STATUS } from "../../../shared/constants";
-import { Failed } from "../../../shared/components/Notification/Failed";
-import { firebaseConfig } from "../../../shared/firebaseClient";
-import { initializeApp } from "firebase/app";
-import { getFirestore, setDoc, doc } from "firebase/firestore";
+import { useDeps } from "../../../shared/context/DependencyContext";
+import moment from "moment";
+import { async } from "@firebase/util";
 
 export const FormPORent = () => {
-  const [POdata, setPOData] = useState([
-    {
-      ["Nama Barang"]: "",
-      vendor_1: "",
-      vendor_2: "",
-      vendor_3: "",
-      item_price_1: "",
-      item_price_2: "",
-      item_price_3: "",
-      quantity: 1,
-      ppn: "",
+  const {purchaseOrderRentService} = useDeps();
+  const [toUser,setToUser] = useState('');
+  const [position,setPosition] = useState('');
+  const [alamatLokasi, setAlamatLokasi] = useState('');
+  const [namaBarang, setNamaBarang] = useState('');
+  const [status,setStatus] = useState('');
+  const [jenisTempat,setJenisTempat] = useState('');
+  const [tlp,setTlp] = useState('');
+  const [pln,setPln] = useState('');
+  const [pam,setPam] = useState('');
+  const [lainLain,setLainlain] = useState('');
+  const [masaSewa, setMasaSewa] = useState('');
+  const [periodeSewaAwal,setPeriodeSewaAwal] = useState();
+  const [periodeSewaAkhir,setPeriodeSewaAkhir] = useState();
+  const [namaPemilik,setNamaPemilik] = useState('');
+  const [NPWP,setNPWP] = useState('');
+  const [alamatPemilik,setAlamatPemilik] = useState('')
+  const [tlpPemilik, setTlpPemilik] = useState('');
+  const [sewaHargaLama, setSewaHargaLama] = useState('')
+  const [sewaHargaBaru, setSewaHargaBaru] = useState('')
+  const [pajak,setPajak] = useState('');
+  const [nominalTransfer, setNominalTransfer] = useState('')
+  const [notaris, setNotaris] = useState('')
+  const [jasaNotaris,setJasaNotaris]= useState('')
+  const [NPWPNotaris,setNPWPNotaris] = useState('')
+  const [namaRekeningTujuan, setNamaRekeningTujuan] = useState('')
+  const [norekTujuan, setNorekTujuan] = useState('')
+  const [bank,setBank] = useState('')
+  const [cabangBank,setCabangBank] = useState('')
+  const [caraPembayaran,setCaraPembayaran] = useState('')
+  const [jatuhTempo,setJatuhTempo] = useState()
 
-      ["Biaya Lain-Lain"]: "",
-    },
-  ]);
 
-  const [POHeader, setPOHeader] = useState({
-    PurchaseOrderDetail: [],
-    tipe: "Maintenance",
-  });
 
-  const [data, setData] = useState([]);
-  const [subProductName, setSubProductName] = useState([]);
-  const {
-    assetItemService,
-    vendorService,
-    notificationService,
-    purchaseOrderService,
-    userService,
-  } = useDeps();
+  const [fileKtp,setFileKtp] = useState([])
+  const [fileNpwp,setFileNpwp] = useState([])
+  const [fileBukuTabungan, setFileBukuTabungan] = useState([])
+  const [fileSertifikat, setFileSertifikat] = useState([])
+  const [fileFotoLokasi, setFileFotoLokasi] = useState([])
 
-  useEffect(() => {
-    onGetAllSubProduct();
-    onGetAllVendor();
-    onGetCookie();
-  }, []);
 
-  const handleChange = (e) => {
-    const newData = { ...POHeader };
-    newData[e.target.name] = e.target.value;
-    setPOHeader(newData);
-  };
-
-  const handleFormChange = (event, index) => {
-    let data = [...POdata];
-    data[index][event.target.name] = event.target.value;
-    setPOData(data);
-  };
-  const [notifData, setNotifData] = useState({});
-
-  const createNotification = async (notifPO) => {
-    try {
-      const response = await notificationService.createNotif(notifPO);
-      setNotifData(response.data);
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  const createPushNotification = async (notifPO) => {
-    try {
-      const response = await notificationService.createPushNotif(notifPO);
-      setNotifData(response.data);
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  const onSubmitPO = async (e) => {
+   const onSubmitPO = async (e)=>{
     e.preventDefault();
-    try {
-      POHeader["Kode Wilayah"] = user.location_id;
-      POHeader["requester"] = user.name;
-      POHeader["tipe"] = "Maintenance";
-      POHeader.status = STATUS.CREATE_PO;
-      for (let i in POdata) {
-        POdata[i].item_price_1 = Number(POdata[i].item_price_1);
-        POdata[i].item_price_2 = Number(POdata[i].item_price_2);
-        POdata[i].item_price_3 = Number(POdata[i].item_price_3);
-        POdata[i].quantity = Number(POdata[i].quantity);
-        POdata[i].ppn = Number(POdata[i].ppn);
-        POdata[i].ppn = Boolean(POdata[i].ppn);
-        POdata[i]["Biaya Lain-Lain"] = Number(POdata[i]["Biaya Lain-Lain"]);
-      }
-      POHeader.PurchaseOrderDetail = [...POdata];
-      const response = await purchaseOrderService.createPO(POHeader);
-      handleClearForm();
-      let myApp = initializeApp(firebaseConfig);
-      const firestore = getFirestore(myApp);
-      if (response.status === "SUCCESS") {
-        swal({
-          title: "Success!",
-          text: "Your request has been made!",
-          icon: "success",
-          button: "OK!",
-        });
-      }
-      const userMobile = await userService.getUserByName(
-        response.data.approver_level1
-      );
+    const rentFormData = new FormData();
+    rentFormData.append("Kode Wilayah", user.location_id)
+    rentFormData.append("requester", user.name)
+    rentFormData.append("User", toUser)
+    rentFormData.append("Jabatan", position)
+    rentFormData.append("alamat_lokasi", alamatLokasi)
+    rentFormData.append("Nama Barang", namaBarang)
+    rentFormData.append("status", status)
+    rentFormData.append("jenis_tempat", jenisTempat)
+    rentFormData.append("TLP", tlp)
+    rentFormData.append("PLN",pln)
+    rentFormData.append("PAM",pam)
+    rentFormData.append("lain_lain",lainLain)
+    rentFormData.append("masa_sewa_bulan_tahun", masaSewa)
+    rentFormData.append("periode_sewa_awal", periodeSewaAwal)
+    rentFormData.append("periode_sewa_akhir", periodeSewaAkhir)
+    rentFormData.append("nama_pemilik", namaPemilik)
+    rentFormData.append("NPWP", NPWP)
+    rentFormData.append("alamat_pemilik",alamatPemilik)
+    rentFormData.append("no_telepon_pemilik", tlpPemilik)
+    rentFormData.append("harga_sewa_per_tahun_harga_lama",sewaHargaLama)
+    rentFormData.append("harga_sewa_per_tahun_harga_baru", sewaHargaBaru)
+    rentFormData.append("pajak",pajak)
+    rentFormData.append("nominal_transfer_ke_pemilik",nominalTransfer)
+    rentFormData.append("notaris", notaris)
+    rentFormData.append("jasa_notaris", jasaNotaris)
+    rentFormData.append("NPWP_notaris", NPWPNotaris)
+    rentFormData.append("nama_rekening_tujuan", namaRekeningTujuan)
+    rentFormData.append("nomor_rekening_tujuan", norekTujuan)
+    rentFormData.append("bank",bank)
+    rentFormData.append("cabang_bank", cabangBank)
+    rentFormData.append("cara_pembayaran", caraPembayaran)
+    rentFormData.append("tanggal_jatuh_tempo", jatuhTempo)
 
-      let pushNotifObj = {
-        to: userMobile.data.token,
-        title: `${PUSHNOTIF.REQUEST.TITLE} ${response.data.approver_level1}`,
-        body: `${PUSHNOTIF.REQUEST.BODY} ${user.name}`,
-      };
-      createPushNotification(pushNotifObj);
-
-      await setDoc(doc(firestore, "notifications", String(Date.now())), {
-        to: userMobile.data.name,
-        user_token: userMobile.data.token,
-        title: PUSHNOTIF.REQUEST.TITLE + userMobile.data.name,
-        body: PUSHNOTIF.REQUEST.BODY + user.name,
-      });
-
-      let notifObj = {
-        to: response.data.approver_level1,
-        title: NOTIF.REQUEST.TITLE,
-        body: `${NOTIF.REQUEST.BODY} ${user.name}`,
-      };
-      createNotification(notifObj);
-      e.target.reset();
-    } catch (error) {
-      console.log(error);
-      Failed("Your request failed to made");
+    for (let i = 0; i < fileKtp.length; i++) {
+        rentFormData.append("ktp", fileKtp[i])
     }
-  };
+    
+    for (let i = 0; i < fileNpwp.length; i++) {
+      rentFormData.append("npwp", fileNpwp[i])
+    }
 
-  // GET ALL SUBPRODUCT NAME
-  const onGetAllSubProduct = async () => {
+    for (let i = 0; i < fileBukuTabungan.length; i++) {
+      rentFormData.append("bukuTabungan", fileBukuTabungan[i])
+    }
+
+    for (let i = 0; i < fileFotoLokasi.length; i++) {
+      rentFormData.append("fotoLokasi", fileFotoLokasi[i])
+    }
+
+    for (let i = 0; i < fileSertifikat.length; i++) {
+      rentFormData.append("sertifikat", fileSertifikat[i])
+    }
+
+    console.log(rentFormData);
     try {
-      const response = await assetItemService.getAllAsset();
-      setSubProductName(response.data);
+      const response = await purchaseOrderRentService.createPO(rentFormData)
+      console.log(response)
+      clearForm()
     } catch (e) {
-      console.log(e);
+      console.log(e)
     }
-  };
+   }
 
-  // GET ALL VENDOR
-  const [vendor, setVendor] = useState([]);
+   useEffect(()=>{
+    onGetCookie();
+   },[]);
 
-  const onGetAllVendor = async () => {
-    try {
-      const response = await vendorService.getAllVendor();
-      setVendor(response.data);
-    } catch (e) {
-      console.log(e);
-    }
-  };
+   const clearForm = () => {
+    setToUser('');
+    setPosition('')
+    setAlamatLokasi('')
+    setNamaBarang('')
+    setJenisTempat('')
+    setTlp('')
+    setPln('')
+    setPam('')
+    setLainlain('')
+    setMasaSewa('')
+    setPeriodeSewaAwal()
+    setPeriodeSewaAkhir()
+    setNamaPemilik('')
+    setNPWP('')
+    setAlamatPemilik('')
+    setTlpPemilik('')
+    setSewaHargaLama('')
+    setSewaHargaBaru('')
+    setPajak('')
+    setNominalTransfer('')
+    setNotaris('')
+    setJasaNotaris('')
+    setNPWPNotaris('')
+    setNamaRekeningTujuan('')
+    setNorekTujuan('')
+    setBank('')
+    setCabangBank('')
+    setCaraPembayaran('')
+    setJatuhTempo('')
+}
 
-  //Get User
-  const { getCookie } = useAuth();
-  const [user, setUser] = useState({
+
+   const {getCookie} = useAuth()
+   const [user, setUser] = useState({
     name: "",
     role: "",
     level_approval: "",
@@ -171,6 +160,7 @@ export const FormPORent = () => {
     cluster: "",
     department: "",
   });
+
   const onGetCookie = () => {
     let savedUserJsonString = getCookie("user");
     let savedUser = JSON.parse(savedUserJsonString);
@@ -186,61 +176,61 @@ export const FormPORent = () => {
     }));
   };
 
-  const handleClearForm = () => {
-    setPOHeader({});
-    setPOData([{}]);
-  };
 
   return (
     <>
-      <div className="po-mtnc-form-container">
-        <div className="po-mtnc-form-card">
+      <div className="po-rent-form-container">
+        <div className="po-rent-form-card">
           <form onSubmit={onSubmitPO}>
             <h4 className="mb-4 text-danger">Purchase Order Request Form</h4>
             <div className="formPOInput">
               <div className="row">
                 <div className="mb-3 col-md-4">
-                  <label>
+                  <label style={{fontWeight:'500'}}>
                     Area Code<span className="text-danger">*</span>
                   </label>
                   <input
+                    readOnly
                     type="text"
                     name="Kode Wilayah"
                     className="form-control"
+                    defaultValue={user.location_id}
                   />
                 </div>
                 <div className="mb-3 col-md-4">
-                  <label>
+                  <label style={{fontWeight:'500'}}>
                     Cluster<span className="text-danger">*</span>
                   </label>
-                  <input type="text" name="Cluster" className="form-control" />
+                  <input readOnly defaultValue={user.cluster} type="text" name="Cluster" className="form-control" />
                 </div>
                 <div className="mb-3 col-md-4">
-                  <label>
+                  <label style={{fontWeight:'500'}}>
                     TAP<span className="text-danger">*</span>
                   </label>
                   <input
+                    readOnly
+                    defaultValue={user.tap}
                     required
                     type="text"
                     name="TAP"
                     className="form-control"
-                    onChange={handleChange}
                   />
                 </div>
                 <div className="mb-3 col-md-6">
-                  <label>
+                  <label style={{fontWeight:'500'}}>
                     User<span className="text-danger">*</span>
                   </label>
                   <input
+                    value={toUser}
                     required
                     type="text"
                     name="User"
                     className="form-control"
-                    onChange={handleChange}
+                    onChange={(e)=>setToUser(e.target.value)}
                   />
                 </div>
                 <div className="mb-3 col-md-6">
-                  <label>
+                  <label style={{fontWeight:'500'}}>
                     Position<span className="text-danger">*</span>
                   </label>
                   <input
@@ -248,17 +238,18 @@ export const FormPORent = () => {
                     type="text"
                     name="Jabatan"
                     className="form-control"
-                    onChange={handleChange}
+                    value={position}
+                    onChange={(e)=> setPosition(e.target.value)}
                   />
                 </div>
                 <div className="mb-3 col-md-12">
-                  <label>
+                  <label style={{fontWeight:'500'}}>
                     Address<span className="text-danger">*</span>
                   </label>
-                  <textarea className="form-control" rows="3"></textarea>
+                  <textarea value={alamatLokasi}  name="alamat_lokasi" onChange={(e)=>setAlamatLokasi(e.target.value)} required className="form-control" rows="3"></textarea>
                 </div>
                 <div className="mb-3 col-md-6">
-                  <label>
+                  <label style={{fontWeight:'500'}}>
                     Item Name<span className="text-danger">*</span>
                   </label>
                   <input
@@ -266,11 +257,12 @@ export const FormPORent = () => {
                     type="text"
                     name="Nama Barang"
                     className="form-control"
-                    onChange={handleChange}
+                    value={namaBarang}
+                    onChange={(e)=>setNamaBarang(e.target.value)}
                   />
                 </div>
                 <div className="mb-3 col-md-6">
-                  <label>
+                  <label style={{fontWeight:'500'}}>
                     Type of Place<span className="text-danger">*</span>
                   </label>
                   <input
@@ -278,11 +270,12 @@ export const FormPORent = () => {
                     type="text"
                     name="jenis_tempat"
                     className="form-control"
-                    onChange={handleChange}
+                    value={jenisTempat}
+                    onChange={(e)=>setJenisTempat(e.target.value)}
                   />
                 </div>
                 <div className="mb-3 col-md-12">
-                  <label> Existing Facilities : </label>
+                  <label style={{fontWeight:'500'}}> Existing Facilities : </label>
                 </div>
                 <div className="mb-3 col-md-4">
                   <label>
@@ -293,7 +286,8 @@ export const FormPORent = () => {
                     type="text"
                     name="TLP"
                     className="form-control"
-                    onChange={handleChange}
+                    value={tlp}
+                    onChange={(e)=>setTlp(e.target.value)}
                   />
                 </div>
                 <div className="mb-3 col-md-4">
@@ -305,7 +299,8 @@ export const FormPORent = () => {
                     type="text"
                     name="PLN"
                     className="form-control"
-                    onChange={handleChange}
+                    value={pln}
+                    onChange={(e)=>setPln(e.target.value)}
                   />
                 </div>
                 <div className="mb-3 col-md-4">
@@ -317,23 +312,24 @@ export const FormPORent = () => {
                     type="text"
                     name="PAM"
                     className="form-control"
-                    onChange={handleChange}
+                    value={pam}
+                    onChange={(e)=>setPam(e.target.value)}
                   />
                 </div>
                 <div className="mb-3 col-md-6">
-                  <label>
-                    Additional Info<span className="text-danger">*</span>
+                  <label style={{fontWeight:'500'}}>
+                    Additional Info
                   </label>
                   <input
-                    required
+                    value={lainLain}
                     type="text"
                     name="lain_lain"
                     className="form-control"
-                    onChange={handleChange}
+                    onChange={(e)=>setLainlain(e.target.value)}
                   />
                 </div>
                 <div className="mb-3 col-md-6">
-                  <label>
+                  <label style={{fontWeight:'500'}}>
                     Rent Period (Month/Year)
                     <span className="text-danger">*</span>
                   </label>
@@ -342,12 +338,13 @@ export const FormPORent = () => {
                     type="text"
                     name="masa_sewa_bulan_tahun"
                     className="form-control"
-                    onChange={handleChange}
+                    value={masaSewa}
+                    onChange={(e)=>setMasaSewa(e.target.value)}
                   />
                 </div>
                 <div></div>
                 <div className="mb-1 col-md-12">
-                  <label> Rent Period: </label>
+                  <label style={{fontWeight:'500'}}> Rent Period: </label>
                 </div>
                 <div className="mb-3 col-md-6">
                   <label>
@@ -356,9 +353,10 @@ export const FormPORent = () => {
                   <input
                     required
                     type="date"
-                    name="periode_sewa"
+                    name="periode_sewa_awal"
                     className="form-control"
-                    onChange={handleChange}
+                    value={periodeSewaAwal}
+                    onChange={(e)=>setPeriodeSewaAwal(e.target.value)}
                   />
                 </div>
                 <div className="mb-3 col-md-6">
@@ -368,13 +366,14 @@ export const FormPORent = () => {
                   <input
                     required
                     type="date"
-                    name="periode_sewa"
+                    name="periode_sewa_akhir"
                     className="form-control"
-                    onChange={handleChange}
+                    value={periodeSewaAkhir}
+                    onChange={(e)=>setPeriodeSewaAkhir(e.target.value)}
                   />
                 </div>
                 <div className="mb-3 col-md-6">
-                  <label>
+                  <label style={{fontWeight:'500'}}>
                     Owner's Name<span className="text-danger">*</span>
                   </label>
                   <input
@@ -382,11 +381,12 @@ export const FormPORent = () => {
                     type="text"
                     name="nama_pemilik"
                     className="form-control"
-                    onChange={handleChange}
+                    value={namaPemilik}
+                    onChange={(e)=>setNamaPemilik(e.target.value)}
                   />
                 </div>
                 <div className="mb-3 col-md-6">
-                  <label>
+                  <label style={{fontWeight:'500'}}>
                     NPWP<span className="text-danger">*</span>
                   </label>
                   <input
@@ -394,21 +394,24 @@ export const FormPORent = () => {
                     type="text"
                     name="NPWP"
                     className="form-control"
-                    onChange={handleChange}
+                    value={NPWP}
+                    onChange={(e)=>setNPWP(e.target.value)}
                   />
                 </div>
                 <div className="mb-3 col-md-12">
-                  <label>
+                  <label style={{fontWeight:'500'}}>
                     Owner's Address<span className="text-danger">*</span>
                   </label>
                   <textarea
+                    onChange={(e)=>setAlamatPemilik(e.target.value)}
+                    value={alamatPemilik}
                     className="form-control"
                     rows="3"
                     name="alamat_pemilik"
                   ></textarea>
                 </div>
                 <div className="mb-3 col-md-6">
-                  <label>
+                  <label style={{fontWeight:'500'}}>
                     Owner's Phone<span className="text-danger">*</span>
                   </label>
                   <input
@@ -416,11 +419,12 @@ export const FormPORent = () => {
                     type="number"
                     name="no_telepon_pemilik"
                     className="form-control"
-                    onChange={handleChange}
+                    onChange={(e)=>setTlpPemilik(e.target.value)}
+                    value={tlpPemilik}
                   />
                 </div>
                 <div className="mb-3 col-md-6">
-                  <label>
+                  <label style={{fontWeight:'500'}}>
                     Rent Price/Year (Old Price if Extend)<span className="text-danger">*</span>
                   </label>
                   <input
@@ -428,11 +432,12 @@ export const FormPORent = () => {
                     type="number"
                     name="harga_sewa_per_tahun_harga_lama"
                     className="form-control"
-                    onChange={handleChange}
+                    value={sewaHargaLama}
+                    onChange={(e)=>setSewaHargaLama(e.target.value)}
                   />
                 </div>
                 <div className="mb-3 col-md-4">
-                  <label>
+                  <label style={{fontWeight:'500'}}>
                     Rent Price/Year (New Price)<span className="text-danger">*</span>
                   </label>
                   <input
@@ -440,11 +445,12 @@ export const FormPORent = () => {
                     type="number"
                     name="harga_sewa_per_tahun_harga_baru"
                     className="form-control"
-                    onChange={handleChange}
+                    value={sewaHargaBaru}
+                    onChange={(e)=>setSewaHargaBaru(e.target.value)}
                   />
                 </div>
                 <div className="mb-3 col-md-4">
-                  <label>
+                  <label style={{fontWeight:'500'}}>
                     Tax (10%)<span className="text-danger">*</span>
                   </label>
                   <input
@@ -452,11 +458,12 @@ export const FormPORent = () => {
                     type="number"
                     name="pajak"
                     className="form-control"
-                    onChange={handleChange}
+                    value={pajak}
+                    onChange={(e)=>setPajak(e.target.value)}
                   />
                 </div>
                 <div className="mb-3 col-md-4">
-                  <label>
+                  <label style={{fontWeight:'500'}}>
                   Amount transferred to Owner<span className="text-danger">*</span>
                   </label>
                   <input
@@ -464,11 +471,12 @@ export const FormPORent = () => {
                     type="number"
                     name="nominal_transfer_ke_pemilik"
                     className="form-control"
-                    onChange={handleChange}
+                    onChange={(e)=>setNominalTransfer(e.target.value)}
+                    value={nominalTransfer}
                   />
                 </div>
                 <div className="mb-3 col-md-4">
-                  <label>
+                  <label style={{fontWeight:'500'}}>
                     Notary<span className="text-danger">*</span>
                   </label>
                   <input
@@ -476,11 +484,12 @@ export const FormPORent = () => {
                     type="text"
                     name="notaris"
                     className="form-control"
-                    onChange={handleChange}
+                    onChange={(e)=>setNotaris(e.target.value)}
+                    value={notaris}
                   />
                 </div>
                 <div className="mb-3 col-md-4">
-                  <label>
+                  <label style={{fontWeight:'500'}}>
                     Notary Services<span className="text-danger">*</span>
                   </label>
                   <input
@@ -488,11 +497,12 @@ export const FormPORent = () => {
                     type="text"
                     name="jasa_notaris"
                     className="form-control"
-                    onChange={handleChange}
+                    value={jasaNotaris}
+                    onChange={(e)=>setJasaNotaris(e.target.value)}
                   />
                 </div>
                 <div className="mb-3 col-md-4">
-                  <label>
+                  <label style={{fontWeight:'500'}}>
                  NPWP Notary<span className="text-danger">*</span>
                   </label>
                   <input
@@ -500,11 +510,12 @@ export const FormPORent = () => {
                     type="text"
                     name="NPWP_notaris"
                     className="form-control"
-                    onChange={handleChange}
+                    value={NPWPNotaris}
+                    onChange={(e)=>setNPWPNotaris(e.target.value)}
                   />
                 </div>
                 <div className="mb-3 col-md-6">
-                  <label>
+                  <label style={{fontWeight:'500'}}>
                  Destination Account Name<span className="text-danger">*</span>
                   </label>
                   <input
@@ -512,11 +523,12 @@ export const FormPORent = () => {
                     type="text"
                     name="nama_rekening_tujuan"
                     className="form-control"
-                    onChange={handleChange}
+                    onChange={(e)=>setNamaRekeningTujuan(e.target.value)}
+                    value={namaRekeningTujuan}
                   />
                 </div>
                 <div className="mb-3 col-md-6">
-                  <label>
+                  <label style={{fontWeight:'500'}}>
                  Destination Account Number<span className="text-danger">*</span>
                   </label>
                   <input
@@ -524,11 +536,12 @@ export const FormPORent = () => {
                     type="text"
                     name="nomor_rekening_tujuan"
                     className="form-control"
-                    onChange={handleChange}
+                    value={norekTujuan}
+                    onChange={(e)=>setNorekTujuan(e.target.value)}
                   />
                 </div>
                 <div className="mb-3 col-md-6">
-                  <label>
+                  <label style={{fontWeight:'500'}}>
                  Bank Name<span className="text-danger">*</span>
                   </label>
                   <input
@@ -536,11 +549,12 @@ export const FormPORent = () => {
                     type="text"
                     name="bank"
                     className="form-control"
-                    onChange={handleChange}
+                    value={bank}
+                    onChange={(e)=>setBank(e.target.value)}
                   />
                 </div>
                 <div className="mb-3 col-md-6">
-                  <label>
+                  <label style={{fontWeight:'500'}}>
                  Branch Name<span className="text-danger">*</span>
                   </label>
                   <input
@@ -548,36 +562,193 @@ export const FormPORent = () => {
                     type="text"
                     name="cabang_bank"
                     className="form-control"
-                    onChange={handleChange}
+                    value={cabangBank}
+                    onChange={(e)=>setCabangBank(e.target.value)}
                   />
                 </div>
                 <div className="mb-3 col-md-6">
-                  <label>
-                Payment Method<span className="text-danger">*</span>
+                  <label style={{fontWeight:'500'}}>
+                  Payment Method<span className="text-danger">*</span>
                   </label>
                   <input
                     required
                     type="text"
                     name="cara_pembayaran"
                     className="form-control"
-                    onChange={handleChange}
+                    value={caraPembayaran}
+                    onChange={(e)=>setCaraPembayaran(e.target.value)}
                   />
                 </div>
                 <div className="mb-3 col-md-6">
-                  <label>
-               Due Date<span className="text-danger">*</span>
+                  <label style={{fontWeight:'500'}}>
+                  Due Date<span className="text-danger">*</span>
                   </label>
                   <input
                     required
                     type="date"
-                    name="cara_pembayaran"
+                    name="tanggal_jatuh_tempo"
                     className="form-control"
-                    onChange={handleChange}
+                    value={jatuhTempo}
+                    onChange={(e)=>setJatuhTempo(e.target.value)}
                   />
                 </div>
-
-
-                <div className="col-md-12">
+                <label style={{fontWeight:'500'}}>Attachment File</label>
+                <div style={{minHeight:'200px', marginTop:'3vh'}} className="card">
+                    <div className="card-header bg-transparent">
+                      KTP
+                    </div>
+                    <div class="card-body">
+                        
+                          <input
+                            onChange={(e) => {
+                            setFileKtp(e.target.files)
+                            }}
+                            multiple
+                            type="file"
+                            accept='.png, .jpeg, .jpg'
+                            />
+                        
+                        <div className="form-group multi-preview"> 
+                        {
+                          Array.from(fileKtp).map(item => {
+                            return (
+                              <span>
+                                <img
+                                  style={{ padding: '10px' }}
+                                  width={150} height={100}
+                                  src={item ? URL.createObjectURL(item) : null} />
+                              </span>
+                            )
+                          })
+                        }
+                        </div>  
+                    </div>
+                  </div>
+                  <div style={{minHeight:'200px', marginTop:'5vh'}} className="card">
+                    <div className="card-header bg-transparent">
+                      NPWP
+                    </div>
+                    <div class="card-body">
+                        <div>
+                          <input
+                            onChange={(e) => {
+                            setFileNpwp(e.target.files)
+                            }}
+                            multiple
+                            type="file"
+                            accept='.png, .jpeg, .jpg'
+                            />
+                        </div>
+                        <div className="form-group multi-preview"> 
+                        {
+                          Array.from(fileNpwp).map(item => {
+                            return (
+                              <span>
+                                <img
+                                  style={{ padding: '10px' }}
+                                  width={150} height={100}
+                                  src={item ? URL.createObjectURL(item) : null} />
+                              </span>
+                            )
+                          })
+                        }
+                        </div>  
+                    </div>
+                  </div>
+                  <div style={{minHeight:'200px', marginTop:'5vh'}} className="card">
+                    <div className="card-header bg-transparent">
+                      Savings Account
+                    </div>
+                    <div class="card-body">
+                        <div>
+                          <input
+                            onChange={(e) => {
+                            setFileBukuTabungan(e.target.files)
+                            }}
+                            multiple
+                            type="file"
+                            accept='.png, .jpeg, .jpg'
+                            />
+                        </div>
+                        <div className="form-group multi-preview"> 
+                        {
+                          Array.from(fileBukuTabungan).map(item => {
+                            return (
+                              <span>
+                                <img
+                                  style={{ padding: '10px' }}
+                                  width={150} height={100}
+                                  src={item ? URL.createObjectURL(item) : null} />
+                              </span>
+                            )
+                          })
+                        }
+                        </div>  
+                    </div>
+                  </div>
+                  <div style={{minHeight:'200px', marginTop:'5vh'}} className="card">
+                    <div className="card-header bg-transparent">
+                      Location Photo
+                    </div>
+                    <div class="card-body">
+                        <div>
+                          <input
+                            onChange={(e) => {
+                            setFileFotoLokasi(e.target.files)
+                            }}
+                            multiple
+                            type="file"
+                            accept='.png, .jpeg, .jpg'
+                            />
+                        </div>
+                        <div className="form-group multi-preview"> 
+                        {
+                          Array.from(fileFotoLokasi).map(item => {
+                            return (
+                              <span>
+                                <img
+                                  style={{ padding: '10px' }}
+                                  width={150} height={100}
+                                  src={item ? URL.createObjectURL(item) : null} />
+                              </span>
+                            )
+                          })
+                        }
+                        </div>  
+                    </div>
+                  </div>
+                  <div style={{minHeight:'200px', marginTop:'5vh'}} className="card">
+                    <div className="card-header bg-transparent">
+                      Certificate
+                    </div>
+                    <div class="card-body">
+                        <div>
+                          <input
+                            onChange={(e) => {
+                            setFileSertifikat(e.target.files)
+                            }}
+                            multiple
+                            type="file"
+                            accept='.png, .jpeg, .jpg'
+                            />
+                        </div>
+                        <div className="form-group multi-preview"> 
+                        {
+                          Array.from(fileSertifikat).map(item => {
+                            return (
+                              <span>
+                                <img
+                                  style={{ padding: '10px' }}
+                                  width={150} height={100}
+                                  src={item ? URL.createObjectURL(item) : null} />
+                              </span>
+                            )
+                          })
+                        }
+                        </div>  
+                    </div>
+                  </div>
+                <div className="col-md-12 mt-4">
                   <button
                     className="btn btn-primary float-end"
                     style={{ marginLeft: "20px", marginRight: "20px" }}

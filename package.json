@@ -25,7 +25,7 @@
     "moment": "^2.29.4",
     "otp-input-react": "^0.3.0",
     "react": "^18.2.0",
-    "react-auth-code-input": "^3.2.1",
+    "react-auth-code-input": "^3.1.0",
     "react-bootstrap": "^2.5.0",
     "react-chartjs-2": "^4.3.1",
     "react-csv": "^2.2.2",

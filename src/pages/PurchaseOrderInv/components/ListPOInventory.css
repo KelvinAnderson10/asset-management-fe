@@ -31,7 +31,7 @@
 
 .po-inv-list-card .po-inv-list-box-item{
     width: 95%;
-    height: 15vh;
+    height: 20vh;
     border-radius: 10px;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     margin-bottom: 1vh;
@@ -72,8 +72,11 @@
 
 .header-list-po .status-po{
     width: 8vw;
-    height: 3vh;
+    height: 4vh;
     border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     text-decoration: none;
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
     color: white;
@@ -141,7 +144,7 @@
     cursor: pointer;
 }
 
-.box-po-inv-detail .pagination-modal{
+.pagination-modal{
     width: 100%;
     display: flex;
     justify-content: flex-end;
@@ -229,4 +232,35 @@
     margin-bottom: 2vh;
     align-items: center;
 }
-  
+
+.text {
+    font-size: 16px;
+    text-decoration: none;
+    color: black;
+    text-align: left;
+}
+ 
+/* For mobile phones: */
+@media only screen and (max-width: 520px) {
+    .approval-inv-box-container .approval-inv-list-card{
+        background-color:whitesmoke;
+        padding: 0;
+    } 
+    .header-list-po .po-num{
+        width: 5vw;
+        height: 3vh;
+        font-size: 12px;
+    }
+    .header-list-po .status-po{
+        width: 14vw;
+        height: 2.5vh;
+        font-size: 10px;
+        font-weight: 600;
+    }
+    .text {
+        font-size: 12px;
+        text-decoration: none;
+        color: black;
+        text-align: left;
+    }
+}

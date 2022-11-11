@@ -270,3 +270,85 @@
   margin: 4px 10px;
   cursor: pointer;
 }
+
+.icon-card {
+  color: white;
+}
+
+.text-card {
+  color: white;
+  font-size: 24px;
+  margin-top: 12px; 
+  margin-left: 8px;
+  text-align: left;
+  text-decoration: none;
+}
+
+.text-eventlog {
+  font-size: 12px;
+  text-decoration: none;
+  color: black;
+}
+
+/* For mobile phones: */
+@media only screen and (max-width: 520px) {
+  .content-dashboard-top .count-dashboard {
+    width: 76vw;
+    height: 10vh;
+  }
+  .icon-card {
+    font-size: 30px;
+  }
+  .dashboard-card .content-dashboard-top {
+    flex-direction: column;
+  }
+  .content-non-icon .count-number {
+    font-size: 3.6vh;
+    margin-left: 4px;
+  }
+
+  .text-card {
+    color: white;
+    font-size: 16px;
+    margin-top: 12px; 
+    margin-left: 8px;
+    text-decoration: none;
+  }
+  .dashboard-card .content-dashboard-center {
+    flex-direction: column;
+  }
+  .content-dashboard-center .piechart {
+    width: 76vw;
+    height: 50vh;
+  }
+
+  .content-dashboard-center .eventlog-container {
+    width: 76vw;
+    height: 40vh;
+  }
+
+  .content-dashboard-center .linechart {
+    width: 76vw;
+    min-height: 40vh;
+  }
+  .dashboard-card .content-dashboard-bottom {
+    min-height: 150vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .dashboard-card .content-dashboard-center {
+    width: 100%;
+    min-height: 120vh;
+  }
+  .text-eventlog {
+    font-size: 12px;
+    text-decoration: none;
+    color: black;
+  }
+  .content-dashboard-bottom .grafik-box {
+    width: 80%;
+  }
+}

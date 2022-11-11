@@ -5,11 +5,12 @@ import { useDeps } from "../../shared/context/DependencyContext";
 import { useNavigate, Navigate } from "react-router-dom";
 import { Failed } from "../../shared/components/Notification/Failed";
 import "./Login.css";
-import AuthCode from "react-auth-code-input";
+import AuthCode from 'react-auth-code-input';
 import { Card } from "react-bootstrap";
 import { useAuth } from "../../services/UseAuth";
 import Loading from "../../shared/components/Loading/Loading";
-
+import { responsiveProperty } from "@mui/material/styles/cssUtils";
+import { useRef } from "react";
 
 export const Login = () => {
   const [email, setEmail] = useState("");
@@ -22,7 +23,10 @@ export const Login = () => {
   const { userService } = useDeps();
   const navigate = useNavigate();
   const { setCookie } = useAuth();
-  const [isLoading, setLoading] = useState(false)
+  const [isLoading, setLoading] = useState(false);
+  const [errDisabled, setErrDisabled] = useState(false);
+  const [errMsg, setErrMsg] = useState('');
+  const [clearOtp, setClearOtp] = useState();
   const [user, setUser] = useState({
     name:'',
     role:'',
@@ -55,6 +59,7 @@ export const Login = () => {
       const timer = counter > 0 && setInterval(() => setCounter(counter - 1), 1000);
       if (counter === 0 ) {
         SetIsDisabled(false)
+        setOTP()
       } 
       return () => clearInterval(timer);
   }, [counter])
@@ -70,6 +75,7 @@ export const Login = () => {
       setCounter(59);
       setShowOTPForm(true);
       SetIsDisabled(true)
+      setErrMsg('')
     } catch (e) {
       Failed("Email not registered yet, Please input a valid email");
     } finally{
@@ -97,9 +103,14 @@ export const Login = () => {
       if (OTPInput == OTP) {
         setCookie("user",user,200)
       } else {
-        Failed("Wrong OTP");
+        // Failed("Wrong OTP");
+        setOTPInput('')
+        const resetKey = Math.random().toString().slice(0.8)
+        setClearOtp(resetKey)
+        setErrDisabled(true);
+        setErrMsg('Wrong OTP! Please input valid OTP.')
       }
-      setShowOTPForm(false);
+      // setShowOTPForm(false);
     }
     
   };
@@ -117,11 +128,11 @@ export const Login = () => {
 
       <div className="container-fluid">
         <div className="row">
-          <div className="col-lg-9 col-md-5 d-none d-md-block image-container">
+          <div className="col-lg-8 col-md-5 d-none d-md-block image-container">
             <h1>MAKE YOUR</h1>
           <h2>WORK EASIER</h2>
           </div>
-          <div className="col-lg-3 col-md-7 form-container">
+          <div className="col-lg-4 col-md-7 form-container">
             <div className="col-lg-10 col-md-12 col-sm-9 col-xs-12 form-box">
               <div className="logo">
                 <img src={logo} alt="logo"/>
@@ -177,6 +188,12 @@ export const Login = () => {
               </div>
               <h3>OTP Verification</h3>
               <h5> Enter the OTP sent to your email</h5>
+              {errDisabled && 
+                <>
+                  <div className="text-err">{errMsg} 
+                  </div>
+                </>
+                }
               <Card.Body>
                 <AuthCode
                   onChange={(e) => {
@@ -185,11 +202,13 @@ export const Login = () => {
                   containerClassName="otpContainer"
                   inputClassName="otpInputContainer"
                   allowedCharacters="numeric"
+                  key={clearOtp}
                 ></AuthCode>
                 <h6 className="message">If you cant'find the OTP in your inbox, please check your spam folder</h6>
                 <div className="counter">
                   00:{counter}
                 </div>
+                
                 {!isDisabled && 
                 <>
                   <div className="text-otp">OTP not received? 

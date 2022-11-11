@@ -4,6 +4,7 @@ import { UseApprovalMaintenance } from '../UseApprovalMaintenance';
 import * as CgIcons from 'react-icons/cg'
 import { NoData } from '../../../shared/components/NoData/NoData';
 import Loading from '../../../shared/components/Loading/Loading';
+import { Modal } from 'react-bootstrap';
 
 export const ListApprovedMaintenance = () => {
     const {appData1,isLoading } = UseApprovalMaintenance();
@@ -139,42 +140,42 @@ export const ListApprovedMaintenance = () => {
                     <div className="box-content-approval">
                       <div className="row-content-approval">
                         <div className="sub-title-content">
-                          <a>Requester</a>
+                          <a className="text">Requester</a>
                         </div>
                         <div className="sub-title-content">
-                          <a>: {data.requester}</a>
+                          <a className="text">: {data.requester}</a>
                         </div>
                       </div>
                       <div className="row-content-approval">
                         <div className="sub-title-content">
-                          <a>To</a>
+                          <a className="text">To</a>
                         </div>
                         <div className="sub-title-content">
-                          <a>: {data.ToUser}</a>
+                          <a className="text">: {data.ToUser}</a>
                         </div>
                       </div>
                     </div>
                     <div className="box-content-approval">
                       <div className="row-content-approval">
                         <div className="sub-title-content">
-                          <a>Location</a>
+                          <a className="text">Location</a>
                         </div>
                         <div className="sub-title-content">
-                          <a>: {data.TAP}</a>
+                          <a className="text">: {data.TAP}</a>
                         </div>
                       </div>
                       <div className="row-content-approval">
                         <div className="sub-title-content">
-                          <a>Product Type</a>
+                          <a className="text">Product Type</a>
                         </div>
                         <div className="sub-title-content">
-                          <a>: {data["Jenis Produk"]}</a>
+                          <a className="text">: {data["Jenis Produk"]}</a>
                         </div>
                       </div>
                     </div>
                   </div>
                   <div className="date-approval">
-                    <a>{data.CreatedAt}</a>
+                    <a className="text">{data.CreatedAt}</a>
                   </div>
                 </div>
               ))
@@ -205,17 +206,22 @@ export const ListApprovedMaintenance = () => {
           </div>
         </div>
         </div>
-        {viewDetail &&
-        <div className='view-po-inv-container'>
-            <div className='box-po-inv-detail'>
-                <div className='close'>
-                    <CgIcons.CgClose size={'2em'} onClick={onClickClocePODetail}/>
-                </div>
-                <form>
-            <div className="formPOInput">
-              <div className="row" style={{textAlign:'left'}}>
-              <h4 style={{textAlign:'left', color:'#B70621'}}>PO Number {POById.po_id} </h4>
-              <div className="mb-2 col-md-4">
+        
+        <div className='model-box-view'>
+          <Modal
+          dialogClassName="modal-90w"
+          show={viewDetail}
+          onHide={onClickClocePODetail}
+          backdrop="static"
+          keyboard={false}
+          size='lg'>
+          <Modal.Header closeButton>
+          <Modal.Title style={{textAlign:'left', color:'#B70621'}} >PO Number {POById.po_id}</Modal.Title>
+         </Modal.Header>
+         <Modal.Body>
+          <div className='form-group'>
+            <div className='row'>
+            <div className="mb-2 col-md-4">
                       <label>
                         Area Code
                       </label>
@@ -349,11 +355,12 @@ export const ListApprovedMaintenance = () => {
                     </div>
                   );
                 }))}
-              </div>
             </div>
-          </form>
-            </div>
-        </div>}
+          </div>
+         </Modal.Body>
+          </Modal>
+
+        </div>
         {isLoading && <Loading/>}
       </div>
       

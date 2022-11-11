@@ -55,7 +55,7 @@
 
 .approval-inv-list-card .approval-inv-box-item{
     width: 90%;
-    height: 15vh;
+    height: 20vh;
     border-radius: 10px;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     margin-bottom: 1vh;
@@ -96,7 +96,10 @@
 
 .header-list-approval .status-approval{
     width: 8vw;
-    height: 3vh;
+    height: 4vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     color: white;
     border-radius: 8px;
     text-decoration: none;
@@ -136,4 +139,48 @@
     width: 100%;
     display: flex;
     justify-content: flex-end;
+}
+
+.text {
+    font-size: 16px;
+    text-decoration: none;
+    color: black;
+    text-align: left;
+}
+
+/* For mobile phones: */
+@media only screen and (max-width: 520px) {
+    .approval-inv-box-container .approval-inv-list-card{
+        background-color:whitesmoke;
+        padding: 0;
+    } 
+    .header-list-approval .approval-num{
+        width: 5vw;
+        height: 3vh;
+        font-size: 12px;
+    }
+    .header-list-approval .status-approval{
+        width: 14vw;
+        height: 2.5vh;
+        font-size: 10px;
+        font-weight: 600;
+    }
+    .text {
+        font-size: 12px;
+        text-decoration: none;
+        color: black;
+        text-align: left;
+    }
+    .header-list-approval .approval-num{
+        width: 5vw;
+        height: 3vh;
+        font-size: 12px;
+    }
+    
+    .header-list-approval .status-approval{
+        width: 14vw;
+        height: 2.5vh;
+        font-size: 10px;
+        font-weight: 600;
+    }
 }
