@@ -23,6 +23,7 @@ import { AppInv } from "../pages/ApprovalInventory/AppInv";
 import { AppMaintenance } from "../pages/ApprovalMaintenance/AppMaintenance";
 import { FormApprovalMaintence } from "../pages/ApprovalMaintenance/components/FormApprovalMaintence";
 import { TableAssetDeprecated } from "../pages/Overview/components/TableAssetDeprecated";
+import { AppTrans } from "../pages/ApprovalTransfer/AppTrans";
 import { PORent } from "../pages/PurchaseOrderRent/PORent";
 import { FormApprovalRent } from "../pages/ApprovalRent/components/FormApprovalRent"
 import { AppRent } from "../pages/ApprovalRent/AppRent";

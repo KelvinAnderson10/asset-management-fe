@@ -182,7 +182,7 @@ export const overviewService = ({doGet, doPut}) => {
     const filterAssetMultipleConditionByUser = async (condition, vendor, location, product, subproduct, category, assetNumber, page) => {
         try {
             return await doGet({
-                url: `/api/asset/user/search?condition=${condition}&vendor=${vendor}&location=${location}&product=${product}&subproduct=${subproduct}&category=${category}&assetNumber=${assetNumber}&page=${page}`
+                url: `/api/asset/user/search?condition=${condition}&vendor=${vendor}&location=${location}&product=${product}&subproduct=${subproduct}&category=${category}&asset_number=${assetNumber}&page=${page}`
             })
         } catch (e) {
             throw e
