@@ -148,6 +148,10 @@
     text-align: left;
 }
 
+.text:hover{
+    color: black;
+}
+
 /* For mobile phones: */
 @media only screen and (max-width: 520px) {
     .approval-inv-box-container .approval-inv-list-card{
@@ -182,5 +186,8 @@
         height: 2.5vh;
         font-size: 10px;
         font-weight: 600;
+    }
+    .text:hover{
+        color: black;
     }
 }
