@@ -30,6 +30,7 @@ import { AppRent } from "../pages/ApprovalRent/AppRent";
 import { FormPORent } from "../pages/PurchaseOrderRent/components/FormPORent";
 import { FormViewRent } from "../pages/PurchaseOrderRent/components/FormViewRent";
 import { FormViewRentDetail } from "../pages/Overview/FormViewRent";
+import { GeneratePdf } from "../pages/ApprovalRent/components/GeneratePdf";
 
 export const AppRouter = () => {
   return (
@@ -58,6 +59,7 @@ export const AppRouter = () => {
         <Route path="/approval-data/rent/form" element={<FormApprovalRent/>}/>
         <Route path="/main/rent" element={<FormViewRentDetail/>}/>
         
+        <Route path="/approval-data/rent/pdf" element={<GeneratePdf/>}/>
         
         <Route path="/settings" element={<Settings/>} />
         <Route path="*" element={<PageNotFound />} />

@@ -7,7 +7,7 @@ import "./EditAsset.css";
 import swal from "sweetalert";
 import Loading from "../../shared/components/Loading/Loading";
 import ReactPaginate from "react-paginate";
-import { EVENT, STATUS } from "../../shared/constants";
+import { EVENT, NOTIF, PUSHNOTIF, STATUS } from "../../shared/constants";
 import { useAuth } from "../../services/UseAuth";
 import imageCompression from "browser-image-compression";
 import AssetLoading from "../../shared/components/Loading/AssetLoading";
@@ -21,7 +21,9 @@ export const Overview = () => {
     locationService,
     assetCategoryService,
     eventLogService,
-    transferRequestService
+    transferRequestService,
+    notificationService,
+    userService
   } = useDeps();
   const [datas, setDatas] = useState([]);
   const [order, setOrder] = useState("ASC");
@@ -85,7 +87,22 @@ export const Overview = () => {
   // GET ID FOR EDIT SHOW
   const [showEdit, setShowEdit] = useState(false);
 
+  const handleGetDetailItem = async (name) =>{
+    setLoading(true);
+    try {
+      const response = await overviewService.getAssetByAssetName(name);
+      setRowData(response.data)
+      console.log(response.data);
+      handleViewShow(setRowData(response.data));
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const handleEditAssetById = async (name) => {
+    setLoading(true);
     try {
       const response = await overviewService.getAssetByAssetName(name);
       if (user.role != "Regular") {
@@ -105,6 +122,8 @@ export const Overview = () => {
       setShowEdit(!showEdit);
     } catch (e) {
       console.log(e);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -736,7 +755,6 @@ export const Overview = () => {
  
    const handleChangeTransfer = (e) => {
      if (e.target.value === "") {
-       setDisableSubmit(true);
        return;
      }
      const newData = { ...assetTransfer};
@@ -762,6 +780,27 @@ export const Overview = () => {
        const response = await transferRequestService.createTransferRequest(transferReqForm);
        if (response.status === "SUCCESS") {
         setLoading(false);
+
+        const userInfo = await userService.getUserByName(response.data.approver_level1);
+
+        //pushnotif
+        let pushNotifObj = {
+          to: userInfo.data.token,
+          title: `${PUSHNOTIF.REQUEST.TITLE} ${response.data.approver_level1}`,
+          body: `${PUSHNOTIF.REQUEST.TRANSFER.BODY} ${user.name}`,
+        };
+        createPushNotification(pushNotifObj);
+
+        //notif
+        let notifObj = {
+          to: response.data.approver_level1,
+          title: NOTIF.REQUEST.TRANSFER.TITLE,
+          body: `${NOTIF.REQUEST.TRANSFER.BODY} ${user.name}`,
+          type: NOTIF.TYPE.TRANSFER,
+          resource_id : String(response.data["to_id"])
+        };
+        createNotification(notifObj);
+
         Swal.fire("Success!", "This transfer request has been created.", "success");
        }
      } catch (e) {
@@ -812,6 +851,22 @@ export const Overview = () => {
     setTargetUserPost("");
     setDisableSubmit(true);
    }
+
+   const createNotification = async (newNotif) => {
+    try {
+      const response = await notificationService.createNotif(newNotif);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const createPushNotification = async (newNotif) => {
+    try {
+      const response = await notificationService.createPushNotif(newNotif);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   return (
     <>
@@ -1031,7 +1086,7 @@ export const Overview = () => {
                             <Button variant="light">
                             <a
                               onClick={() => {
-                                handleViewShow(setRowData(data));
+                                handleGetDetailItem(data["Nomor Asset"])
                               }}
                               className="view"
                               data-toggle="modal"
@@ -1075,6 +1130,7 @@ export const Overview = () => {
                                 <Dropdown.Item >
                               <a
                                   onClick={() => {
+                                    
                                     handleEditShow(data["Nomor Asset"]);
                                   }}
                                   className="edit"
@@ -1173,8 +1229,31 @@ export const Overview = () => {
                   <img src={rowData["Asset Image"]}></img>
                 </div>
                 <div className="row">
+                  
                   <div className="col-md-6 mb-3 mt-3">
-                    <label>No Asset</label>
+                    <label>Request Date</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={moment(
+                        rowData["Tanggal Pembelian"]
+                      ).format("YYYY-MM-DD HH:MM")}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-md-6 mb-3 mt-3">
+                    <label>BAST Date</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={moment(
+                        rowData["BAST Output"]
+                      ).format("YYYY-MM-DD HH:MM")}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-md-6 mb-3">
+                    <label>Asset Number</label>
                     <input
                       type="text"
                       className="form-control"
@@ -1182,7 +1261,7 @@ export const Overview = () => {
                       readOnly
                     />
                   </div>
-                  <div className="col-md-6 mb-3 mt-3">
+                  <div className="col-md-6 mb-3">
                     <label>Asset Name</label>
                     <input
                       type="text"
@@ -1219,7 +1298,7 @@ export const Overview = () => {
                     />
                   </div>
                   <div className="col-md-6 mb-3">
-                    <label>No PO</label>
+                    <label>PO Number</label>
                     <input
                       type="text"
                       className="form-control"
@@ -1246,7 +1325,7 @@ export const Overview = () => {
                     />
                   </div>
                   <div className="col-md-6 mb-3">
-                    <label>Lifetime</label>
+                    <label>Lifetime in Month</label>
                     <input
                       type="text"
                       className="form-control"
@@ -1260,6 +1339,24 @@ export const Overview = () => {
                       type="text"
                       className="form-control"
                       value={rowData["Nilai Asset saat ini"]}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-md-6 mb-3">
+                    <label>Tracking Number</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={rowData["Nomor Resi"]}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-md-6 mb-3">
+                    <label>Condition</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={rowData["Kondisi"]}
                       readOnly
                     />
                   </div>
@@ -1621,6 +1718,7 @@ export const Overview = () => {
             show={modalTransferShow}
             onHide={() => {
               setModalTransferShow(false)
+              clearFormTransfer()
             }}
             backdrop="static"
             keyboard={false}
@@ -1679,7 +1777,14 @@ export const Overview = () => {
                           type="text"
                           className="form-control"
                           value={targetUser}
-                          onChange={e => {setTargetUser(e.target.value)}}
+                          onChange={e => {
+                            setTargetUser(e.target.value)
+                            if (e.target.value === "") {
+                              setDisableSubmit(true);
+                            } else {
+                              setDisableSubmit(String(assetTransfer["Kode Wilayah"]) === String(originalLocation) || (e.target.value !== "" && targetUserPost === ""));
+                            }
+                          }}
                         />
                       </div>
                       <div className="col-md-6 mb-3">
@@ -1688,7 +1793,14 @@ export const Overview = () => {
                           type="text"
                           className="form-control"
                           value={targetUserPost}
-                          onChange={e => {setTargetUserPost(e.target.value)}}
+                          onChange={e => {
+                            setTargetUserPost(e.target.value)
+                            if (e.target.value === "") {
+                              setDisableSubmit(true);
+                            } else {
+                              setDisableSubmit(String(assetTransfer["Kode Wilayah"]) === String(originalLocation) || (targetUser === "" && e.target.value !== ""));
+                            }
+                          }}
                         />
                       </div>
                       <div className="col-md-12 mb-3">
@@ -1734,6 +1846,7 @@ export const Overview = () => {
                     className="btn btn-danger button-cancel"
                     onClick={() => {
                       setModalTransferShow(false)
+                      clearFormTransfer()
                     }}
                     style={{marginRight : "8px"}}
                   >

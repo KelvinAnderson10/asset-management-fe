@@ -21,6 +21,7 @@ export const ViewRent = () => {
   const handlePageClick = async (data) => {
     setCurrentPage(data.selected);
   };
+  const [loading, setLoading] = useState(false)
 
   const [searchCluster, setSearchCluster] = useState("");
   const [searchTAP, setSearchTAP] = useState("");
@@ -135,24 +136,31 @@ export const ViewRent = () => {
     } catch (e) {
       console.log(e.response);
       Failed("Failed to approved");
+    } finally{
+      getRentPagination(1)
     }
   };
 
   const onDeliveredRent = async (e, id) => {
     e.preventDefault(e);
-    Swal.fire({
-      title: "Are you sure?",
-      text: "Do you really want to update status active this rent",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, I want!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        updateStatus(id, 'Active');
-      }
-    });
+    try {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "Do you really want to update status active this rent",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, I want!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          updateStatus(id, 'Active');
+        }
+      });      
+    } catch (error) {
+      console.log(error)
+    } 
+    
   };
 
   const onViewDetail = async(id)=>{
@@ -294,7 +302,7 @@ export const ViewRent = () => {
                   <th>No</th>
                   <th style={{ minWidth: "150px" }}>Action</th>
                   <th style={{ minWidth: "200px" }}>Item Name</th>
-                  <th style={{ minWidth: "300px" }}>Status</th>
+                  <th>Status</th>
                   <th style={{ minWidth: "150px" }}>Cluster</th>
                   <th style={{ minWidth: "200px" }}>TAP</th>
                   <th style={{ minWidth: "150px" }}>Type of Place</th>

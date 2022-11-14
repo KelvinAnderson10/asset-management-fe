@@ -20,7 +20,7 @@ export const FormViewRentDetail = () => {
 
 
   const onClickBack = () => {
-    navigate("/main/list-rent", { replace: true });
+    navigate("/main", { replace: true });
   };
 
   const viewImg = async() => {

@@ -92,8 +92,8 @@ export const ListApprovedRent = () => {
               style={{ marginRight: "2vw", marginTop: "1vh" }}
             >
               <ReactPaginate
-                previousLabel={"prev"}
-                nextLabel={"next"}
+                previousLabel={"Prev"}
+                nextLabel={"Next"}
                 breakLabel={"..."}
                 pageCount={totalPageApp}
                 marginPagesDisplayed={2}

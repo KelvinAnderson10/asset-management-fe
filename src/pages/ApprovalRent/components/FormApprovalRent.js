@@ -10,6 +10,7 @@ import { getFirestore, setDoc, doc } from "firebase/firestore";
 import { firebaseConfig } from "../../../shared/firebaseClient";
 import { Failed } from "../../../shared/components/Notification/Failed";
 import { NOTIF, PUSHNOTIF, STATUS } from "../../../shared/constants";
+import { UseApprovalRent } from "../UseApprovalRent";
 
 export const FormApprovalRent = () => {
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ export const FormApprovalRent = () => {
   const [fileSertifikat, setFileSertifikat] = useState([])
   const [fileFotoLokasi, setFileFotoLokasi] = useState([])
   const {rentService, notificationService} = useDeps();
+  const {user} = UseApprovalRent()
 
   const onClickBack = () => {
     navigate("/approval-data/rent", { replace: true });
@@ -177,6 +179,10 @@ export const FormApprovalRent = () => {
       reject(); 
     }
     });
+  }
+
+  const moveToPDF = () => {
+    navigate("/approval-data/rent/pdf", { state: { detail: location.state.detail}})
   }
 
   return (
@@ -669,8 +675,17 @@ export const FormApprovalRent = () => {
                           Reject
                         </button>
                       </div>
-                    ) : (<div></div>)
-                  }
+                    ) : ( <div> 
+                  </div>)
+                  } 
+                  {(user.role=="GA" && location.state.detail.approved_level3 === true &&
+                   <div>
+                   <button style={{ marginTop: "20px", width:'200px'}}  className="btn btn-danger float-end" onClick={moveToPDF}>
+                     View PDF
+                   </button>
+                   </div> 
+                  )}
+                                
                 </div>
               </div>
             </form>

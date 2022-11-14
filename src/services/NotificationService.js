@@ -1,13 +1,21 @@
 import React from "react";
 
-export const notificationService = ({ doGet, doPost }) => {
-  const readNotif = async (name) => {
+export const notificationService = ({ doGet, doPost, doPut }) => {
+  const getNotif = async (name) => {
     try {
       return await doGet({ url: `/api/notification/${name}` });
     } catch (e) {
       throw e;
     }
   };
+
+  const readNotif = async (id) => {
+    try {
+      return await doPut({url : `/api/notification/read/${id}`});
+    } catch (e) {
+      throw e
+    }
+  }
 
   const createNotif = async (newNotif) => {
     try {
@@ -39,5 +47,5 @@ export const notificationService = ({ doGet, doPost }) => {
     }
   };
 
-  return { createPushNotif, readNotif, createNotif, countNotificationByUser };
+  return { createPushNotif, getNotif, createNotif, countNotificationByUser, readNotif };
 };

@@ -17,6 +17,7 @@ import logo from "../../../assets/images/default.png";
 import { Noty } from "../Noty/Noty";
 import { useDeps } from "../../context/DependencyContext";
 import moment from "moment";
+import { NOTIF, PATH } from "../../constants";
 
 const routesAdmin = [
   {
@@ -299,7 +300,7 @@ const Sidebar = ({ children }) => {
 
   const onReadNotification = async (name) => {
     try {
-      const response = await notificationService.readNotif(name);
+      const response = await notificationService.getNotif(name);
       for (let i in response.data){
         response.data[i].CreatedAt = moment(response.data[i].CreatedAt).format("LL")
       }
@@ -309,6 +310,26 @@ const Sidebar = ({ children }) => {
       console.log(e);
     }
   };
+
+  const onClickNotification = async (id, type) => {
+    try {
+      const response = await notificationService.readNotif(id);
+      let destinationPath;
+      if (type === NOTIF.TYPE.TRANSFER) {
+        destinationPath = PATH.APPROVAL_TRANSFER
+      } else if (type === NOTIF.TYPE.PURCHASE_INVENTORY) {
+        destinationPath = PATH.APPROVAL_INVENTORY
+      } else if (type === NOTIF.TYPE.PURCHASE_MAINTENANCE) {
+        destinationPath = PATH.APPROVAL_MAINTENANCE
+      }
+
+      if (user.level_approval !== "Regular") {
+        navigate(destinationPath);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   const { eraseCookie } = useAuth();
 
@@ -598,13 +619,14 @@ const Sidebar = ({ children }) => {
                               <li
                                 key={index}
                                 className="list-group-item list-group-item-action"
+                                onClick={() => {
+                                  onClickNotification(d.ID, d.type);
+                                }}
                               >
                                 Hi {d.to}, {d.body} 
                                 <div>
                                 <a style={{ color: "#B70621"}} >{d.CreatedAt} </a>
-                                </div>
-                                
-                                
+                                </div> 
                               </li>
                             );
                           })
