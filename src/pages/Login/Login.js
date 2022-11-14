@@ -9,8 +9,8 @@ import AuthCode from 'react-auth-code-input';
 import { Card } from "react-bootstrap";
 import { useAuth } from "../../services/UseAuth";
 import Loading from "../../shared/components/Loading/Loading";
-import { responsiveProperty } from "@mui/material/styles/cssUtils";
 import { useRef } from "react";
+import background from "../../assets/images/img.svg"
 
 export const Login = () => {
   const [email, setEmail] = useState("");
@@ -136,6 +136,7 @@ export const Login = () => {
   document.querySelector("body").style.overflow = "auto";
   return (
     
+    
   
     <div>
       {getCookie("user") &&  <Navigate to='/main'></Navigate>}
@@ -143,8 +144,12 @@ export const Login = () => {
       <div className="container-fluid">
         <div className="row">
           <div className="col-lg-8 col-md-5 d-none d-md-block image-container">
-            <h1>MAKE YOUR</h1>
-          <h2>WORK EASIER</h2>
+            <div>
+        
+            </div>
+            
+            {/* <h1>MAKE YOUR</h1>
+          <h2>WORK EASIER</h2> */}
           </div>
           <div className="col-lg-4 col-md-7 form-container">
             <div className="col-lg-10 col-md-12 col-sm-9 col-xs-12 form-box">
