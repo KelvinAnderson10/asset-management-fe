@@ -4,9 +4,12 @@ import Header from "../../../assets/images/Header.png"
 import Footer from "../../../assets/images/Footer.png"
 import { useState } from 'react';
 import gambar from "../../../assets/images/no-data.png"
+import { useLocation } from 'react-router-dom';
+import { MdLocationSearching } from 'react-icons/md';
 
 export const GeneratePdf = () => {
     const [coba, setCoba] = useState(true)
+    const location = useLocation()
     const Attachment = [
         {"name": "a", "picture": "a"},
         {"name": "b", "picture": "b"},
@@ -95,25 +98,25 @@ export const GeneratePdf = () => {
                                 <td><b>1.</b></td>
                                 <td><b>Lokasi Gedung</b></td>
                                 <td>: </td>
-                                <td>&nbsp;Jl. Kol. Wahid Udin No 559 F Sekayu Kab. Musi Banyuasin</td>
+                                <td>&nbsp;{location.state.detail.alamat_lokasi}</td>
                             </tr>
                             <tr>
                                 <td><b>2.</b></td>
                                 <td><b>Jumlah Lantai</b></td>
                                 <td>: </td>
-                                <td>&nbsp;1 Ruko 2 Lantai</td>
+                                <td>&nbsp;{location.state.detail.jenis_tempat}</td>
                             </tr>
                             <tr>
                                 <td><b>3.</b></td>
                                 <td><b>Daya Listrik</b></td>
                                 <td>: </td>
-                                <td>&nbsp;5.500 Watt</td>
+                                <td>&nbsp;{location.state.detail.PLN}</td>
                             </tr>
                             <tr>
                                 <td><b>4.</b></td>
                                 <td><b>Periode Sewa</b></td>
                                 <td>: </td>
-                                <td>&nbsp;01 November 2022 s.d 30 Oktober 2023</td>
+                                <td>&nbsp;{location.state.detail.periode_sewa_awal} s.d {location.state.detail.periode_sewa_akhir}</td>
                             </tr>
                             <tr>
                                 <td><b>5.</b></td>
@@ -125,7 +128,7 @@ export const GeneratePdf = () => {
                                 <td><b>6.</b></td>
                                 <td><b>Pajak 4 Ayat 2</b></td>
                                 <td>: </td>
-                                <td>&nbsp;Rp 4.250.000,- (Pajak ditanggung PT. Narindo Solusi Telekomunikasi)</td>
+                                <td>&nbsp;Rp {location.state.detail.pajak}</td>
                             </tr>
                             <tr>
                                 <td><b>7.</b></td>
@@ -137,19 +140,19 @@ export const GeneratePdf = () => {
                                 <td><b>8.</b></td>
                                 <td><b>Pembayaran</b></td>
                                 <td>: </td>
-                                <td>&nbsp;Transfer ke rek SUMSEL BABEL dengan</td>
+                                <td>&nbsp;{location.state.detail.cara_pembayaran} ke Rek {location.state.detail.bank} dengan </td>
                             </tr>
                             <tr>
                                 <td></td>
                                 <td></td>
                                 <td></td>
-                                <td>&nbsp;No. Rek 1400.123.867 a.n SYAHRIR TAUHID IR.H.MM</td>
+                                <td>&nbsp;No. Rek {location.state.detail.nomor_rekening_tujuan} a.n {location.state.detail.nama_rekening_tujuan}</td>
                             </tr>
                             <tr>
                                 <td><b>9.</b></td>
                                 <td><b>Batas Waktu</b></td>
                                 <td>: </td>
-                                <td>&nbsp;31 Oktober 2022</td>
+                                <td>&nbsp;{location.state.detail.tanggal_jatuh_tempo}</td>
                             </tr>
                             <tr>
                                 <td><b>10.</b></td>

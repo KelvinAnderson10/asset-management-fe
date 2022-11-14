@@ -4,9 +4,12 @@ import "./FormPORent.css";
 import { useDeps } from "../../../shared/context/DependencyContext";
 import moment from "moment";
 import { async } from "@firebase/util";
+import { Failed } from "../../../shared/components/Notification/Failed";
+import swal from "sweetalert";
+import { NOTIF, STATUS } from "../../../shared/constants";
 
 export const FormPORent = () => {
-  const {purchaseOrderRentService} = useDeps();
+  const {purchaseOrderRentService, notificationService} = useDeps();
   const [toUser,setToUser] = useState('');
   const [position,setPosition] = useState('');
   const [alamatLokasi, setAlamatLokasi] = useState('');
@@ -37,6 +40,7 @@ export const FormPORent = () => {
   const [cabangBank,setCabangBank] = useState('')
   const [caraPembayaran,setCaraPembayaran] = useState('')
   const [jatuhTempo,setJatuhTempo] = useState()
+  const [isLoading,setIsLoading] = useState(false)
 
 
 
@@ -46,9 +50,17 @@ export const FormPORent = () => {
   const [fileSertifikat, setFileSertifikat] = useState([])
   const [fileFotoLokasi, setFileFotoLokasi] = useState([])
 
+  const createNotification = async (notifPO) => {
+    try {
+      const response = await notificationService.createNotif(notifPO);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
    const onSubmitPO = async (e)=>{
     e.preventDefault();
+    setIsLoading(true)
     const rentFormData = new FormData();
     rentFormData.append("Kode Wilayah", user.location_id)
     rentFormData.append("requester", user.name)
@@ -56,7 +68,7 @@ export const FormPORent = () => {
     rentFormData.append("Jabatan", position)
     rentFormData.append("alamat_lokasi", alamatLokasi)
     rentFormData.append("Nama Barang", namaBarang)
-    rentFormData.append("status", status)
+    rentFormData.append("status", STATUS.CREATE_PO)
     rentFormData.append("jenis_tempat", jenisTempat)
     rentFormData.append("TLP", tlp)
     rentFormData.append("PLN",pln)
@@ -107,11 +119,115 @@ export const FormPORent = () => {
     try {
       const response = await purchaseOrderRentService.createPO(rentFormData)
       console.log(response)
+      let notifObjGM = {
+        to: response.data.approver_level1,
+        title: NOTIF.REQUEST.TITLE,
+        body: `${NOTIF.REQUEST.BODY} ${user.name}`,
+      };
+      let notifObjVpTrad = {
+        to: response.data.approver_level2,
+        title: NOTIF.REQUEST.TITLE,
+        body: `${NOTIF.REQUEST.BODY} ${user.name}`,
+      };
+      let notifObjGA = {
+        to: response.data.approver_level3,
+        title: NOTIF.REQUEST.TITLE,
+        body: `${NOTIF.REQUEST.BODY} ${user.name}`,
+      };
+      createNotification(notifObjGM);
+      createNotification(notifObjVpTrad);
+      createNotification(notifObjGA);
       clearForm()
-    } catch (e) {
+      if (response.status === "SUCCESS"){
+        swal({
+          title: "Success!",
+          text: "Your request has been made!",
+          icon: "success",
+          button: "OK!",
+        });
+      }
+    } catch (error) {
+      if (error.response.data.message === 'File extension is forbidden') {
+        Failed('There is unsupported file extension in your attachment')
+    } else if ( error.response.data.message === 'Each file should not exceed 2 MB'){
+        Failed('Maximum size of each attachment is 2MB')
+    }else{
+      console.log(error.response.data);
+      Failed("Your request failed to made");
+    }
+
       console.log(e)
+    } finally{
+      e.target.reset()
+      setIsLoading(false)
     }
    }
+
+  const validateFileSizeKTP = () => {
+    if (fileKtp.length === 0) {
+        return true
+    }
+
+    for (let i = 0; i < fileKtp.length; i++) {
+        if (fileKtp[i].size > 2000000){
+            return false
+        }
+    }
+    return true
+  }
+
+  const validateFileSizeNPWP = () => {
+    if (fileNpwp.length === 0) {
+        return true
+    }
+
+    for (let i = 0; i < fileNpwp.length; i++) {
+        if (fileNpwp[i].size > 2000000){
+            return false
+        }
+    }
+    return true
+  }
+
+  const validateFileSizeBukuTabungan = () => {
+    if (fileBukuTabungan.length === 0) {
+        return true
+    }
+
+    for (let i = 0; i < fileBukuTabungan.length; i++) {
+        if (fileBukuTabungan[i].size > 2000000){
+            return false
+        }
+    }
+    return true
+  }
+
+  const validateFileSizeSertifikat = () => {
+    if (fileSertifikat.length === 0) {
+        return true
+    }
+
+    for (let i = 0; i < fileSertifikat.length; i++) {
+        if (fileSertifikat[i].size > 2000000){
+            return false
+        }
+    }
+    return true
+  }
+
+  const validateFileSizeFotoLokasi = () => {
+    if (fileFotoLokasi.length === 0) {
+        return true
+    }
+
+    for (let i = 0; i < fileFotoLokasi.length; i++) {
+        if (fileFotoLokasi[i].size > 2000000){
+            return false
+        }
+    }
+    return true
+  }
+
 
    useEffect(()=>{
     onGetCookie();
@@ -128,8 +244,8 @@ export const FormPORent = () => {
     setPam('')
     setLainlain('')
     setMasaSewa('')
-    setPeriodeSewaAwal()
-    setPeriodeSewaAkhir()
+    setPeriodeSewaAwal('')
+    setPeriodeSewaAkhir('')
     setNamaPemilik('')
     setNPWP('')
     setAlamatPemilik('')
@@ -147,6 +263,11 @@ export const FormPORent = () => {
     setCabangBank('')
     setCaraPembayaran('')
     setJatuhTempo('')
+    setFileKtp('')
+    setFileBukuTabungan('')
+    setFileNpwp('')
+    setFileSertifikat('')
+    setFileFotoLokasi('')
 }
 
 
@@ -177,12 +298,13 @@ export const FormPORent = () => {
   };
 
 
-  return (
-    <>
+
+  return (    <>
       <div className="po-rent-form-container">
         <div className="po-rent-form-card">
           <form onSubmit={onSubmitPO}>
             <h4 className="mb-4 text-danger">Purchase Order Request Form</h4>
+            <p><span className="text-danger">*</span> required fields</p>
             <div className="formPOInput">
               <div className="row">
                 <div className="mb-3 col-md-4">
@@ -417,6 +539,7 @@ export const FormPORent = () => {
                   <input
                     required
                     type="number"
+                    min="0"
                     name="no_telepon_pemilik"
                     className="form-control"
                     onChange={(e)=>setTlpPemilik(e.target.value)}
@@ -429,6 +552,7 @@ export const FormPORent = () => {
                   </label>
                   <input
                     required
+                    min="0"
                     type="number"
                     name="harga_sewa_per_tahun_harga_lama"
                     className="form-control"
@@ -443,6 +567,7 @@ export const FormPORent = () => {
                   <input
                     required
                     type="number"
+                    min="0"
                     name="harga_sewa_per_tahun_harga_baru"
                     className="form-control"
                     value={sewaHargaBaru}
@@ -456,6 +581,7 @@ export const FormPORent = () => {
                   <input
                     required
                     type="number"
+                    min="0"
                     name="pajak"
                     className="form-control"
                     value={pajak}
@@ -469,6 +595,7 @@ export const FormPORent = () => {
                   <input
                     required
                     type="number"
+                    min="0"
                     name="nominal_transfer_ke_pemilik"
                     className="form-control"
                     onChange={(e)=>setNominalTransfer(e.target.value)}
@@ -593,21 +720,23 @@ export const FormPORent = () => {
                   />
                 </div>
                 <label style={{fontWeight:'500'}}>Attachment File</label>
-                <div style={{minHeight:'200px', marginTop:'3vh'}} className="card">
+                <div className="file-extension">
+                    <p  style={{fontSize:'15px', color:'rgb(255, 178, 0)'}}>Allowed file types : <b>png, jpg, jpeg</b><br></br> Maximum size of each attachment is 2MB <br></br> You can choose more than 1 file</p>
+                </div>
+                <div style={{minHeight:'200px'}} className="card">
                     <div className="card-header bg-transparent">
-                      KTP
+                      KTP <span className="text-danger">*</span>
                     </div>
                     <div class="card-body">
-                        
                           <input
+                            required
                             onChange={(e) => {
                             setFileKtp(e.target.files)
                             }}
                             multiple
                             type="file"
                             accept='.png, .jpeg, .jpg'
-                            />
-                        
+                            />     
                         <div className="form-group multi-preview"> 
                         {
                           Array.from(fileKtp).map(item => {
@@ -621,16 +750,18 @@ export const FormPORent = () => {
                             )
                           })
                         }
-                        </div>  
+                        </div>
+                        { !validateFileSizeKTP() && <span className='text-danger' style={{fontSize:'15px'}}>*maximum size of each attachment is 2MB</span>}  
                     </div>
                   </div>
                   <div style={{minHeight:'200px', marginTop:'5vh'}} className="card">
                     <div className="card-header bg-transparent">
-                      NPWP
+                      NPWP <span className="text-danger">*</span>
                     </div>
                     <div class="card-body">
                         <div>
                           <input
+                            required
                             onChange={(e) => {
                             setFileNpwp(e.target.files)
                             }}
@@ -653,15 +784,17 @@ export const FormPORent = () => {
                           })
                         }
                         </div>  
+                        { !validateFileSizeNPWP() && <span className='text-danger' style={{fontSize:'15px'}}>*maximum size of each attachment is 2MB</span>} 
                     </div>
                   </div>
                   <div style={{minHeight:'200px', marginTop:'5vh'}} className="card">
                     <div className="card-header bg-transparent">
-                      Savings Account
+                      Savings Account <span className="text-danger">*</span>
                     </div>
                     <div class="card-body">
                         <div>
                           <input
+                            required
                             onChange={(e) => {
                             setFileBukuTabungan(e.target.files)
                             }}
@@ -684,15 +817,17 @@ export const FormPORent = () => {
                           })
                         }
                         </div>  
+                        { !validateFileSizeBukuTabungan() && <span className='text-danger' style={{fontSize:'15px'}}>*maximum size of each attachment is 2MB</span>} 
                     </div>
                   </div>
                   <div style={{minHeight:'200px', marginTop:'5vh'}} className="card">
                     <div className="card-header bg-transparent">
-                      Location Photo
+                      Location Photo <span className="text-danger">*</span>
                     </div>
                     <div class="card-body">
                         <div>
                           <input
+                            required
                             onChange={(e) => {
                             setFileFotoLokasi(e.target.files)
                             }}
@@ -715,15 +850,17 @@ export const FormPORent = () => {
                           })
                         }
                         </div>  
+                        { !validateFileSizeFotoLokasi() && <span className='text-danger' style={{fontSize:'15px'}}>*maximum size of each attachment is 2MB</span>} 
                     </div>
                   </div>
                   <div style={{minHeight:'200px', marginTop:'5vh'}} className="card">
                     <div className="card-header bg-transparent">
-                      Certificate
+                      Certificate <span className="text-danger">*</span>
                     </div>
                     <div class="card-body">
                         <div>
                           <input
+                            required
                             onChange={(e) => {
                             setFileSertifikat(e.target.files)
                             }}
@@ -746,6 +883,7 @@ export const FormPORent = () => {
                           })
                         }
                         </div>  
+                        { !validateFileSizeSertifikat() && <span className='text-danger' style={{fontSize:'15px'}}>*maximum size of each attachment is 2MB</span>} 
                     </div>
                   </div>
                 <div className="col-md-12 mt-4">
@@ -755,7 +893,7 @@ export const FormPORent = () => {
                   >
                     Submit
                   </button>
-                  <button type="reset" className="btn btn-warning float-end">
+                  <button onClick={clearForm} type="reset" className="btn btn-warning float-end">
                     Cancel
                   </button>
                 </div>
@@ -764,6 +902,7 @@ export const FormPORent = () => {
           </form>
         </div>
       </div>
+      
     </>
   );
 };

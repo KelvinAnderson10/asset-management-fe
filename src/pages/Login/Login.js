@@ -9,7 +9,8 @@ import AuthCode from 'react-auth-code-input';
 import { Card } from "react-bootstrap";
 import { useAuth } from "../../services/UseAuth";
 import Loading from "../../shared/components/Loading/Loading";
-
+import { useRef } from "react";
+import background from "../../assets/images/img.svg"
 
 export const Login = () => {
   const [email, setEmail] = useState("");
@@ -45,7 +46,8 @@ export const Login = () => {
       setUser(prevObj=>({...prevObj,name:(response.data.name), role:(response.data.role), level_approval:(response.data.level_approval), location_id:(response.data.location_id), tap:(response.data.TAP), cluster:(response.data.Cluster), department:(response.data.department)}))
       setOTP(response.otp);
       console.log(response.otp)
-      // setCounter(59);
+      setCounter(59);
+      SetIsDisabled(true)
       setShowOTPForm(true);
     } catch (error) {
       Failed("Email not registered yet, Please input a valid email");
@@ -102,7 +104,14 @@ export const Login = () => {
     if(OTPInput.length === 6){
       if (counter === 0) {
         setOTP()
-        SetIsDisabled(true)
+        SetIsDisabled(false)
+        if (OTPInput !== OTP) {
+          setOTPInput('')
+          const resetKey = Math.random().toString().slice(0.8)
+          setClearOtp(resetKey)
+          setErrDisabled(true);
+          setErrMsg('Wrong OTP! Please input valid OTP.')
+        }
       } else {
         if (OTPInput == OTP) {
           setCookie("user",user,200)
@@ -127,6 +136,7 @@ export const Login = () => {
   document.querySelector("body").style.overflow = "auto";
   return (
     
+    
   
     <div>
       {getCookie("user") &&  <Navigate to='/main'></Navigate>}
@@ -134,8 +144,12 @@ export const Login = () => {
       <div className="container-fluid">
         <div className="row">
           <div className="col-lg-8 col-md-5 d-none d-md-block image-container">
-            <h1>MAKE YOUR</h1>
-          <h2>WORK EASIER</h2>
+            <div>
+        
+            </div>
+            
+            {/* <h1>MAKE YOUR</h1>
+          <h2>WORK EASIER</h2> */}
           </div>
           <div className="col-lg-4 col-md-7 form-container">
             <div className="col-lg-10 col-md-12 col-sm-9 col-xs-12 form-box">

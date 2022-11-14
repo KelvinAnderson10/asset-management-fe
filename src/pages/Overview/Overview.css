@@ -78,10 +78,10 @@
   }
   .pagination li.active a,
   .pagination li.active a.page-link {
-    background: #03a9f4;
+    background: #b70621;
   }
   .pagination li.active a:hover {
-    background: #0397d6;
+    background: #8B0217;
   }
   .pagination li.disabled i {
     color: #ccc;
@@ -216,6 +216,8 @@ input.form-control:focus{
   justify-content: space-around;
   align-items: center;
 }
+
+
 
 .search-container .box-search-container{
   width: 50%;

@@ -42,15 +42,15 @@ export const rentService = ({ doGet, doPost, doPut, doDelete }) => {
     }
   };
 
-  //   const getRentByRequester = async () => {
-  //     try {
-  //       return await doGet({
-  //         url: ``,
-  //       });
-  //     } catch (error) {
-  //       throw error;
-  //     }
-  //   };
+    const getRentByRequester = async (name='',page=1) => {
+      try {
+        return await doGet({
+          url: `api/rent/requester/search?name=${name}&page=${page}`,
+        });
+      } catch (error) {
+        throw error;
+      }
+    };
 
   // const getRentDetailById = async (id) => {
   //   try {
@@ -108,27 +108,26 @@ export const rentService = ({ doGet, doPost, doPut, doDelete }) => {
     }
   };
 
-  //   const updatePODetail = async (id, newData) => {
-  //     try {
-  //       return await doPut({
-  //         url: `/api/po/detail/${id}`,
-  //         data: newData,
-  //       });
-  //     } catch (e) {
-  //       throw e;
-  //     }
-  //   };
-
-  //   const updatePO = async (id, newData) => {
-  //     try {
-  //       return await doPut({
-  //         url: `/api/po/status/${id}`,
-  //         data: newData,
-  //       });
-  //     } catch (e) {
-  //       throw e;
-  //     }
-  //   };
+  const updateStatusRent = async (id, newData) => {
+    try {
+        return await doPut({
+            url: `/api/rent/status/${id}`, data: newData
+            
+        })
+    } catch (e) {
+        throw e;
+    }
+}
+const updateRent = async (id, newData) => {
+  try {
+      return await doPut({
+          url: `/api/rent/expired?id=${id}&rent_status=${newData}`
+          
+      })
+  } catch (e) {
+      throw e;
+  }
+}
 
   return {
     createRent,
@@ -141,5 +140,8 @@ export const rentService = ({ doGet, doPost, doPut, doDelete }) => {
     getRentListByApproval,
     getRentListHistory,
     getImgUrl,
+    getRentByRequester,
+    updateStatusRent,
+    updateRent,
   };
 };

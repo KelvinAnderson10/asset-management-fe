@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import ReactPaginate from "react-paginate";
 import Loading from "../../../shared/components/Loading/Loading";
 import { NoData } from "../../../shared/components/NoData/NoData";
 import { UseApprovalRent } from "../UseApprovalRent";
@@ -9,74 +10,13 @@ export const ListRentRequest = () => {
     user,
     isLoading,
     appData,
-    appData1,
     handleClickApproval,
     rentDetail,
+    handlePageClick2,
+    totalPage
   } = UseApprovalRent();
-  const [currentPage, setcurrentPage] = useState(1);
-  const [itemsPerPage, setitemsPerPage] = useState(10);
-  const [pageNumberLimit, setpageNumberLimit] = useState(5);
-  const [maxPageNumberLimit, setmaxPageNumberLimit] = useState(5);
-  const [minPageNumberLimit, setminPageNumberLimit] = useState(0);
 
-  const handleClick = (event) => {
-    setcurrentPage(Number(event.target.id));
-  };
-
-  const pages = [];
-  for (let i = 1; i <= Math.ceil(appData.length / itemsPerPage); i++) {
-    pages.push(i);
-  }
-
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = appData.slice(indexOfFirstItem, indexOfLastItem);
-
-  const renderPageNumbers = pages.map((number) => {
-    if (number < maxPageNumberLimit + 1 && number > minPageNumberLimit) {
-      return (
-        <li
-          key={number}
-          id={number}
-          onClick={handleClick}
-          className={currentPage == number ? "active" : null}
-        >
-          {number}
-        </li>
-      );
-    } else {
-      return null;
-    }
-  });
-
-  const handleNextbtn = () => {
-    setcurrentPage(currentPage + 1);
-
-    if (currentPage + 1 > maxPageNumberLimit) {
-      setmaxPageNumberLimit(maxPageNumberLimit + pageNumberLimit);
-      setminPageNumberLimit(minPageNumberLimit + pageNumberLimit);
-    }
-  };
-
-  const handlePrevbtn = () => {
-    setcurrentPage(currentPage - 1);
-
-    if ((currentPage - 1) % pageNumberLimit == 0) {
-      setmaxPageNumberLimit(maxPageNumberLimit - pageNumberLimit);
-      setminPageNumberLimit(minPageNumberLimit - pageNumberLimit);
-    }
-  };
-
-  let pageIncrementBtn = null;
-  if (pages.length > maxPageNumberLimit) {
-    pageIncrementBtn = <li onClick={handleNextbtn}> &hellip; </li>;
-  }
-
-  let pageDecrementBtn = null;
-  if (minPageNumberLimit >= 1) {
-    pageDecrementBtn = <li onClick={handlePrevbtn}> &hellip; </li>;
-  }
-
+ 
   return (
     <div>
       <div className="approval-inv-list-container">
@@ -85,7 +25,7 @@ export const ListRentRequest = () => {
             {appData.length === 0 ? (
               <NoData/>
             ) : (
-              currentItems.map((data) => (
+              appData.map((data) => (
                 <div
                   className="approval-inv-box-item"
                   key={data.po_id}
@@ -157,32 +97,33 @@ export const ListRentRequest = () => {
                 </div>
               ))
             )}
+            <div
+              key={totalPage}
+              style={{ marginRight: "2vw", marginTop: "1vh" }}
+            >
+              <ReactPaginate
+                previousLabel={"Prev"}
+                nextLabel={"Next"}
+                breakLabel={"..."}
+                pageCount={totalPage}
+                marginPagesDisplayed={2}
+                pageRangeDisplayed={3}
+                onPageChange={handlePageClick2}
+                containerClassName={"pagination justify-content-center"}
+                pageClassName={"page-item"}
+                pageLinkClassName={"page-link"}
+                previousClassName={"page-item"}
+                previousLinkClassName={"page-link"}
+                nextClassName={"page-item"}
+                nextLinkClassName={"page-link"}
+                breakClassName={"page-item"}
+                breakLinkClassName={"page-link"}
+                activeClassName={"active"}
+                // forcePage={currentPage}
+              />
+            </div>
           </div>
-          <div className="pagination-list" style={{ marginTop: "10px" }}>
-            <ul className="listNumbers">
-              <li style={{ borderRadius: "1vh 0vh 0vh 1vh" }}>
-                <button
-                  onClick={handlePrevbtn}
-                  disabled={currentPage == pages[0] ? true : false}
-                >
-                  <span class="material-icons">chevron_left</span>
-                </button>
-              </li>
-              {pageDecrementBtn}
-              {renderPageNumbers}
-              {pageIncrementBtn}
-              <li style={{ borderRadius: "0px 1vh 1vh 0px" }}>
-                <button
-                  onClick={handleNextbtn}
-                  disabled={
-                    currentPage == pages[pages.length - 1] ? true : false
-                  }
-                >
-                  <span class="material-icons">chevron_right</span>
-                </button>
-              </li>
-            </ul>
-          </div>
+         
         </div>
       </div>
       {isLoading && <Loading />}
