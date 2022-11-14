@@ -157,22 +157,33 @@ input.form-control:focus{
   overflow-y: scroll;
 }
 
-.overview-card .table-box {
+.overview-card {
   width: 96%;
   height: 100%;
   border-radius: 10px;
-  overflow-x: scroll;
   margin-top: 2vh;
   margin-left: 2vw;
 }
 
-.table-box .table-header{
+.table-box {
+  width: 96%;
+  height: 100%;
+  border-radius: 10px;
+  margin-top: 2vh;
+  margin-left: 2vw;
   background-color:white;
   color: rgb(219, 66, 66);
-  /* position: -webkit-sticky; */
-  /* position: sticky; */
-  /* top: 0; */
-  z-index: 2;
+  overflow-x: scroll;
+}
+
+ .table-header{
+  background-color:white;
+  color: rgb(219, 66, 66);
+  z-index: 150 !important;
+}
+
+.dropdown-menu{
+  z-index: 100 !important;
 }
 
 .image-view > img{
