@@ -999,7 +999,6 @@ export const Overview = () => {
             <button
               value="submit"
               className="btn btn-warning btn-sm"
-              style={{ backgroundColor: "rgb(255, 178, 0)" }}
               onClick={onClearForm}
             >
               Clear
