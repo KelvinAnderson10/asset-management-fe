@@ -19,22 +19,26 @@ export const ListTransReq = ({listData = [], showButton = true}) => {
 
   return (
     <>
+          <div className="approval-inv-list-container">
+          <div className="approval-inv-box-container">
+          <div className="approval-inv-list-card">
+
             { listData.length === 0 ?(
-                <NoData />
-            ) : (
+              <NoData />
+              ) : (
                 listData.map((data) => (
-                    <div
-                      className="container-fluid bg-light shadow-sm rounded-2 p-2 mb-3"
-                      style={{cursor : "pointer"}}
-                      key={data.to_id}
-                      onClick={() => {handleShowModalRequest(data)}}
-                    >
+                  <div
+                  className="approval-inv-box-item"
+                  style={{cursor : "pointer"}}
+                  key={data.to_id}
+                  onClick={() => {handleShowModalRequest(data)}}
+                  >
                       <div className="d-flex flex-row justify-content-between px-5">
                         <div className="text-white rounded-2 mb-2 fw-bold" style={{backgroundColor : "rgb(183, 6, 33)", width: "2.5vw"}}>{data.to_id}</div>
                         <div
                           className="text-white rounded-2 mb-2 fw-bold"
                           style={{backgroundColor: data.status === STATUS.CREATE_PO ? "rgb(255, 178, 0)" : data.status === STATUS.TRANSFERRED ? 'rgb(92, 184, 92)' :  'rgb(183, 6, 33)', width: "8vw" }}
-                        >
+                          >
                           {data.status}
                         </div>
                       </div>
@@ -70,10 +74,13 @@ export const ListTransReq = ({listData = [], showButton = true}) => {
                       </div>
                     </div>
                 ))
-            )}
+                )}
+                </div>
+                </div>
+          </div>
 
         {
-            <div className="model-box-view">
+          <div className="model-box-view">
             <Modal
               dialogClassName="view-modal"
               show={showModalReq}
