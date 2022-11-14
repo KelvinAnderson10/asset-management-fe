@@ -1853,7 +1853,7 @@ export const Overview = () => {
                     Cancel
                   </button>
                   <button
-                    className="btn btn-primary button-submit"
+                    className="btn btn-primary float-end"
                     onClick={handleSubmitTransfer}
                     disabled={disableSubmit}
                   >
