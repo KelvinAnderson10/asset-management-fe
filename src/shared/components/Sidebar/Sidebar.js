@@ -202,6 +202,11 @@ const routesUserGMSPVVP = [
     name: "Rent",
     icon: <FaIcons.FaStore />,
   },
+  {
+    path: "/approval-data/transfer",
+    name: "Transfer",
+    icon: <BiIcons.BiTransferAlt />,
+  },
 ];
 
 const Sidebar = ({ children }) => {
