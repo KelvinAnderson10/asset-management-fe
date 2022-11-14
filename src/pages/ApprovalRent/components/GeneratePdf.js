@@ -215,6 +215,295 @@ export const GeneratePdf = () => {
                     </>
                 )
             })}
+
+            <div style={{paddingTop: "5%", margin: "1.5cm"}} >
+                <table width={"100%"} style={{border: "3px solid black"}}>
+                    <tr style={{textAlign: 'center', fontWeight:'bold', fontSize: 20}}>FORMULIR PENGAJUAN BIAYA SEWA</tr>
+                </table>
+
+                <p style={{marginTop: "0.3cm", marginBottom: "0.3cm", fontSize: 12}}>TANGGAL&nbsp;: passing data createdAt</p>
+                <table width={"100%"} style={{border: "1px solid black", fontSize: 12}} >
+                    <tr>
+                        <th style={{border: "1px solid black", textAlign: 'center', width: "5%"}}>NO</th>
+                        <th style={{border: "1px solid black", textAlign: 'center', width: "32%"}}>KETERANGAN</th>
+                        <th style={{border: "1px solid black", textAlign: 'center'}}>&nbsp;</th>
+                        <th style={{border: "1px solid black", textAlign: 'center'}}>WAJIB DIISI</th>
+                    </tr>
+                    <tr>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td style={{border: "1px solid black", textAlign: "center"}}>1</td>
+                        <td style={{border: "1px solid black", paddingLeft: "0.1cm"}}>REGIONAL</td>
+                        <td style={{border: "1px solid black", textAlign: "center"}}>:</td>
+                        <td style={{border: "1px solid black", paddingLeft: "0.1cm"}}>Sumbagsel</td>
+                    </tr>
+                    <tr>
+                        <td style={{border: "1px solid black", textAlign: "center"}}>2</td>
+                        <td style={{border: "1px solid black", paddingLeft: "0.1cm"}}>CABANG</td>
+                        <td style={{border: "1px solid black", textAlign: "center"}}>:</td>
+                        <td style={{border: "1px solid black", paddingLeft: "0.1cm"}}>Sumbagsel</td>
+                    </tr>
+                    <tr>
+                        <td style={{border: "1px solid black", textAlign: "center"}}>3</td>
+                        <td style={{border: "1px solid black", paddingLeft: "0.1cm"}}>CLUSTER</td>
+                        <td style={{border: "1px solid black", textAlign: "center"}}>:</td>
+                        <td style={{border: "1px solid black", paddingLeft: "0.1cm"}}>Musi</td>
+                    </tr>
+                    <tr>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td style={{border: "1px solid black", textAlign: "center"}}>4</td>
+                        <td style={{border: "1px solid black", paddingLeft: "0.1cm"}}>ALAMAT LOKASI</td>
+                        <td style={{border: "1px solid black", textAlign: "center"}}>:</td>
+                        <td style={{border: "1px solid black", paddingLeft: "0.1cm"}}>Jl. dimana</td>
+                    </tr>
+                    <tr>
+                        <td style={{border: "1px solid black", textAlign: "center"}}>&nbsp;</td>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                        <td style={{border: "1px solid black", textAlign: "center"}}>&nbsp;</td>
+                        <td style={{border: "1px solid black", paddingLeft: "0.1cm"}}>Lanjutan Alamat</td>
+                    </tr>
+                    <tr>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td style={{border: "1px solid black", textAlign: "center"}}>5</td>
+                        <td style={{border: "1px solid black", paddingLeft: "0.1cm"}}>JENIS TEMPAT (RUKO / RUMAH)</td>
+                        <td style={{border: "1px solid black", textAlign: "center"}}>:</td>
+                        <td style={{border: "1px solid black", paddingLeft: "0.1cm"}}>jenisnya</td>
+                    </tr>
+                    <tr>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td style={{border: "1px solid black", textAlign: "center"}}>6</td>
+                        <td style={{border: "1px solid black", paddingLeft: "0.1cm"}}>FASILITAS YANG ADA : TELEPON : </td>
+                        <td style={{border: "1px solid black", textAlign: "center"}}>:</td>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td style={{border: "1px solid black", textAlign: "center"}}>&nbsp;</td>
+                        <td style={{border: "1px solid black", paddingLeft: "4cm"}}>PLN : </td>
+                        <td style={{border: "1px solid black", textAlign: "center"}}>&nbsp;</td>
+                        <td style={{border: "1px solid black", paddingLeft: "0.1cm"}}>plnnya</td>
+                    </tr>
+                    <tr>
+                        <td style={{border: "1px solid black", textAlign: "center"}}>&nbsp;</td>
+                        <td style={{border: "1px solid black", paddingLeft: "4cm"}}>PAM :</td>
+                        <td style={{border: "1px solid black", textAlign: "center"}}>&nbsp;</td>
+                        <td style={{border: "1px solid black", paddingLeft: "0.1cm"}}>pdamnya</td>
+                    </tr>
+                    <tr>
+                        <td style={{border: "1px solid black", textAlign: "center"}}>7</td>
+                        <td style={{border: "1px solid black", paddingLeft: "0.1cm"}}>LAIN - LAIN</td>
+                        <td style={{border: "1px solid black", textAlign: "center"}}>:</td>
+                        <td style={{border: "1px solid black", paddingLeft: "0.1cm"}}>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td style={{border: "1px solid black", textAlign: "center"}}>8</td>
+                        <td style={{border: "1px solid black", paddingLeft: "0.1cm"}}>MASA SEWA (BULAN / TAHUN)</td>
+                        <td style={{border: "1px solid black", textAlign: "center"}}>:</td>
+                        <td style={{border: "1px solid black", paddingLeft: "0.1cm"}}>pdata</td>
+                    </tr>
+                    <tr>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td style={{border: "1px solid black", textAlign: "center"}}>9</td>
+                        <td style={{border: "1px solid black", paddingLeft: "0.1cm"}}>PERIODE SEWA</td>
+                        <td style={{border: "1px solid black", textAlign: "center"}}>:</td>
+                        <td style={{border: "1px solid black", paddingLeft: "0.1cm"}}> 1 nov</td>
+                    </tr>
+                    <tr>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td style={{border: "1px solid black", textAlign: "center"}}>10</td>
+                        <td style={{border: "1px solid black", paddingLeft: "0.1cm"}}>NAMA PEMILIK</td>
+                        <td style={{border: "1px solid black", textAlign: "center"}}>:</td>
+                        <td style={{border: "1px solid black", paddingLeft: "0.1cm"}}>pemilik</td>
+                    </tr>
+                    <tr>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td style={{border: "1px solid black", textAlign: "center"}}>11</td>
+                        <td style={{border: "1px solid black", paddingLeft: "0.1cm"}}>NPWP</td>
+                        <td style={{border: "1px solid black", textAlign: "center"}}>:</td>
+                        <td style={{border: "1px solid black", paddingLeft: "0.1cm"}}>eifhwe</td>
+                    </tr>
+                    <tr>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td style={{border: "1px solid black", textAlign: "center"}}>12</td>
+                        <td style={{border: "1px solid black", paddingLeft: "0.1cm"}}>ALAMAT PEMILIK</td>
+                        <td style={{border: "1px solid black", textAlign: "center"}}>:</td>
+                        <td style={{border: "1px solid black", paddingLeft: "0.1cm"}}>alamat pe</td>
+                    </tr>
+                    <tr>
+                        <td style={{border: "1px solid black", textAlign: "center"}}>13</td>
+                        <td style={{border: "1px solid black", paddingLeft: "0.1cm"}}>NO TELEPON PEMILIK</td>
+                        <td style={{border: "1px solid black", textAlign: "center"}}>:</td>
+                        <td style={{border: "1px solid black", paddingLeft: "0.1cm"}}>849354</td>
+                    </tr>
+                    <tr>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td style={{border: "1px solid black", textAlign: "center"}}>14</td>
+                        <td style={{border: "1px solid black", paddingLeft: "0.1cm"}}>HARGA SEWA / TAHUN (Harga Lama)</td>
+                        <td style={{border: "1px solid black", textAlign: "center"}}>:</td>
+                        <td style={{border: "1px solid black", paddingLeft: "0.1cm"}}>Rp 1000</td>
+                    </tr><tr>
+                        <td style={{border: "1px solid black", textAlign: "center"}}>15 </td>
+                        <td style={{border: "1px solid black", paddingLeft: "0.1cm"}}>HARGA SEWA / TAHUN (Harga Baru)</td>
+                        <td style={{border: "1px solid black", textAlign: "center"}}>:</td>
+                        <td style={{border: "1px solid black", paddingLeft: "0.1cm"}}>Rp 1000</td>
+                    </tr>
+                    <tr>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td style={{border: "1px solid black", textAlign: "center"}}>16</td>
+                        <td style={{border: "1px solid black", paddingLeft: "0.1cm"}}>PPh</td>
+                        <td style={{border: "1px solid black", textAlign: "center"}}>:</td>
+                        <td style={{border: "1px solid black", paddingLeft: "0.1cm"}}>Pph dibayar penyewa</td>
+                    </tr>
+                    <tr>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td style={{border: "1px solid black", textAlign: "center"}}>17</td>
+                        <td style={{border: "1px solid black", paddingLeft: "0.1cm"}}>NAMA REKENING PEMILIK</td>
+                        <td style={{border: "1px solid black", textAlign: "center"}}>:</td>
+                        <td style={{border: "1px solid black", paddingLeft: "0.1cm"}}>namanya</td>
+                    </tr>
+                    <tr>
+                        <td style={{border: "1px solid black", textAlign: "center"}}>&nbsp;</td>
+                        <td style={{border: "1px solid black", paddingLeft: "0.1cm"}}>NOMOR REKENING PEMILIK</td>
+                        <td style={{border: "1px solid black", textAlign: "center"}}>:</td>
+                        <td style={{border: "1px solid black", paddingLeft: "0.1cm"}}>123</td>
+                    </tr>
+                    <tr>
+                        <td style={{border: "1px solid black", textAlign: "center"}}>&nbsp;</td>
+                        <td style={{border: "1px solid black", paddingLeft: "0.1cm"}}>BANK</td>
+                        <td style={{border: "1px solid black", textAlign: "center"}}>:</td>
+                        <td style={{border: "1px solid black", paddingLeft: "0.1cm"}}>passing</td>
+                    </tr>
+                    <tr>
+                        <td style={{border: "1px solid black", textAlign: "center"}}>&nbsp;</td>
+                        <td style={{border: "1px solid black", paddingLeft: "0.1cm"}}>CABANG</td>
+                        <td style={{border: "1px solid black", textAlign: "center"}}>:</td>
+                        <td style={{border: "1px solid black", paddingLeft: "0.1cm"}}>cabang</td>
+                    </tr>
+                    <tr>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td style={{border: "1px solid black", textAlign: "center"}}>18</td>
+                        <td style={{border: "1px solid black", paddingLeft: "0.1cm"}}>CARA PMEBAYARAN</td>
+                        <td style={{border: "1px solid black", textAlign: "center"}}>:</td>
+                        <td style={{border: "1px solid black", paddingLeft: "0.1cm"}}>TRANSFER</td>
+                    </tr>
+                    <tr>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td style={{border: "1px solid black", textAlign: "center"}}>19</td>
+                        <td style={{border: "1px solid black", paddingLeft: "0.1cm"}}>TANGGAL JATUH TEMPO</td>
+                        <td style={{border: "1px solid black", textAlign: "center"}}>:</td>
+                        <td style={{border: "1px solid black", paddingLeft: "0.1cm"}}>31 Oktober</td>
+                    </tr>
+                    <tr>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                        <td style={{border: "1px solid black"}}>&nbsp;</td>
+                    </tr>
+                </table>
+
+                <div style={{paddingTop: "0.3cm"}}>
+                    <table width={"100%"} >
+                        <tr style={{fontSize:12}}>Musi Banyuasin, 24 Okt</tr>
+                    </table>
+                </div>
+
+                <div style={{paddingTop: "0.3cm"}}>
+                    <table width={"100%"}>
+                        <tr>
+                            <td style={{fontSize: 12, fontWeight: 'bold', textAlign:"center"}}>Dibuat Oleh,</td>
+                            <td style={{fontSize: 12, fontWeight: 'bold', textAlign:"center"}}>Diketahui Oleh,</td>
+                            <td style={{fontSize: 12, fontWeight: 'bold', textAlign:"center"}}>Menyetujui</td>
+                        </tr>
+                        <tr>
+                            <td style={{lineHeight: "2cm"}}>&nbsp;</td>
+                            <td style={{lineHeight: "2cm"}}>&nbsp;</td>
+                            <td style={{lineHeight: "2cm"}}>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td style={{fontSize: 12, fontWeight: 'bold', textAlign:"center"}}>AAAA</td>
+                            <td style={{fontSize: 12, fontWeight: 'bold', textAlign:"center"}}>BBBB</td>
+                            <td style={{fontSize: 12, fontWeight: 'bold', textAlign:"center"}}>CCCC</td>
+                        </tr>
+                        <tr>
+                            <td style={{fontSize: 12, fontWeight: 'bold', textAlign:"center"}}>Jabatan1</td>
+                            <td style={{fontSize: 12, fontWeight: 'bold', textAlign:"center"}}>Jabatan1</td>
+                            <td style={{fontSize: 12, fontWeight: 'bold', textAlign:"center"}}>Jabatan1</td>
+                        </tr>
+                    </table>
+                </div>
+
+
+
+            </div>
         </div>
     )
 }
