@@ -169,9 +169,9 @@ input.form-control:focus{
 .table-box .table-header{
   background-color:white;
   color: rgb(219, 66, 66);
-  position: -webkit-sticky;
-  position: sticky;
-  top: 0;
+  /* position: -webkit-sticky; */
+  /* position: sticky; */
+  /* top: 0; */
   z-index: 2;
 }
 
