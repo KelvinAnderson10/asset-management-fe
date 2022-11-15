@@ -37,9 +37,7 @@ export const AppMaintenance = () => {
                 </div> 
                 </div>
                 <div className='title-right'>
-                <div className='title-box'>
                     Maintenance
-                </div>
                 </div>
             </div>
        </div>

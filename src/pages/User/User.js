@@ -399,7 +399,7 @@ export const UserManage = () => {
     <>
       <Sidebar>
         <div  className="body-user">
-          <div className="body">
+          <div className="body-user2">
             <div className="container">
               <div className="user-container-item">
                 <form>
@@ -442,7 +442,7 @@ export const UserManage = () => {
               <div className="table-title">
                     <div className="row">
                       <div className="col-xs-6">
-                        <h2 style={{fontSize: "24px"}}>Manage Users</h2>
+                        <h2 style={{fontSize: "24px", textAlign: 'center'}}>Manage Users</h2>
                       </div>
                     </div>
                   </div>

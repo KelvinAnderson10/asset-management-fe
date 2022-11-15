@@ -78,7 +78,8 @@
   .navbar-po-container .navbar-po-box2{
     width: 100px;
   }
-  .title-box{
-    margin-left: 20px;
+  .navbar-po-container .title-right{
+    width: 60%;
   }
+  
 }

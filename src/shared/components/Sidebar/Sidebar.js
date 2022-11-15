@@ -319,17 +319,36 @@ const Sidebar = ({ children }) => {
   const onClickNotification = async (id, type) => {
     try {
       const response = await notificationService.readNotif(id);
-      let destinationPath = PATH.OVERVIEW;
-      if (type === NOTIF.TYPE.TRANSFER) {
-        destinationPath = PATH.APPROVAL_TRANSFER
-      } else if (type === NOTIF.TYPE.PURCHASE_INVENTORY) {
-        destinationPath = PATH.APPROVAL_INVENTORY
-      } else if (type === NOTIF.TYPE.PURCHASE_MAINTENANCE) {
-        destinationPath = PATH.APPROVAL_MAINTENANCE
+      if (user.level_approval === 'Regular') {
+        if (type === NOTIF.TYPE.PURCHASE_INVENTORY) {
+          navigate(PATH.REQUEST_INVENTORY, {
+            state : { list : true}
+          })
+          return
+        } else if (type === NOTIF.TYPE.PURCHASE_MAINTENANCE) {
+          navigate(PATH.REQUEST_MAINTENANCE, {
+            state : { list : true}
+          })
+          return
+        } else if (type === NOTIF.TYPE.RENT)  {
+          navigate(PATH.REQUEST_RENT, {
+            state : { list : true}
+          })
+          return
+        }
+      } else {
+        if (type === NOTIF.TYPE.TRANSFER) {
+          navigate(PATH.APPROVAL_TRANSFER)
+          return
+        } else if (type === NOTIF.TYPE.PURCHASE_INVENTORY) {
+          navigate(PATH.APPROVAL_INVENTORY)
+          return
+        } else if (type === NOTIF.TYPE.PURCHASE_MAINTENANCE) {
+          navigate(PATH.APPROVAL_MAINTENANCE)
+          return
+        }
       }
-
-      navigate(destinationPath);
-      
+      navigate(PATH.OVERVIEW)
     } catch (e) {
       console.log(e);
     }

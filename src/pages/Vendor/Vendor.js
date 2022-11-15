@@ -354,7 +354,6 @@ document.querySelector("body").style.overflow = "auto";
     <>
       <Sidebar>
       <div className="body-vendor">
-      <div className="body">
           <div className="container">
           <div className="vendor-container-item" >  
           <form>
@@ -389,7 +388,7 @@ document.querySelector("body").style.overflow = "auto";
             <div className="table-title">
                   <div className="row">
                     <div className="col-xs-6">
-                      <h2 style={{fontSize: "24px"}}>
+                      <h2 style={{fontSize: "24px", textAlign: 'center'}}>
                         Manage <b>Vendors</b>
                       </h2>
                     </div>
@@ -521,7 +520,6 @@ document.querySelector("body").style.overflow = "auto";
               </div>
             </div>
           </div>
-        </div>
 
         {/* ADD MODAL FOR SUBMIT DATABASE */}
 

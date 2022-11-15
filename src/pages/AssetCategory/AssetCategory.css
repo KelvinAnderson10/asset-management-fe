@@ -187,7 +187,8 @@ input.form-control:focus{
   text-align: left;
 }
 
-.body {
+.body-asset {
+  background-color: whitesmoke;
   color: #6478a0;
   height: auto;
   overflow: hidden;

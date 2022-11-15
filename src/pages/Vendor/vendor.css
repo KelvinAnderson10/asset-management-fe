@@ -78,7 +78,8 @@
   margin-top: 10px;
   font-size: 13px;
 }
-.body {
+.body-vendor {
+  background-color: whitesmoke;
   color: #6478a0;
   height: auto;
   overflow: hidden;
@@ -97,7 +98,7 @@
 }
 .table-title {
   padding-bottom: 15px;
-  background: #757a81;
+  background: #B70621;
   color: rgb(255, 255, 255);
   padding: 16px 20px;
   margin: -20px -25px 10px;

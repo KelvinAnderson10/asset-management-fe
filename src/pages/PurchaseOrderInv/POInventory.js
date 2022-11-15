@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import Sidebar from '../../shared/components/Sidebar/Sidebar'
 import { FormPOInventory } from './components/FormPOInventory'
 import { ListPOInventory } from './components/ListPOInventory'
@@ -25,6 +26,16 @@ export const POInventory = () => {
         setClassNavbarForm('navbar-po-box2')
         setClassNavbarList('navbar-po-box')
     }
+
+    const location = useLocation()
+
+    useEffect(() => {
+        if(location.state) {
+            if (location.state.list) {
+                handleClickList();
+            }
+        }
+    }, []);
 
     return (
         <>
