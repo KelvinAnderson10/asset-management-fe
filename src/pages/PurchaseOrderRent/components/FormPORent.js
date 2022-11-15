@@ -41,7 +41,11 @@ export const FormPORent = () => {
   const [caraPembayaran,setCaraPembayaran] = useState('')
   const [jatuhTempo,setJatuhTempo] = useState()
   const [isLoading,setIsLoading] = useState(false)
-
+  const [perihal, setPerihal] = useState('')
+  const [taxRates, setTaxrates] = useState('')
+  const [alasan,setAlasan] = useState('')
+  const [regional,setRegional] = useState('')
+  const [background, setBackground] = useState([])
 
 
   const [fileKtp,setFileKtp] = useState([])
@@ -50,6 +54,18 @@ export const FormPORent = () => {
   const [fileSertifikat, setFileSertifikat] = useState([])
   const [fileFotoLokasi, setFileFotoLokasi] = useState([])
 
+  const addFields = (e)=>{
+    let object = {
+      backgroundDetail:''
+    }
+    setBackground([...background,object])
+  }
+
+  const handleBackgroundChange =(event,index)=>{
+    let data = [...background]
+    data[index][event.target.name] = event.target.value
+    
+  }
   const createNotification = async (notifPO) => {
     try {
       const response = await notificationService.createNotif(notifPO);
@@ -61,6 +77,7 @@ export const FormPORent = () => {
    const onSubmitPO = async (e)=>{
     e.preventDefault();
     setIsLoading(true)
+   
     const rentFormData = new FormData();
     rentFormData.append("Kode Wilayah", user.location_id)
     rentFormData.append("requester", user.name)
@@ -95,6 +112,11 @@ export const FormPORent = () => {
     rentFormData.append("cara_pembayaran", caraPembayaran)
     rentFormData.append("tanggal_jatuh_tempo", jatuhTempo)
 
+    for (let i = 0; i < background.length; i++) {
+      console.log('ini bg',background)
+      rentFormData.append("background_list", background[i].background)
+  }
+
     for (let i = 0; i < fileKtp.length; i++) {
         rentFormData.append("ktp", fileKtp[i])
     }
@@ -115,7 +137,7 @@ export const FormPORent = () => {
       rentFormData.append("sertifikat", fileSertifikat[i])
     }
 
-    console.log(rentFormData);
+    console.log('ini rentform',rentFormData);
     try {
       const response = await purchaseOrderRentService.createPO(rentFormData)
       console.log(response)
@@ -338,6 +360,38 @@ export const FormPORent = () => {
                     className="form-control"
                   />
                 </div>
+                {/* <div className="mb-3">
+                <label style={{fontWeight:'500'}}>
+                    About<span className="text-danger">*</span>
+                  </label>
+                    <select
+                      required
+                      name="About"
+                      value={perihal}
+                      onChange={(e)=>setPerihal(e.target.value)}
+                      className="form-select"
+                     
+                    >
+                      <option value="">Select Option</option>
+                      <option>Perpanjangan Sewa Ruko</option>
+                      <option>Pengajuan Sewa Baru Ruko</option>
+                      
+                    </select>
+
+                </div>
+                <div className="mb-3">
+                  <label style={{fontWeight:'500'}}>
+                    Reason<span className="text-danger">*</span>
+                  </label>
+                  <input
+                    value={alasan}
+                    required
+                    type="text"
+                    name="Alasan"
+                    className="form-control"
+                    onChange={(e)=>setAlasan(e.target.value)}
+                  />
+                </div> */}
                 <div className="mb-3 col-md-6">
                   <label style={{fontWeight:'500'}}>
                     User<span className="text-danger">*</span>
@@ -368,7 +422,7 @@ export const FormPORent = () => {
                   <label style={{fontWeight:'500'}}>
                     Address<span className="text-danger">*</span>
                   </label>
-                  <textarea value={alamatLokasi}  name="alamat_lokasi" onChange={(e)=>setAlamatLokasi(e.target.value)} required className="form-control" rows="3"></textarea>
+                  <textarea value={alamatLokasi} name="alamat_lokasi" onChange={(e)=>setAlamatLokasi(e.target.value)} required className="form-control" rows="3"></textarea>
                 </div>
                 <div className="mb-3 col-md-6">
                   <label style={{fontWeight:'500'}}>
@@ -452,7 +506,7 @@ export const FormPORent = () => {
                 </div>
                 <div className="mb-3 col-md-6">
                   <label style={{fontWeight:'500'}}>
-                    Rent Period (Month/Year)
+                    Rent Period (Month)
                     <span className="text-danger">*</span>
                   </label>
                   <input
@@ -494,7 +548,7 @@ export const FormPORent = () => {
                     onChange={(e)=>setPeriodeSewaAkhir(e.target.value)}
                   />
                 </div>
-                <div className="mb-3 col-md-6">
+                <div className="mb-3 col-md-4">
                   <label style={{fontWeight:'500'}}>
                     Owner's Name<span className="text-danger">*</span>
                   </label>
@@ -507,7 +561,7 @@ export const FormPORent = () => {
                     onChange={(e)=>setNamaPemilik(e.target.value)}
                   />
                 </div>
-                <div className="mb-3 col-md-6">
+                <div className="mb-3 col-md-4">
                   <label style={{fontWeight:'500'}}>
                     NPWP<span className="text-danger">*</span>
                   </label>
@@ -518,6 +572,20 @@ export const FormPORent = () => {
                     className="form-control"
                     value={NPWP}
                     onChange={(e)=>setNPWP(e.target.value)}
+                  />
+                </div>
+                <div className="mb-3 col-md-4">
+                  <label style={{fontWeight:'500'}}>
+                    Owner's Phone<span className="text-danger">*</span>
+                  </label>
+                  <input
+                    required
+                    type="number"
+                    min="0"
+                    name="no_telepon_pemilik"
+                    className="form-control"
+                    onChange={(e)=>setTlpPemilik(e.target.value)}
+                    value={tlpPemilik}
                   />
                 </div>
                 <div className="mb-3 col-md-12">
@@ -532,23 +600,10 @@ export const FormPORent = () => {
                     name="alamat_pemilik"
                   ></textarea>
                 </div>
+                
                 <div className="mb-3 col-md-6">
                   <label style={{fontWeight:'500'}}>
-                    Owner's Phone<span className="text-danger">*</span>
-                  </label>
-                  <input
-                    required
-                    type="number"
-                    min="0"
-                    name="no_telepon_pemilik"
-                    className="form-control"
-                    onChange={(e)=>setTlpPemilik(e.target.value)}
-                    value={tlpPemilik}
-                  />
-                </div>
-                <div className="mb-3 col-md-6">
-                  <label style={{fontWeight:'500'}}>
-                    Rent Price/Year (Old Price if Extend)<span className="text-danger">*</span>
+                    Rent Price (Old Price if Extend)<span className="text-danger">*</span>
                   </label>
                   <input
                     required
@@ -560,9 +615,9 @@ export const FormPORent = () => {
                     onChange={(e)=>setSewaHargaLama(e.target.value)}
                   />
                 </div>
-                <div className="mb-3 col-md-4">
+                <div className="mb-3 col-md-6">
                   <label style={{fontWeight:'500'}}>
-                    Rent Price/Year (New Price)<span className="text-danger">*</span>
+                    Rent Price (New Price)<span className="text-danger">*</span>
                   </label>
                   <input
                     required
@@ -574,9 +629,28 @@ export const FormPORent = () => {
                     onChange={(e)=>setSewaHargaBaru(e.target.value)}
                   />
                 </div>
-                <div className="mb-3 col-md-4">
+                {/* <div className="mb-3 col-md-6">
+                <label style={{fontWeight:'500'}}>
+                    Tax Options<span className="text-danger">*</span>
+                  </label>
+                    <select
+                      required
+                      name="Tax Rates"
+                      value={taxRates}
+                      onChange={(e)=>setTaxrates(e.target.value)}
+                      className="form-select"
+                     
+                    >
+                      <option value="">Select Option</option>
+                      <option value="dibayar oleh penyewa">Paid by Tenant</option>
+                      <option value="dibayar oleh pemilik">Paid by Owner</option>
+                      
+                    </select>
+
+                </div>
+                <div className="mb-3 col-md-6">
                   <label style={{fontWeight:'500'}}>
-                    Tax (10%)<span className="text-danger">*</span>
+                    Tax<span className="text-danger">*</span>
                   </label>
                   <input
                     required
@@ -587,8 +661,8 @@ export const FormPORent = () => {
                     value={pajak}
                     onChange={(e)=>setPajak(e.target.value)}
                   />
-                </div>
-                <div className="mb-3 col-md-4">
+                </div> */}
+                <div className="mb-3 col-md-6">
                   <label style={{fontWeight:'500'}}>
                   Amount transferred to Owner<span className="text-danger">*</span>
                   </label>
@@ -602,7 +676,7 @@ export const FormPORent = () => {
                     value={nominalTransfer}
                   />
                 </div>
-                <div className="mb-3 col-md-4">
+                {/* <div className="mb-3 col-md-4">
                   <label style={{fontWeight:'500'}}>
                     Notary<span className="text-danger">*</span>
                   </label>
@@ -627,8 +701,8 @@ export const FormPORent = () => {
                     value={jasaNotaris}
                     onChange={(e)=>setJasaNotaris(e.target.value)}
                   />
-                </div>
-                <div className="mb-3 col-md-4">
+                </div> */}
+                <div className="mb-3 col-md-6">
                   <label style={{fontWeight:'500'}}>
                  NPWP Notary<span className="text-danger">*</span>
                   </label>
@@ -718,6 +792,38 @@ export const FormPORent = () => {
                     value={jatuhTempo}
                     onChange={(e)=>setJatuhTempo(e.target.value)}
                   />
+                </div>
+                {background.map((form,index)=>{
+                  return(
+                    <div>
+                      <div className="mb-3">
+                          <label>
+                            Background
+                            <span className="text-danger">*</span>{" "}
+                          </label>
+                          <input
+                            required
+                            type="text"
+                            name="background"
+                            placeholder="background"
+                            className="form-control"
+                            onChange={(event) => handleBackgroundChange(event, index)}
+                          />
+                        </div>
+                      </div>
+                  )
+                })}
+                <div className="col-md-12">
+                  <button
+                  // disabled={enabled}
+                    className="btn btn-success float-start"
+                    onClick={addFields}
+                  >
+                    Add More..
+                  </button>
+                </div>
+                <div>
+
                 </div>
                 <label style={{fontWeight:'500'}}>Attachment File</label>
                 <div className="file-extension">
