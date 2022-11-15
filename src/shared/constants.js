@@ -79,4 +79,7 @@ export const PATH = {
   APPROVAL_INVENTORY : "/approval-data/inventory",
   APPROVAL_MAINTENANCE : "/approval-data/maintenance",
   OVERVIEW: "/main",
+  REQUEST_INVENTORY : "/purchase-request/inventory",
+  REQUEST_RENT : "/purchase-request/rent",
+  REQUEST_MAINTENANCE :  "/purchase-request/maintenance",
 };

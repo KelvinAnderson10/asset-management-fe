@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import { useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 import Sidebar from '../../shared/components/Sidebar/Sidebar'
 import { FormPOMaintenance } from './components/FormPOMaintenance'
 import { ListPOMaintenance } from './components/ListPOMaintenance'
@@ -23,6 +25,16 @@ export const POMaintenance = () => {
     setClassNavbarForm('navbar-po-box2')
     setClassNavbarList('navbar-po-box')
   }
+
+  const location = useLocation();
+  
+    useEffect(() => {
+      if(location.state) {
+        if (location.state.list) {
+            handleClickList();
+        }
+      }
+    }, []);
 
   return (
     <div>
