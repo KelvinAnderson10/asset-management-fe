@@ -7,7 +7,7 @@ import { AuthProvider } from './services/UseAuth';
 
 function App() {
   return (
-    <div className="App">
+    <div>
       <AuthProvider>
       <AppRouter></AppRouter>
       </AuthProvider>

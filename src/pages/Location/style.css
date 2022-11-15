@@ -78,7 +78,8 @@
   margin-top: 10px;
   font-size: 13px;
 }
-.body {
+.body-loc {
+  background-color: whitesmoke;
   color: #6478a0;
   height: auto;
   overflow: hidden;

@@ -39,12 +39,14 @@
   color: #cc2103;
   font-weight: 500;
   margin-bottom: 12px;
+  text-align: center;
 }
 
 .text-otp {
   font-family: "Poppins";
   color: #8b8d97;
   font-size: 14px;
+  text-align: center;
 }
 
 .text-err {
@@ -52,6 +54,7 @@
   color: #cc2103;
   font-size: 14px;
   font-weight: 600;
+  text-align: center;
 }
 .form-box {
   display: flex;
@@ -401,7 +404,7 @@ input::placeholder {
   margin: 0;
 }
 
-.container {
+.container-login {
   /* background-color:#d37379; */
   /* background-color:#891018; */
   width: 100vw;
@@ -412,7 +415,7 @@ input::placeholder {
 
 }
 
-body {
+.body-login {
   background-image: url("../../assets/images/login_bg.svg");
   background-position: center;
   background-repeat: no-repeat;
@@ -425,7 +428,7 @@ body {
 
 .white-container {
   background-color: white;
-  width: 85%;
+  width: 80%;
   height: 85%;
   display: flex;
   flex-direction: row;
@@ -445,7 +448,7 @@ body {
   /* border: 1px solid #BFBFBF;
   box-shadow: 8px 8px 4px #aaaaaa;
   border-radius: 50px; */
-  width: 90%;
+  width: 80%;
   display: flex;
   justify-content: center;
   align-items: center;

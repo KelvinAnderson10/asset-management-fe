@@ -1,6 +1,7 @@
 .PDF {
     line-height: normal;
     text-align: left;
+    background-color: white;
   }
   
   #img-header {
@@ -11,7 +12,7 @@
     width: 90%;
   }
 
-  .pdf-body {
+  .pdfs {
     margin-left: 1.5cm;
     margin-right: 1.5cm;
     margin-top: 0%;

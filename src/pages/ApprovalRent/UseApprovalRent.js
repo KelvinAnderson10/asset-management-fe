@@ -26,7 +26,7 @@ export const UseApprovalRent = () => {
           response.data[i].CreatedAt = moment(response.data[i].CreatedAt).format("LL");
         }
           setAppData(response.data)
-          console.log('inirent',appData)
+          console.log('inirent',response.data)
           setTotalPage(Math.ceil(response.count / 10))
 
           } catch (e) {
