@@ -18,6 +18,7 @@ import { Noty } from "../Noty/Noty";
 import { useDeps } from "../../context/DependencyContext";
 import moment from "moment";
 import { NOTIF, PATH } from "../../constants";
+import 'moment/locale/en-sg'
 
 const routesAdmin = [
   {
@@ -307,7 +308,7 @@ const Sidebar = ({ children }) => {
     try {
       const response = await notificationService.getNotif(name);
       for (let i in response.data){
-        response.data[i].CreatedAt = moment(response.data[i].CreatedAt).format("LLL")
+        response.data[i].CreatedAt = moment(response.data[i].CreatedAt).locale("en-sg").format("LLL")
       }
     
       setViewNotif(response.data);

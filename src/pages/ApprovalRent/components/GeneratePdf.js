@@ -10,6 +10,7 @@ import moment from 'moment';
 import 'moment/locale/id'
 
 export const GeneratePdf = () => {
+    document.querySelector("body").style.backgroundImage = "none";
     const [coba, setCoba] = useState(true)
     const location = useLocation()
     const Attachment = [
@@ -36,7 +37,7 @@ export const GeneratePdf = () => {
     return (
         <div className="PDF">
             <img id="img-header" src={Header} width="20cm"></img>
-            <div className="pdf-body">
+            <div className="pdfs">
                 <a style={{fontSize: 14}}>INTERNAL MEMO</a>
                 <table style={{borderCollapse: "collapse", lineHeight: '18px', fontSize:14}}>
                     <tr>
@@ -51,6 +52,11 @@ export const GeneratePdf = () => {
                         <td>Kepada</td>
                         <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: - Bp. Bernard Martian
                         </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Bp. Bernard
+                            Martian </td>
                     </tr>
                     <tr>
                         <td></td>
@@ -165,33 +171,38 @@ export const GeneratePdf = () => {
                         </table>
                         Demikian permohonan ini kami sampaikan, dan atas persetujuan yang diberikan kami ucapkan terima kasih.
                     </p>
-                    <table style={{width: "100%", borderCollapse: "collapse", fontSize:14, marginBottom: 180}}>
+                    <table style={{width: "100%", borderCollapse: "collapse", fontSize:14}}>
                         <tr>
                             <th style={{fontWeight: "normal", textAlign: "left", width: "5cm"}}>Sekayu, 24 Oktober 2022</th>
                             <th></th>
                             <th></th>
                             <th></th>
                         </tr>
-                        <tr>
+                    </table>
+                    <table style={{width: "100%", borderCollapse: "collapse", fontSize:14, marginBottom: 180}}>
+                        <tr style={{border: "1px solid black"}}>
                             <td style={{textAlign: "left"}}>Diajukan oleh,</td>
-                            <td colspan="2" style={{textAlign: "center"}}>Mengetahui,</td>
+                            <td colspan="3" style={{textAlign: "center", border: "1px solid black"}}>Mengetahui,</td>
                             <td style={{textAlign: "left"}}>Disetujui oleh,</td>
                         </tr>
-                        <tr>
+                        <tr style={{border: "1px solid black"}}>
                             <td style={{lineHeight: "2cm", }}>&nbsp;</td>
                             <td>&nbsp;</td>
                             <td>&nbsp;</td>
                             <td>&nbsp;</td>
+                            <td>&nbsp;</td>
                         </tr>
-                        <tr>
+                        <tr style={{border: "1px solid black"}}>
                             <td><b><u>Arief Budiman</u></b></td>
-                            <td>&nbsp;<b><u>Josephat Christian</u></b></td>
+                            <td><b><u>Josephat Christian</u></b></td>
+                            <td><b><u>Moh. Firman Subarkah</u></b></td>
                             <td><b><u>Ridwan Syahman</u></b></td>
                             <td><b><u>Bernard Martian</u></b></td>
                         </tr>
-                        <tr>
-                            <td style={{width: "30%"}}><b>GM Regional SBP</b></td>
-                            <td>&nbsp;<b>Director Of Sales</b></td>
+                        <tr style={{border: "1px solid black"}}>
+                            <td><b>GM Regional SBP</b></td>
+                            <td><b>Director Of Sales</b></td>
+                            <td><b>Head of HRGA</b></td>
                             <td><b>Chief Of Finance</b></td>
                             <td><b>Chief Of Executive</b></td>
                         </tr>
@@ -201,7 +212,7 @@ export const GeneratePdf = () => {
 
             </div>
             <img id="img-footer" src={Footer} width="20cm"></img>
-            {Attachment.map((item)=>{
+            {/* {Attachment.map((item)=>{
                 console.log(item);
                 // iterateAttachment(item)
                 return(
@@ -219,7 +230,7 @@ export const GeneratePdf = () => {
                         </div>
                     </>
                 )
-            })}
+            })} */}
 
             <div style={{paddingTop: "5%", margin: "1.5cm"}} >
                 <table width={"100%"} style={{border: "3px solid black"}}>
@@ -506,9 +517,6 @@ export const GeneratePdf = () => {
                         </tr>
                     </table>
                 </div>
-
-
-
             </div>
         </div>
     )
