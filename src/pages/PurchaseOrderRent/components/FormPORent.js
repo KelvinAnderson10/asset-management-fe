@@ -7,6 +7,8 @@ import { async } from "@firebase/util";
 import { Failed } from "../../../shared/components/Notification/Failed";
 import swal from "sweetalert";
 import { NOTIF, STATUS } from "../../../shared/constants";
+import * as CgIcons from "react-icons/cg";
+import * as BiIcons from "react-icons/bi"
 
 export const FormPORent = () => {
   const {purchaseOrderRentService, notificationService} = useDeps();
@@ -42,10 +44,11 @@ export const FormPORent = () => {
   const [jatuhTempo,setJatuhTempo] = useState()
   const [isLoading,setIsLoading] = useState(false)
   const [perihal, setPerihal] = useState('')
-  const [taxRates, setTaxrates] = useState('')
   const [alasan,setAlasan] = useState('')
   const [regional,setRegional] = useState('')
-  const [background, setBackground] = useState([])
+  const [background, setBackground] = useState([{
+    background:''
+  }])
 
 
   const [fileKtp,setFileKtp] = useState([])
@@ -56,7 +59,7 @@ export const FormPORent = () => {
 
   const addFields = (e)=>{
     let object = {
-      backgroundDetail:''
+      background:''
     }
     setBackground([...background,object])
   }
@@ -66,6 +69,11 @@ export const FormPORent = () => {
     data[index][event.target.name] = event.target.value
     
   }
+  const removeFields = (index) => {
+    let data = [...background];
+    data.splice(index, 1);
+    setBackground(data);
+  };
   const createNotification = async (notifPO) => {
     try {
       const response = await notificationService.createNotif(notifPO);
@@ -80,9 +88,12 @@ export const FormPORent = () => {
    
     const rentFormData = new FormData();
     rentFormData.append("Kode Wilayah", user.location_id)
+    rentFormData.append("regional", regional)
     rentFormData.append("requester", user.name)
     rentFormData.append("User", toUser)
     rentFormData.append("Jabatan", position)
+    rentFormData.append("about",perihal)
+    rentFormData.append("reason",alasan)
     rentFormData.append("alamat_lokasi", alamatLokasi)
     rentFormData.append("Nama Barang", namaBarang)
     rentFormData.append("status", STATUS.CREATE_PO)
@@ -102,8 +113,8 @@ export const FormPORent = () => {
     rentFormData.append("harga_sewa_per_tahun_harga_baru", sewaHargaBaru)
     rentFormData.append("pajak",pajak)
     rentFormData.append("nominal_transfer_ke_pemilik",nominalTransfer)
-    rentFormData.append("notaris", notaris)
-    rentFormData.append("jasa_notaris", jasaNotaris)
+    // rentFormData.append("notaris", notaris)
+    // rentFormData.append("jasa_notaris", jasaNotaris)
     rentFormData.append("NPWP_notaris", NPWPNotaris)
     rentFormData.append("nama_rekening_tujuan", namaRekeningTujuan)
     rentFormData.append("nomor_rekening_tujuan", norekTujuan)
@@ -113,7 +124,6 @@ export const FormPORent = () => {
     rentFormData.append("tanggal_jatuh_tempo", jatuhTempo)
 
     for (let i = 0; i < background.length; i++) {
-      console.log('ini bg',background)
       rentFormData.append("background_list", background[i].background)
   }
 
@@ -166,7 +176,7 @@ export const FormPORent = () => {
           text: "Your request has been made!",
           icon: "success",
           button: "OK!",
-        });
+        }).then(result => {window.location.reload()});
       }
     } catch (error) {
       if (error.response.data.message === 'File extension is forbidden') {
@@ -329,7 +339,7 @@ export const FormPORent = () => {
             <p><span className="text-danger">*</span> required fields</p>
             <div className="formPOInput">
               <div className="row">
-                <div className="mb-3 col-md-4">
+                <div className="mb-3 col-md-6">
                   <label style={{fontWeight:'500'}}>
                     Area Code<span className="text-danger">*</span>
                   </label>
@@ -341,13 +351,13 @@ export const FormPORent = () => {
                     defaultValue={user.location_id}
                   />
                 </div>
-                <div className="mb-3 col-md-4">
+                <div className="mb-3 col-md-6">
                   <label style={{fontWeight:'500'}}>
                     Cluster<span className="text-danger">*</span>
                   </label>
                   <input readOnly defaultValue={user.cluster} type="text" name="Cluster" className="form-control" />
                 </div>
-                <div className="mb-3 col-md-4">
+                <div className="mb-3 col-md-6">
                   <label style={{fontWeight:'500'}}>
                     TAP<span className="text-danger">*</span>
                   </label>
@@ -360,13 +370,26 @@ export const FormPORent = () => {
                     className="form-control"
                   />
                 </div>
-                {/* <div className="mb-3">
+                <div className="mb-3 col-md-6">
+                  <label style={{fontWeight:'500'}}>
+                    Regional<span className="text-danger">*</span>
+                  </label>
+                  <input
+                    value={regional}
+                    required
+                    type="text"
+                    name="regional"
+                    className="form-control"
+                    onChange={(e)=>setRegional(e.target.value)}
+                  />
+                </div>
+                <div className="mb-3">
                 <label style={{fontWeight:'500'}}>
                     About<span className="text-danger">*</span>
                   </label>
                     <select
                       required
-                      name="About"
+                      name="about"
                       value={perihal}
                       onChange={(e)=>setPerihal(e.target.value)}
                       className="form-select"
@@ -387,11 +410,11 @@ export const FormPORent = () => {
                     value={alasan}
                     required
                     type="text"
-                    name="Alasan"
+                    name="reason"
                     className="form-control"
                     onChange={(e)=>setAlasan(e.target.value)}
                   />
-                </div> */}
+                </div>
                 <div className="mb-3 col-md-6">
                   <label style={{fontWeight:'500'}}>
                     User<span className="text-danger">*</span>
@@ -629,39 +652,25 @@ export const FormPORent = () => {
                     onChange={(e)=>setSewaHargaBaru(e.target.value)}
                   />
                 </div>
-                {/* <div className="mb-3 col-md-6">
+                <div className="mb-3 col-md-6">
                 <label style={{fontWeight:'500'}}>
                     Tax Options<span className="text-danger">*</span>
                   </label>
                     <select
                       required
-                      name="Tax Rates"
-                      value={taxRates}
-                      onChange={(e)=>setTaxrates(e.target.value)}
+                      name="pajak"
+                      value={pajak}
+                      onChange={(e)=>setPajak(e.target.value)}
                       className="form-select"
                      
                     >
                       <option value="">Select Option</option>
-                      <option value="dibayar oleh penyewa">Paid by Tenant</option>
-                      <option value="dibayar oleh pemilik">Paid by Owner</option>
+                      <option value="dibayar penyewa">Paid by Tenant</option>
+                      <option value="dibayar pemilik">Paid by Owner</option>
                       
                     </select>
 
                 </div>
-                <div className="mb-3 col-md-6">
-                  <label style={{fontWeight:'500'}}>
-                    Tax<span className="text-danger">*</span>
-                  </label>
-                  <input
-                    required
-                    type="number"
-                    min="0"
-                    name="pajak"
-                    className="form-control"
-                    value={pajak}
-                    onChange={(e)=>setPajak(e.target.value)}
-                  />
-                </div> */}
                 <div className="mb-3 col-md-6">
                   <label style={{fontWeight:'500'}}>
                   Amount transferred to Owner<span className="text-danger">*</span>
@@ -754,7 +763,7 @@ export const FormPORent = () => {
                     onChange={(e)=>setBank(e.target.value)}
                   />
                 </div>
-                <div className="mb-3 col-md-6">
+                <div className="mb-3 col-md-4">
                   <label style={{fontWeight:'500'}}>
                  Branch Name<span className="text-danger">*</span>
                   </label>
@@ -767,7 +776,7 @@ export const FormPORent = () => {
                     onChange={(e)=>setCabangBank(e.target.value)}
                   />
                 </div>
-                <div className="mb-3 col-md-6">
+                <div className="mb-3 col-md-4">
                   <label style={{fontWeight:'500'}}>
                   Payment Method<span className="text-danger">*</span>
                   </label>
@@ -780,7 +789,7 @@ export const FormPORent = () => {
                     onChange={(e)=>setCaraPembayaran(e.target.value)}
                   />
                 </div>
-                <div className="mb-3 col-md-6">
+                <div className="mb-3 col-md-4">
                   <label style={{fontWeight:'500'}}>
                   Due Date<span className="text-danger">*</span>
                   </label>
@@ -793,14 +802,21 @@ export const FormPORent = () => {
                     onChange={(e)=>setJatuhTempo(e.target.value)}
                   />
                 </div>
+                <div className="col-md-12">
+                <label>Background<span className="text-danger">*</span>{" "}</label>
+                  <a onClick={addFields}>
+                    <BiIcons.BiListPlus size="2em" color="green"/>
+                  </a>
+                </div>
                 {background.map((form,index)=>{
                   return(
-                    <div>
-                      <div className="mb-3">
-                          <label>
-                            Background
-                            <span className="text-danger">*</span>{" "}
-                          </label>
+                    <div key={index}>
+                      <div className="row">
+                        {/* <div className="col-1 center">
+                          {index+1}
+                          
+                        </div> */}
+                      <div className="mb-3 col-11">
                           <input
                             required
                             type="text"
@@ -808,20 +824,20 @@ export const FormPORent = () => {
                             placeholder="background"
                             className="form-control"
                             onChange={(event) => handleBackgroundChange(event, index)}
-                          />
+                            />
+                        </div>
+                        <div className="col-1">
+                        {index > 0 && (
+                            <a onClick={() => removeFields(index)}>
+                            <CgIcons.CgCloseR size="2em" color="red" />
+                          </a>
+                        )}
+                        </div>
                         </div>
                       </div>
                   )
                 })}
-                <div className="col-md-12">
-                  <button
-                  // disabled={enabled}
-                    className="btn btn-success float-start"
-                    onClick={addFields}
-                  >
-                    Add More..
-                  </button>
-                </div>
+                
                 <div>
 
                 </div>
