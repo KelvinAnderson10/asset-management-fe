@@ -34,14 +34,16 @@ export const PORent = () => {
                     <div className='navbar-po-container'>
                         <div className='navbar-po-left'>
                         <div className={classNavbarForm} onClick={() => handleClickForm()}>
-                        <a>Form Request</a>
+                        <div className='text-inv'>Form Request</div>
                         </div>
                         <div className={classNavbarList} onClick={() => handleClickList()}>
-                            <a>List Request</a>
+                            <div className='text-inv'>List Request</div>
                         </div> 
                         </div>
                         <div className='title-right'>
-                        <a>Rent</a>
+                            <div className='title-box'>
+                            Rent
+                            </div>
                         </div>
                     </div>
                </div>

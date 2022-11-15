@@ -1,10 +1,12 @@
 .text-inv {
     text-decoration: none;
     font-size: 14px;
+    text-align: center;
 }
 .text-inv2 {
     text-decoration: none;
     font-size: 14px;
+    text-align: center;
 }
 
 /* For mobile phones: */
@@ -12,9 +14,11 @@
     .text-inv {
         text-decoration: none;
         font-size: 10px;
+        text-align: center;
     }
     .text-inv2 {
         text-decoration: none;
         font-size: 10px;
+        text-align: center;
     }
 }

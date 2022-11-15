@@ -356,7 +356,7 @@ export const Location = () => {
   return (
     <>
       <Sidebar>
-        <div className="body">
+        <div className="body-loc">
           <div className="container">
             <div className="loc-container-item">
               <form>
@@ -401,7 +401,7 @@ export const Location = () => {
             <div className="table-title">
                   <div className="row">
                     <div className="col-xs-6">
-                      <h2 style={{fontSize: "24px"}}>
+                      <h2 style={{fontSize: "24px", textAlign: 'center'}}>
                         Manage <b>Locations</b>
                       </h2>
                     </div>

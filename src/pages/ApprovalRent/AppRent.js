@@ -3,6 +3,7 @@ import Sidebar from "../../shared/components/Sidebar/Sidebar";
 import { FormApprovalRent } from "./components/FormApprovalRent";
 import { ListApprovedRent } from "./components/ListApprovedRent";
 import { ListRentRequest } from "./components/ListRentRequest";
+import '../ApprovalInventory/AppInv.css'
 
 export const AppRent = () => {
   const [requestForm, setRequestForm] = useState(true);
@@ -34,18 +35,18 @@ export const AppRent = () => {
                 className={classNavbarForm}
                 onClick={() => handleClickForm()}
               >
-                <a>List Rent Request</a>
+                <div className='text-inv'>List Rent Request</div>
               </div>
               <div
                 className={classNavbarList}
                 onClick={() => handleClickList()}
               >
-                <a>Approved</a>
+                <div className='text-inv2'>Approved</div>
               </div>
             </div>
             <div className="title-right">
               <div className="title-box">
-                <a>Rent</a>
+                Rent
               </div>
             </div>
           </div>
