@@ -11,6 +11,8 @@ import { useAuth } from "../../services/UseAuth";
 import Loading from "../../shared/components/Loading/Loading";
 import { useRef } from "react";
 import background from "../../assets/images/img.svg"
+import { TypeAnimation } from 'react-type-animation';
+import icon from '../../assets/images/asset_icon.png';
 
 export const Login = () => {
   const [email, setEmail] = useState("");
@@ -142,14 +144,51 @@ export const Login = () => {
       {getCookie("user") &&  <Navigate to='/main'></Navigate>}
 
       <div className="container-fluid">
-        <div className="row">
+        <div className='bg'>
+          <div className='container'>
+            <div className='white-container'>
+              <div className='left-container'>
+                <div className='carousel-div'>
+                <img src={icon} width={'70%'} height={'70%'}></img>
+                <div className="tagline">
+                    <h2 style={{textAlign: 'center', marginBottom: '12px'}}>Manage Your Asset</h2>
+                    <TypeAnimation
+                      // Same String at the start will only be typed once, initially
+                      sequence={[
+                      'EFFICIENTLY',
+                      2000,
+                      'EXCELLENTLY',
+                      2000,
+                      'EFFECTIVELY',
+                      2000,
+                      ]}
+                      speed={40} // Custom Speed from 1-99 - Default Speed: 40
+                      style={{fontWeight: 'bolder', fontSize: '1.5em', width: '220px', textAlign: 'center' , backgroundColor: '#bd1722', color:'white', paddingLeft:'10px', borderRadius: '5px'}}
+                      wrapper="span" // Animation will be rendered as a <span>
+                      repeat={Infinity} // Repeat this Animation Sequence infinitely
+                    />
+                </div>
+                </div>
+              </div>
+              <div className='right-container'>
+                <img src={logo} width={'40%'} height={'12%'}></img>
+                <div className="title-h1">Welcome to Namaste!</div>
+                <p id='login-txt'>Login to your account</p>
+                <p id='email'>Email</p>
+                <input className='input' placeholder='Email Address' required=""
+                    onChange={(e) => setEmail(e.target.value)}></input>
+                <button className='login-btn' onClick={(e) => {
+                      validateEmail(e);
+                    }}><span>Login</span></button>
+              </div>
+            </div>
+          </div>
+          </div>
+        {/* <div className="row">
           <div className="col-lg-8 col-md-5 d-none d-md-block image-container">
             <div>
         
             </div>
-            
-            {/* <h1>MAKE YOUR</h1>
-          <h2>WORK EASIER</h2> */}
           </div>
           <div className="col-lg-4 col-md-7 form-container">
             <div className="col-lg-10 col-md-12 col-sm-9 col-xs-12 form-box">
@@ -192,7 +231,7 @@ export const Login = () => {
               </form>
             </div>
           </div>
-        </div>
+        </div> */}
         {showOTPForm && (
           <div className="otpForm">
             <Card className="card">
@@ -223,7 +262,7 @@ export const Login = () => {
                   allowedCharacters="numeric"
                   key={clearOtp}
                 ></AuthCode>
-                <h6 className="message">If you cant'find the OTP in your inbox, please check your spam folder</h6>
+                <h6 className="message-otp">If you cant'find the OTP in your inbox, please check your spam folder</h6>
                 <div className="counter">
                   00:{counter}
                 </div>
