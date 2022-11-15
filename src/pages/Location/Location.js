@@ -442,7 +442,7 @@ export const Location = () => {
                           <th>{item.cluster}</th>
                           <th>{item.location}</th>
                           <th>{item["kode wilayah"]}</th>
-                          <td>
+                          <td style={{textAlign: 'center'}}>
                             <a
                               onClick={() => {
                                 handleViewShow(SetRowData(item));

@@ -39,12 +39,14 @@
   color: #cc2103;
   font-weight: 500;
   margin-bottom: 12px;
+  text-align: center;
 }
 
 .text-otp {
   font-family: "Poppins";
   color: #8b8d97;
   font-size: 14px;
+  text-align: center;
 }
 
 .text-err {
@@ -52,6 +54,7 @@
   color: #cc2103;
   font-size: 14px;
   font-weight: 600;
+  text-align: center;
 }
 .form-box {
   display: flex;

@@ -510,7 +510,7 @@ export const UserManage = () => {
                             <th>{item.TAP}</th>
                             <th>{item.Cluster}</th>
                             <th>{item.department}</th>
-                            <td>
+                            <td style={{textAlign: 'center'}}>
                               <a
                                 onClick={() => {
                                   handleViewShow(SetRowData(item));

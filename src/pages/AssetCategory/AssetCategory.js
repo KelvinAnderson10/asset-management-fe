@@ -535,7 +535,7 @@ export const AssetCategory = () => {
                         <th>{item.product_name}</th>
                         <th>{item.subproduct_name}</th>
                         <th>{item.pic}</th>
-                        <td>
+                        <td style={{textAlign: 'center'}}>
                           <a
                             onClick={() => {
                               handleViewShow(SetRowData(item));

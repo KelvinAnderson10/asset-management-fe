@@ -251,6 +251,7 @@ table.table tr th:first-child {
 }
 table.table tr th:last-child {
   width: 200px;
+  text-align: center;
 }
 table.table-striped tbody tr:nth-of-type(odd) {
   background-color: #fcfcfc;

@@ -51,6 +51,7 @@ export const Login = () => {
       setCounter(59);
       SetIsDisabled(true)
       setShowOTPForm(true);
+      setErrDisabled(false)
     } catch (error) {
       Failed("Email not registered yet, Please input a valid email");
     } finally {
@@ -244,7 +245,7 @@ export const Login = () => {
                   <i className="fa fa-times"></i>
                 </button>
               </div>
-              <h3>OTP Verification</h3>
+              <h3 style={{textAlign: 'center'}}>OTP Verification</h3>
               <h5> Enter the OTP sent to your email</h5>
               {errDisabled && 
                 <>
