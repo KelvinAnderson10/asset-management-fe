@@ -4,6 +4,7 @@ import { UseAppTrans } from '../UseAppTrans'
 import { NoData } from "../../../shared/components/NoData/NoData";
 import { Modal} from "react-bootstrap";
 import { STATUS } from '../../../shared/constants';
+import ReactPaginate from 'react-paginate';
 
 export const ListTransReq = ({listData = [], showButton = true}) => {
     const {
@@ -14,66 +15,117 @@ export const ListTransReq = ({listData = [], showButton = true}) => {
         detailAsset,
         handleShowModalRequest,
         setShowModalReq,
-        showModalReq
+        showModalReq,
+        handlePageClick,
+        handlePageClick2,
+        totalPage,
+        totalPageApp,
+        currentPage
     } = UseAppTrans()
 
   return (
     <>
+          <div className="approval-inv-list-container">
+          <div className="approval-inv-box-container">
+          <div className="approval-inv-list-card">
+
             { listData.length === 0 ?(
-                <NoData />
-            ) : (
+              <NoData />
+              ) : (
                 listData.map((data) => (
-                    <div
-                      className="container-fluid bg-light shadow-sm rounded-2 p-2 mb-3"
-                      style={{cursor : "pointer"}}
-                      key={data.to_id}
-                      onClick={() => {handleShowModalRequest(data)}}
-                    >
-                      <div className="d-flex flex-row justify-content-between px-5">
-                        <div className="text-white rounded-2 mb-2 fw-bold" style={{backgroundColor : "rgb(183, 6, 33)", width: "2.5vw"}}>{data.to_id}</div>
+                  <div
+                  className="approval-inv-box-item"
+                  style={{cursor : "pointer"}}
+                  key={data.to_id}
+                  onClick={() => {handleShowModalRequest(data)}}
+                  >
+                      <div  className="header-list-approval">
+                      <a className="approval-num">{data.to_id}</a>
                         <div
-                          className="text-white rounded-2 mb-2 fw-bold"
+                          className="text-white rounded-2 mb-2"
                           style={{backgroundColor: data.status === STATUS.CREATE_PO ? "rgb(255, 178, 0)" : data.status === STATUS.TRANSFERRED ? 'rgb(92, 184, 92)' :  'rgb(183, 6, 33)', width: "8vw" }}
-                        >
+                          >
                           {data.status}
                         </div>
                       </div>
-                      <div className="mx-5 text-start fw-semibold fs-6">
-                        <div className="row">
-                            <div className="col">
-                              <a>Requester</a>
-                              <a>: {data.requester}</a>
+                      <div className="approval-content-container">
+                        <div className="box-content-approval">
+                            <div className="row-content-approval">
+                              <div className="sub-title-content" >
+                              <a className="text">Requester</a>
+                              </div>
+                              <div className="sub-title-content">
+                              <a className="text">: {data.requester}</a>
+                              </div>
                             </div>
-                            <div className="col">
-                              <a>Target Location</a>
-                              <a>: {data.TAPDestination}</a>
-                            </div>
-                        </div>
-                        <div className="row">
-                            <div className="col">
-                              <a>To</a>
-                              <a>: {data.ToUser}</a>
-                            </div>
-                            <div className="col">
-                              <a>Asset Number</a>
-                              <a>: {data["Nomor Asset"]}</a>
+                            <div className="row-content-approval">
+                              <div className="sub-title-content" >
+                              <a className="text">Target Location</a>
+                              </div>
+                              <div className="sub-title-content">
+                              <a className="text">: {data.TAPDestination}</a>
+                              </div>
                             </div>
                         </div>
-                        <div className="row">
-                            <div className="col">
-                              <a>Request Date</a>
-                              <a>: {new Date(data.CreatedAt).toLocaleDateString('in-ID')}</a>
+
+                        <div className="box-content-approval">
+                            <div className="row-content-approval">
+                              <div className="sub-title-content">
+                              <a className="text">To</a>
+                              </div>
+                              <div className="sub-title-content">
+                              <a className="text">: {data.ToUser}</a>
+                              </div>
                             </div>
-                            <div className="col">
+                            <div className="row-content-approval">
+                              <div className="sub-title-content">
+                              <a className="text" >Asset Number</a>
+                              </div>
+                              <div className="sub-title-content">
+
+                              <a className="text">: {data["Nomor Asset"]}</a>
+                              </div>
                             </div>
                         </div>
                       </div>
+                      <div className="date-approval">
+                      <a className="text">{data.CreatedAt}</a>
+
+                      </div>
                     </div>
                 ))
-            )}
+                )}
+                <div
+              key={totalPageApp}
+              style={{ marginRight: "2vw", marginTop: "1vh" }}
+            >
+              <ReactPaginate
+                previousLabel={"Prev"}
+                nextLabel={"Next"}
+                breakLabel={"..."}
+                pageCount={totalPageApp}
+                marginPagesDisplayed={2}
+                pageRangeDisplayed={3}
+                onPageChange={handlePageClick}
+                containerClassName={"pagination justify-content-center"}
+                pageClassName={"page-item"}
+                pageLinkClassName={"page-link"}
+                previousClassName={"page-item"}
+                previousLinkClassName={"page-link"}
+                nextClassName={"page-item"}
+                nextLinkClassName={"page-link"}
+                breakClassName={"page-item"}
+                breakLinkClassName={"page-link"}
+                activeClassName={"active"}
+                // forcePage={currentPage}
+              />
+            </div>
+                </div>
+                </div>
+          </div>
 
         {
-            <div className="model-box-view">
+          <div className="model-box-view">
             <Modal
               dialogClassName="view-modal"
               show={showModalReq}
@@ -165,7 +217,7 @@ export const ListTransReq = ({listData = [], showButton = true}) => {
               <Modal.Footer>
                 <div className="">
                   <button
-                    className="btn btn-danger button-cancel"
+                    className="btn btn-danger"
                     onClick={() => {
                       handleRejectRequest(detailRequest["to_id"]);
                     }}
@@ -174,7 +226,7 @@ export const ListTransReq = ({listData = [], showButton = true}) => {
                     Reject
                   </button>
                   <button
-                    className="btn btn-primary button-submit"
+                    className="btn btn-primary "
                     onClick={() => {
                       handleApproveRequest(detailRequest["to_id"]);
                     }}

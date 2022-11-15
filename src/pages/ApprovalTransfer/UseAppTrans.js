@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../services/UseAuth';
 import { NOTIF, PUSHNOTIF, STATUS } from '../../shared/constants';
 import { useDeps } from '../../shared/context/DependencyContext';
+import moment from 'moment';
 
 export const UseAppTrans = () => {
     // USER
@@ -20,6 +21,10 @@ export const UseAppTrans = () => {
         department: "",
     });
 
+    const [totalPage, setTotalPage] = useState(0)
+    const [totalPageApp, setTotalPageApp] = useState(0)
+    const [currentPage, setCurrentPage] = useState(0)
+    const [ currentPageApprove, setCurrentPageApprv]= useState(0)
     const onGetUser = () => {
         let savedUserJsonString = getCookie("user");
         let savedUser = JSON.parse(savedUserJsonString);
@@ -34,6 +39,18 @@ export const UseAppTrans = () => {
           department: savedUser.department,
         }));
     }
+
+    useEffect(() => {
+        if (user.name){
+          getListRequest(user.name,currentPageApprove+1);
+        }
+      }, [user.name, currentPageApprove]);
+    
+      useEffect(() => {
+        if (user.name){
+          getListRequestApproved(user.name, currentPage+1)
+        }
+      }, [user.name, currentPage]);
 
     useEffect(() => {
         onGetUser();
@@ -54,6 +71,11 @@ export const UseAppTrans = () => {
         setLoading(true);
         try {
             const response = await transferRequestService.getIncomingRequest(user.name, page);
+            for (let i in response.data) {
+                response.data[i].CreatedAt = moment(response.data[i].CreatedAt).format(
+                  "LL"
+                );
+                }
             if (response.data.length !== 0) {
                 setReqList(response.data)
             }
@@ -69,9 +91,16 @@ export const UseAppTrans = () => {
         console.log(user.name);
         try {
             const response = await transferRequestService.getHistoryRequest(user.name, page);
+            for (let i in response.data) {
+                response.data[i].CreatedAt = moment(response.data[i].CreatedAt).format("LL");
+            }
             if (response.data.length !== 0) {
-                let approvedList = response.data.filter(data => data.status === STATUS.TRANSFERRED)
-                setReqApprovedList(approvedList)
+                // let approvedList = response.data.filter(data => data.status === STATUS.TRANSFERRED)
+                setReqApprovedList(response.data)
+                if (user.level_approval === "GA") {
+                    let approvedList = response.data.filter(data => data.status === STATUS.TRANSFERRED)
+                    setReqApprovedList(approvedList)
+                }
             }
         } catch (e) {
             console.log(e);
@@ -260,10 +289,14 @@ export const UseAppTrans = () => {
         }
       };
 
-    useEffect(() => {
-        getListRequest();
-        getListRequestApproved();
-    }, [user.name]);
+      const handlePageClick = async (data) => {
+        setCurrentPage(data.selected)
+        
+      };
+      const handlePageClick2 = async (data) => {
+        setCurrentPageApprv(data.selected)
+        
+      };
 
     return {
         reqList, 
@@ -277,6 +310,11 @@ export const UseAppTrans = () => {
         showModalReq,
         reqApprovedList,
         handleApproveRequest,
-        handleRejectRequest
+        handleRejectRequest,
+        handlePageClick,
+        handlePageClick2,
+        totalPage,
+        totalPageApp,
+        currentPage
     }
 }

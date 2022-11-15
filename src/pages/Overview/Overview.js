@@ -999,7 +999,6 @@ export const Overview = () => {
             <button
               value="submit"
               className="btn btn-warning btn-sm"
-              style={{ backgroundColor: "rgb(255, 178, 0)" }}
               onClick={onClearForm}
             >
               Clear
@@ -1107,12 +1106,13 @@ export const Overview = () => {
                             <Dropdown.Menu style={{minHeight : "200px"}}>
                               <Dropdown.Item >
                               <a
-                                target="_blank"
-                                href={`http://api.qrserver.com/v1/create-qr-code/?data= Asset Number: ${data["Nomor Asset"]}%0A Purchase Date: ${data["Tanggal Output"]}%0A Asset Name: ${data["Nama Barang"]}%0A Asset Category: ${data["Kategori Jenis Produk"]}%0A Product Name: ${data["Jenis Produk"]}%0A Location: ${data["Lokasi"]}%0A PO Number: ${data["No. PO / Dokumenen Pendukung"]}%0A Lifetime: ${data["Masa Manfaat (Bulan)"]}%0A Value: ${data["Nilai Asset saat ini"]}%0A Vendor: ${data["Vendor"]}&size=${size}x${size}&bgcolor=${bgColor}`}
+                                // target="_blank"
+                                // href={`http://api.qrserver.com/v1/create-qr-code/?data= Asset Number: ${data["Nomor Asset"]}%0A Purchase Date: ${data["Tanggal Output"]}%0A Asset Name: ${data["Nama Barang"]}%0A Asset Category: ${data["Kategori Jenis Produk"]}%0A Product Name: ${data["Jenis Produk"]}%0A Location: ${data["Lokasi"]}%0A PO Number: ${data["No. PO / Dokumenen Pendukung"]}%0A Lifetime: ${data["Masa Manfaat (Bulan)"]}%0A Value: ${data["Nilai Asset saat ini"]}%0A Vendor: ${data["Vendor"]}&size=${size}x${size}&bgcolor=${bgColor}`}
+                                href="https://youtube.com"
                                 download="QRCode"
                                 style={{cursor : "pointer",textDecoration : "none", display : 'flex', marginTop : "3px"}}
                                 onClick={() => {
-                                  setMoreActionShow(Array(moreActionShow.length).fill(false))
+                                  window.open(`http://api.qrserver.com/v1/create-qr-code/?data= Asset Number: ${data["Nomor Asset"]}%0A Purchase Date: ${data["Tanggal Output"]}%0A Asset Name: ${data["Nama Barang"]}%0A Asset Category: ${data["Kategori Jenis Produk"]}%0A Product Name: ${data["Jenis Produk"]}%0A Location: ${data["Lokasi"]}%0A PO Number: ${data["No. PO / Dokumenen Pendukung"]}%0A Lifetime: ${data["Masa Manfaat (Bulan)"]}%0A Value: ${data["Nilai Asset saat ini"]}%0A Vendor: ${data["Vendor"]}&size=${size}x${size}&bgcolor=${bgColor}`, "_blank")
                                 }}
                               >
                                 <i
@@ -1853,7 +1853,7 @@ export const Overview = () => {
                     Cancel
                   </button>
                   <button
-                    className="btn btn-primary button-submit"
+                    className="btn btn-primary float-end"
                     onClick={handleSubmitTransfer}
                     disabled={disableSubmit}
                   >

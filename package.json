@@ -40,6 +40,7 @@
     "react-scripts": "5.0.1",
     "react-secure-storage": "^1.0.18",
     "react-tsparticles": "^2.2.4",
+    "react-type-animation": "^2.1.2",
     "serve": "^14.0.1",
     "styled-components": "^5.3.5",
     "sweetalert": "^2.1.2",

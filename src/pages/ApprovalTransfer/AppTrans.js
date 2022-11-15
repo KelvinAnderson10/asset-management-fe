@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import Sidebar from '../../shared/components/Sidebar/Sidebar'
 import { ListTransReq } from './component/ListTransReq';
 import { UseAppTrans } from './UseAppTrans';
+import "../ApprovalInventory/components/ListPurchaseRequest.css"
 
 export const AppTrans = () => {
     const [requestList, setRequestList] = useState(true);
@@ -39,7 +40,7 @@ export const AppTrans = () => {
                     </div>
                 </div>
             </div>
-            <div className='container-fluid bg-secondary bg-opacity-10 rounded-2 mx-5 p-5 h-75'>
+            <div >
                 {requestList && <ListTransReq listData={reqList}/>}
                 {requestApproved && <ListTransReq listData={reqApprovedList} showButton={false}/>}
             </div>
