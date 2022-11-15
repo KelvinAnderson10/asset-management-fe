@@ -433,7 +433,7 @@ document.querySelector("body").style.overflow = "auto";
                           <th>{item.address}</th>
                           <th>{item.phone}</th>
                           <th>{item.account_number}</th>
-                          <td>
+                          <td style={{textAlign: 'center'}}>
                             <a
                               onClick={() => {
                                 handleViewShow(SetRowData(item));

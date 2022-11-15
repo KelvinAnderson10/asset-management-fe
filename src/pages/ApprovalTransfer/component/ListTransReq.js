@@ -43,7 +43,7 @@ export const ListTransReq = ({listData = [], showButton = true}) => {
                       <a className="approval-num">{data.to_id}</a>
                         <div
                           className="text-white rounded-2 mb-2"
-                          style={{backgroundColor: data.status === STATUS.CREATE_PO ? "rgb(255, 178, 0)" : data.status === STATUS.TRANSFERRED ? 'rgb(92, 184, 92)' :  'rgb(183, 6, 33)', width: "8vw" }}
+                          style={{backgroundColor: data.status === STATUS.CREATE_PO ? "rgb(255, 178, 0)" : data.status === STATUS.TRANSFERRED ? 'rgb(92, 184, 92)' :  'rgb(183, 6, 33)', width: "8vw", textAlign: 'center' }}
                           >
                           {data.status}
                         </div>
