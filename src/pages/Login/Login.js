@@ -12,7 +12,7 @@ import Loading from "../../shared/components/Loading/Loading";
 import { useRef } from "react";
 import background from "../../assets/images/img.svg"
 import { TypeAnimation } from 'react-type-animation';
-import icon from '../../assets/images/asset_icon.png';
+import icon from '../../assets/images/3075759.jpg';
 
 export const Login = () => {
   const [email, setEmail] = useState("");
@@ -135,7 +135,7 @@ export const Login = () => {
     setShowOTPForm(false);
   };
 
-  document.querySelector("body").style.overflow = "auto";
+  // document.querySelector("body").style.overflow = "auto";
   return (
     
     
@@ -143,15 +143,15 @@ export const Login = () => {
     <div>
       {getCookie("user") &&  <Navigate to='/main'></Navigate>}
 
-      <div className="container-fluid">
+      <div className="body-login">
         <div className='bg'>
-          <div className='container'>
+          <div className='container-login'>
             <div className='white-container'>
               <div className='left-container'>
                 <div className='carousel-div'>
-                <img src={icon} width={'70%'} height={'70%'}></img>
+                <img src={icon} width={'110%'} height={'85%'}></img>
                 <div className="tagline">
-                    <h2 style={{textAlign: 'center', marginBottom: '12px'}}>Manage Your Asset</h2>
+                    <h2 style={{textAlign: 'center', marginBottom: '12px', fontSize: '24px', fontFamily: 'Poppins', fontWeight: '600'}}>Manage Your Asset</h2>
                     <TypeAnimation
                       // Same String at the start will only be typed once, initially
                       sequence={[
