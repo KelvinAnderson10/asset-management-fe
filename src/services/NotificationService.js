@@ -17,6 +17,14 @@ export const notificationService = ({ doGet, doPost, doPut }) => {
     }
   }
 
+  const clearNotif = async (username) => {
+    try {
+      return await doPut({url : `/api/notification/clear/${username}`});
+    } catch (e) {
+      throw e
+    }
+  }
+
   const createNotif = async (newNotif) => {
     try {
       return await doPost({
@@ -47,5 +55,5 @@ export const notificationService = ({ doGet, doPost, doPut }) => {
     }
   };
 
-  return { createPushNotif, getNotif, createNotif, countNotificationByUser, readNotif };
+  return { createPushNotif, getNotif, createNotif, countNotificationByUser, readNotif, clearNotif };
 };

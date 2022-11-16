@@ -355,6 +355,19 @@ const Sidebar = ({ children }) => {
     }
   }
 
+  const onClearNotif = async () => {
+    try {
+      const response = await notificationService.clearNotif(user.name);
+      if (response.status === 'SUCCESS'){
+        onClickViewNotif();
+        setCountNotif('0');
+        setViewNotif([]);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   const { eraseCookie } = useAuth();
 
   const navigate = useNavigate();
@@ -634,15 +647,15 @@ const Sidebar = ({ children }) => {
               <div style={{cursor:'pointer'}} onClick={onClickViewNotif}>
                 <Noty width={"30px"} color={"#122C34"} count={countNotif} />
                 {notif && (
-                  <div className="modalNotif">
-                    <div className="card border-light shadow-sm">
-                      <ul className="list-group list-group-flush">
-                        {viewNotif.length !== 0 ?  (
+                  <div className="modalNotif shadow p-1">
+                    {viewNotif.length !== 0 ?  (
+                      <div className="modal-notif-items p-1">
+                        {
                           viewNotif.map((d, index) => {
                             return (
-                              <li
+                              <div 
+                                className="card border-light p-2 my-1"
                                 key={index}
-                                className="list-group-item list-group-item-action"
                                 onClick={() => {
                                   onClickNotification(d.ID, d.type);
                                 }}
@@ -651,14 +664,25 @@ const Sidebar = ({ children }) => {
                                 <div>
                                 <a style={{ color: "#B70621"}} >{d.CreatedAt} </a>
                                 </div> 
-                              </li>
+                              </div>
                             );
+                          {/* </ul> */}
                           })
-                        ) : (
-                          <div>No notification yet</div>
-                        )}
-                      </ul>
-                    </div>
+                        }
+                      </div>
+                    ) : (
+                      <div className="d-flex justify-content-center fw-bold p-4">
+                        No Notification
+                      </div>
+                    )}
+                    { viewNotif.length !== 0 &&
+                      <div 
+                        className="btn btn-light mt-2 shadow-sm"
+                        onClick={onClearNotif}
+                      > 
+                        Clear Notification
+                      </div>
+                    }
                   </div>
                 )}
               </div>
