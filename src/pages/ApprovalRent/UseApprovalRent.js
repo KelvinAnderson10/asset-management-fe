@@ -111,6 +111,7 @@ export const UseApprovalRent = () => {
       const response = await rentService.getRentById(id);
       response.data.periode_sewa_awal = moment(response.data.periode_sewa_awal).format("YYYY-MM-DD")
       response.data.periode_sewa_akhir = moment(response.data.periode_sewa_akhir).format("YYYY-MM-DD")
+      response.data.tanggal_jatuh_tempo = moment(response.data.tanggal_jatuh_tempo).format("YYYY-MM-DD")
       setrentDetail(response.data);
     } catch (error) {
       alert("Oops")
