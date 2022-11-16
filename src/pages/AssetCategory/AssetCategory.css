@@ -187,7 +187,8 @@ input.form-control:focus{
   text-align: left;
 }
 
-.body {
+.body-asset {
+  background-color: whitesmoke;
   color: #6478a0;
   height: auto;
   overflow: hidden;
@@ -206,7 +207,7 @@ input.form-control:focus{
 }
 .table-title {
   padding-bottom: 15px;
-  background: #757a81;
+  background: #B70621;
   color: rgb(255, 255, 255);
   padding: 16px 20px;
   margin: -20px -25px 10px;
@@ -250,6 +251,7 @@ table.table tr th:first-child {
 }
 table.table tr th:last-child {
   width: 200px;
+  text-align: center;
 }
 table.table-striped tbody tr:nth-of-type(odd) {
   background-color: #fcfcfc;
@@ -302,4 +304,20 @@ text-transform: none;
 align-items: flex-start;
 display: flex;
 border-radius:8px;
+}
+
+/* For mobile phones: */
+@media only screen and (max-width: 520px) {
+  .feature{
+    display: flex;
+    gap: 0px;
+    margin-top: 2em;
+    margin-bottom: 2em;
+    justify-content: flex-start;
+    flex-direction: column;
+  }
+  .feature > Button {
+    width: 60%;
+    height: 100%;
+  }
 }

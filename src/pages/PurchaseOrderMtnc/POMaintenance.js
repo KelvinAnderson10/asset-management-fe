@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import { useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 import Sidebar from '../../shared/components/Sidebar/Sidebar'
 import { FormPOMaintenance } from './components/FormPOMaintenance'
 import { ListPOMaintenance } from './components/ListPOMaintenance'
@@ -24,6 +26,16 @@ export const POMaintenance = () => {
     setClassNavbarList('navbar-po-box')
   }
 
+  const location = useLocation();
+  
+    useEffect(() => {
+      if(location.state) {
+        if (location.state.list) {
+            handleClickList();
+        }
+      }
+    }, []);
+
   return (
     <div>
         <Sidebar>
@@ -31,14 +43,14 @@ export const POMaintenance = () => {
                     <div className='navbar-po-container'>
                       <div className='navbar-po-left'>
                       <div className={classNavbarForm} onClick={() => handleClickForm()}>
-                            <a>Form Request</a>
+                            <div className='text-inv'>Form Request</div>
                         </div>
                         <div className={classNavbarList} onClick={() => handleClickList()}>
-                            <a>List Request</a>
+                            <div className='text-inv'>List Request</div>
                         </div>
                       </div>
                       <div className='title-right'>
-                        <a>Maintenance</a>
+                        Maintenance
                         </div>
                     </div>
                 </div>

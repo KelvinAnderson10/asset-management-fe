@@ -4,7 +4,7 @@ import Sidebar from "../../shared/components/Sidebar/Sidebar";
 import { useDeps } from "../../shared/context/DependencyContext";
 import { FiPlus } from "react-icons/fi";
 import { Link } from "react-router-dom";
-import "./style.css";
+import "./vendor.css";
 import Swal from 'sweetalert2'
 import {FaSort} from 'react-icons/fa'
 import Button from "react-bootstrap/Button";
@@ -353,8 +353,7 @@ document.querySelector("body").style.overflow = "auto";
   return (
     <>
       <Sidebar>
-      <div>
-      <div className="body">
+      <div className="body-vendor">
           <div className="container">
           <div className="vendor-container-item" >  
           <form>
@@ -389,7 +388,7 @@ document.querySelector("body").style.overflow = "auto";
             <div className="table-title">
                   <div className="row">
                     <div className="col-xs-6">
-                      <h2 style={{fontSize: "24px"}}>
+                      <h2 style={{fontSize: "24px", textAlign: 'center'}}>
                         Manage <b>Vendors</b>
                       </h2>
                     </div>
@@ -434,7 +433,7 @@ document.querySelector("body").style.overflow = "auto";
                           <th>{item.address}</th>
                           <th>{item.phone}</th>
                           <th>{item.account_number}</th>
-                          <td>
+                          <td style={{textAlign: 'center'}}>
                             <a
                               onClick={() => {
                                 handleViewShow(SetRowData(item));
@@ -521,7 +520,6 @@ document.querySelector("body").style.overflow = "auto";
               </div>
             </div>
           </div>
-        </div>
 
         {/* ADD MODAL FOR SUBMIT DATABASE */}
 

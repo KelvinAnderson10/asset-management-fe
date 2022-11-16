@@ -5,7 +5,7 @@ export const purchaseOrderRentService = ({doGet,doPost,doPut,doDelete}) => {
     const createPO = async (newAsset) => {
         try {
             return await doPost({
-                url: '/api/rent', data: newAsset
+                url: '/api/rent', data: newAsset,headers:{'Content-Type':'multipart/form-data'}
                 
             })
         } catch (e) {

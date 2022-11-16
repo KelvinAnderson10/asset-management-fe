@@ -28,12 +28,17 @@ export const STATUS = {
   APPROVE_GA_IT: "Approved",
   ACCEPT: "Delivered",
   REJECT: "Denied",
+  TRANSFERRED : "Transferred",
 };
 
 export const NOTIF = {
   REQUEST: {
     TITLE: "Pending Request",
     BODY: "Incoming Request From",
+    TRANSFER : {
+      TITLE: "Pending Transfer Request",
+      BODY: "Incoming Transfer Request From",
+    }
   },
   APPROVED: {
     TITLE: "Request Approved",
@@ -42,6 +47,12 @@ export const NOTIF = {
   REJECTED:{
     TITLE: "Request Denied",
     BODY: "Sorry, Your Request Has Been Denied !",
+  },
+  TYPE : {
+    TRANSFER : "to",
+    PURCHASE_INVENTORY : "po",
+    PURCHASE_MAINTENANCE : "po_m",
+    RENT : "po_rent"
   }
 };
 
@@ -49,6 +60,9 @@ export const PUSHNOTIF = {
   REQUEST: {
     TITLE: "👋 Hi, ",
     BODY: "📝 Incoming Request From ",
+    TRANSFER : {
+      BODY: "📝 Incoming Transfer Request From ",
+    }
   },
   APPROVED: {
     TITLE: "Hi 👋",
@@ -58,4 +72,14 @@ export const PUSHNOTIF = {
     TITLE: "Hi 👋",
     BODY: "Sorry, Your Request Has Been Denied !",
   }
+};
+
+export const PATH = {
+  APPROVAL_TRANSFER : "/approval-data/transfer",
+  APPROVAL_INVENTORY : "/approval-data/inventory",
+  APPROVAL_MAINTENANCE : "/approval-data/maintenance",
+  OVERVIEW: "/main",
+  REQUEST_INVENTORY : "/purchase-request/inventory",
+  REQUEST_RENT : "/purchase-request/rent",
+  REQUEST_MAINTENANCE :  "/purchase-request/maintenance",
 };

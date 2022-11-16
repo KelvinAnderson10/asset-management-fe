@@ -9,6 +9,7 @@ import { Failed } from "../../../shared/components/Notification/Failed";
 import { firebaseConfig } from "../../../shared/firebaseClient";
 import { initializeApp } from "firebase/app";
 import { getFirestore, setDoc, doc } from "firebase/firestore";
+import Loading from "../../../shared/components/Loading/Loading";
 
 export const FormPOInventory = () => {
   const [POdata, setPOData] = useState([
@@ -65,10 +66,24 @@ export const FormPOInventory = () => {
     setPOHeader(newData);
   };
 
+  const [form3price, setForm3price] = useState([true])
+  useEffect(() => {
+    if (form3price.length != 0) {
+      // handleFormChange()
+    }
+  }, [form3price])
+
   const handleFormChange = (event, index) => {
     let data = [...POdata];
     data[index][event.target.name] = event.target.value;
 
+    if (event.target.name == 'vendor_3'){
+      console.log("SELECT VENDOR 3", event.target.value);
+      if (event.target.value == ''){
+        console.log("PILIH VENDOR");
+      }
+      console.log(form3price);
+    }
     for (let i in data){
       if (data[index]["Nama Barang"].length >0 &&
       data[index].quantity.length >0 && 
@@ -79,7 +94,22 @@ export const FormPOInventory = () => {
       data[index].ppn.length >0){
         setFormIsValid(true)
       }
+      if (data[index].vendor_3.length == 0){
+        console.log("data 0 ketrigger");
+        setForm3price(data=>({
+          ...data,
+          [index]: true
+        }))
+        data[index].item_price_3 = '';
+      } else {
+        setForm3price(data=>({
+          ...data,
+          [index]: false
+        }))
+      }
     }
+
+    
     if (formIsValid == true) {
       setEnabled(false)
      } else{
@@ -133,8 +163,11 @@ export const FormPOInventory = () => {
     }
   };
 
+  const [loading, setLoading] = useState(false)
+  // const [submitted, setSubmitted] = useState()
   const onSubmitPO = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       POHeader["Kode Wilayah"] = user.location_id;
       POHeader["requester"] = user.name;
@@ -160,7 +193,6 @@ export const FormPOInventory = () => {
 
 
       if (response.status === "SUCCESS") {
-
         const userMobile = await userService.getUserByName(
           response.data.approver_level1
         );
@@ -184,20 +216,24 @@ export const FormPOInventory = () => {
           to: response.data.approver_level1,
           title: NOTIF.REQUEST.TITLE,
           body: `${NOTIF.REQUEST.BODY} ${user.name}`,
+          type: NOTIF.TYPE.PURCHASE_INVENTORY,
+          resource_id : String(response.data.po_id)
         };
+        // setSubmitted(notifObj);
         createNotification(notifObj);
-        
         swal({
           title: "Success!",
           text: "Your request has been made!",
           icon: "success",
           button: "OK!",
-        });
+        }).then(result => {window.location.reload()});
       }
       e.target.reset();
     } catch (error) {
       Failed("Your request failed to made");
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -493,6 +529,7 @@ export const FormPOInventory = () => {
                             placeholder="Item Price 3"
                             onChange={(event) => handleFormChange(event, index)}
                             value={form.item_price_3}
+                            disabled={form3price[index]}
                           />
                         </div>
                         <div className="inputBoxPO mb-3 col-md-4">
@@ -552,7 +589,7 @@ export const FormPOInventory = () => {
                   </button>
                 </div>
                 <div className="col-md-12">
-                  <button
+                  <button disabled={loading}
                     className="btn btn-primary float-end"
                     style={{ marginLeft: "20px", marginRight: "20px" }}
                   >

@@ -4,11 +4,15 @@ import Sidebar from '../../shared/components/Sidebar/Sidebar'
 import { Dashboard } from './Dashboard'
 import './Main.css'
 import { Overview } from './Overview'
+import { ViewRent } from './ViewRent'
 export const Main = () => {
   const [assetList, setAssetList] = useState()
   const [dashboard, setDashboard] = useState()
+  const [rentList, setRentList] = useState()
   const [classNavbarAsset, setClassNavbarAsset] = useState('main-navbar-asset')
   const [classNavbarDashboard, setClassNavbarDashboard] = useState('main-navbar-dashboard2')
+  const [classNavbarRent, setClassNavbarRent] = useState('main-navbar-rent')
+
 
   //Get User
   const { getCookie } = useAuth();
@@ -53,15 +57,28 @@ export const Main = () => {
   const handleClickAsset =() => {
     setAssetList(true)
     setDashboard(false)
+    setRentList(false)
     setClassNavbarAsset('main-navbar-asset2')
     setClassNavbarDashboard('main-navbar-dashboard')
+    setClassNavbarRent('main-navbar-rent')
   }
 
   const handleClickDashboard = () => {
     setDashboard(true)
     setAssetList(false)
+    setRentList(false)
     setClassNavbarAsset('main-navbar-asset')
     setClassNavbarDashboard('main-navbar-dashboard2')
+    setClassNavbarRent('main-navbar-rent')
+  }
+
+  const handleClickRent = () => {
+    setRentList(true)
+    setDashboard(false)
+    setAssetList(false)
+    setClassNavbarAsset('main-navbar-asset')
+    setClassNavbarDashboard('main-navbar-dashboard')
+    setClassNavbarRent('main-navbar-rent2')
   }
 
   const onView = () => {
@@ -88,9 +105,13 @@ export const Main = () => {
               <div className={classNavbarAsset} onClick={() => handleClickAsset()}>
                 <a style={{fontSize: '12px'}}>List of Inventory</a>
               </div>
+              <div className={classNavbarRent} onClick={() => handleClickRent()}>
+                <a style={{fontSize: '12px'}}>List of Rent</a>
+              </div>
             </div>
             {dashboard && <Dashboard/>}
             {assetList && <Overview/>}
+            {rentList && <ViewRent/>}
         </div>
       </Sidebar>    
     </> 

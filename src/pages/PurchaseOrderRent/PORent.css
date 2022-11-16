@@ -68,3 +68,18 @@
     background-color:rgb(208, 208, 208);
     cursor: pointer;
   }
+
+/* For mobile phones */
+@media only screen and (max-width: 520px) {
+  .navbar-po-container .navbar-po-box{
+    width: 100px;
+    margin-left: 16px;
+  }
+  .navbar-po-container .navbar-po-box2{
+    width: 100px;
+  }
+  .navbar-po-container .title-right{
+    width: 60%;
+  }
+  
+}

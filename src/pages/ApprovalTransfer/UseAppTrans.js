@@ -1,9 +1,12 @@
 import React from 'react'
+import Swal from "sweetalert2";
 import { useEffect } from 'react';
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../services/UseAuth';
+import { NOTIF, PUSHNOTIF, STATUS } from '../../shared/constants';
 import { useDeps } from '../../shared/context/DependencyContext';
+import moment from 'moment';
 
 export const UseAppTrans = () => {
     // USER
@@ -18,6 +21,10 @@ export const UseAppTrans = () => {
         department: "",
     });
 
+    const [totalPage, setTotalPage] = useState(0)
+    const [totalPageApp, setTotalPageApp] = useState(0)
+    const [currentPage, setCurrentPage] = useState(0)
+    const [ currentPageApprove, setCurrentPageApprv]= useState(0)
     const onGetUser = () => {
         let savedUserJsonString = getCookie("user");
         let savedUser = JSON.parse(savedUserJsonString);
@@ -34,6 +41,18 @@ export const UseAppTrans = () => {
     }
 
     useEffect(() => {
+        if (user.name){
+          getListRequest(user.name,currentPageApprove+1);
+        }
+      }, [user.name, currentPageApprove]);
+    
+      useEffect(() => {
+        if (user.name){
+          getListRequestApproved(user.name, currentPage+1)
+        }
+      }, [user.name, currentPage]);
+
+    useEffect(() => {
         onGetUser();
     }, []);
 
@@ -45,13 +64,18 @@ export const UseAppTrans = () => {
     const [detailAsset, setDetailAsset] = useState({});
     const [detailRequest, setDetailRequest] = useState({});
     const [showModalReq, setShowModalReq] = useState(false);
-    const {transferRequestService, assetItemService} = useDeps();
+    const {transferRequestService, assetItemService, notificationService, userService} = useDeps();
     const navigate = useNavigate()
 
     const getListRequest = async () => {
         setLoading(true);
         try {
             const response = await transferRequestService.getIncomingRequest(user.name, page);
+            for (let i in response.data) {
+                response.data[i].CreatedAt = moment(response.data[i].CreatedAt).format(
+                  "LL"
+                );
+                }
             if (response.data.length !== 0) {
                 setReqList(response.data)
             }
@@ -67,8 +91,16 @@ export const UseAppTrans = () => {
         console.log(user.name);
         try {
             const response = await transferRequestService.getHistoryRequest(user.name, page);
+            for (let i in response.data) {
+                response.data[i].CreatedAt = moment(response.data[i].CreatedAt).format("LL");
+            }
             if (response.data.length !== 0) {
+                // let approvedList = response.data.filter(data => data.status === STATUS.TRANSFERRED)
                 setReqApprovedList(response.data)
+                if (user.level_approval === "GA") {
+                    let approvedList = response.data.filter(data => data.status === STATUS.TRANSFERRED)
+                    setReqApprovedList(approvedList)
+                }
             }
         } catch (e) {
             console.log(e);
@@ -81,18 +113,70 @@ export const UseAppTrans = () => {
         setShowModalReq(false)
         setLoading(true);
         try {
+            let response;
             if (user.level_approval === 'GA') {
-                const response = await transferRequestService.updateApprovalToLevel2(id);
+                response = await transferRequestService.updateApprovalToLevel2(id);
             } else {
-                const response = await transferRequestService.updateApprovalToLevel1(id);
+                response = await transferRequestService.updateApprovalToLevel1(id);
+            }
+
+            if (response.status === "SUCCESS") {
+                setLoading(false);
+
+                // SEND NOTIF TO GA IF APRROVED BY GM OR SPV
+                if(user.level_approval !== 'GA') {
+                    let existedRequest = await transferRequestService.getByReqeustId(id);
+                    if (existedRequest.status === "SUCCESS") {
+                        let notifObj = {
+                            to: existedRequest.data.approver_level1,
+                            title: NOTIF.REQUEST.TRANSFER.TITLE,
+                            body: `${NOTIF.REQUEST.TRANSFER.BODY} ${user.name}`,
+                            type: NOTIF.TYPE.TRANSFER,
+                            resource_id : String(existedRequest.data["to_id"])
+                        };
+                        createNotification(notifObj)
+
+                        const userInfo = await userService.getUserByName(existedRequest.data.approver_level2);
+
+                        //pushnotif
+                        let pushNotifObj = {
+                            to: userInfo.data.token,
+                            title: `${PUSHNOTIF.REQUEST.TITLE} ${existedRequest.data.approver_level2}`,
+                            body: `${PUSHNOTIF.REQUEST.TRANSFER.BODY} ${user.name}`,
+                        };
+                        createPushNotification(pushNotifObj);
+                    }
+                }
+
+                Swal.fire("Success!", "This transfer request has been approved.", "success").then((result) => {
+                    if (result.isConfirmed) {
+                        navigate(0);
+                    }
+                })
             }
         } catch (e) {
             console.log(e);
         } finally {
             reset();
             setLoading(false);
-            navigate(0);
         }
+    }
+
+    const handleApproveRequest = async (id) => {
+        setShowModalReq(false);
+        Swal.fire({
+            title: "Are you sure?",
+            text: "Do you want to approve this transfer request",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, Approve",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              approveRequest(id);
+            } 
+          });
     }
 
     const rejectRequest = async (id) => {
@@ -100,13 +184,60 @@ export const UseAppTrans = () => {
         setLoading(true);
         try {
             const response = await transferRequestService.rejectApprovalTo(id);
+            if (response.status === "SUCCESS") {
+                setLoading(false);
+
+                // NOTIF TO REQUESTER
+                let existedRequest = await transferRequestService.getByReqeustId(id);
+                if (existedRequest.status === "SUCCESS") {
+                    let notifObj = {
+                        to: existedRequest.data.requester,
+                        title: NOTIF.REJECTED.TITLE,
+                        body: `${NOTIF.REJECTED.BODY}`,
+                        type: NOTIF.TYPE.TRANSFER,
+                        resource_id : String(existedRequest.data["to_id"])
+                    };
+                    createNotification(notifObj)
+
+                    const userInfo = await userService.getUserByName(existedRequest.data.requester);
+                    //pushnotif
+                    let pushNotifObj = {
+                        to: userInfo.data.token,
+                        title: `${PUSHNOTIF.REJECTED.TITLE} ${existedRequest.data.requester}`,
+                        body: `${PUSHNOTIF.REJECTED.BODY}`,
+                    };
+                    createPushNotification(pushNotifObj);
+                }
+
+                Swal.fire("Success!", "This transfer request has been rejected.", "success").then((result) => {
+                    if (result.isConfirmed) {
+                        navigate(0);
+                    }
+                })
+            }
         } catch (e) {
             console.log(e);
         } finally {
             reset();
             setLoading(false);
-            navigate(0);
         }
+    }
+
+    const handleRejectRequest = async (id) => {
+        setShowModalReq(false);
+        Swal.fire({
+            title: "Are you sure?",
+            text: "Do you want to reject this transfer request",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, Reject",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              rejectRequest(id);
+            } 
+          });
     }
 
     const getAssetDetail = async (assetNumber) => {
@@ -142,10 +273,30 @@ export const UseAppTrans = () => {
         setDetailRequest({});
     }
 
-    useEffect(() => {
-        getListRequest();
-        getListRequestApproved();
-    }, [user.name]);
+    const createNotification = async (newNotif) => {
+        try {
+          const response = await notificationService.createNotif(newNotif);
+        } catch (e) {
+          console.log(e);
+        }
+      };
+    
+      const createPushNotification = async (newNotif) => {
+        try {
+          const response = await notificationService.createPushNotif(newNotif);
+        } catch (e) {
+          console.log(e);
+        }
+      };
+
+      const handlePageClick = async (data) => {
+        setCurrentPage(data.selected)
+        
+      };
+      const handlePageClick2 = async (data) => {
+        setCurrentPageApprv(data.selected)
+        
+      };
 
     return {
         reqList, 
@@ -157,6 +308,13 @@ export const UseAppTrans = () => {
         handleShowModalRequest,
         setShowModalReq,
         showModalReq,
-        reqApprovedList
+        reqApprovedList,
+        handleApproveRequest,
+        handleRejectRequest,
+        handlePageClick,
+        handlePageClick2,
+        totalPage,
+        totalPageApp,
+        currentPage
     }
 }

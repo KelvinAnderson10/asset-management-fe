@@ -137,8 +137,7 @@ export const ImportData = () => {
   return (
     <>
       <Sidebar>
-        <div>
-          <div className="body-import">
+        <div className="background">
             <div className="container">
               <div className="title-container">
                 <h4>Add Multiple Asset</h4>
@@ -156,16 +155,18 @@ export const ImportData = () => {
                   <span id="file-chosen">{fileName}</span>
                 </div>
 
-                <button className="download-excel-temp">
-                  <a href={guidelines} download="Upload Guidelines.xlsx">
-                    Download Guidelines
-                  </a>
-                </button>
-                <button className="download-excel-temp">
-                  <a href={template} download="Template.xlsx">
-                    Download Template
-                  </a>
-                </button>
+                <div className="download-button">
+                  <button className="download-excel-temp">
+                    <a className="text-download" href={guidelines} download="Upload Guidelines.xlsx">
+                      Download Guidelines
+                    </a>
+                  </button>
+                  <button className="download-excel-temp">
+                    <a className="text-download" href={template} download="Template.xlsx">
+                      Download Template
+                    </a>
+                  </button>
+                </div>
               </div>
               <div className="note">
                 <h5>Notes</h5>
@@ -298,7 +299,7 @@ export const ImportData = () => {
                 </div>
               </div>
             </div>
-          </div>
+         
           {isLoading && <UploadLoading />}
         </div>
       </Sidebar>

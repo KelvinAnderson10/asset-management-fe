@@ -6,7 +6,7 @@
     justify-content: center;
     align-items: center;
     align-content: center;
-    height: 93vh;
+    height: 80vh;
     margin-top: 0.5vh;
     font-family: "Poppins";
 }
@@ -16,7 +16,7 @@
     width: 90vw;
     display: flex;
     justify-content: center;
-    height: 88vh;
+    height: 75vh;
     align-items: flex-end;
     flex-direction: column;
     border-radius: 10px;
@@ -78,10 +78,10 @@
   }
   .pagination li.active a,
   .pagination li.active a.page-link {
-    background: #03a9f4;
+    background: #b70621;
   }
   .pagination li.active a:hover {
-    background: #0397d6;
+    background: #8B0217;
   }
   .pagination li.disabled i {
     color: #ccc;
@@ -157,22 +157,33 @@ input.form-control:focus{
   overflow-y: scroll;
 }
 
-.overview-card .table-box {
+.overview-card {
   width: 96%;
   height: 100%;
   border-radius: 10px;
-  overflow-x: scroll;
   margin-top: 2vh;
   margin-left: 2vw;
 }
 
-.table-box .table-header{
+.table-box {
+  width: 96%;
+  height: 100%;
+  border-radius: 10px;
+  margin-top: 2vh;
+  margin-left: 2vw;
   background-color:white;
   color: rgb(219, 66, 66);
-  position: -webkit-sticky;
-  position: sticky;
-  top: 0;
-  z-index: 2;
+  overflow-x: scroll;
+}
+
+ .table-header{
+  background-color:white;
+  color: rgb(219, 66, 66);
+  z-index: 100 !important;
+}
+
+.dropdown-menu{
+  z-index: 10 !important;
 }
 
 .image-view > img{
@@ -216,6 +227,8 @@ input.form-control:focus{
   justify-content: space-around;
   align-items: center;
 }
+
+
 
 .search-container .box-search-container{
   width: 50%;
@@ -278,4 +291,8 @@ input.form-control:focus{
   display: flex;
   justify-content: center;
   align-items: center;
+}
+/* For mobile phones: */
+@media only screen and (max-width: 520px) {
+  
 }

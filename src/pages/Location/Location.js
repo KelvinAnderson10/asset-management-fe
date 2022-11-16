@@ -356,7 +356,7 @@ export const Location = () => {
   return (
     <>
       <Sidebar>
-        <div className="body">
+        <div className="body-loc">
           <div className="container">
             <div className="loc-container-item">
               <form>
@@ -401,7 +401,7 @@ export const Location = () => {
             <div className="table-title">
                   <div className="row">
                     <div className="col-xs-6">
-                      <h2 style={{fontSize: "24px"}}>
+                      <h2 style={{fontSize: "24px", textAlign: 'center'}}>
                         Manage <b>Locations</b>
                       </h2>
                     </div>
@@ -442,7 +442,7 @@ export const Location = () => {
                           <th>{item.cluster}</th>
                           <th>{item.location}</th>
                           <th>{item["kode wilayah"]}</th>
-                          <td>
+                          <td style={{textAlign: 'center'}}>
                             <a
                               onClick={() => {
                                 handleViewShow(SetRowData(item));
@@ -560,7 +560,7 @@ export const Location = () => {
                       type="text"
                       className="form-control"
                       name="cluster"
-                      placeholder="Location Name"
+                      placeholder="Cluster Name"
                       required
                       onChange={handleLocation}
                     />

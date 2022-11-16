@@ -398,8 +398,8 @@ export const UserManage = () => {
   return (
     <>
       <Sidebar>
-        <div>
-          <div className="body">
+        <div  className="body-user">
+          <div className="body-user2">
             <div className="container">
               <div className="user-container-item">
                 <form>
@@ -442,13 +442,14 @@ export const UserManage = () => {
               <div className="table-title">
                     <div className="row">
                       <div className="col-xs-6">
-                        <h2 style={{fontSize: "24px"}}>Manage Users</h2>
+                        <h2 style={{fontSize: "24px", textAlign: 'center'}}>Manage Users</h2>
                       </div>
                     </div>
                   </div>
+                
               <div className="table-responsive">
-                <div className="table-wrapper">
-                  <table className="table table-striped table-hover">
+                <div>
+                  <table id="myTable" className="table table-striped table-hover">
                     <thead>
                       <tr>
                         <th>No</th>
@@ -456,11 +457,11 @@ export const UserManage = () => {
                           {" "}
                           <FaSort /> NIK
                         </th>
-                        <th onClick={() => sorting("email")}>
+                        <th  style={{ minWidth: "180px" }} onClick={() => sorting("email")}>
                           {" "}
                           <FaSort /> Email
                         </th>
-                        <th onClick={() => sorting("name")}>
+                        <th  style={{ minWidth: "180px" }} onClick={() => sorting("name")}>
                           {" "}
                           <FaSort /> Name
                         </th>
@@ -468,27 +469,27 @@ export const UserManage = () => {
                           {" "}
                           <FaSort /> Role
                         </th>
-                        <th onClick={() => sorting("level_approval")}>
+                        <th style={{ minWidth: "180px" }} onClick={() => sorting("level_approval")}>
                           {" "}
                           <FaSort /> Level Approval
                         </th>
-                        <th onClick={() => sortingNum("location_id")}>
+                        <th  style={{ minWidth: "150px" }} onClick={() => sortingNum("location_id")}>
                           {" "}
                           <FaSort /> Area Code
                         </th>
-                        <th onClick={() => sorting("TAP")}>
+                        <th style={{ minWidth: "150px" }} onClick={() => sorting("TAP")}>
                           {" "}
                           <FaSort /> Location
                         </th>
-                        <th onClick={() => sorting("Cluster")}>
+                        <th  style={{ minWidth: "180px" }} onClick={() => sorting("Cluster")}>
                           {" "}
                           <FaSort /> Cluster
                         </th>
-                        <th onClick={() => sorting("department")}>
+                        <th  style={{ minWidth: "180px" }} onClick={() => sorting("department")}>
                           {" "}
                           <FaSort /> Department
                         </th>
-                        <th>Actions</th>
+                        <th style={{ minWidth: "150px" }}>Actions</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -509,7 +510,7 @@ export const UserManage = () => {
                             <th>{item.TAP}</th>
                             <th>{item.Cluster}</th>
                             <th>{item.department}</th>
-                            <td>
+                            <td style={{textAlign: 'center'}}>
                               <a
                                 onClick={() => {
                                   handleViewShow(SetRowData(item));
@@ -564,7 +565,10 @@ export const UserManage = () => {
                       )}
                     </tbody>
                   </table>
-                  <div className="clearfix">
+                  
+                </div>
+              </div>
+              <div className="clearfix">
                     <div className="hint-text">
                       Showing <b>{currentItems.length}</b> out of{" "}
                       <b>{data.length}</b> entries
@@ -596,8 +600,6 @@ export const UserManage = () => {
                       </li>
                     </ul>
                   </div>
-                </div>
-              </div>
             </div>
           </div>
 

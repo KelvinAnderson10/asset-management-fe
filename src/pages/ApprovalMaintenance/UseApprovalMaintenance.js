@@ -21,7 +21,7 @@ export const UseApprovalMaintenance = () => {
         response.data[i].CreatedAt = moment(response.data[i].CreatedAt).format(
           "LL"
         );
-        if (response.data[i].tipe == "Maintenance") {
+        if (response.data[i].tipe === "Maintenance") {
           if (
             response.data[i].is_approved_level1 == true &&
             response.data[i].is_approved_level2 == true &&

@@ -4,6 +4,7 @@
     align-items: center;
     align-content: center;
     min-height: 79vh;
+    font-family: "Poppins";
 }
 
 .po-rent-form-container .po-rent-form-card {

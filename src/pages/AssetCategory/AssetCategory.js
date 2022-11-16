@@ -401,7 +401,7 @@ export const AssetCategory = () => {
   return (
     <>
       <Sidebar>
-        <div className="body">
+        <div className="body-asset">
           <div className="container">
             <div className="feature">
               <div className="input-group mb-3 dropdown">
@@ -483,7 +483,7 @@ export const AssetCategory = () => {
               <div className="table-title">
                 <div className="row">
                   <div className="col-xs-6">
-                    <h2 style={{fontSize: "24px"}}>
+                    <h2 style={{fontSize: "24px", textAlign: 'center'}}>
                       Manage <b>Asset Category</b>
                     </h2>
                   </div>
@@ -535,7 +535,7 @@ export const AssetCategory = () => {
                         <th>{item.product_name}</th>
                         <th>{item.subproduct_name}</th>
                         <th>{item.pic}</th>
-                        <td>
+                        <td style={{textAlign: 'center'}}>
                           <a
                             onClick={() => {
                               handleViewShow(SetRowData(item));
@@ -832,7 +832,7 @@ export const AssetCategory = () => {
                   </form>
                 </Modal.Body>
                 <Modal.Footer>
-                  <Button variant="secondary" onClick={handleViewClose}>
+                  <Button variant="secondary" onClick={handleEditClose}>
                     Close
                   </Button>
                 </Modal.Footer>

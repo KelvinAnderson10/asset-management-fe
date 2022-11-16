@@ -17,6 +17,8 @@ import logo from "../../../assets/images/default.png";
 import { Noty } from "../Noty/Noty";
 import { useDeps } from "../../context/DependencyContext";
 import moment from "moment";
+import { NOTIF, PATH } from "../../constants";
+import 'moment/locale/en-sg'
 
 const routesAdmin = [
   {
@@ -126,11 +128,11 @@ const routesGA = [
         name: "Transfer",
         icon: <BiIcons.BiTransferAlt />,
       },
-      // {
-      //   path: "/approval-data/rent",
-      //   name: "Rent",
-      //   icon: <FaIcons.FaStore />,
-      // },
+      {
+        path: "/approval-data/rent",
+        name: "Rent",
+        icon: <FaIcons.FaStore />,
+      },
     ],
   },
 ];
@@ -195,6 +197,16 @@ const routesUserGMSPVVP = [
     path: "/main",
     name: "Overview",
     icon: <FaHome />,
+  },
+  {
+    path: "/approval-data/rent",
+    name: "Rent",
+    icon: <FaIcons.FaStore />,
+  },
+  {
+    path: "/approval-data/transfer",
+    name: "Transfer",
+    icon: <BiIcons.BiTransferAlt />,
   },
 ];
 
@@ -294,9 +306,9 @@ const Sidebar = ({ children }) => {
 
   const onReadNotification = async (name) => {
     try {
-      const response = await notificationService.readNotif(name);
+      const response = await notificationService.getNotif(name);
       for (let i in response.data){
-        response.data[i].CreatedAt = moment(response.data[i].CreatedAt).format("LL")
+        response.data[i].CreatedAt = moment(response.data[i].CreatedAt).locale("en-sg").format("LLL")
       }
     
       setViewNotif(response.data);
@@ -304,6 +316,44 @@ const Sidebar = ({ children }) => {
       console.log(e);
     }
   };
+
+  const onClickNotification = async (id, type) => {
+    try {
+      const response = await notificationService.readNotif(id);
+      if (user.level_approval === 'Regular') {
+        if (type === NOTIF.TYPE.PURCHASE_INVENTORY) {
+          navigate(PATH.REQUEST_INVENTORY, {
+            state : { list : true}
+          })
+          return
+        } else if (type === NOTIF.TYPE.PURCHASE_MAINTENANCE) {
+          navigate(PATH.REQUEST_MAINTENANCE, {
+            state : { list : true}
+          })
+          return
+        } else if (type === NOTIF.TYPE.RENT)  {
+          navigate(PATH.REQUEST_RENT, {
+            state : { list : true}
+          })
+          return
+        }
+      } else {
+        if (type === NOTIF.TYPE.TRANSFER) {
+          navigate(PATH.APPROVAL_TRANSFER)
+          return
+        } else if (type === NOTIF.TYPE.PURCHASE_INVENTORY) {
+          navigate(PATH.APPROVAL_INVENTORY)
+          return
+        } else if (type === NOTIF.TYPE.PURCHASE_MAINTENANCE) {
+          navigate(PATH.APPROVAL_MAINTENANCE)
+          return
+        }
+      }
+      navigate(PATH.OVERVIEW)
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   const { eraseCookie } = useAuth();
 
@@ -325,6 +375,7 @@ const Sidebar = ({ children }) => {
   return (
     <>
       <div className="main-container">
+        
         <motion.div
           animate={{
             width: isOpen ? "300px" : "50px",
@@ -576,8 +627,9 @@ const Sidebar = ({ children }) => {
         </motion.div>
 
         <main>
+          <div className="">
           <nav className="navbar navbar-expand-lg header-main">
-            <img src={logo} style={{ width: "7.8vw", height: "4.5vh" }}></img>
+            <img src={logo} className="logo-nav"></img>
             <div className="nav-right">
               <div style={{cursor:'pointer'}} onClick={onClickViewNotif}>
                 <Noty width={"30px"} color={"#122C34"} count={countNotif} />
@@ -591,13 +643,14 @@ const Sidebar = ({ children }) => {
                               <li
                                 key={index}
                                 className="list-group-item list-group-item-action"
+                                onClick={() => {
+                                  onClickNotification(d.ID, d.type);
+                                }}
                               >
                                 Hi {d.to}, {d.body} 
                                 <div>
                                 <a style={{ color: "#B70621"}} >{d.CreatedAt} </a>
-                                </div>
-                                
-                                
+                                </div> 
                               </li>
                             );
                           })
@@ -627,6 +680,8 @@ const Sidebar = ({ children }) => {
               </div>
             </div>
           </nav>
+          </div>
+         
           {children}
         </main>
       </div>

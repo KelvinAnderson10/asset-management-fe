@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import Sidebar from '../../shared/components/Sidebar/Sidebar'
 import { ListTransReq } from './component/ListTransReq';
 import { UseAppTrans } from './UseAppTrans';
+import "../ApprovalInventory/components/ListPurchaseRequest.css"
+import '../ApprovalInventory/AppInv.css'
 
 export const AppTrans = () => {
     const [requestList, setRequestList] = useState(true);
@@ -31,15 +33,15 @@ export const AppTrans = () => {
                 <div className='navbar-po-container'>
                     <div className='navbar-po-left'>
                     <div className={classNavbarForm} onClick={() => handleClickList()}>
-                    <a>List Transfer Request</a>
+                    <div className='text-inv'>List Transfer Request</div>
                     </div>
                     <div className={classNavbarList} onClick={() => handleClickApproved()}>
-                        <a>Approved</a>
+                        <div className='text-inv2'>Approved</div>
                     </div> 
                     </div>
                 </div>
             </div>
-            <div className='container-fluid bg-secondary bg-opacity-10 rounded-2 mx-5 p-5 h-75'>
+            <div >
                 {requestList && <ListTransReq listData={reqList}/>}
                 {requestApproved && <ListTransReq listData={reqApprovedList} showButton={false}/>}
             </div>

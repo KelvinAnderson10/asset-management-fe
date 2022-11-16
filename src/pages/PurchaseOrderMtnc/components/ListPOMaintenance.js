@@ -308,7 +308,7 @@ export const ListPOMaintenance = () => {
                     </div>
                   </div>
                   <div className="date-request">
-                      <a style={{ fontSize: "12px" }}>{data.CreatedAt}</a>
+                      <a style={{ fontSize: "14px" }}>{data.CreatedAt}</a>
                     </div>
                 </div>
               ))
