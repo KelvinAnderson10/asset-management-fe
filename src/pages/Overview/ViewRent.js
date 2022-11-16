@@ -169,6 +169,7 @@ export const ViewRent = () => {
      
         response.data.periode_sewa_awal = moment(response.data.periode_sewa_awal).format("YYYY-MM-DD");
         response.data.periode_sewa_akhir = moment(response.data.periode_sewa_akhir).format("YYYY-MM-DD");
+        response.data.tanggal_jatuh_tempo = moment(response.data.tanggal_jatuh_tempo).format("YYYY-MM-DD");
  
       navigate("/main/rent", {state: { detail: response.data }})
 

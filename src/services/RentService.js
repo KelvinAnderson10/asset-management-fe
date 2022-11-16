@@ -129,6 +129,14 @@ const updateRent = async (id, newData) => {
   }
 }
 
+const getBackground = async (id, newData) => {
+  try {
+    return await doGet({ url: `api/background/po_rent/${id}`, data: newData });
+  } catch (error) {
+    throw error;
+  }
+}
+
   return {
     createRent,
     deleteRent,
@@ -143,5 +151,6 @@ const updateRent = async (id, newData) => {
     getRentByRequester,
     updateStatusRent,
     updateRent,
+    getBackground,
   };
 };

@@ -16,11 +16,23 @@ export const FormViewRent = () => {
   const [fileBukuTabungan, setFileBukuTabungan] = useState([])
   const [fileSertifikat, setFileSertifikat] = useState([])
   const [fileFotoLokasi, setFileFotoLokasi] = useState([])
-
+  const [background,setBackground] = useState([])
   const onClickBack = () => {
     navigate("/purchase-request/rent", { replace: true });
   };
 
+  const getBackground = async ()=>{
+    try {
+      for(let i = 0; i <= location.state.detail.background.length ; i++){
+        const response = await rentService.getBackground(location.state.detail.po_id)
+        console.log('ini response bg', response);
+        setBackground(response.data)
+      }
+      
+    } catch (e) {
+      console.log(e);
+    }
+  }
   const viewImg = async() => {
     try {
       for (let i = 0; i <= location.state.detail.attachment.length ; i++) {
@@ -56,6 +68,7 @@ export const FormViewRent = () => {
 
   useEffect(() => {
     viewImg();
+    getBackground();
   }, []);
     return (    
     <>
@@ -75,7 +88,7 @@ export const FormViewRent = () => {
               </h4>
               <div className="formPOInput">
                 <div className="row">
-                  <div className="mb-3 col-md-4">
+                  <div className="mb-3 col-md-6">
                     <label style={{fontWeight:'500'}}>
                       Area Code<span className="text-danger">*</span>
                     </label>
@@ -86,7 +99,7 @@ export const FormViewRent = () => {
                       
                     />
                   </div>
-                  <div className="mb-3 col-md-4">
+                  <div className="mb-3 col-md-6">
                     <label style={{fontWeight:'500'}}>
                       Cluster<span className="text-danger">*</span>
                     </label>
@@ -94,12 +107,42 @@ export const FormViewRent = () => {
                       readOnly
                       className="form-control" />
                   </div>
-                  <div className="mb-3 col-md-4">
+                  <div className="mb-3 col-md-6">
                     <label style={{fontWeight:'500'}}>
                       TAP<span className="text-danger">*</span>
                     </label>
                     <input
                       value={location.state.detail.TAP}
+                      readOnly
+                      className="form-control"
+                    />
+                  </div>
+                  <div className="mb-3 col-md-6">
+                    <label style={{fontWeight:'500'}}>
+                      Regional<span className="text-danger">*</span>
+                    </label>
+                    <input
+                      value={location.state.detail.regional}
+                      readOnly
+                      className="form-control"
+                    />
+                  </div>
+                  <div className='mb-3'>
+                  <label style={{fontWeight:'500'}}>
+                      About<span className="text-danger">*</span>
+                    </label>
+                    <input
+                      value={location.state.detail.Perihal}
+                      readOnly
+                      className="form-control"
+                    />
+                  </div>
+                  <div className='mb-3'>
+                  <label style={{fontWeight:'500'}}>
+                      Reason<span className="text-danger">*</span>
+                    </label>
+                    <input
+                      value={location.state.detail.Alasan}
                       readOnly
                       className="form-control"
                     />
@@ -202,7 +245,7 @@ export const FormViewRent = () => {
                   </div>
                   <div className="mb-3 col-md-6">
                     <label style={{fontWeight:'500'}}>
-                      Rent Period (Month/Year)
+                      Rent Period (Month)
                       <span className="text-danger">*</span>
                     </label>
                     <input
@@ -235,7 +278,7 @@ export const FormViewRent = () => {
                      className="form-control"
                     />
                   </div>
-                  <div className="mb-3 col-md-6">
+                  <div className="mb-3 col-md-4">
                     <label style={{fontWeight:'500'}}>
                       Owner's Name<span className="text-danger">*</span>
                     </label>
@@ -245,12 +288,22 @@ export const FormViewRent = () => {
                       className="form-control"
                     />
                   </div>
-                  <div className="mb-3 col-md-6">
+                  <div className="mb-3 col-md-4">
                     <label style={{fontWeight:'500'}}>
                       NPWP<span className="text-danger">*</span>
                     </label>
                     <input
                       value={location.state.detail.NPWP}
+                      readOnly
+                      className="form-control"
+                    />
+                  </div>
+                  <div className="mb-3 col-md-4">
+                    <label style={{fontWeight:'500'}}>
+                      Owner's Phone<span className="text-danger">*</span>
+                    </label>
+                    <input
+                      value={location.state.detail.no_telepon_pemilik}
                       readOnly
                       className="form-control"
                     />
@@ -266,19 +319,10 @@ export const FormViewRent = () => {
                       readOnly
                     ></textarea>
                   </div>
+                  
                   <div className="mb-3 col-md-6">
                     <label style={{fontWeight:'500'}}>
-                      Owner's Phone<span className="text-danger">*</span>
-                    </label>
-                    <input
-                      value={location.state.detail.no_telepon_pemilik}
-                      readOnly
-                      className="form-control"
-                    />
-                  </div>
-                  <div className="mb-3 col-md-6">
-                    <label style={{fontWeight:'500'}}>
-                      Rent Price/Year (Old Price if Extend)<span className="text-danger">*</span>
+                      Rent Price (Old Price if Extend)<span className="text-danger">*</span>
                     </label>
                     <input
                       value={
@@ -288,9 +332,9 @@ export const FormViewRent = () => {
                       className="form-control"
                     />
                   </div>
-                  <div className="mb-3 col-md-4">
+                  <div className="mb-3 col-md-6">
                     <label style={{fontWeight:'500'}}>
-                      Rent Price/Year (New Price)<span className="text-danger">*</span>
+                      Rent Price (New Price)<span className="text-danger">*</span>
                     </label>
                     <input
                       value={
@@ -300,17 +344,17 @@ export const FormViewRent = () => {
                       className="form-control"
                     />
                   </div>
-                  <div className="mb-3 col-md-4">
+                  <div className="mb-3 col-md-6">
                     <label style={{fontWeight:'500'}}>
-                      Tax (10%)<span className="text-danger">*</span>
+                      Tax<span className="text-danger">*</span>
                     </label>
                     <input
-                     value={location.state.detail.pajak}
+                     value={location.state.detail.total_pajak}
                      readOnly
                      className="form-control"
                     />
                   </div>
-                  <div className="mb-3 col-md-4">
+                  <div className="mb-3 col-md-6">
                     <label style={{fontWeight:'500'}}>
                     Amount transferred to Owner<span className="text-danger">*</span>
                     </label>
@@ -320,7 +364,7 @@ export const FormViewRent = () => {
                       className="form-control"
                     />
                   </div>
-                  <div className="mb-3 col-md-4">
+                  {/* <div className="mb-3 col-md-4">
                     <label style={{fontWeight:'500'}}>
                       Notary<span className="text-danger">*</span>
                     </label>
@@ -340,8 +384,8 @@ export const FormViewRent = () => {
                       className="form-control"
                     
                     />
-                  </div>
-                  <div className="mb-3 col-md-4">
+                  </div> */}
+                  <div className="mb-3 col-md-6">
                     <label style={{fontWeight:'500'}}>
                    NPWP Notary<span className="text-danger">*</span>
                     </label>
@@ -382,7 +426,7 @@ export const FormViewRent = () => {
                       className="form-control"
                     />
                   </div>
-                  <div className="mb-3 col-md-6">
+                  <div className="mb-3 col-md-4">
                     <label style={{fontWeight:'500'}}>
                    Branch Name<span className="text-danger">*</span>
                     </label>
@@ -392,7 +436,7 @@ export const FormViewRent = () => {
                      className="form-control"
                     />
                   </div>
-                  <div className="mb-3 col-md-6">
+                  <div className="mb-3 col-md-4">
                     <label style={{fontWeight:'500'}}>
                     Payment Method<span className="text-danger">*</span>
                     </label>
@@ -402,7 +446,7 @@ export const FormViewRent = () => {
                        className="form-control"
                     />
                   </div>
-                  <div className="mb-3 col-md-6">
+                  <div className="mb-3 col-md-4">
                     <label style={{fontWeight:'500'}}>
                     Due Date<span className="text-danger">*</span>
                     </label>
@@ -412,11 +456,25 @@ export const FormViewRent = () => {
                       className="form-control"
                     />
                   </div>
-                  <label style={{fontWeight:'500'}}>Attachment File</label>
-                  <div className="file-extension">
-                      <p  style={{fontSize:'15px', color:'rgb(255, 178, 0)'}}>Allowed file types : <b>png, jpg, jpeg</b><br></br> Maximum size of each attachment is 2MB</p>
+                  <div className="">
+                  <label style={{fontWeight:'500'}} >
+                      Background<span className="text-danger">*</span>
+                    </label>
                   </div>
-                  <div style={{minHeight:'200px'}} className="card">
+                  {background.map((form,index)=>{
+                    return(
+                      <div key={form.background_id}>
+                        <div className="mb-3">
+                        <input  readOnly
+                      className="form-control" value={form.background_list}/>
+                        </div>
+                      
+                      </div>
+                      
+                    )
+                  })}
+                  <label style={{fontWeight:'500'}}>Attachment File</label>
+                          <div style={{minHeight:'200px'}} className="card">
                       <div className="card-header bg-transparent">
                         KTP <span className="text-danger">*</span>
                       </div>

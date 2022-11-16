@@ -8,7 +8,8 @@ import { Failed } from "../../../shared/components/Notification/Failed";
 import swal from "sweetalert";
 import { NOTIF, STATUS } from "../../../shared/constants";
 import * as CgIcons from "react-icons/cg";
-import * as BiIcons from "react-icons/bi"
+import * as BiIcons from "react-icons/bi";
+import * as AiIcons from "react-icons/ai";
 
 export const FormPORent = () => {
   const {purchaseOrderRentService, notificationService} = useDeps();
@@ -57,7 +58,20 @@ export const FormPORent = () => {
   const [fileSertifikat, setFileSertifikat] = useState([])
   const [fileFotoLokasi, setFileFotoLokasi] = useState([])
 
+  const [enabled, setEnabled] = useState(false)
+  const [formIsValid,setFormIsValid] = useState(false)
+
+  useEffect(()=>{
+    if (formIsValid) {
+      setEnabled(false)
+     } else{
+      setEnabled(true)
+     }
+  },[formIsValid])
+
   const addFields = (e)=>{
+    e.preventDefault();
+    setFormIsValid(false)
     let object = {
       background:''
     }
@@ -67,7 +81,14 @@ export const FormPORent = () => {
   const handleBackgroundChange =(event,index)=>{
     let data = [...background]
     data[index][event.target.name] = event.target.value
-    
+    if (data[index].background.length>0){
+      setFormIsValid(true)
+    }
+    if (formIsValid == true) {
+      setEnabled(false)
+     } else{
+      setEnabled(true)
+     }
   }
   const removeFields = (index) => {
     let data = [...background];
@@ -802,26 +823,24 @@ export const FormPORent = () => {
                     onChange={(e)=>setJatuhTempo(e.target.value)}
                   />
                 </div>
+                <div className="row">
                 <div className="col-md-12">
-                <label>Background<span className="text-danger">*</span>{" "}</label>
-                  <a onClick={addFields}>
-                    <BiIcons.BiListPlus size="2em" color="green"/>
-                  </a>
+                <label  style={{fontWeight:'500'}} >Background<span className="text-danger">*</span>{" "}</label>
                 </div>
+                  <p style={{fontSize:'12px', color:'rgb(255, 178, 0)'}} > You can add more than 1 background</p>
+                </div>
+                
                 {background.map((form,index)=>{
                   return(
                     <div key={index}>
                       <div className="row">
-                        {/* <div className="col-1 center">
-                          {index+1}
-                          
-                        </div> */}
                       <div className="mb-3 col-11">
+                       
                           <input
                             required
                             type="text"
                             name="background"
-                            placeholder="background"
+                            placeholder="Background"
                             className="form-control"
                             onChange={(event) => handleBackgroundChange(event, index)}
                             />
@@ -829,7 +848,7 @@ export const FormPORent = () => {
                         <div className="col-1">
                         {index > 0 && (
                             <a onClick={() => removeFields(index)}>
-                            <CgIcons.CgCloseR size="2em" color="red" />
+                            <BiIcons.BiTrash size="2em" color="red" />
                           </a>
                         )}
                         </div>
@@ -837,6 +856,15 @@ export const FormPORent = () => {
                       </div>
                   )
                 })}
+                <div className="mb-3 col-md-12">
+                  <button
+                    disabled={enabled}
+                    className="btn btn-success btn-sm float-start"
+                    onClick={addFields}
+                  >
+                     + Add More..
+                  </button>
+                </div>
                 
                 <div>
 
