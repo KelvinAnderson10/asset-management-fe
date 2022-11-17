@@ -742,11 +742,11 @@ export const AssetCategory = () => {
                     </Button>
                   </form>
                 </Modal.Body>
-                <Modal.Footer>
+                {/* <Modal.Footer>
                   <Button variant="secondary" onClick={handleViewClose}>
                     Close
                   </Button>
-                </Modal.Footer>
+                </Modal.Footer> */}
               </Modal>
             </div>
 
@@ -831,11 +831,11 @@ export const AssetCategory = () => {
                     </Button>
                   </form>
                 </Modal.Body>
-                <Modal.Footer>
+                {/* <Modal.Footer>
                   <Button variant="secondary" onClick={handleEditClose}>
                     Close
                   </Button>
-                </Modal.Footer>
+                </Modal.Footer> */}
               </Modal>
             </div>
 
@@ -904,11 +904,11 @@ export const AssetCategory = () => {
                     </div>
                   </div>
                 </Modal.Body>
-                <Modal.Footer>
+                {/* <Modal.Footer>
                   <Button variant="secondary" onClick={handleViewClose}>
                     Close
                   </Button>
-                </Modal.Footer>
+                </Modal.Footer> */}
               </Modal>
             </div>
           </div>

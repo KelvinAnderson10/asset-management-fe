@@ -580,6 +580,19 @@ document.querySelector("body").style.overflow = "auto";
                   />
                 </div>
                 <div className="form-group mt-3">
+                  <label className="form-label">Bank Name<span style={{color :"red"}} >*</span></label>
+                  <input
+                  required
+                  style={{maxWidth:"500px"}}
+                    type="text"
+                    className="form-control"
+                    onChange={handleChange}
+                    placeholder="Please enter bank name"
+                    name="bank_name"
+                    value={vendorData.bank_name}
+                  />
+                </div>
+                <div className="form-group mt-3">
                   <label className="form-label">Account Number <span style={{color :"red"}} >*</span></label>
                   <input
                   required
@@ -592,6 +605,19 @@ document.querySelector("body").style.overflow = "auto";
                     value={vendorData.account_number}
                   />
                 </div>
+                <div className="form-group mt-3">
+                  <label className="form-label">Account Name <span style={{color :"red"}} >*</span></label>
+                  <input
+                  required
+                  style={{maxWidth:"500px"}}
+                    type="text"
+                    className="form-control"
+                    onChange={handleChange}
+                    placeholder="Please enter account owner name"
+                    name="account_name"
+                    value={vendorData.account_name}
+                  />
+                </div>
                 </div>
                 <Button
                   type="submit"
@@ -602,11 +628,11 @@ document.querySelector("body").style.overflow = "auto";
               
               </form>
             </Modal.Body>
-            <Modal.Footer>
+            {/* <Modal.Footer>
               <Button variant="secondary" onClick={hanldePostClose}>
                 Close
               </Button>
-            </Modal.Footer>
+            </Modal.Footer> */}
           </Modal>
         </div>
 
@@ -626,6 +652,7 @@ document.querySelector("body").style.overflow = "auto";
               <form onSubmit={(e)=>handleEdit(e,RowData.name)}>
               <div>
                 <div className="form-group">
+                  <div className="form-group mt-3">
                   <label>Address</label>
                   <input
                   required
@@ -636,7 +663,9 @@ document.querySelector("body").style.overflow = "auto";
                     placeholder="Please enter Address"
                     name="address"
                     defaultValue={RowData.address}
-                  />
+                    />
+                  </div>
+                  <div className="form-group mt-3">
                   <label>Phone</label>
                   <input
                   required
@@ -647,18 +676,47 @@ document.querySelector("body").style.overflow = "auto";
                     placeholder="Please enter Phone"
                     name="phone"
                     defaultValue={RowData.phone}
-                  />
-                  <label>Account Number</label>
+                    />
+                  </div>
+                  <div className="form-group mt-3">
+                  <label className="form-label">Bank Name</label>
                   <input
                   required
                   style={{maxWidth:"500px"}}
                     type="text"
                     className="form-control"
                     onChange={handleChange}
+                    placeholder="Please enter bank name"
+                    name="bank_name"
+                    defaultValue={RowData.bank_name}
+                  />
+                </div>
+                <div className="form-group mt-3">
+                  <label className="form-label">Account Number</label>
+                  <input
+                  required
+                  style={{maxWidth:"500px"}}
+                    type="text"
+                    className="form-control"
+                    onChange={handleChange}
+                    placeholder="Please enter account number"
                     name="account_number"
-                    placeholder="Please enter Account Number"
                     defaultValue={RowData.account_number}
                   />
+                </div>
+                <div className="form-group mt-3">
+                  <label className="form-label">Account Name</label>
+                  <input
+                  required
+                  style={{maxWidth:"500px"}}
+                    type="text"
+                    className="form-control"
+                    onChange={handleChange}
+                    placeholder="Please enter account owner name"
+                    name="account_name"
+                    defaultValue={RowData.account_name}
+                  />
+                </div>
                 </div>
                 </div>
                 <Button
@@ -669,11 +727,11 @@ document.querySelector("body").style.overflow = "auto";
                 </Button>
               </form>
             </Modal.Body>
-            <Modal.Footer>
+            {/* <Modal.Footer>
               <Button variant="secondary" onClick={hanldeEditClose}>
                 Close
               </Button>
-            </Modal.Footer>
+            </Modal.Footer> */}
           </Modal>
         </div>
 
@@ -691,46 +749,80 @@ document.querySelector("body").style.overflow = "auto";
             <Modal.Body>
               <div>
                 <div className="form-group">
+                  <div className="form-group mt-3">
                   <label>Vendor Name </label>
                   <input
                   style={{maxWidth:"500px"}}
-                    type="text"
-                    className="form-control"
-                    value={RowData.name}
-                    readOnly
+                  type="text"
+                  className="form-control"
+                  value={RowData.name}
+                  readOnly
                   />
-                  <label>Address </label>
+                  </div>
+                  <div className="form-group mt-3">
+                  <label>Address</label>
                   <input
+                  required
                   style={{maxWidth:"500px"}}
                     type="text"
                     className="form-control"
-                    value={RowData.address}
                     readOnly
-                  />
-                  <label>Phone </label>
+                    defaultValue={RowData.address}
+                    />
+                  </div>
+                  <div className="form-group mt-3">
+                  <label>Phone</label>
                   <input
+                  required
                   style={{maxWidth:"500px"}}
                     type="text"
                     className="form-control"
-                    value={RowData.phone}
                     readOnly
-                  />
-                  <label>Account Number </label>
+                    defaultValue={RowData.phone}
+                    />
+                  </div>
+                  <div className="form-group mt-3">
+                  <label className="form-label">Bank Name</label>
                   <input
+                  required
                   style={{maxWidth:"500px"}}
                     type="text"
                     className="form-control"
-                    value={RowData.account_number}
                     readOnly
+                    defaultValue={RowData.bank_name}
                   />
+                </div>
+                <div className="form-group mt-3">
+                  <label className="form-label">Account Number</label>
+                  <input
+                  required
+                  style={{maxWidth:"500px"}}
+                    type="text"
+                    className="form-control"
+                    readOnly
+                    defaultValue={RowData.account_number}
+                  />
+                </div>
+                <div className="form-group mt-3">
+                  <label className="form-label">Account Name</label>
+                  <input
+                  required
+                  style={{maxWidth:"500px"}}
+                    type="text"
+                    className="form-control"
+                    readOnly
+                    defaultValue={RowData.account_name}
+                  />
+                </div>
+                  
                 </div>
               </div>
             </Modal.Body>
-            <Modal.Footer>
+            {/* <Modal.Footer>
               <Button variant="secondary" onClick={hanldeViewClose}>
                 Close
               </Button>
-            </Modal.Footer>
+            </Modal.Footer> */}
           </Modal>
         </div>
       </div>

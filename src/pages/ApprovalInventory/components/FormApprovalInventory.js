@@ -577,7 +577,7 @@ export const FormApprovalInventory = () => {
                             </select>
                           </div>
                           <div className="inputBoxPO mb-3 col-md-3">
-                            <label>Additional Cost</label>
+                            <label>Additional Costtt</label>
                             <input
                               readOnly
                               type="number"

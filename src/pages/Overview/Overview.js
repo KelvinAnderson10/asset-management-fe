@@ -1364,7 +1364,7 @@ export const Overview = () => {
               </div>
             </div>
           </Modal.Body>
-          <Modal.Footer></Modal.Footer>
+          {/* <Modal.Footer></Modal.Footer> */}
         </Modal>
       </div>
       {/* EDIT SHOW */}
