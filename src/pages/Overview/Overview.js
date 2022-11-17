@@ -1236,7 +1236,7 @@ export const Overview = () => {
                       type="text"
                       className="form-control"
                       value={moment(
-                        rowData["Tanggal Pembelian"]
+                        rowData["Tanggal Output"]
                       ).format("YYYY-MM-DD HH:MM")}
                       readOnly
                     />

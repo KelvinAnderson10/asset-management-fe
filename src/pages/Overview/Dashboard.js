@@ -9,6 +9,7 @@ import * as FaIcons from "react-icons/fa";
 import * as CgIcons from "react-icons/cg";
 import { useNavigate } from "react-router-dom";
 import { ExportToExcel } from "../../shared/components/ExportExcel/ExportToExcel";
+import 'moment/locale/en-sg'
 
 export const Dashboard = () => {
   const { eventLogService, dashboardService } = useDeps();
@@ -68,9 +69,7 @@ export const Dashboard = () => {
       if (user.role !== "Regular") {
         const response = await eventLogService.getEventLog();
         for (let i in response.data) {
-          response.data[i]["CreatedAt"] = moment(
-            response.data[i]["CreatedAt"]
-          ).format("YYYY-MM-DD HH:MM A");
+          response.data[i]["CreatedAt"] = moment(response.data[i].CreatedAt).locale("en-sg").format("LLL")
         }
         setEvent(response.data);
       }

@@ -63,6 +63,9 @@ export const ViewRent = () => {
       const response = await overviewService.getAssetRentPagination(
         currentPage
       );
+      for (let i in response.data){
+        response.data[i].tanggal_jatuh_tempo = moment(response.data[i].tanggal_jatuh_tempo).format("YYYY-MM-DD");
+      }
       console.log("ini data rent", response.data);
       setDatas(response.data);
       setTotalAsset(response.count);

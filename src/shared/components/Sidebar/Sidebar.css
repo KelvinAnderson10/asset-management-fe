@@ -150,6 +150,7 @@ main {
   flex-direction: row;
   justify-content: flex-end;
   align-items: center;
+  margin-right: 36px;
 }
 
 .modalNotif {
