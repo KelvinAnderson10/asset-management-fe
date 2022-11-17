@@ -554,16 +554,16 @@ document.querySelector("body").style.overflow = "auto";
                 </div>
                 <div className="form-group mt-3">
                   <label className="form-label">Address <span style={{color :"red"}} >*</span></label>
-                  <input
+                  <textarea
                   required
-                  style={{maxWidth:"500px"}}
+                  style={{maxWidth:"500px", height:"100px"}}
                     type="text"
                     className="form-control"
                     onChange={handleChange}
                     placeholder="Please enter address"
                     name="address"
                     value={vendorData.address}
-                    
+                    height="100px"
                   />
                 </div>
                 <div className="form-group mt-3">
@@ -654,9 +654,9 @@ document.querySelector("body").style.overflow = "auto";
                 <div className="form-group">
                   <div className="form-group mt-3">
                   <label>Address</label>
-                  <input
+                  <textarea
                   required
-                  style={{maxWidth:"500px"}}
+                  style={{maxWidth:"500px", height:"100px"}}
                     type="text"
                     className="form-control"
                     onChange={handleChange}
@@ -761,9 +761,9 @@ document.querySelector("body").style.overflow = "auto";
                   </div>
                   <div className="form-group mt-3">
                   <label>Address</label>
-                  <input
+                  <textarea
                   required
-                  style={{maxWidth:"500px"}}
+                  style={{maxWidth:"500px", height:"100px"}}
                     type="text"
                     className="form-control"
                     readOnly

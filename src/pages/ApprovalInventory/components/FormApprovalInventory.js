@@ -21,7 +21,43 @@ export const FormApprovalInventory = () => {
     purchaseOrderService,
     generalSettingService,
     userService,
+    logisticService,
   } = useDeps();
+
+  const [logistic, setLogistic] = useState([
+    {id: 1, name: 'JNE'},
+    {id: 2, name: 'SiCepat'},
+    {id: 3, name: 'POS'},
+  ])
+
+  const [formCostValid,setFormCostValid] = useState(false)
+
+  const addFields = (e) => {
+    // e.preventDefault();
+    // setFormCostValid(false)
+    // let object = {
+    //   ["Nama Barang"]: "",
+    //   vendor_1: "",
+    //   vendor_2: "",
+    //   vendor_3: "",
+    //   item_price_1: "",
+    //   item_price_2: "",
+    //   item_price_3: "",
+    //   quantity: "",
+    //   ppn: "",
+    //   ["Biaya Lain-Lain"]: "",
+    // };
+    // setPOData([...POdata, object]);
+  };
+
+  const onGetAllLogistic = async () => {
+    try {
+      const response = await logisticService.getAllLogistic();
+      setLogistic(response.data);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   const handleFormChange = (event, index) => {
     const newArray = location.state.detail.map((item, i) => {
@@ -70,6 +106,7 @@ export const FormApprovalInventory = () => {
 
   useEffect(() => {
     onGetAllVendor();
+    onGetAllLogistic();
   }, []);
 
   const navigate = useNavigate();
@@ -577,8 +614,8 @@ export const FormApprovalInventory = () => {
                             </select>
                           </div>
                           <div className="inputBoxPO mb-3 col-md-3">
-                            <label>Additional Costtt</label>
-                            <input
+                            <label>Logistic</label>
+                            {/* <input
                               readOnly
                               type="number"
                               name="Biaya Lain-Lain"
@@ -587,7 +624,27 @@ export const FormApprovalInventory = () => {
                                 handleFormChange(event, index)
                               }
                               value={form["Biaya Lain-Lain"]}
-                            />
+                            /> */}
+                            <select
+                                required
+                                name="logistic"
+                                value={form.logistic}
+                                onChange={(event) =>
+                                  handleFormChange2(event, index)
+                                }
+                                style={{ width: "95%" }}
+                                
+                              >
+                                <option value="">Select Logistic</option>
+                                {logistic &&
+                                  logistic.map((item) => {
+                                      return (
+                                        <option key={item.id} value={item.name}>
+                                          {item.name}
+                                        </option>
+                                      );
+                                  })}
+                              </select>
                           </div>
                           {form.item_price_selected >= setting.minimum_asset ? (
                             <div className="inputBoxPO mb-3 col-md-3">
@@ -635,7 +692,18 @@ export const FormApprovalInventory = () => {
                       </div>
                     );
                   })}
-
+                  <div className="additional-column">
+                    <label>Additional Cost</label>
+                    <div className="col-md-12">
+                      <button
+                      disabled={formCostValid}
+                        className="btn btn-success float-start"
+                        onClick={addFields}
+                      >
+                        Add Additional Cost..
+                      </button>
+                    </div>
+                  </div>
                   <div className="col-md-12">
                     <button
                       className="btn btn-primary float-end"
