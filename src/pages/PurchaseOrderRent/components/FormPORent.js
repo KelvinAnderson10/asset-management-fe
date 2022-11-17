@@ -360,7 +360,7 @@ export const FormPORent = () => {
             <p><span className="text-danger">*</span> required fields</p>
             <div className="formPOInput">
               <div className="row">
-                <div className="mb-3 col-md-6">
+                <div className="mb-3 col-md-4">
                   <label style={{fontWeight:'500'}}>
                     Area Code<span className="text-danger">*</span>
                   </label>
@@ -1043,7 +1043,7 @@ export const FormPORent = () => {
                   >
                     Submit
                   </button>
-                  <button onClick={clearForm} type="reset" className="btn btn-warning float-end">
+                  <button onClick={clearForm} type="reset" className="btn btn-outline-danger float-end">
                     Cancel
                   </button>
                 </div>

@@ -603,7 +603,7 @@ document.querySelector("body").style.overflow = "auto";
               </form>
             </Modal.Body>
             <Modal.Footer>
-              <Button variant="secondary" onClick={hanldePostClose}>
+              <Button variant="outline-danger" onClick={hanldePostClose}>
                 Close
               </Button>
             </Modal.Footer>
@@ -663,14 +663,14 @@ document.querySelector("body").style.overflow = "auto";
                 </div>
                 <Button
                   type="submit"
-                  className="btn btn-warning mt-4"               
+                  className="btn btn-success mt-4"               
                 >
                   Save Changes
                 </Button>
               </form>
             </Modal.Body>
             <Modal.Footer>
-              <Button variant="secondary" onClick={hanldeEditClose}>
+              <Button variant="outline-danger" onClick={hanldeEditClose}>
                 Close
               </Button>
             </Modal.Footer>
@@ -727,7 +727,7 @@ document.querySelector("body").style.overflow = "auto";
               </div>
             </Modal.Body>
             <Modal.Footer>
-              <Button variant="secondary" onClick={hanldeViewClose}>
+              <Button variant="outline-danger" onClick={hanldeViewClose}>
                 Close
               </Button>
             </Modal.Footer>

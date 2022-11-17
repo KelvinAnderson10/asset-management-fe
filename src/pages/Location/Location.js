@@ -632,14 +632,14 @@ export const Location = () => {
                     />
                   </div>
 
-                  <Button type="submit" className="btn btn-warning mt-4">
+                  <Button type="submit" className="btn btn-success mt-4">
                     Save Changes
                   </Button>
                 </div>
               </form>
             </Modal.Body>
             <Modal.Footer>
-              <Button variant="secondary" onClick={hanldeEditClose}>
+              <Button variant="outline-danger" onClick={hanldeEditClose}>
                 Close
               </Button>
             </Modal.Footer>
@@ -681,7 +681,7 @@ export const Location = () => {
               </div>
             </Modal.Body>
             <Modal.Footer>
-              <Button variant="secondary" onClick={hanldeViewClose}>
+              <Button variant="outline-danger" onClick={hanldeViewClose}>
                 Close
               </Button>
             </Modal.Footer>

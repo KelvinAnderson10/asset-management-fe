@@ -3,7 +3,7 @@ import moment from "moment";
 import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
-import { Badge, Button, ButtonGroup, Dropdown } from "react-bootstrap";
+import { Badge, Button, ButtonGroup, Dropdown, Form, Modal } from "react-bootstrap";
 import ReactPaginate from "react-paginate";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -27,6 +27,13 @@ export const ViewRent = () => {
   const [searchTAP, setSearchTAP] = useState("");
   const [searchStatusActv, setSearchStatusActv] = useState("");
   const [searchJnsTmpt, setSearchJnsTmpt] = useState("");
+  const [showModal, setShowModal] = useState(false)
+  const [iom, setIom] = useState('');
+  const [idUser, setIdUser] = useState()
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
 
   //Get User
   const { getCookie } = useAuth();
@@ -130,9 +137,9 @@ export const ViewRent = () => {
     setCurrentPage(0);
   };
 
-  const updateStatus = async (id, status) => {
+  const updateStatusAndIom = async (id, status, iom) => {
     try {
-      const response = await rentService.updateRent(id, status);
+      const response = await rentService.updateStatusRentAndIom(id, status, iom);
       if (response.status === "SUCCESS") {
         Swal.fire("Success!", "Status has been updated.", "success");
       }
@@ -144,8 +151,9 @@ export const ViewRent = () => {
     }
   };
 
-  const onDeliveredRent = async (e, id) => {
+  const onDeliveredRent = async (e, id, iom) => {
     e.preventDefault(e);
+    setShowModal(true)
     try {
       Swal.fire({
         title: "Are you sure?",
@@ -157,14 +165,31 @@ export const ViewRent = () => {
         confirmButtonText: "Yes, I want!",
       }).then((result) => {
         if (result.isConfirmed) {
-          updateStatus(id, 'Active');
+          updateStatusAndIom(id, 'Active', iom);
         }
       });      
     } catch (error) {
       console.log(error)
-    } 
+    } finally {
+      setShowModal(false)
+    }
     
   };
+
+  const openModal = (id) => {
+    setShowModal(true)
+    handleGetRentById(id)
+  }
+
+  const handleGetRentById = async(id) => {
+    try {
+      const response = await rentService.getRentById(id)
+      // console.log('ini id user', response.data);
+      setIdUser(response.data.po_id)
+    } catch (e) {
+      throw e;
+    }
+  }
 
   const onViewDetail = async(id)=>{
     try {
@@ -310,7 +335,7 @@ export const ViewRent = () => {
                   <th style={{ minWidth: "150px" }}>Cluster</th>
                   <th style={{ minWidth: "200px" }}>TAP</th>
                   <th style={{ minWidth: "150px" }}>Type of Place</th>
-                  <th style={{ minWidth: "200px" }}>Due Date</th>
+                  <th style={{ minWidth: "200px", textAlign: 'left' }}>Due Date</th>
                 </tr>
               </thead>
               <tbody>
@@ -361,9 +386,7 @@ export const ViewRent = () => {
                            
                               <Dropdown.Item>
                                 <a
-                                  onClick={(e) => {
-                                    onDeliveredRent(e, data.po_id);
-                                  }}
+                                  onClick={() => openModal(data.po_id)}
                                   className="edit"
                                   data-toggle="modal"
                                   style={{
@@ -381,7 +404,7 @@ export const ViewRent = () => {
                                   >
                                     &#xe3c9;
                                   </i>
-                                  <p style={{ color: "black" }}>Delivered</p>
+                                  <p style={{ color: "black" }}>Active</p>
                                 </a>
                               </Dropdown.Item>
                             
@@ -414,6 +437,56 @@ export const ViewRent = () => {
             </table>
           </div>
         </div>
+      </div>
+      {/* VIEW MODAL */}
+      <div className="model-box-view">
+        <Modal
+          // dialogClassName="view-modal"
+          show={showModal}
+          onHide={handleCloseModal}
+          centered
+          // backdrop="static"
+          // keyboard={false}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Input Internal Office Memo</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+          <Form>
+            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+              <Form.Label>Internal Office Memo</Form.Label>
+              <Form.Control
+                type="Internal Office Memo"
+                placeholder="Internal Office Memo"
+                autoFocus
+                required
+                onChange={(e)=>setIom(e.target.value)}
+                value={iom}
+              />
+            </Form.Group>
+          </Form>
+          </Modal.Body>
+          <Modal.Footer>
+            <div className="button-asset">
+                  <button
+                    className="btn btn-outline-danger button-cancel"
+                    onClick={() => {
+                      setShowModal(false)
+                    }}
+                    style={{marginRight : "8px"}}
+                  >
+                    Close
+                  </button>
+                  <button
+                    className="btn btn-primary float-end"
+                    onClick={(e) => onDeliveredRent(e, idUser, iom)}
+                    // disabled={disableSubmit}
+                  >
+                    Activated
+                  </button>
+                </div>
+          </Modal.Footer>
+        </Modal>
       </div>
     </div>
   );

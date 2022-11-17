@@ -453,6 +453,7 @@ export const UserManage = () => {
                     <thead>
                       <tr>
                         <th>No</th>
+                        <th style={{ minWidth: "150px" }}>Actions</th>
                         <th onClick={() => sorting("nik")}>
                           {" "}
                           <FaSort /> NIK
@@ -489,7 +490,7 @@ export const UserManage = () => {
                           {" "}
                           <FaSort /> Department
                         </th>
-                        <th style={{ minWidth: "150px" }}>Actions</th>
+                        
                       </tr>
                     </thead>
                     <tbody>
@@ -501,16 +502,7 @@ export const UserManage = () => {
                         currentItems.map((item, index) => (
                           <tr key={item.name}>
                             <th>{index + 1}</th>
-                            <th>{item.nik}</th>
-                            <th>{item.email}</th>
-                            <th>{item.name}</th>
-                            <th>{item.role}</th>
-                            <th>{item.level_approval}</th>
-                            <th>{item.location_id}</th>
-                            <th>{item.TAP}</th>
-                            <th>{item.Cluster}</th>
-                            <th>{item.department}</th>
-                            <td style={{textAlign: 'center'}}>
+                            <td>
                               <a
                                 onClick={() => {
                                   handleViewShow(SetRowData(item));
@@ -560,6 +552,16 @@ export const UserManage = () => {
                                 </i>
                               </a>
                             </td>
+                            <th>{item.nik}</th>
+                            <th>{item.email}</th>
+                            <th>{item.name}</th>
+                            <th>{item.role}</th>
+                            <th>{item.level_approval}</th>
+                            <th>{item.location_id}</th>
+                            <th>{item.TAP}</th>
+                            <th>{item.Cluster}</th>
+                            <th>{item.department}</th>
+                            
                           </tr>
                         ))
                       )}
@@ -761,7 +763,7 @@ export const UserManage = () => {
                   </form>
                 </Modal.Body>
                 <Modal.Footer>
-                  <Button variant="secondary" onClick={hanldePostClose}>
+                  <Button variant="outline-danger" onClick={hanldePostClose}>
                     Close
                   </Button>
                 </Modal.Footer>
@@ -903,13 +905,13 @@ export const UserManage = () => {
                         )}
                       </div>
                     </div>
-                    <Button type="submit" className="btn btn-warning mt-4">
+                    <Button type="submit" className="btn btn-success mt-4">
                       Save Changes
                     </Button>
                   </form>
                 </Modal.Body>
                 <Modal.Footer>
-                  <Button variant="secondary" onClick={hanldeEditClose}>
+                  <Button variant="outline-danger" onClick={hanldeEditClose}>
                     Close
                   </Button>
                 </Modal.Footer>
@@ -997,7 +999,7 @@ export const UserManage = () => {
                   </div>
                 </Modal.Body>
                 <Modal.Footer>
-                  <Button variant="secondary" onClick={hanldeViewClose}>
+                  <Button variant="outline-danger" onClick={hanldeViewClose}>
                     Close
                   </Button>
                 </Modal.Footer>

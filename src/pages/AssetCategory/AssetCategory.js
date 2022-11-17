@@ -743,7 +743,7 @@ export const AssetCategory = () => {
                   </form>
                 </Modal.Body>
                 <Modal.Footer>
-                  <Button variant="secondary" onClick={handleViewClose}>
+                  <Button variant="outline-danger" onClick={handlePostClose}>
                     Close
                   </Button>
                 </Modal.Footer>
@@ -826,13 +826,13 @@ export const AssetCategory = () => {
                         </div>
                       </div>
                     </div>
-                    <Button type="submit" className="btn btn-warning mt-4">
+                    <Button type="submit" className="btn btn-success mt-4">
                       Save Changes
                     </Button>
                   </form>
                 </Modal.Body>
                 <Modal.Footer>
-                  <Button variant="secondary" onClick={handleEditClose}>
+                  <Button variant="outline-danger" onClick={handleEditClose}>
                     Close
                   </Button>
                 </Modal.Footer>
@@ -905,7 +905,7 @@ export const AssetCategory = () => {
                   </div>
                 </Modal.Body>
                 <Modal.Footer>
-                  <Button variant="secondary" onClick={handleViewClose}>
+                  <Button variant="outline-danger" onClick={handleViewClose}>
                     Close
                   </Button>
                 </Modal.Footer>
