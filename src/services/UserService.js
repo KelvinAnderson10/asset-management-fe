@@ -102,5 +102,13 @@ const deleteUser = async (name) => {
   }
 }
 
-  return {getUserByNameLike, updateUser, deleteUser,getUserByEmail, createUser,getUserByName, getAllUser, findGAApprover,findGMByCluster,findITApprover,findSpvByDepartment,findVPTrad };
+const findUserByLocationId = async (locationId) => {
+  try {
+    return await doGet({ url: `/api/user/location/${locationId}` });
+  } catch (e) {
+    throw e;
+  }
+}
+
+  return {getUserByNameLike, updateUser, deleteUser,getUserByEmail, createUser,getUserByName, getAllUser, findGAApprover,findGMByCluster,findITApprover,findSpvByDepartment,findVPTrad, findUserByLocationId };
 };

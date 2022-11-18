@@ -22,13 +22,10 @@ export const FormApprovalInventory = () => {
     generalSettingService,
     userService,
     logisticService,
+    expeditionService,
   } = useDeps();
 
-  const [logistic, setLogistic] = useState([
-    {id: 1, name: 'JNE'},
-    {id: 2, name: 'SiCepat'},
-    {id: 3, name: 'POS'},
-  ])
+  const [logistic, setLogistic] = useState([])
 
   const [formCostValid,setFormCostValid] = useState(false)
 
@@ -50,14 +47,25 @@ export const FormApprovalInventory = () => {
     // setPOData([...POdata, object]);
   };
 
-  const onGetAllLogistic = async () => {
+  // const onGetAllLogistic = async () => {
+  //   try {
+  //     const response = await logisticService.getAllLogistic();
+  //     setLogistic(response.data);
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
+
+  const getListExpedition = async () => {
     try {
-      const response = await logisticService.getAllLogistic();
-      setLogistic(response.data);
+      const response = await expeditionService.getListExpedition();
+      if (response.status === 'SUCCESS') {
+        setLogistic(response.data);
+      }
     } catch (e) {
       console.log(e);
     }
-  };
+  }
 
   const handleFormChange = (event, index) => {
     const newArray = location.state.detail.map((item, i) => {
@@ -106,7 +114,8 @@ export const FormApprovalInventory = () => {
 
   useEffect(() => {
     onGetAllVendor();
-    onGetAllLogistic();
+    // onGetAllLogistic();
+    getListExpedition();
   }, []);
 
   const navigate = useNavigate();
@@ -639,8 +648,8 @@ export const FormApprovalInventory = () => {
                                 {logistic &&
                                   logistic.map((item) => {
                                       return (
-                                        <option key={item.id} value={item.name}>
-                                          {item.name}
+                                        <option key={item.id} value={item["expedition_name"]}>
+                                          {item["expedition_name"]}
                                         </option>
                                       );
                                   })}
