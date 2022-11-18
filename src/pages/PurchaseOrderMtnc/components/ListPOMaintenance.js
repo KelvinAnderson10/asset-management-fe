@@ -208,38 +208,38 @@ export const ListPOMaintenance = () => {
                     <div className="box-content-po">
                       <div className="row-content-po">
                         <div className="sub-title-content">
-                          <a>To</a>
+                          <a className="text">To</a>
                         </div>
                         <div className="sub-title-content">
-                          <a>: {data.ToUser}</a>
-                        </div>
-                      </div>
-                      <div className="row-content-po">
-                        <div className="sub-title-content">
-                          <a>Location</a>
-                        </div>
-                        <div className="sub-title-content">
-                          <a>: {data.TAP}</a>
+                          <a className="text">: {data.ToUser}</a>
                         </div>
                       </div>
                       <div className="row-content-po">
                         <div className="sub-title-content">
-                          <a>Product Type</a>
+                          <a className="text">Location</a>
                         </div>
                         <div className="sub-title-content">
-                          <a>: {data["Jenis Produk"]}</a>
+                          <a className="text">: {data.TAP}</a>
+                        </div>
+                      </div>
+                      <div className="row-content-po">
+                        <div className="sub-title-content">
+                          <a className="text">Product Type</a>
+                        </div>
+                        <div className="sub-title-content">
+                          <a className="text">: {data["Jenis Produk"]}</a>
                         </div>
                       </div>
                     </div>
                     <div className="box-content-po">
                       <div className="row-content-po">
                         <div className="sub-title-content">
-                          {user.cluster != "HO" && <a>Approved By GM </a>}
-                          {user.cluster == "HO" && <a>Approved By SPV</a>}
+                          {user.cluster != "HO" && <a className="text">Approved By GM </a>}
+                          {user.cluster == "HO" && <a className="text">Approved By SPV</a>}
                         </div>
                         <div className="sub-title-content">
                           {data.is_approved_level1 == true && (
-                            <a>
+                            <a className="text">
                               <BsIcons.BsCheckCircleFill
                                 color="rgb(92, 184, 92)"
                                 size="1.2em"
@@ -247,7 +247,7 @@ export const ListPOMaintenance = () => {
                             </a>
                           )}
                           {data.is_approved_level1 == false && (
-                            <a>
+                            <a className="text">
                               <AiIcons.AiFillCloseCircle
                                 color="red"
                                 size="1.2em"
@@ -258,12 +258,12 @@ export const ListPOMaintenance = () => {
                       </div>
                       <div className="row-content-po">
                         <div className="sub-title-content">
-                          {user.cluster != "HO" && <a>Approved By VP Trade</a>}
-                          {user.cluster == "HO" && <a>Approved By GA/IT</a>}
+                          {user.cluster != "HO" && <a className="text">Approved By VP Trade</a>}
+                          {user.cluster == "HO" && <a className="text">Approved By GA/IT</a>}
                         </div>
                         <div className="sub-title-content">
                           {data.is_approved_level2 == true && (
-                            <a>
+                            <a className="text">
                               <BsIcons.BsCheckCircleFill
                                 color="rgb(92, 184, 92)"
                                 size="1.2em"
@@ -271,7 +271,7 @@ export const ListPOMaintenance = () => {
                             </a>
                           )}
                           {data.is_approved_level2 == false && (
-                            <a>
+                            <a className="text">
                               <AiIcons.AiFillCloseCircle
                                 color="red"
                                 size="1.2em"
@@ -282,12 +282,12 @@ export const ListPOMaintenance = () => {
                       </div>
                       <div className="row-content-po">
                         <div className="sub-title-content">
-                          {user.cluster != "HO" && <a>Approved By GA/IT</a>}
+                          {user.cluster != "HO" && <a className="text">Approved By GA/IT</a>}
                         </div>
                         <div className="sub-title-content">
                           {data.is_approved_level3 == true &&
                             data.approver_level3 != "-" && (
-                              <a>
+                              <a className="text">
                                 <BsIcons.BsCheckCircleFill
                                   color="rgb(92, 184, 92)"
                                   size="1.2em"
@@ -296,7 +296,7 @@ export const ListPOMaintenance = () => {
                             )}
                           {data.is_approved_level3 == false &&
                             data.approver_level3 != "-" && (
-                              <a>
+                              <a className="text">
                                 <AiIcons.AiFillCloseCircle
                                   color="red"
                                   size="1.2em"

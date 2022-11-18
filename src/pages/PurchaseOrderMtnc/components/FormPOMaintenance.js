@@ -476,7 +476,7 @@ export const FormPOMaintenance = () => {
                   >
                     Submit
                   </button>
-                  <button type="reset" className="btn btn-warning float-end">
+                  <button type="reset" className="btn btn-outline-danger float-end">
                     Cancel
                   </button>
                 </div>

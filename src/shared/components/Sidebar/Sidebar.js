@@ -19,6 +19,7 @@ import { useDeps } from "../../context/DependencyContext";
 import moment from "moment";
 import { NOTIF, PATH } from "../../constants";
 import 'moment/locale/en-sg'
+import * as TbIcons from "react-icons/tb"
 
 const routesAdmin = [
   {
@@ -55,6 +56,11 @@ const routesAdmin = [
         path: "/data-management/user",
         name: "User",
         icon: <BsIcons.BsPeople />,
+      },
+      {
+        path: "/data-management/expedition",
+        name: "Expedition",
+        icon: <TbIcons.TbTruckDelivery/>,
       },
     ],
   },
@@ -105,6 +111,11 @@ const routesGA = [
         path: "/data-management/user",
         name: "User",
         icon: <BsIcons.BsPeople />,
+      },
+      {
+        path: "/data-management/expedition",
+        name: "Expedition",
+        icon: <TbIcons.TbTruckDelivery/>,
       },
     ],
   },

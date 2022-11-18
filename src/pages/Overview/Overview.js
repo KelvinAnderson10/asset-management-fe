@@ -23,7 +23,8 @@ export const Overview = () => {
     eventLogService,
     transferRequestService,
     notificationService,
-    userService
+    userService,
+    expeditionService,
   } = useDeps();
   const [datas, setDatas] = useState([]);
   const [order, setOrder] = useState("ASC");
@@ -728,11 +729,20 @@ export const Overview = () => {
    const [originalLocation, setOriginalLocation] = useState("");
    const [targetUser, setTargetUser] = useState("");
    const [targetUserPost, setTargetUserPost] = useState("");
+   const [remarkTransfer, setRemarkTransfer] = useState("");
    const [disableSubmit, setDisableSubmit] = useState(true);
+   const [listTargetLocation, setListTargetLocation] = useState([]);
+   const [recipient, setRecipient] = useState("");
+   const [recipientList, setRecipientList] = useState([]);
+   const [deliveryDate, setDeliveryDate] = useState("");
+   const [shippingCompany, setShippingCompany] = useState("");
+   const [deliveryFee, setDeliveryFee] = useState("");
+   const [listShippingCompany, setListShippingCompany] = useState([]);
 
    const handleToggleTransfer = async (name) => {
      setLoading(true);
      try {
+      // check if asset still in transfer process
         let existedRequest = await transferRequestService.getByAssetNumber(name);
         let pendingRequest = existedRequest.data.filter(item => item.status === STATUS.CREATE_PO);
        if(pendingRequest.length > 0){
@@ -745,6 +755,13 @@ export const Overview = () => {
          setAssetTransfer(response.data)
          setOriginalLocation(response.data["Kode Wilayah"])
        }
+
+       // get list location
+       const listLocation = locations.filter(item => item["kode wilayah"] !== response.data["Kode Wilayah"]);
+       setListTargetLocation(listLocation);
+
+       // get list expedition
+       getListExpedition();
      } catch (e) {
        console.log(e);
      } finally {
@@ -759,21 +776,48 @@ export const Overview = () => {
      }
      const newData = { ...assetTransfer};
      newData[e.target.name] = e.target.value;
-     setDisableSubmit(String(newData["Kode Wilayah"]) === String(originalLocation) || (targetUser === "" && targetUserPost === ""));
+     getUserByLocation(String(newData["Kode Wilayah"]));
+     setDisableSubmit(submitValidation(String(newData["Kode Wilayah"])));
      setAssetTransfer(newData);
+   };
+
+   const submitValidation = (newLocation) => {
+    return (
+      newLocation === String(originalLocation) || targetUser === "" || targetUserPost === "" || remarkTransfer === ""  || deliveryDate === "" || recipient === "" || shippingCompany === "" || deliveryFee === ""
+    )
+  }
+
+  useEffect(() => {
+    setDisableSubmit(submitValidation(String(assetTransfer["Kode Wilayah"])));
+  }, [targetUser, targetUserPost, remarkTransfer, deliveryDate, recipient, shippingCompany, deliveryFee])
+
+   const getUserByLocation = async (locationId) => {
+    try {
+      const response = await userService.findUserByLocationId(locationId);
+      if (response.status === 'SUCCESS') {
+        setRecipientList(response.data)
+      }
+    } catch (error) {
+      console.log(error);
+    }
    };
  
    const onSubmitTrasfer = async () => {
-     const transferReqForm = {
+    const transferReqForm = {
        "Nomor Asset": assetTransfer["Nomor Asset"],
        "requester":user.name,
        "Kode Wilayah": parseInt(assetTransfer["Kode Wilayah"]),
        "ToUser":targetUser,
        "Jabatan":targetUserPost,
+       "deliveryDate" : deliveryDate,
+       "deliveryFee" : Number(deliveryFee),
+       "recipient" : recipient,
+       "reason" : remarkTransfer,
+       "courier" : shippingCompany,
        "is_approved_level1":false,
        "is_approved_level2":false,
-   }
- 
+    }
+
      try {
        setModalTransferShow(false)
        setLoading(true)
@@ -797,7 +841,7 @@ export const Overview = () => {
           title: NOTIF.REQUEST.TRANSFER.TITLE,
           body: `${NOTIF.REQUEST.TRANSFER.BODY} ${user.name}`,
           type: NOTIF.TYPE.TRANSFER,
-          resource_id : String(response.data["to_id"])
+          resource_id : String(response.data["to_id"]),
         };
         createNotification(notifObj);
 
@@ -849,7 +893,13 @@ export const Overview = () => {
     setOriginalLocation("");
     setTargetUser("");
     setTargetUserPost("");
+    setRemarkTransfer("");
+    setDeliveryDate("");
+    setRecipient("");
+    setShippingCompany("");
+    setDeliveryFee("");
     setDisableSubmit(true);
+    setListShippingCompany([]);
    }
 
    const createNotification = async (newNotif) => {
@@ -867,6 +917,22 @@ export const Overview = () => {
       console.log(e);
     }
   };
+
+  const addCommas = (num) =>{
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+  const removeNonNumeric = (num) => {return num.toString().replace(/[^0-9]/g, "")};
+
+  const getListExpedition = async () => {
+    try {
+      const response = await expeditionService.getListExpedition();
+      if (response.status === 'SUCCESS') {
+        setListShippingCompany(response.data);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   return (
     <>
@@ -1367,6 +1433,7 @@ export const Overview = () => {
           {/* <Modal.Footer></Modal.Footer> */}
         </Modal>
       </div>
+
       {/* EDIT SHOW */}
       <div className="model-box-view">
         <Modal
@@ -1736,7 +1803,7 @@ export const Overview = () => {
             keyboard={false}
             size='lg'
           >
-            <Modal.Header closeButton>
+            <Modal.Header closeButton={assetTransfer["Nomor Asset"] ? false : true}>
               <Modal.Title>Transfer Asset Request</Modal.Title>
             </Modal.Header>
             <Modal.Body>
@@ -1825,7 +1892,7 @@ export const Overview = () => {
                           className="form-select"
                         >
                           <option value="">Select Location</option>
-                          {locations.map((item, index) => (
+                          {listTargetLocation.map((item, index) => (
                             <option
                               key={item["kode wilayah"]}
                               value={item["kode wilayah"]}
@@ -1834,6 +1901,83 @@ export const Overview = () => {
                             </option>
                           ))}
                         </select>
+                      </div>
+                      <div className="col-md-12 col-sm-12 mb-3">
+                        <label>Reason For Transfer <span style={{color : "red"}}>*</span></label>
+                        <textarea
+                          className="col-md-12 rounded p-1"
+                          value={remarkTransfer}
+                          onChange={(e) => {
+                            setRemarkTransfer(e.target.value)
+                          }}
+                          rows="3"
+                        />
+                      </div>
+                      <div className="col-md-6 mb-3">
+                        <label>Delivery Date <span style={{color : "red"}}>*</span></label>
+                        <input
+                          type="date"
+                          className="form-control"
+                          value={deliveryDate}
+                          onChange={(e) => {setDeliveryDate(e.target.value)}}
+                        />
+                      </div>
+                      <div className="col-md-6 mb-3">
+                        <label>Recipient <span style={{color : "red"}}>*</span></label>
+                        <select
+                          required
+                          value={recipient}
+                          onChange={(e) => {
+                            if (e.target.value === "") {
+                              return
+                            }
+                            setRecipient(e.target.value)
+                          }}
+                          className="form-select"
+                        >
+                          <option value="">Select Recipient</option>
+                          {recipientList.map((item, index) => (
+                            <option
+                              key={item.name}
+                              value={item.name}
+                            >
+                              {item.name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      <div className="col-md-6 mb-3">
+                        <label>Shipping Company <span style={{color : "red"}}>*</span></label>
+                        <select
+                          required
+                          value={shippingCompany}
+                          onChange={(e) => {
+                            if (e.target.value === "") {
+                              return
+                            }
+                            setShippingCompany(e.target.value)
+                          }}
+                          className="form-select"
+                        >
+                          <option value="">Select Expedition</option>
+                          {listShippingCompany.map((item, index) => (
+                            <option
+                              key={item["expedition_name"]}
+                              value={item["expedition_name"]}
+                            >
+                              {item["expedition_name"]}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      <div className="col-md-6 mb-3">
+                        <label>Delivery Fee <span style={{color : "red"}}>*</span></label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          value={addCommas(removeNonNumeric(deliveryFee))}
+                          onChange={(e) => {setDeliveryFee(removeNonNumeric(e.target.value))}}
+                        />
                       </div>
                     </div>
                   </div> :

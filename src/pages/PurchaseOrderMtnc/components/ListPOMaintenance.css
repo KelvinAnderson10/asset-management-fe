@@ -238,4 +238,44 @@
     margin-bottom: 2vh;
     align-items: center;
 }
+
+.text {
+    font-size: 14px;
+    text-decoration: none !important;
+    color: black;
+    text-align: left;
+}
+
+.text:hover {
+    color: black;
+}
+ 
+/* For mobile phones: */
+@media only screen and (max-width: 520px) {
+    .approval-inv-box-container .approval-inv-list-card{
+        background-color:whitesmoke;
+        padding: 0;
+    } 
+    .header-list-po .po-num{
+        width: 5vw;
+        height: 3vh;
+        font-size: 12px;
+    }
+    .header-list-po .status-po{
+        width: 14vw;
+        height: 2.5vh;
+        font-size: 10px;
+        font-weight: 600;
+    }
+    .text {
+        font-size: 12px;
+        text-decoration: none;
+        color: black;
+        text-align: left;
+    }
+
+    .po-mtnc-list-card .po-mtnc-list-box-item{
+        min-height: 28vh;
+    }
+}
   

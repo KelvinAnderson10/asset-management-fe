@@ -117,25 +117,37 @@ export const rentService = ({ doGet, doPost, doPut, doDelete }) => {
     } catch (e) {
         throw e;
     }
-}
-const updateRent = async (id, newData) => {
-  try {
-      return await doPut({
-          url: `/api/rent/expired?id=${id}&rent_status=${newData}`
-          
-      })
-  } catch (e) {
-      throw e;
   }
-}
 
-const getBackground = async (id, newData) => {
-  try {
-    return await doGet({ url: `api/background/po_rent/${id}`, data: newData });
-  } catch (error) {
-    throw error;
+  const updateStatusRentAndIom = async (id, status, iom) => {
+    try {
+        return await doPut({
+            url: `/api/rent/expired?id=${id}&rent_status=${status}&iom_number=${iom}`
+            
+        })
+    } catch (e) {
+        throw e;
+    }
   }
-}
+
+  const updateRent = async (id, newData) => {
+    try {
+        return await doPut({
+            url: `/api/rent/expired?id=${id}&rent_status=${newData}`
+            
+        })
+    } catch (e) {
+        throw e;
+    }
+  }
+
+  const getBackground = async (id, newData) => {
+    try {
+      return await doGet({ url: `api/background/po_rent/${id}`, data: newData });
+    } catch (error) {
+      throw error;
+    }
+  }
 
   return {
     createRent,
@@ -152,5 +164,6 @@ const getBackground = async (id, newData) => {
     updateStatusRent,
     updateRent,
     getBackground,
+    updateStatusRentAndIom,
   };
 };

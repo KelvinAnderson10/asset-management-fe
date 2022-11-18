@@ -415,6 +415,7 @@ export const Location = () => {
                   <thead>
                     <tr>
                       <th>No</th>
+                      <th style={{textAlign: 'center'}}>Actions</th>
                       <th onClick={() => sorting("cluster")}>
                         {" "}
                         <FaSort /> Cluster
@@ -427,7 +428,7 @@ export const Location = () => {
                         {" "}
                         <FaSort /> Area Code
                       </th>
-                      <th>Actions</th>
+                      
                     </tr>
                   </thead>
                   <tbody>
@@ -439,9 +440,6 @@ export const Location = () => {
                       currentItems.map((item, index) => (
                         <tr key={item["kode wilayah"]}>
                           <th>{index + 1}</th>
-                          <th>{item.cluster}</th>
-                          <th>{item.location}</th>
-                          <th>{item["kode wilayah"]}</th>
                           <td style={{textAlign: 'center'}}>
                             <a
                               onClick={() => {
@@ -492,6 +490,10 @@ export const Location = () => {
                               </i>
                             </a>
                           </td>
+                          <th>{item.cluster}</th>
+                          <th>{item.location}</th>
+                          <th>{item["kode wilayah"]}</th>
+                          
                         </tr>
                       ))
                     )}
@@ -632,7 +634,7 @@ export const Location = () => {
                     />
                   </div>
 
-                  <Button type="submit" className="btn btn-warning mt-4">
+                  <Button type="submit" className="btn btn-success mt-4">
                     Save Changes
                   </Button>
                 </div>

@@ -401,6 +401,7 @@ document.querySelector("body").style.overflow = "auto";
                   <thead>
                     <tr>
                       <th>No</th>
+                      <th style={{textAlign: 'center'}}>Actions</th>
                       <th onClick={() => sorting("name")}>
                         {" "}
                         <FaSort /> Name
@@ -417,7 +418,7 @@ document.querySelector("body").style.overflow = "auto";
                         {" "}
                         <FaSort /> Acount Number
                       </th>
-                      <th>Actions</th>
+                      
                     </tr>
                   </thead>
                   <tbody>
@@ -429,10 +430,6 @@ document.querySelector("body").style.overflow = "auto";
                       currentItems.map((item, index) => (
                         <tr key={item.ID}>
                           <th>{index + 1}</th>
-                          <th>{item.name}</th>
-                          <th>{item.address}</th>
-                          <th>{item.phone}</th>
-                          <th>{item.account_number}</th>
                           <td style={{textAlign: 'center'}}>
                             <a
                               onClick={() => {
@@ -482,6 +479,11 @@ document.querySelector("body").style.overflow = "auto";
                               </i>
                             </a>
                           </td>
+                          <th>{item.name}</th>
+                          <th>{item.address}</th>
+                          <th>{item.phone}</th>
+                          <th>{item.account_number}</th>
+                          
                         </tr>
                       ))
                     )}
@@ -721,7 +723,7 @@ document.querySelector("body").style.overflow = "auto";
                 </div>
                 <Button
                   type="submit"
-                  className="btn btn-warning mt-4"               
+                  className="btn btn-success mt-4"               
                 >
                   Save Changes
                 </Button>

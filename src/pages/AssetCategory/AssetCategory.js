@@ -496,6 +496,7 @@ export const AssetCategory = () => {
                 <thead>
                   <tr>
                     <th>No</th>
+                    <th style={{textAlign: 'center', width: '120px'}}>Actions</th>
                     <th onClick={() => sorting("asset_category")}>
                       {" "}
                       <FaSort /> Asset Category
@@ -517,7 +518,7 @@ export const AssetCategory = () => {
                       <FaSort /> Subproduct Name
                     </th>
                     <th>PIC</th>
-                    <th>Actions</th>
+                    
                   </tr>
                 </thead>
                 <tbody>
@@ -529,12 +530,6 @@ export const AssetCategory = () => {
                     currentItems.map((item, index) => (
                       <tr key={item.subproduct_name}>
                         <th>{index + 1}</th>
-                        <th>{item.asset_category}</th>
-                        <th>{item.useful_life}</th>
-                        <th>{item.product_code}</th>
-                        <th>{item.product_name}</th>
-                        <th>{item.subproduct_name}</th>
-                        <th>{item.pic}</th>
                         <td style={{textAlign: 'center'}}>
                           <a
                             onClick={() => {
@@ -587,6 +582,13 @@ export const AssetCategory = () => {
                             </i>
                           </a>
                         </td>
+                        <th>{item.asset_category}</th>
+                        <th>{item.useful_life}</th>
+                        <th>{item.product_code}</th>
+                        <th>{item.product_name}</th>
+                        <th>{item.subproduct_name}</th>
+                        <th>{item.pic}</th>
+                        
                       </tr>
                     ))
                   )}
@@ -826,7 +828,7 @@ export const AssetCategory = () => {
                         </div>
                       </div>
                     </div>
-                    <Button type="submit" className="btn btn-warning mt-4">
+                    <Button type="submit" className="btn btn-success mt-4">
                       Save Changes
                     </Button>
                   </form>
