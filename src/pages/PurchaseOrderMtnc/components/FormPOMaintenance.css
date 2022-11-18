@@ -19,7 +19,7 @@
     flex-direction: column;
     border-radius: 10px;
     position: relative;
-    padding: 40px;
+    padding: 40px 80px;
     text-align: start;
     margin-bottom: 3vh;
 }

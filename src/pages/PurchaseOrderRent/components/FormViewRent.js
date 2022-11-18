@@ -84,7 +84,7 @@ export const FormViewRent = () => {
                   onClick={onClickBack}
                   style={{ cursor: "pointer" }}
                 />
-                Purchase Order Detail
+                Rent Detail
               </h4>
               <div className="formPOInput">
                 <div className="row">
