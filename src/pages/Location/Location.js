@@ -438,13 +438,13 @@ export const Location = () => {
                   <tbody>
                     {data.length === 0 ? (
                       <tr>
-                        <th colspan="5">Data is not found</th>
+                        <th colspan="6">Data is not found</th>
                       </tr>
                     ) : (
                       currentItems.map((item, index) => (
                         <tr key={item["kode wilayah"]}>
                           <th>{index + 1}</th>
-                          <th>{item.address}</th>
+                          
                           <td style={{textAlign: 'center'}}>
                             <a
                               onClick={() => {
@@ -498,6 +498,7 @@ export const Location = () => {
                           <th>{item.cluster}</th>
                           <th>{item.location}</th>
                           <th>{item["kode wilayah"]}</th>
+                          <th>{item.address}</th>
                           
                         </tr>
                       ))

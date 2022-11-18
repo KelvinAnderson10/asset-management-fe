@@ -23,7 +23,7 @@ export const EVENT = {
   UPDATE_SETTING: "updated variable setting",
   CREATE_ADDITIONAL_COST: "inserted new additional cost data",
   UPDATE_ADDITIONAL_COST: "updated additional cost data",
-  DELETE_ADDITIONAL_COST: "deleted additional cost data",,
+  DELETE_ADDITIONAL_COST: "deleted additional cost data",
   CREATE_EXPEDITION: "inserted new expedition data",
   UPDATE_EXPEDITION: "updated expedition data",
   DELETE_EXPEDITION: "deleted expedition data",
