@@ -80,4 +80,9 @@
       .title-box{
         margin-left: 20px;
       }
+      .po-maintenance-container .navbar-po-container{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
 }

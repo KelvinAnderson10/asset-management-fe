@@ -43,38 +43,38 @@ export const ListPORent = () => {
                     <div className="box-content-po">
                       <div className="row-content-po">
                         <div className="sub-title-content">
-                          <a>To</a>
+                          <a className="text">To</a>
                         </div>
                         <div className="sub-title-content">
-                          <a>: {data.User}</a>
-                        </div>
-                      </div>
-                      <div className="row-content-po">
-                        <div className="sub-title-content">
-                          <a>Position</a>
-                        </div>
-                        <div className="sub-title-content">
-                          <a>: {data.Jabatan}</a>
+                          <a className="text">: {data.User}</a>
                         </div>
                       </div>
                       <div className="row-content-po">
                         <div className="sub-title-content">
-                          <a>Item Name</a>
+                          <a className="text">Position</a>
                         </div>
                         <div className="sub-title-content">
-                          <a>: {data["Nama Barang"]}</a>
+                          <a className="text">: {data.Jabatan}</a>
+                        </div>
+                      </div>
+                      <div className="row-content-po">
+                        <div className="sub-title-content">
+                          <a className="text">Item Name</a>
+                        </div>
+                        <div className="sub-title-content">
+                          <a className="text">: {data["Nama Barang"]}</a>
                         </div>
                       </div>
                     </div>
                     <div className="box-content-po">
                       <div className="row-content-po">
                         <div className="sub-title-content">
-                          {user.cluster != "HO" && <a>Approved By GM </a>}
+                          {user.cluster != "HO" && <a className="text">Approved By GM </a>}
                           
                         </div>
                         <div className="sub-title-content">
                           {data.approved_level1 == true && (
-                            <a>
+                            <a className="text">
                               <BsIcons.BsCheckCircleFill
                                 color="rgb(92, 184, 92)"
                                 size="1.2em"
@@ -82,7 +82,7 @@ export const ListPORent = () => {
                             </a>
                           )}
                           {data.approved_level1 == false && (
-                            <a>
+                            <a className="text">
                               <AiIcons.AiFillCloseCircle
                                 color="red"
                                 size="1.2em"
@@ -93,12 +93,12 @@ export const ListPORent = () => {
                       </div>
                       <div className="row-content-po">
                         <div className="sub-title-content">
-                          {user.cluster != "HO" && <a>Approved By VP Trade</a>}
+                          {user.cluster != "HO" && <a className="text">Approved By VP Trade</a>}
                           
                         </div>
                         <div className="sub-title-content">
                           {data.approved_level2 == true && (
-                            <a>
+                            <a className="text">
                               <BsIcons.BsCheckCircleFill
                                 color="rgb(92, 184, 92)"
                                 size="1.2em"
@@ -106,7 +106,7 @@ export const ListPORent = () => {
                             </a>
                           )}
                           {data.approved_level2 == false && (
-                            <a>
+                            <a className="text">
                               <AiIcons.AiFillCloseCircle
                                 color="red"
                                 size="1.2em"
@@ -117,11 +117,11 @@ export const ListPORent = () => {
                       </div>
                       <div className="row-content-po">
                         <div className="sub-title-content">
-                          {user.cluster != "HO" && <a>Approved By GA/IT</a>}
+                          {user.cluster != "HO" && <a className="text">Approved By GA/IT</a>}
                         </div>
                         <div className="sub-title-content">
                           {data.approved_level3 == true && (
-                              <a>
+                              <a className="text">
                                 <BsIcons.BsCheckCircleFill
                                   color="rgb(92, 184, 92)"
                                   size="1.2em"
@@ -129,7 +129,7 @@ export const ListPORent = () => {
                               </a>
                             )}
                           {data.approved_level3 == false && (
-                              <a>
+                              <a className="text">
                                 <AiIcons.AiFillCloseCircle
                                   color="red"
                                   size="1.2em"

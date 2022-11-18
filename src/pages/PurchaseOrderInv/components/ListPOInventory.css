@@ -246,6 +246,10 @@
     color: black;
     text-align: left;
 }
+
+.text:hover {
+    color: black;
+}
  
 /* For mobile phones: */
 @media only screen and (max-width: 520px) {
@@ -269,5 +273,8 @@
         text-decoration: none;
         color: black;
         text-align: left;
+    }
+    .po-inv-list-card .po-inv-list-box-item {
+        min-height: 28vh;
     }
 }
