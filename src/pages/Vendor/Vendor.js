@@ -727,7 +727,7 @@ document.querySelector("body").style.overflow = "auto";
                 </Button>
               </form>
             </Modal.Body>
-            <Modal.Footer>
+            {/* <Modal.Footer>
               <Button variant="secondary" onClick={hanldeEditClose}>
                 Close
               </Button>
@@ -818,7 +818,7 @@ document.querySelector("body").style.overflow = "auto";
                 </div>
               </div>
             </Modal.Body>
-            <Modal.Footer>
+            {/* <Modal.Footer>
               <Button variant="secondary" onClick={hanldeViewClose}>
                 Close
               </Button>
