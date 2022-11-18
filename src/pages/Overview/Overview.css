@@ -32,12 +32,12 @@
   
   .pageNumbers li {
     padding: 5px;
-    background-color: #cccdce;
+    /* background-color: #cccdce; */
     cursor: pointer;
   }
   
   .pageNumbers li.active {
-    background-color: #3e4041;
+    background-color: #b70621;
     color: rgb(255, 255, 255);
   }
   
@@ -50,7 +50,7 @@
     cursor: pointer;
   }
   .pageNumbers li button:hover {
-    background-color: #999;
+    /* background-color: rgb(242, 174, 174); */
     color: black;
   }
   .pageNumbers li button:focus {

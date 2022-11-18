@@ -729,7 +729,7 @@ export const FormApprovalRent = () => {
                           style={{ marginLeft: "20px", marginRight: "20px", marginTop: "20px" }}
                           
                         >
-                          Approved
+                          Approve
                         </button>
                         <button type="reset" className="btn btn-warning float-end"
                           style={{ marginTop: "20px" }}

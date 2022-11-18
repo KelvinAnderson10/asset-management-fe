@@ -428,6 +428,10 @@ export const Location = () => {
                         {" "}
                         <FaSort /> Area Code
                       </th>
+                      <th onClick={() => sortingNum("ID")}>
+                        {" "}
+                        <FaSort /> Address
+                      </th>
                       
                     </tr>
                   </thead>
@@ -440,6 +444,7 @@ export const Location = () => {
                       currentItems.map((item, index) => (
                         <tr key={item["kode wilayah"]}>
                           <th>{index + 1}</th>
+                          <th>{item.address}</th>
                           <td style={{textAlign: 'center'}}>
                             <a
                               onClick={() => {
