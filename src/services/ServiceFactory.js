@@ -14,6 +14,7 @@ import { rentService } from './RentService'
 import { userService } from './UserService'
 import { vendorService } from './VendorService'
 import { logisticService } from './LogisticService'
+import { expeditionService } from './ExpeditionService'
 
 export const ServiceFactory = (apiClient) => {
   return {
@@ -34,5 +35,6 @@ export const ServiceFactory = (apiClient) => {
     transferRequestService: transferRequestService(apiClient),
     rentService: rentService(apiClient),
     logisticService: logisticService(apiClient),
+    expeditionService: expeditionService(apiClient),
   }
 }

@@ -23,7 +23,8 @@ export const Overview = () => {
     eventLogService,
     transferRequestService,
     notificationService,
-    userService
+    userService,
+    expeditionService,
   } = useDeps();
   const [datas, setDatas] = useState([]);
   const [order, setOrder] = useState("ASC");
@@ -736,10 +737,12 @@ export const Overview = () => {
    const [deliveryDate, setDeliveryDate] = useState("");
    const [shippingCompany, setShippingCompany] = useState("");
    const [deliveryFee, setDeliveryFee] = useState("");
+   const [listShippingCompany, setListShippingCompany] = useState([]);
 
    const handleToggleTransfer = async (name) => {
      setLoading(true);
      try {
+      // check if asset still in transfer process
         let existedRequest = await transferRequestService.getByAssetNumber(name);
         let pendingRequest = existedRequest.data.filter(item => item.status === STATUS.CREATE_PO);
        if(pendingRequest.length > 0){
@@ -753,8 +756,12 @@ export const Overview = () => {
          setOriginalLocation(response.data["Kode Wilayah"])
        }
 
+       // get list location
        const listLocation = locations.filter(item => item["kode wilayah"] !== response.data["Kode Wilayah"]);
        setListTargetLocation(listLocation);
+
+       // get list expedition
+       getListExpedition();
      } catch (e) {
        console.log(e);
      } finally {
@@ -892,6 +899,7 @@ export const Overview = () => {
     setShippingCompany("");
     setDeliveryFee("");
     setDisableSubmit(true);
+    setListShippingCompany([]);
    }
 
    const createNotification = async (newNotif) => {
@@ -914,6 +922,17 @@ export const Overview = () => {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
   const removeNonNumeric = (num) => {return num.toString().replace(/[^0-9]/g, "")};
+
+  const getListExpedition = async () => {
+    try {
+      const response = await expeditionService.getListExpedition();
+      if (response.status === 'SUCCESS') {
+        setListShippingCompany(response.data);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   return (
     <>
@@ -1929,12 +1948,27 @@ export const Overview = () => {
                       </div>
                       <div className="col-md-6 mb-3">
                         <label>Shipping Company <span style={{color : "red"}}>*</span></label>
-                        <input
-                          type="text"
-                          className="form-control"
+                        <select
+                          required
                           value={shippingCompany}
-                          onChange={(e) => {setShippingCompany(e.target.value)}}
-                        />
+                          onChange={(e) => {
+                            if (e.target.value === "") {
+                              return
+                            }
+                            setShippingCompany(e.target.value)
+                          }}
+                          className="form-select"
+                        >
+                          <option value="">Select Expedition</option>
+                          {listShippingCompany.map((item, index) => (
+                            <option
+                              key={item["expedition_name"]}
+                              value={item["expedition_name"]}
+                            >
+                              {item["expedition_name"]}
+                            </option>
+                          ))}
+                        </select>
                       </div>
                       <div className="col-md-6 mb-3">
                         <label>Delivery Fee <span style={{color : "red"}}>*</span></label>
