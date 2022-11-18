@@ -34,9 +34,43 @@ input[type=radio] {
 }
 
 .additional-column {
-    height: 100px;
-    width: 90%;
+    min-height: max-content;
+    width: 100%;
     /* background-color: rgba(200, 0, 0, 0.5); */
-    border: 1px solid black;
+    border: 1px solid grey;
     margin: 20px 0px;
+    padding: 5px 10px;
+    border-radius: 5px;
 }
+
+.header-item-additional{
+    width: 100%;
+    height: max-content;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+.header-item-additional >a {
+    cursor: pointer;
+}
+
+.add-cost-button {
+    width: 100%;
+    height: max-content;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 10px;
+}
+
+.content-item-additional{
+    width: 100%;
+    height: max-content;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+  }
