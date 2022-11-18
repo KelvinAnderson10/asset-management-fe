@@ -8,12 +8,13 @@ import * as MdIcons from "react-icons/md";
 import Swal from "sweetalert2";
 import { Failed } from "../../../shared/components/Notification/Failed";
 import { NOTIF, PUSHNOTIF, STATUS } from "../../../shared/constants";
-import { Row } from "antd";
+import * as BsIcons from "react-icons/bs";
 import { firebaseConfig } from "../../../shared/firebaseClient";
 import { initializeApp } from "firebase/app";
 import { getFirestore, setDoc, doc } from "firebase/firestore";
 
 export const FormApprovalInventory = () => {
+  const location = useLocation();
   const { user, setpoDetail, setPOHeader } = UseApprovalInventory();
   const {
     vendorService,
@@ -30,24 +31,36 @@ export const FormApprovalInventory = () => {
     {id: 3, name: 'POS'},
   ])
 
-  const [formCostValid,setFormCostValid] = useState(false)
+  const [formCostValid, setFormCostValid] = useState(false)
+  const [additionalCost, setAdditionalCost] = useState([
+    {
+      po_id: location.state.header.id,
+      category: "",
+      price: "",
+    },
+  ])
+
+  const [categoryMasterAdditionalCost, setCategoryMasterAdditionalCost] = useState([
+    {id: 1, name: 'Angkut barang'},
+    {id: 2, name: 'Uang makan'},
+    {id: 3, name: 'Uang parkir'},
+  ])
 
   const addFields = (e) => {
-    // e.preventDefault();
+    e.preventDefault();
     // setFormCostValid(false)
-    // let object = {
-    //   ["Nama Barang"]: "",
-    //   vendor_1: "",
-    //   vendor_2: "",
-    //   vendor_3: "",
-    //   item_price_1: "",
-    //   item_price_2: "",
-    //   item_price_3: "",
-    //   quantity: "",
-    //   ppn: "",
-    //   ["Biaya Lain-Lain"]: "",
-    // };
-    // setPOData([...POdata, object]);
+    let object = {
+      po_id: location.state.header.id,
+      category: "",
+      price: "",
+    };
+    setAdditionalCost([...additionalCost, object]);
+  };
+
+  const removeFields = (index) => {
+    let data = [...additionalCost];
+    data.splice(index, 1);
+    setAdditionalCost(data);
   };
 
   const onGetAllLogistic = async () => {
@@ -93,6 +106,24 @@ export const FormApprovalInventory = () => {
     setpoDetail(newArray2);
   };
 
+  const handleChangeAdditionalCost = (event, index) => {
+    const newArray2 = additionalCost.map((item, i) => {
+      console.log("handle change", item, i);
+      console.log("Value", event.target.value);
+      if (index === i) {
+        if (event.target.name == 'price'){
+          console.log("Price", event.target.value);
+          return { ...item, [event.target.name]: Number(event.target.value) };
+        } else {
+          return { ...item, [event.target.name]: event.target.value };
+        }
+      } else {
+        return item;
+      }
+    });
+    setAdditionalCost(newArray2);
+  }
+
   const [vendor, setVendor] = useState([]);
   const onGetAllVendor = async () => {
     try {
@@ -102,7 +133,6 @@ export const FormApprovalInventory = () => {
       console.log(e);
     }
   };
-  const location = useLocation();
 
   useEffect(() => {
     onGetAllVendor();
@@ -210,6 +240,7 @@ export const FormApprovalInventory = () => {
   const onApproved = async (e, id) => {
     e.preventDefault(e);
     try {
+      location.state.header.additional_cost = additionalCost;
       for (let i in location.state.detail) {
         location.state.detail[i].ppn = Number(location.state.detail[i].ppn);
         location.state.detail[i].ppn = Boolean(location.state.detail[i].ppn);
@@ -322,6 +353,11 @@ export const FormApprovalInventory = () => {
     }
   };
 
+  const dummySubmit = () => {
+    location.state.header.additional_cost = additionalCost;
+    console.log("Submitted", location.state.header);
+  }
+
   //Setting
   const [setting, setSetting] = useState({});
   const onGetGeneralSetting = async () => {
@@ -339,6 +375,7 @@ export const FormApprovalInventory = () => {
         <div className="po-app-form-container">
           <div className="po-app-form-card">
             <form onSubmit={(e) => onApproved(e, location.state.header.id)}>
+            {/* <form onSubmit={dummySubmit()}> */}
               <h4 className="mb-5 text-danger">
                 {" "}
                 <MdIcons.MdOutlineArrowBackIosNew
@@ -649,7 +686,7 @@ export const FormApprovalInventory = () => {
                           {form.item_price_selected >= setting.minimum_asset ? (
                             <div className="inputBoxPO mb-3 col-md-3">
                               <label>
-                                Is Asset
+                              Included as Asset
                                 <span className="text-danger">*</span>
                               </label>
                               <select
@@ -670,7 +707,7 @@ export const FormApprovalInventory = () => {
                           ) : (
                             <div className="inputBoxPO mb-3 col-md-3">
                               <label>
-                                Is Asset
+                                Included as Asset
                                 <span className="text-danger">*</span>
                               </label>
                               <select
@@ -689,21 +726,73 @@ export const FormApprovalInventory = () => {
                             </div>
                           )}
                         </div>
+                        <div className="additional-column">
+                          {additionalCost.map((form, index) => {
+                            return(
+                              <div key={index}>
+                                <div className="header-item-additional">
+                                  <h5 style={{ textAlign: "center" }}>
+                                    Additional Cost {index + 1}{" "}
+                                  </h5>
+                                  {index > 0 && (
+                                    <a onClick={() => removeFields(index)}>
+                                      <BsIcons.BsTrash size="2em" color="red" />
+                                    </a>
+                                  )}
+                                </div>
+                                <div className="content-item-additional">
+                                <div className="inputBoxPO mb-3 col-md-6 ">
+                                  <label>Additional Description</label>
+                                    <select
+                                      required
+                                      name="category"
+                                      value={form.category}
+                                      onChange={(event) =>
+                                        handleChangeAdditionalCost(event, index)
+                                      }
+                                      style={{ width: "50%" }}
+                                      
+                                    >
+                                      <option value="">Select Description</option>
+                                      {categoryMasterAdditionalCost &&
+                                        categoryMasterAdditionalCost.map((item) => {
+                                            return (
+                                              <option key={item.id} value={item.name}>
+                                                {item.name}
+                                              </option>
+                                            );
+                                        })}
+                                    </select>
+                                  </div>
+                                  <div className="inputBoxPO mb-3 col-md-6">
+                                  <label>Additional Price</label>
+                                    <input
+                                      required
+                                      type="number"
+                                      min="0"
+                                      name="price"
+                                      placeholder="Input additional cost"
+                                      onChange={(event) => handleChangeAdditionalCost(event, index)}
+                                      value={form.price}
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            )
+                          })}
+                          <div className="add-cost-button col-md-12">
+                            <button
+                            disabled={formCostValid}
+                              className="btn btn-success float-start"
+                              onClick={addFields}
+                            >
+                              Add Additional Cost..
+                            </button>
+                          </div>
+                        </div>
                       </div>
                     );
                   })}
-                  <div className="additional-column">
-                    <label>Additional Cost</label>
-                    <div className="col-md-12">
-                      <button
-                      disabled={formCostValid}
-                        className="btn btn-success float-start"
-                        onClick={addFields}
-                      >
-                        Add Additional Cost..
-                      </button>
-                    </div>
-                  </div>
                   <div className="col-md-12">
                     <button
                       className="btn btn-primary float-end"
