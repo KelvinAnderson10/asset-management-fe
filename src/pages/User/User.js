@@ -760,11 +760,11 @@ export const UserManage = () => {
                     </Button>
                   </form>
                 </Modal.Body>
-                <Modal.Footer>
+                {/* <Modal.Footer>
                   <Button variant="secondary" onClick={hanldePostClose}>
                     Close
                   </Button>
-                </Modal.Footer>
+                </Modal.Footer> */}
               </Modal>
             </div>
 
@@ -908,11 +908,11 @@ export const UserManage = () => {
                     </Button>
                   </form>
                 </Modal.Body>
-                <Modal.Footer>
+                {/* <Modal.Footer>
                   <Button variant="secondary" onClick={hanldeEditClose}>
                     Close
                   </Button>
-                </Modal.Footer>
+                </Modal.Footer> */}
               </Modal>
             </div>
 
@@ -996,11 +996,11 @@ export const UserManage = () => {
                     </div>
                   </div>
                 </Modal.Body>
-                <Modal.Footer>
+                {/* <Modal.Footer>
                   <Button variant="secondary" onClick={hanldeViewClose}>
                     Close
                   </Button>
-                </Modal.Footer>
+                </Modal.Footer> */}
               </Modal>
             </div>
           </div>
