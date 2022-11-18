@@ -1364,7 +1364,7 @@ export const Overview = () => {
               </div>
             </div>
           </Modal.Body>
-          <Modal.Footer></Modal.Footer>
+          {/* <Modal.Footer></Modal.Footer> */}
         </Modal>
       </div>
       {/* EDIT SHOW */}
@@ -1580,7 +1580,7 @@ export const Overview = () => {
                       onChange={handleChange}
                     />
                     </div>
-                    <div className="asset-image-container">
+                    <div className="col-md-6 mb-3 asset-image-container">
                     <div className="image-box">
                       {imageBase64 && (
                         <div className="image">
@@ -1599,7 +1599,20 @@ export const Overview = () => {
                         </div>
                       )}
                     </div>
-                    <div className="choose-file">
+                    </div>
+                    <div className="col-md-6 mb-3">
+                        <label>Description</label>
+                    <input
+                      className="form-control"
+                      type="text"
+                      required
+                      name="Description"
+                      value={assetEdit["Description"]}
+                      onChange={handleChange}
+                      placeholder="Additional information like product code etc"
+                    />
+                    </div>
+                    <div className="col-md-6 mb-3 choose-file">
                       <input
                         ref={ref}
                         accept="image/*"
@@ -1611,7 +1624,6 @@ export const Overview = () => {
                       <label for="actual-btn">Choose File</label>
                       <span id="file-chosen">{fileName}</span>
                     </div>
-                  </div>
                   </div>
                   <div className="col-md-12 mt-3">
                     <button
@@ -1641,7 +1653,7 @@ export const Overview = () => {
         <div className="edit-container-reg">
           <div className="asset-edit-reg-container">
             <form onSubmit={onSubmitEditAsset}>
-              <div className="inputBoxReg">
+              <div className="mb-3 inputBoxReg">
                 <span>Asset Name :</span>
                 <input
                   readOnly
@@ -1652,7 +1664,7 @@ export const Overview = () => {
                   onChange={handleChange}
                 />
               </div>
-              <div className="asset-image-container">
+              <div className="col-md-6 mb-3 asset-image-container">
                 <div className="image-box">
                   {imageBase64 && (
                     <div className="image">
@@ -1668,7 +1680,7 @@ export const Overview = () => {
                     </div>
                   )}
                 </div>
-                <div className="choose-file">
+                <div className="col-md-6 mb-3 choose-file">
                   <input
                     ref={ref}
                     accept="image/*"

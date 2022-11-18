@@ -32,3 +32,11 @@
 input[type=radio] {
     transform: scale(1.5);
 }
+
+.additional-column {
+    height: 100px;
+    width: 90%;
+    /* background-color: rgba(200, 0, 0, 0.5); */
+    border: 1px solid black;
+    margin: 20px 0px;
+}

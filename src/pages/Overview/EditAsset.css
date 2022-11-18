@@ -199,14 +199,15 @@
   background-color: red;
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 0px 0px 6px 6px;
   width: 100%;
 }
 
 .asset-edit-reg-container form .asset-image-container{
   display: flex;
   flex-direction: row;
-  margin: 20px;
+  /* margin: 20px; */
+  padding-left: 20px;
   width: 90%;
   height: 137px;
   margin-bottom: 10px;
@@ -216,10 +217,12 @@
 .asset-image-container{
   display: flex;
   flex-direction: row;
-  margin: 20px;
+  /* margin: 20px; */
+  justify-content: center;
   width: 90%;
   height: 137px;
   margin-bottom: 10px;
+  /* background-color: rgba(100, 0, 0, 0.5); */
 }
 
 .asset-edit-reg-container form .button-cancel{
@@ -270,4 +273,12 @@ transition: 0.5s all;
 
 .asset-edit-container form .row .col input[type="file"]:hover::-webkit-file-upload-button{
   background-color: #1b3ed8;
+}
+
+.choose-file {
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  justify-content: center;
+  padding: 40px;
 }
