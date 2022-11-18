@@ -427,6 +427,10 @@ export const Location = () => {
                         {" "}
                         <FaSort /> Area Code
                       </th>
+                      <th onClick={() => sortingNum("ID")}>
+                        {" "}
+                        <FaSort /> Address
+                      </th>
                       <th>Actions</th>
                     </tr>
                   </thead>
@@ -442,6 +446,7 @@ export const Location = () => {
                           <th>{item.cluster}</th>
                           <th>{item.location}</th>
                           <th>{item["kode wilayah"]}</th>
+                          <th>{item.address}</th>
                           <td style={{textAlign: 'center'}}>
                             <a
                               onClick={() => {

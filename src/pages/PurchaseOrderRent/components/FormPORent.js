@@ -356,7 +356,7 @@ export const FormPORent = () => {
       <div className="po-rent-form-container">
         <div className="po-rent-form-card">
           <form onSubmit={onSubmitPO}>
-            <h4 className="mb-4 text-danger">Purchase Order Request Form</h4>
+            <h4 className="mb-4 text-danger">Rent Request Form</h4>
             <p><span className="text-danger">*</span> required fields</p>
             <div className="formPOInput">
               <div className="row">
@@ -706,32 +706,7 @@ export const FormPORent = () => {
                     value={nominalTransfer}
                   />
                 </div>
-                {/* <div className="mb-3 col-md-4">
-                  <label style={{fontWeight:'500'}}>
-                    Notary<span className="text-danger">*</span>
-                  </label>
-                  <input
-                    required
-                    type="text"
-                    name="notaris"
-                    className="form-control"
-                    onChange={(e)=>setNotaris(e.target.value)}
-                    value={notaris}
-                  />
-                </div>
-                <div className="mb-3 col-md-4">
-                  <label style={{fontWeight:'500'}}>
-                    Notary Services<span className="text-danger">*</span>
-                  </label>
-                  <input
-                    required
-                    type="text"
-                    name="jasa_notaris"
-                    className="form-control"
-                    value={jasaNotaris}
-                    onChange={(e)=>setJasaNotaris(e.target.value)}
-                  />
-                </div> */}
+              
                 <div className="mb-3 col-md-6">
                   <label style={{fontWeight:'500'}}>
                  NPWP Notary<span className="text-danger">*</span>
@@ -823,12 +798,11 @@ export const FormPORent = () => {
                     onChange={(e)=>setJatuhTempo(e.target.value)}
                   />
                 </div>
-                <div className="row">
                 <div className="col-md-12">
                 <label  style={{fontWeight:'500'}} >Background<span className="text-danger">*</span>{" "}</label>
                 </div>
                   <p style={{fontSize:'12px', color:'rgb(255, 178, 0)'}} > You can add more than 1 background</p>
-                </div>
+                
                 
                 {background.map((form,index)=>{
                   return(

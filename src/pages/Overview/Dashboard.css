@@ -32,9 +32,30 @@
   height: 20vh;
   border-radius: 20px;
   border-color: rgb(200, 200, 200);
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  /* box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px; */
   display: flex;
   font-family: 'Roboto';
+}
+
+.content-dashboard-top .count-dashboard-deprecated {
+  width: 20vw;
+  height: 20vh;
+  border-radius: 20px;
+  border-color: rgb(200, 200, 200);
+  /* box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px; */
+  display: flex;
+  font-family: 'Roboto';
+  box-shadow: 0 6px 10px rgba(0,0,0,.08), 0 0 6px rgba(0,0,0,.05);
+  transition: .3s transform cubic-bezier(.155,1.105,.295,1.12),.3s box-shadow,.3s -webkit-transform cubic-bezier(.155,1.105,.295,1.12);
+
+}
+
+.count-dashboard-deprecated:hover{
+  background-color: whitesmoke;
+    cursor: pointer;
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.06);
+
 }
 
 .content-dashboard-top .content-icon {
@@ -156,8 +177,19 @@
   border-radius: 3vh;
   border-width: 0.3vh;
   background-color: white;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  /* box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px; */
   cursor: pointer;
+  box-shadow: 0 6px 10px rgba(0,0,0,.08), 0 0 6px rgba(0,0,0,.05);
+  transition: .3s transform cubic-bezier(.155,1.105,.295,1.12),.3s box-shadow,.3s -webkit-transform cubic-bezier(.155,1.105,.295,1.12);
+
+}
+
+.grafik-box:hover{
+  background-color: whitesmoke;
+  cursor: pointer;
+  transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.06);
+
 }
 
 .content-dashboard-center .eventlog-container {
@@ -229,14 +261,14 @@
    z-index: 100;
    background-color: rgba(126, 126, 126, 0.75);
    transition: all .2s linear;
-   position: absolute;
+   position: fixed;
    top: 0;
    bottom: 0;
    left: 0;
    right: 0;
    display: flex;
    justify-content: center;
-   align-items: center;
+   align-items: flex-start;
   
 }
 .box-spending-cluster-detail{
@@ -244,6 +276,7 @@
   height: 65%;
   background-color: white;
   border-radius: 10px;
+  margin-top: 50px;
 }
 
 .box-spending-cluster-detail .box-spending-header{
@@ -343,6 +376,7 @@
     justify-content: space-between;
     align-items: center;
     flex-direction: column;
+    margin-top: 10px;
   }
 
   .dashboard-card .content-dashboard-center {
@@ -357,4 +391,9 @@
   .content-dashboard-bottom .grafik-box {
     width: 80%;
   }
+  .content-dashboard-top .count-dashboard-deprecated {
+    width: 76vw;
+    height: 10vh;
+  }
+  
 }

@@ -31,6 +31,7 @@ import { FormPORent } from "../pages/PurchaseOrderRent/components/FormPORent";
 import { FormViewRent } from "../pages/PurchaseOrderRent/components/FormViewRent";
 import { FormViewRentDetail } from "../pages/Overview/FormViewRent";
 import { GeneratePdf } from "../pages/ApprovalRent/components/GeneratePdf";
+import { AdditionalCost, AdditionalCostManage } from "../pages/AdditionalCost/AdditionalCost";
 
 export const AppRouter = () => {
   return (
@@ -45,6 +46,7 @@ export const AppRouter = () => {
         <Route path="/data-management/vendor" element={<VendorManage />} />
         <Route path="/data-management/location" element={<Location />} />
         <Route path="/data-management/user" element={<UserManage />} />
+        <Route path="/data-management/additional-cost" element={<AdditionalCost/>} />
         <Route path="/upload-data" element={<ImportData />} />
         <Route path="/purchase-request/inventory" element={<POInventory/>} />
         <Route path="/purchase-request/maintenance" element={<POMaintenance/>}/>

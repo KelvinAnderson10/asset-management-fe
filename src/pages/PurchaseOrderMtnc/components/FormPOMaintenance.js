@@ -198,7 +198,7 @@ export const FormPOMaintenance = () => {
       <div className="po-mtnc-form-container">
         <div className="po-mtnc-form-card">
           <form onSubmit={onSubmitPO}>
-            <h4 className="mb-4 text-danger">Purchase Order Request Form</h4>
+            <h4 className="mb-4 text-danger">Maintenance Request Form</h4>
             <div className="formPOInput">
               <div className="row">
                 <div className="mb-3 col-md-4">

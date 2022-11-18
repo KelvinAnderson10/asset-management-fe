@@ -314,7 +314,7 @@ export const Dashboard = () => {
             </div>
             <br/>
             <div
-              className="count-dashboard"
+              className="count-dashboard-deprecated"
               style={{
                 backgroundImage:
                   "radial-gradient( circle farthest-corner at 14.2% 24%,  rgba(239,61,78,1) 0%, rgba(239,61,78,0.81) 51.8%, rgba(239,61,78,0.63) 84.6% )",

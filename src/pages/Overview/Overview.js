@@ -1580,6 +1580,18 @@ export const Overview = () => {
                       onChange={handleChange}
                     />
                     </div>
+                    <div className="col-md-12 mb-3">
+                      <label>Position</label>
+                      <input
+                      className="form-control"
+                      type="text"
+                      required
+                      name="Jabatan"
+                      value={assetEdit.Jabatan}
+                      onChange={handleChange}
+                    />
+                    </div>
+                    
                     <div className="asset-image-container">
                     <div className="image-box">
                       {imageBase64 && (

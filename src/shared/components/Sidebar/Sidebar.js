@@ -9,6 +9,7 @@ import * as IoIcons from "react-icons/io";
 import * as BiIcons from "react-icons/bi";
 import * as FaIcons from "react-icons/fa";
 import * as BsIcons from "react-icons/bs";
+import * as GrIcons from "react-icons/gr"
 import "./Sidebar.css";
 import * as AiIcons from "react-icons/ai";
 import { useAuth } from "../../../services/UseAuth";
@@ -55,6 +56,11 @@ const routesAdmin = [
         path: "/data-management/user",
         name: "User",
         icon: <BsIcons.BsPeople />,
+      },
+      {
+        path: "/data-management/additional-cost",
+        name: "Additional Cost",
+        icon: <FaIcons.FaCoins />,
       },
     ],
   },
@@ -105,6 +111,11 @@ const routesGA = [
         path: "/data-management/user",
         name: "User",
         icon: <BsIcons.BsPeople />,
+      },
+      {
+        path: "/data-management/additional-cost",
+        name: "Additional Cost",
+        icon: <FaIcons.FaCoins />,
       },
     ],
   },

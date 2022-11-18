@@ -90,7 +90,7 @@
 }
 .table-wrapper {
   min-width: 900px;
-  max-height: 95vh;
+  /* max-height: 95vh; */
   background: rgb(248, 248, 248);
   padding: 20px 25px;
   border-radius: 3px;
