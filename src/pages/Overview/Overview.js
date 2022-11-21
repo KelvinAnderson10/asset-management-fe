@@ -925,7 +925,8 @@ export const Overview = () => {
 
   const getListExpedition = async () => {
     try {
-      const response = await expeditionService.getListExpedition();
+      const response = await expeditionService.getAllExpedition();
+      console.log(response);
       if (response.status === 'SUCCESS') {
         setListShippingCompany(response.data);
       }
@@ -2055,10 +2056,13 @@ export const Overview = () => {
                               &#xeaf5;
                             </i>
                           </div>
-                          <div className="d-flex flex-row">
-                            <div className="fw-semibold">{new Date(data.ApprovalDate).toLocaleDateString('in-ID')}</div>
+                          {data.InitialLocation !== data.CurrentLocation ? <div className="d-flex flex-row">
+                            <div className="fw-semibold">{new Date(data.Date).toLocaleDateString('in-ID')}</div>
                             &nbsp;{`- from ${data.InitialLocation} to ${data.CurrentLocation} [Requester : ${data.Requester}]`}
-                          </div>
+                          </div> : <div className="d-flex flex-row">
+                            <div className="fw-semibold">{new Date(data.Date).toLocaleDateString('in-ID')}</div>
+                            &nbsp;{`- the transfer request by ${data.Requester} has been approved`}
+                          </div> }
                         </div>
                     )
                   })}
